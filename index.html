@@ -1757,6 +1757,24 @@ window.addEventListener("load", () => {
 
     </style>
 
+
+<!-- =================== CTA =================== -->
+    <section>
+      <div class="cta-large">
+        <div style="display:flex;gap:16px;align-items:center">
+          <div>
+            <div style="font-size:22px;font-weight:800">CalcIQ</div>
+            <div style="opacity:0.95;font-size:15px"> The Brain behind budget. </div>
+          </div>
+        </div>
+
+        <button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='calculator.html'">Launch Tool</button>
+
+      </div>
+    </section>
+
+
+
     <!-- =================== GAMING ARENA =================== -->
 
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -1860,7 +1878,13 @@ window.addEventListener("load", () => {
         </p>
       </div>
 
-      <div class="resource-row">
+      <div class="resource-slider-wrapper">
+
+        <button class="resource-nav left" aria-label="Previous">‹</button>
+
+        <div class="resource-row resource-slider">
+          <!-- existing resource cards stay exactly the same -->
+
 
         <div class="resource">
           <div style="display:flex;gap:12px;align-items:center">
@@ -1904,9 +1928,12 @@ window.addEventListener("load", () => {
               <div class="resource-arrow"> →</div>
             </div>
           </div>
-        </div>
+          </div>
 
-      </div>
+      <button class="resource-nav right" aria-label="Next">›</button>
+
+    </div>
+
     </section>
 
     <style>
@@ -1937,6 +1964,70 @@ window.addEventListener("load", () => {
       100% { transform: translateX(0); }
     }
 
+
+    /* ================= RESOURCES SLIDER (MOBILE/TABLET) ================= */
+
+    @media (max-width: 900px) {
+
+      .resource-slider-wrapper {
+        position: relative;
+      }
+
+      .resource-slider {
+        display: flex !important;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 10px 36px; /* space for arrows */
+      }
+
+      .resource-slider::-webkit-scrollbar {
+        display: none;
+      }
+
+      .resource {
+        min-width: 240px;
+        flex-shrink: 0;
+      }
+
+      /* NAV ARROWS */
+      .resource-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: none;
+        background: #fff;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--accent);
+        cursor: pointer;
+        z-index: 10;
+      }
+
+      .resource-nav.left {
+        left: 6px;
+      }
+
+      .resource-nav.right {
+        right: 6px;
+      }
+
+      .resource-nav:active {
+        transform: translateY(-50%) scale(0.95);
+      }
+    }
+
+    /* HIDE ARROWS ON DESKTOP */
+    @media (min-width: 901px) {
+      .resource-nav {
+        display: none;
+      }
+    }
+
     </style>
 
     <script>
@@ -1952,22 +2043,29 @@ window.addEventListener("load", () => {
       });
       </script>
 
+      <script>
+        const slider = document.querySelector(".resource-slider");
+        const leftBtn = document.querySelector(".resource-nav.left");
+        const rightBtn = document.querySelector(".resource-nav.right");
+
+        if (slider && leftBtn && rightBtn) {
+
+          const scrollAmount = 260;
+
+          rightBtn.onclick = () => {
+            slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+          };
+
+          leftBtn.onclick = () => {
+            slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+          };
+        }
+        </script>
 
 
-    <!-- =================== CTA =================== -->
-    <section>
-      <div class="cta-large">
-        <div style="display:flex;gap:16px;align-items:center">
-          <div>
-            <div style="font-size:22px;font-weight:800">CalcIQ</div>
-            <div style="opacity:0.95;font-size:15px"> The Brain behind budget. </div>
-          </div>
-        </div>
 
-        <button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='calculator.html'">Launch Tool</button>
 
-      </div>
-    </section>
+    
 
   </main>
 
