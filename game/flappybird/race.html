@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ACCESCO Racer</title>
+    <title>ACCESCO Racer - Wide View & Speed</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
     <style>
@@ -47,6 +47,12 @@
             width: 220px; transform: skewX(-5deg);
             pointer-events: none;
         }
+        @media (max-width: 600px) {
+            .car-stats-panel { top: 120px; left: 50%; transform: translateX(-50%) skewX(0); width: 80%; }
+            .garage-title { font-size: 32px; }
+            .bank-display { top: 10px; right: 10px; font-size: 14px; }
+        }
+
         .stat-row { margin-bottom: 15px; }
         .stat-label { color: #ccc; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
         .stat-track { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; }
@@ -118,6 +124,32 @@
             display: flex; flex-direction: column; gap: 8px;
             min-width: 140px;
         }
+
+        /* --- MOBILE HUD ADJUSTMENT --- */
+        @media (max-width: 600px) {
+            .hud-top {
+                flex-direction: column; padding: 10px; gap: 10px; width: 100%; box-sizing: border-box;
+            }
+            .stats-box {
+                /* Transform to horizontal strip */
+                width: 100%; box-sizing: border-box;
+                flex-direction: row; justify-content: space-around;
+                align-items: center; padding: 10px;
+                border-left: none; border-bottom: 2px solid #fc8019;
+                background: rgba(0,0,0,0.8);
+                margin-bottom: 0;
+            }
+            .hud-row { gap: 5px; flex-direction: column; }
+            .hud-val { font-size: 16px; }
+            .hud-label { font-size: 9px; }
+            
+            .fuel-bar-track { display: none; } /* Hide bar on mobile to save space */
+            
+            .hud-controls {
+                position: absolute; top: 90px; right: 10px; flex-direction: column;
+            }
+            .hud-btn { width: 40px; height: 40px; font-size: 16px; }
+        }
         
         .hud-row { display: flex; justify-content: space-between; align-items: center; }
         .hud-label { font-size: 11px; color: #aaa; text-transform: uppercase; }
@@ -164,14 +196,12 @@
 
     <div id="canvas-container"></div>
 
-    <!-- Music Element -->
     <audio id="bg-music" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_3a40af212a.mp3?filename=fun-life-112188.mp3" type="audio/mpeg">
     </audio>
 
     <div id="ui-layer">
         
-        <!-- SHOWROOM MENU -->
         <div id="menu-screen">
             <div class="garage-header">
                 <h1 class="garage-title">ACCESCO RACER</h1>
@@ -198,15 +228,12 @@
 
             <div class="garage-footer">
                 <div class="car-carousel" id="car-list">
-                    <!-- Cars injected here -->
-                </div>
+                    </div>
                 <button class="btn-drive" id="main-btn" onclick="handleMainButton()">DRIVE NOW</button>
             </div>
         </div>
 
-        <!-- GAME HUD -->
         <div id="game-hud">
-            <!-- Steering Zones -->
             <div class="touch-zones">
                 <div class="touch-half" id="zone-left"></div>
                 <div class="touch-half" id="zone-right"></div>
@@ -238,10 +265,9 @@
             </div>
         </div>
 
-        <div class="hint-text">USE A/D OR ARROWS TO STEER</div>
+        <div class="hint-text">TAP LEFT / RIGHT TO STEER</div>
     </div>
 
-    <!-- MODALS -->
     <div id="pause-modal">
             <div class="modal-card">
                 <div class="modal-title">PAUSED</div>
@@ -439,6 +465,15 @@
         scene.fog = new THREE.Fog(0x87CEEB, 20, 150); 
 
         camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+        
+        // Initial setup for camera FOV based on screen
+        if (window.innerWidth < window.innerHeight) {
+            camera.fov = 80; // Wider FOV for mobile portrait
+        } else {
+            camera.fov = 50;
+        }
+        camera.updateProjectionMatrix();
+
         camera.position.set(0, 3, 8); 
         camera.lookAt(0, 1, 0);
 
@@ -690,7 +725,7 @@
     function spawnCoin() {
         const lane = LANE_POSITIONS[Math.floor(Math.random()*3)];
         const c = createCoin();
-        c.position.set(lane, 1.5, -200); // Fixed: Spawns at 1.5 height instead of 0
+        c.position.set(lane, 1.5, -200); 
         scene.add(c); coins.push(c);
     }
 
@@ -730,6 +765,7 @@
 
         if(!state.musicPlaying) toggleMusic();
 
+        // Safety clear on launch just in case
         obstacles.forEach(o => scene.remove(o)); obstacles = [];
         fuelCans.forEach(f => scene.remove(f)); fuelCans = [];
         coins.forEach(c => scene.remove(c)); coins = [];
@@ -746,6 +782,13 @@
         scene.fog = new THREE.Fog(0x121212, 10, 50); // Dark fog
         roadGroup.visible = false;
         if(playerGroup) scene.remove(playerGroup);
+        
+        // --- FIX: Clean up game objects from scene so they don't show in menu ---
+        obstacles.forEach(o => scene.remove(o)); obstacles = [];
+        fuelCans.forEach(f => scene.remove(f)); fuelCans = [];
+        coins.forEach(c => scene.remove(c)); coins = [];
+        // ---------------------------------------------------------------------
+
         if(!showroomGroup) selectCar(state.carIndex);
         scene.add(showroomGroup);
         
@@ -770,6 +813,7 @@
         state.cameraIdx = (state.cameraIdx + 1) % CAM_CONFIGS.length;
     }
 
+    // --- GAME UPDATE (MODIFIED) ---
     function update(time) {
         if(state.mode === 'MENU') {
             if(showroomGroup) showroomGroup.rotation.y += 0.01;
@@ -778,11 +822,22 @@
 
         if(state.mode !== 'GAME' || state.paused) return;
 
-        const maxSpeed = CARS[state.carIndex].speed;
-        state.targetSpeed = maxSpeed;
-        state.speed += (state.targetSpeed - state.speed) * 0.05;
+        // --- PROGRESSIVE SPEED LOGIC ---
+        const carBaseSpeed = CARS[state.carIndex].speed;
+        
+        // UPDATED: Started speed factor at 0.75 (approx 20-25% faster than 0.6)
+        let speedFactor = 0.75 + (state.score / 5000); 
+        
+        state.targetSpeed = carBaseSpeed * speedFactor;
+        if(state.targetSpeed > 2.0) state.targetSpeed = 2.0;
+
+        // Smooth Acceleration (LERP)
+        state.speed += (state.targetSpeed - state.speed) * 0.01; 
+        
         state.score += state.speed;
-        state.fuel -= 0.04;
+
+        // Dynamic Fuel Burn: Faster driving burns more fuel
+        state.fuel -= (0.01 + (state.speed * 0.03));
 
         if(state.fuel <= 0) {
             document.getElementById('go-title-text').innerText = "OUT OF FUEL";
@@ -790,8 +845,6 @@
             state.mode = 'OVER';
             document.getElementById('final-score').innerText = Math.floor(state.score)+"m";
             document.getElementById('final-coins').innerText = state.coins;
-            
-            // Save earned coins on game over
             state.totalCoins += state.coins;
             localStorage.setItem('accesco_total_coins', state.totalCoins);
         }
@@ -808,21 +861,32 @@
             playerGroup.position.x += state.steering * 0.5 * state.speed;
             playerGroup.rotation.y = -state.steering * 0.3;
             playerGroup.rotation.z = -state.steering * 0.1;
-            playerGroup.position.x = Math.max(-15, Math.min(15, playerGroup.position.x));
+            
+            // Tighter clamp (+/- 7.5) ensures you can't go off-road to avoid cars
+            playerGroup.position.x = Math.max(-12.5, Math.min(12.5, playerGroup.position.x));
 
             const cfg = CAM_CONFIGS[state.cameraIdx];
             const ideal = cfg.offset.clone();
-            
-            // Mobile Camera Fix
-            if (window.innerWidth < window.innerHeight && (cfg.name === "Chase" || cfg.name === "Top")) {
-                ideal.z *= 1.5; ideal.y *= 1.2;
+            const target = cfg.lookAt.clone();
+
+            // --- MOBILE CAMERA VISIBILITY FIX ---
+            if (window.innerWidth < window.innerHeight) {
+                // Portrait mode detected
+                if (cfg.name === "Chase") {
+                    // WIDER FOV LOGIC IS IN RENDERER/RESIZE
+                    // Just need correct offset here to not look too top-down
+                    ideal.set(0, 12, 35); 
+                } else if (cfg.name === "Top") {
+                     ideal.y = 50;
+                }
             }
+            // -------------------------------------
 
             if(cfg.name === "Chase") ideal.x += playerGroup.position.x * 0.5;
             else if(cfg.name === "Hood") ideal.x += playerGroup.position.x;
             
             camera.position.lerp(ideal, 0.1);
-            const target = cfg.lookAt.clone();
+            
             target.x += playerGroup.position.x * 0.5;
             camera.lookAt(target);
         }
@@ -850,8 +914,6 @@
                 state.mode = 'OVER';
                 document.getElementById('final-score').innerText = Math.floor(state.score)+"m";
                 document.getElementById('final-coins').innerText = state.coins;
-                
-                // Save earned coins on crash
                 state.totalCoins += state.coins;
                 localStorage.setItem('accesco_total_coins', state.totalCoins);
             }
@@ -901,6 +963,12 @@
         renderer.render(scene, camera);
     }
     window.onresize = () => {
+        // Dynamic FOV update on resize
+        if (window.innerWidth < window.innerHeight) {
+            camera.fov = 80;
+        } else {
+            camera.fov = 50;
+        }
         camera.aspect = window.innerWidth/window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
