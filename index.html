@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ACCESCO </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>ACCESCO | Winter Edition</title>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" href="images/accesco.png" />
@@ -16,36 +16,79 @@
   <style>
 
     /* =========================
+       CHRISTMAS EFFECTS START
+       ========================= */
+    
+    /* 1. Falling Snow Animation */
+    .snowflake {
+        position: fixed;
+        top: -20px;
+        color: #fff;
+        text-shadow: 0 0 5px #000;
+        user-select: none;
+        pointer-events: none;
+        z-index: 9999;
+        animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+        to { transform: translateY(105vh) rotate(360deg); }
+    }
+
+    /* 2. Real Santa Hat on Logo */
+    .brand .logo {
+        position: relative; 
+        overflow: visible !important; 
+    }
+
+    .brand .logo::after {
+        content: "";
+        position: absolute;
+        /* Position adjustments */
+        top: -22px; 
+        left: -18px; 
+        width: 55px; 
+        height: 55px;
+        /* Transparent Santa Hat Image */
+        background-size: contain;
+        background-repeat: no-repeat;
+        transform: rotate(-15deg);
+        z-index: 100;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+    
+    /* =========================
+       CHRISTMAS EFFECTS END
+       ========================= */
+
+    /* =========================
        FONT SETUP
        ========================= */
     
-    /* Davetica definition */
     @font-face {
         font-family: 'Davetica';
         src: local('Davetica'), local('Davetica-Regular'), sans-serif;
     }
 
-    /* Global font for entire website (Adidas UI style) */
+    /* Global font */
     body, p, li, a, button, input, label, span {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 400;
         letter-spacing: 0.2px;
     }
 
-    /* Adidas-style bold headings */
     h1, h2, h3, h4, h5, h6 {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 800;
         letter-spacing: -0.5px;
     }
 
-    /* Adidas-style section headers */
     .big-h, .hero-title {
         font-weight: 900;
         letter-spacing: -1px;
     }
 
-    /* Buttons similar to Adidas */
     button, .cta-pill, .cta-outline, .start-btn {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-weight: 700;
@@ -53,27 +96,24 @@
         text-transform: uppercase;
     }
 
-    /* Sidebar + Navigation fonts matching Adidas */
     .navbar, .side-list a {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         letter-spacing: 0.6px;
         font-weight: 700;
     }
 
-    /* Hero small pill styling */
     .small-pill {
         font-weight: 700;
         letter-spacing: 0.7px;
         text-transform: uppercase;
     }
 
-    /* Resource arrows */
     .resource-arrow {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
 
-    html{ 
+    html { 
       scroll-behavior: smooth; 
     }
 
@@ -97,6 +137,9 @@
       color: #222;
       background: var(--bg);
       line-height: 1.5;
+      /* Prevent horizontal scroll on mobile */
+      overflow-x: hidden;
+      width: 100%;
     }
 
     a {
@@ -114,7 +157,7 @@
     /* NAVBAR */
     .navbar {
       position: fixed; 
-      top: 7px ;
+      top: 7px;
       width: 100%;
       align-items: center;
       justify-content: center;
@@ -136,9 +179,10 @@
 
     @media(max-width: 899px) {
       .navbar {
-        width: 100%;
-        left: 0;
+        width: 96%; /* Added slight margin */
+        left: 2%;
         transform: none;
+        top: 10px;
       }
     }
 
@@ -184,7 +228,7 @@
 
     .menu-toggle {
       position: absolute;
-      left: 20px;
+      left: 10px; /* Adjusted for mobile */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -193,11 +237,12 @@
       border-radius: 10px;
       border: 1px solid rgba(0, 0, 0, 0.1);
       background: #fff;
+      cursor: pointer;
     }
 
     .nav-actions {
       position: absolute;
-      right: 20px;
+      right: 10px; /* Adjusted for mobile */
       display: flex;
       align-items: center;
       gap: 10px;
@@ -210,6 +255,9 @@
       color: rgba(112, 4, 87, 1);
       background: transparent;
       font-weight: 600;
+      cursor: pointer;
+      display: inline-block; /* For <a> tags */
+      text-align: center;
     }
 
     .btn-cta {
@@ -249,7 +297,7 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 100%;          
+      width: 80%; /* Adjusted for mobile */       
       background: #fff;
       padding: 0;
       transform: translateX(-100%);
@@ -273,7 +321,7 @@
     /* TOP BAR */
     .sidebar-top {
       display: flex;
-      justify-content: center;
+      justify-content: space-between; /* Changed for better alignment */
       align-items: center;
       padding: 18px 20px;
       border-bottom: 1px solid #ddd;
@@ -286,9 +334,6 @@
     }
 
     .sidebar-close {
-      position: absolute;
-      right: 18px;
-      top: 18px;
       background: transparent;
       border: none;
       font-size: 26px;
@@ -357,6 +402,14 @@
       align-items: center;
     }
 
+    /* Responsive Hero height */
+    @media (max-width: 600px) {
+        .hero {
+            min-height: 500px;
+            padding-top: 100px; /* Space for Navbar */
+        }
+    }
+
     .hero::before {
       content: "";
       position: absolute;
@@ -401,6 +454,8 @@
       padding: 14px 20px;
       border-radius: 12px;
       font-weight: 700;
+      cursor: pointer;
+      border: none;
     }
 
     .cta-pill {
@@ -415,13 +470,14 @@
     }
 
     @media(max-width: 900px) {
-      .hero {
-        padding: 70px 20px;
-      }
-
       .hero-title {
         font-size: 42px;
       }
+    }
+    @media(max-width: 480px) {
+        .hero-title {
+            font-size: 32px; /* Smaller for mobile */
+        }
     }
 
     /* SECTIONS */
@@ -449,6 +505,10 @@
       font-weight: 800;
       margin: 10px 0;
     }
+    
+    @media(max-width: 600px) {
+        .big-h { font-size: 28px; }
+    }
 
     .muted-center {
       color: var(--muted);
@@ -470,6 +530,10 @@
     @media(max-width: 900px) {
       .about-grid {
           grid-template-columns: 1fr;
+      }
+      .about-grid img {
+          width: 100%;
+          height: auto; /* Fix for image distortion */
       }
     }
 
@@ -503,12 +567,9 @@
       }
     }
 
-    /* ==========================================================
-       SERVICE CARDS - SINGLE LINE GRID (NO SCROLL)
-       ========================================================== */
+    /* SERVICE CARDS */
     .cards {
       display: grid;
-      /* Force 5 columns in one line on large screens */
       grid-template-columns: repeat(5, 1fr); 
       gap: 16px;
       margin-top: 30px;
@@ -527,9 +588,6 @@
       color: #ffffff;
       background-size: cover;
       background-position: center;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
     }
 
     .card::before {
@@ -554,7 +612,7 @@
     .badge h3 {
       margin: 0;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-      font-size: 26px !important; /* Slightly smaller to fit single line */
+      font-size: 26px !important; 
       font-weight: 900 !important;
       letter-spacing: -1px !important;
       text-transform: uppercase !important;
@@ -563,11 +621,10 @@
       text-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
 
-    /* Description text: DAVETICA */
     .cards .card p {
       margin: 0;
       font-family: 'Davetica', sans-serif !important; 
-      font-size: 18px !important; /* Adjusted for width */
+      font-size: 18px !important; 
       font-weight: 500;
       font-style: normal; 
       color: rgba(255,255,255,0.98) !important;
@@ -621,10 +678,10 @@
       font-weight: 800;
     }
 
-    /* Responsive Grid for Services - Wraps on small screens */
+    /* Responsive Grid for Services */
     @media (max-width: 1024px) {
       .cards {
-        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+        grid-template-columns: repeat(3, 1fr); 
       }
     }
     
@@ -632,7 +689,7 @@
       .cards {
         grid-template-columns: 1fr; /* Stack on mobile */
       }
-      .card { height: 220px; }
+      .card { height: 220px; width: 100%; }
     }
 
 
@@ -758,21 +815,22 @@
 
 
     @media(max-width: 1100px) {
-      .gaming-arena { flex-direction: column; padding: 50px 40px; }
+      .gaming-arena { flex-direction: column; padding: 50px 20px; } /* Reduced padding */
       .gaming-arena .left, .gaming-arena .right { width: 100%; max-width: 100%; }
       .gaming-arena .right { align-items: center; }
-      .game-grid { width: 100%; max-width: 460px; }
+      .game-grid { width: 100%; max-width: 100%; } /* Full width on tablet/mobile */
       .gaming-arena h1 { font-size: 42px; }
     }
     @media(max-width: 750px) {
-      .game-grid { grid-template-columns: 1fr; padding: 30px 25px; }
-      .features { flex-direction: column; gap: 14px; }
-      .gaming-arena h1 { font-size: 38px; }
-      .start-btn { font-size: 16px; }
+      .game-grid { grid-template-columns: 1fr; padding: 30px 20px; }
+      .features { flex-direction: column; gap: 14px; width: 100%; }
+      .feature-box { width: 100%; }
+      .gaming-arena h1 { font-size: 32px; }
+      .start-btn { font-size: 16px; width: 100%; justify-content: center; }
+      .tag.offer { float: none; display: table; margin-bottom: 10px;}
     }
     @media(max-width: 450px) {
-      .gaming-arena { padding: 30px 20px; }
-      .gaming-arena h1 { font-size: 30px; }
+      .gaming-arena { padding: 30px 15px; }
       .game-card { padding: 20px; }
     }
 
@@ -816,13 +874,13 @@
 
     /* RESOURCE SLIDER MOBILE */
     @media (max-width: 900px) {
-      .resource-slider-wrapper { position: relative; }
+      .resource-slider-wrapper { position: relative; width: 100%; }
       .resource-slider {
         display: flex !important;
         gap: 16px;
         overflow-x: auto;
         scroll-behavior: smooth;
-        padding: 10px 36px;
+        padding: 10px 5px; /* reduced side padding */
       }
       .resource-slider::-webkit-scrollbar { display: none; }
       .resource { min-width: 240px; flex-shrink: 0; }
@@ -842,8 +900,8 @@
         cursor: pointer;
         z-index: 10;
       }
-      .resource-nav.left { left: 6px; }
-      .resource-nav.right { right: 6px; }
+      .resource-nav.left { left: 0px; }
+      .resource-nav.right { right: 0px; }
     }
     @media (min-width: 901px) {
       .resource-nav { display: none; }
@@ -923,7 +981,7 @@ window.addEventListener("load", () => {
     <div class="sidebar-label">MENU</div>
     <ul class="side-list">
       <li><a href="#home">HOME <span>›</span></a></li>
-      <li><a href="services.html">SERVICES <span>›</span></a></li>
+      <li><a href="#services">SERVICES <span>›</span></a></li>
       <li><a href="#wallet">WALLET <span>›</span></a></li>
       <li><a href="#transactions">YOUR TRANSACTIONS <span>›</span></a></li>
       <li><a href="#resources">RESOURCES <span>›</span></a></li>
@@ -960,7 +1018,7 @@ window.addEventListener("load", () => {
             ecosystem — designed for simplicity, speed, and excellence.
           </p>
           <div class="hero-ctas">
-            <button class="cta-pill" onclick="location.href='services.html'">Explore More →</button>
+            <button class="cta-pill" >Explore Services →</button>
             </div>
         </div>
       </div>
@@ -975,23 +1033,26 @@ window.addEventListener("load", () => {
       </div>
 
       <div class="cards">
-        <a class="card" href="services-gromart.html" style="background-image:url('images/mart.jpg')">
+
+        <div class="card" style="background-image:url('images/mart.jpg')">
           <div class="badge"><h3>Gromart</h3></div>
           <div class="card-info">
             <span class="card-tag offer">60% OFF + CASHBACK</span>
             <p>Eat Right. Live Better "</p>
             <div class="learn">→</div>
           </div>
-        </a>
-        <a class="card" href="services-vault.html" style="background-image:url('images/hub.jpeg')">
+        </div>
+
+        <div class="card" style="background-image:url('images/hub.jpeg')">
           <div class="badge"><h3>Vault</h3></div>
           <div class="card-info">
             <span class="card-tag time">⚡ 14 MINS</span>
             <p>Why Buy? Just Accesco "</p>
             <div class="learn">→</div>
           </div>
-        </a>
-        <a class="card" href="services-instastyle.html" style="background-image:url('images/fashion.jpg')">
+        </div>
+
+        <div class="card" style="background-image:url('images/fashion.jpg')">
           <div class="badge">
             <h3>InstaStyle</h3>
             <span class="new-badge">NEW</span>
@@ -1000,23 +1061,26 @@ window.addEventListener("load", () => {
             <p>Instant style, zero guesswork "</p>
             <div class="learn">→</div>
           </div>
-        </a>
-        <a class="card" href="services-eatfeast.html" style="background-image:url('images/eat.jpg')">
+        </div>
+
+        <div class="card" style="background-image:url('images/eat.jpg')">
           <div class="badge"><h3>EatFeast</h3></div>
           <div class="card-info">
             <span class="card-tag offer">UP TO 50% OFF</span>
             <p>Food delivered with precision "</p>
             <div class="learn">→</div>
           </div>
-        </a>
-        <a class="card" href="services-dineout.html" style="background-image:url('images/dinout.jpg')">
+        </div>
+
+        <div class="card" style="background-image:url('images/dinout.jpg')">
           <div class="badge"><h3>Dineout</h3></div>
           <div class="card-info">
             <span class="card-tag fest">DINING FEST LIVE</span>
             <p>Table ready before you are "</p>
             <div class="learn">→</div>
           </div>
-        </a>
+        </div>
+
       </div>
     </section>
 
@@ -1029,7 +1093,7 @@ window.addEventListener("load", () => {
             <div style="opacity:0.95;font-size:15px"> The Brain behind budget. </div>
           </div>
         </div>
-        <button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='calculator.html'">Launch Tool</button>
+        <a href="calculator.html" class="btn-outline launch-btn" style="background:#fff; font-weight:700; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">Launch Tool</a>
       </div>
     </section>
 
@@ -1078,7 +1142,7 @@ window.addEventListener("load", () => {
           <div class="game-card">
             <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
             <i class="ri-target-line fallback-icon"></i>
-            <h3><button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='quiz.html'">Quiz Time</button></h3>
+            <h3><a href="quiz.html" style="text-decoration:none; color:inherit;">Quiz Time</a></h3>
             <p>Test knowledge</p>
           </div>
           <div class="game-card">
@@ -1090,7 +1154,7 @@ window.addEventListener("load", () => {
           <div class="game-card">
             <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
             <i class="ri-roadster-line fallback-icon"></i>
-            <h3><button class="btn-outline launch-btn" style="background:#fff;font-weight:700" onclick="window.location.href='game/flappybird/race.html'">Accesco Racer</button></h3>
+             <h3><a href="game/flappybird/race.html" style="text-decoration:none; color:inherit;">Accesco Racer</a></h3>
             <p>High speed racing</p>
           </div>
           </div>
@@ -1162,7 +1226,7 @@ window.addEventListener("load", () => {
 
       <div class="about-grid">
         <div>
-          <img src="images/teamwork.jpg" alt="About Image" style="height:100% ; object-fit:cover;border-radius:18px;box-shadow:var(--shadow)" />
+          <img src="images/teamwork.jpg" alt="About Image" style="width: 100%; height: auto; object-fit:cover;border-radius:18px;box-shadow:var(--shadow)" />
         </div>
 
         <div>
@@ -1243,6 +1307,40 @@ window.addEventListener("load", () => {
           setTimeout(() => { arrow.classList.remove("shoot"); }, 350);
         });
       });
+
+      // ==========================
+      // SNOWFALL SCRIPT START
+      // ==========================
+      function createSnow() {
+        const snow = document.createElement('div');
+        snow.innerHTML = "❄";
+        snow.classList.add('snowflake');
+        document.body.appendChild(snow);
+        
+        // Randomize
+        const startLeft = Math.random() * 100; // Start pos
+        snow.style.left = startLeft + 'vw';
+        
+        const duration = Math.random() * 3 + 4; // Between 4-7s
+        snow.style.animationDuration = duration + 's';
+        
+        const size = Math.random() * 15 + 10; // 10px to 25px
+        snow.style.fontSize = size + 'px';
+        
+        snow.style.opacity = Math.random() * 0.6 + 0.4;
+        
+        // Remove after animation
+        setTimeout(() => {
+            snow.remove();
+        }, duration * 1000);
+      }
+
+      // Generate snow every 150ms
+      setInterval(createSnow, 150);
+      // ==========================
+      // SNOWFALL SCRIPT END
+      // ==========================
+
     </script>
 
   <footer id="contact">
