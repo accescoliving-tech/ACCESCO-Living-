@@ -47,8 +47,8 @@
     
     html { scroll-behavior: smooth; }
     :root {
-      --bg: hsl(0, 8%, 97%); --muted: #fcf9f9; --accent: rgba(112, 4, 87, 1); --accent-2: rgba(160, 30, 125, 1);
-      --card: #ffffff; --shadow: 0 18px 40px rgba(112, 4, 87, 0.08); --container: 1200px;
+      --bg: #fff; --muted: #8a8a8a; --accent: rgba(112, 4, 87, 1); --accent-2: rgba(160, 30, 125, 1);
+      --card: #fff; --shadow: 0 18px 40px rgba(112, 4, 87, 0.08); --container: 1200px;
     }
     * { box-sizing: border-box; }
     body { margin: 0; font-family: "Inter", sans-serif; color: #222; background: var(--bg); line-height: 1.5; overflow-x: hidden; width: 100%; }
@@ -85,19 +85,30 @@
     .side-list a:hover { color: var(--accent); transform: translateX(10px); }
 
     /* ================= HERO (WITH VIDEO) ================= */
-    .hero {
-      padding: 40px 20px;
-      position: relative;
-      min-height: 640px;
-      display: flex;
-      align-items: center;
-      overflow: hidden; 
-    }
+ /* ================= HERO (WITH VIDEO) ================= */
+.hero {
+  padding: 40px 20px;
+  position: relative;
+  
+  /* CHANGED: Use 100vh to fill the entire screen height */
+  height: 100vh; 
+  width: 100%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Optional: centers content horizontally too */
+  overflow: hidden; 
+}
 
-    .hero-bg-video {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; z-index: 0; 
-    }
+.hero-bg-video {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+    z-index: 0; 
+}
 
     @media (max-width: 600px) { .hero { min-height: 500px; padding-top: 100px; } }
 
@@ -164,41 +175,34 @@
     /* CTA & GAMING */
     .cta-large { max-width: 1100px; margin: auto; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; padding: 28px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
     @media(max-width: 900px) { .cta-large { flex-direction: column; text-align: center; } }
-    .gaming-arena { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 90px 60px; gap: 70px; border-radius: 28px; overflow: hidden; background: radial-gradient(circle at 10% 10%, rgba(112,4,87,0.08), transparent 32%), radial-gradient(circle at 80% 10%, rgba(0,0,0,0.04), transparent 28%), #fdf7ff; box-shadow: 0 24px 60px rgba(0,0,0,0.08); }
-    .arena-bg { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-    .orb { position: absolute; width: 200px; height: 200px; border-radius: 50%; filter: blur(60px); opacity: 0.75; animation: floatPulse 10s ease-in-out infinite; }
-    .orb.one { top: -40px; left: -60px; background: rgba(112,4,87,0.25); }
-    .orb.two { bottom: -60px; right: -40px; background: rgba(255,130,180,0.24); animation-delay: 2s; }
-    .gaming-arena .left { position: relative; z-index: 2; flex: 1; max-width: 520px; }
-    .tag { padding: 8px 18px; border-radius: 18px; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; box-shadow: 0 10px 22px rgba(0,0,0,0.06); }
-    .tag.red { background: rgba(112, 4, 87, 0.12); color: var(--accent); }
-    .tag.offer { background: linear-gradient(120deg, #ff5f9f, #a10f73); color: white; float: right; margin-bottom: 18px; margin-right: 20px; box-shadow: 0 18px 35px rgba(161,15,115,0.25); }
-    .gaming-arena h1 { font-size: 50px; font-weight: 850; line-height: 1.1; margin-bottom: 12px; color: #2d0100; margin-top: 20px; }
+    .gaming-arena { display: flex; justify-content: space-between; align-items: center; padding: 80px 60px; gap: 70px; }
+    .gaming-arena .left { flex: 1; max-width: 480px; }
+    .tag { padding: 8px 18px; border-radius: 18px; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+    .tag.red { background: rgba(112, 4, 87, 0.08); color: var(--accent); }
+    .tag.offer { background: var(--accent); color: white; float: right; margin-bottom: 18px; margin-right: 20px;}
+    .gaming-arena h1 { font-size: 50px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; color: #2d0100; margin-top: 20px; }
     .gaming-arena h1 span { color: var(--accent); }
-    .features { display: flex; gap: 18px; margin: 35px 0; flex-wrap: wrap; }
-    .feature-box { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: #fff; border-radius: 16px; box-shadow: 0 12px 28px rgba(112,4,87,0.12); width: 170px; position: relative; overflow: hidden; }
-    .feature-box::after { content: ""; position: absolute; inset: -30%; background: radial-gradient(circle, rgba(255,95,159,0.18), transparent 50%); animation: shimmer 3.5s ease-in-out infinite; opacity: 0.8; }
-    .feature-box i { font-size: 26px; color: var(--accent); position: relative; z-index: 1; }
-    .feature-box h4, .feature-box p { position: relative; z-index: 1; }
-    .start-btn { background: linear-gradient(120deg, #ff5f9f, #a10f73); color: #fff; border: none; padding: 16px 32px; font-size: 17px; border-radius: 14px; display: inline-flex; gap: 10px; align-items: center; cursor: pointer; font-weight: 700; box-shadow: 0 18px 35px rgba(161,15,115,0.25); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .start-btn:hover { transform: translateY(-3px); box-shadow: 0 24px 45px rgba(161,15,115,0.32); }
-    .gaming-arena .right { position: relative; z-index: 2; flex: 1.25; display: flex; flex-direction: column; align-items: flex-end; }
-    .game-grid { width: 90%; max-width: 540px; background: linear-gradient(160deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6)); padding: 40px 32px; border-radius: 32px; box-shadow: inset 0 0 24px rgba(112, 4, 87, 0.12), 0 20px 40px rgba(0,0,0,0.08); display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; border: 1px solid rgba(112,4,87,0.08); }
-    .game-card { position: relative; background: white; padding: 24px 20px; border-radius: 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.08); transition: transform 0.22s ease, box-shadow 0.22s ease; text-decoration: none; color: inherit; display: block; overflow: hidden; }
-    .game-card::before { content: ""; position: absolute; inset: -40%; background: conic-gradient(from 120deg, rgba(255,95,159,0.2), rgba(161,15,115,0.2), rgba(255,95,159,0.2)); filter: blur(40px); opacity: 0; transition: opacity 0.3s ease; }
-    .game-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 20px 45px rgba(0,0,0,0.12); }
-    .game-card:hover::before { opacity: 1; }
-    .game-card img, .game-card .fallback-icon { width: 54px; height: 54px; object-fit: contain; position: relative; z-index: 1; }
+    .features { display: flex; gap: 18px; margin: 35px 0; }
+    .feature-box { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); width: 160px; }
+    .feature-box i { font-size: 26px; color: var(--accent); }
+    .start-btn { background: var(--accent); color: #fff; border: none; padding: 16px 32px; font-size: 17px; border-radius: 14px; display: inline-flex; gap: 10px; align-items: center; cursor: pointer; font-weight: 600; }
+    .gaming-arena .right { flex: 1.3; display: flex; flex-direction: column; align-items: flex-end; }
+    .game-grid { width: 85%; max-width: 520px; background: rgba(112, 4, 87, 0.05); padding: 40px 32px; border-radius: 32px; box-shadow: inset 0 0 24px rgba(112, 4, 87, 0.1); display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
+    
+    .game-card { 
+        background: white; padding: 24px 20px; border-radius: 20px; 
+        box-shadow: 0 3px 10px rgba(112, 4, 87, 0.1); 
+        transition: 0.2s; 
+        text-decoration: none; color: inherit; display: block;
+    }
+    .game-card:hover { transform: translateY(-5px); }
+    .game-card img, .game-card .fallback-icon { width: 54px; height: 54px; object-fit: contain; }
     .fallback-icon { font-size: 48px; color: var(--accent); display: none; }
-    .game-card h3 { font-size: 19px; margin-top: 12px; color: #2d0100; font-weight: 700; position: relative; z-index: 1; }
-    .game-card p { font-size: 15px; color: #777; margin-top: 4px; position: relative; z-index: 1; }
+    .game-card h3 { font-size: 19px; margin-top: 12px; color: #2d0100; font-weight: 700; }
+    .game-card p { font-size: 15px; color: #777; margin-top: 4px; }
 
     @media(max-width: 1100px) { .gaming-arena { flex-direction: column; padding: 50px 20px; } .gaming-arena .left, .gaming-arena .right { width: 100%; max-width: 100%; } .gaming-arena .right { align-items: center; } .game-grid { width: 100%; max-width: 100%; } .gaming-arena h1 { font-size: 42px; } }
     @media(max-width: 750px) { .game-grid { grid-template-columns: 1fr; padding: 30px 20px; } .features { flex-direction: column; gap: 14px; width: 100%; } .feature-box { width: 100%; } .gaming-arena h1 { font-size: 32px; } .start-btn { font-size: 16px; width: 100%; justify-content: center; } .tag.offer { float: none; display: table; margin-bottom: 10px;} }
-
-    /* ARENA ANIMATIONS */
-    @keyframes floatPulse { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-10px) scale(1.05); } }
-    @keyframes shimmer { 0% { transform: translateX(-20%) translateY(-10%); opacity: 0.4; } 50% { opacity: 0.9; } 100% { transform: translateX(20%) translateY(10%); opacity: 0.4; } }
 
     /* RESOURCES */
     .resource-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
@@ -410,13 +414,14 @@
 </head>
 
 <body>
-  <!-- ================= LOADING SCREEN ================= -->
-  <div id="loadingScreen">
+
+
+<div id="loadingScreen">
   <video class="plane-video" autoplay muted loop playsinline>
     <source src="images/plane.mp4" type="video/mp4">
   </video>
   <div class="loading-text">LOADING...</div>
-  </div>
+</div>
 
 <script>
 window.addEventListener("load", () => {
@@ -428,7 +433,7 @@ window.addEventListener("load", () => {
 });
 </script>
 
-  <!-- ================= SIDEBAR ================= -->
+
   <div id="backdrop" class="sidebar-backdrop"></div>
   <aside id="sidebar" class="sidebar">
     <div class="sidebar-top">
@@ -447,7 +452,6 @@ window.addEventListener("load", () => {
     </ul>
   </aside>
 
-  <!-- ================= NAVBAR ================= -->
   <header class="navbar" id="nav">
     <div class="nav-inner">
       <button class="menu-toggle" id="openMenu">☰</button>
@@ -462,9 +466,7 @@ window.addEventListener("load", () => {
   </header>
 
 
-  <!-- ================= MAIN CONTENT ================= -->
   <main id="home">
-    <!-- HERO -->
     <section class="hero">
       <video class="hero-bg-video" autoplay muted loop playsinline>
           <source src="images/start.mp4" type="video/mp4">
@@ -472,11 +474,11 @@ window.addEventListener("load", () => {
       <div class="hero-grid">
         <div class="hero-left">
           <br>
-          <span class="small-pill">Welcome to the Future of Digital Services</span>
+          <span class="small-pill">Welcome to Smarter Living</span>
           <h2 class="hero-title">
             Redefining Everyday<br>Living with <span style="color:var(--accent)">ACCESCO</span>
           </h2>
-          <p class="hero-sub">
+          <p class=" small-pill">
             Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
           </p>
           <div class="hero-ctas">
@@ -489,12 +491,11 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- SERVICES GRID -->
     <section id="services">
       <div class="section-title">
         <div class="small-upper">OUR SERVICES</div>
-        <h3 class="big-h">Everything You Need, All in One Place</h3>
-        <p class="muted-center">Explore our comprehensive suite of digital services "</p>
+        <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
+        <p class="muted-center">Welcome to Accesco Living — discover timeless essentials designed to elevate your everyday living.</p>
       </div>
 
       <div class="cards">
@@ -505,7 +506,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag offer">60% OFF + CASHBACK</span>
                 <p>Eat Right. Live Better "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -516,7 +517,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag time">⚡ 14 MINS</span>
                 <p>Why Buy? Just Accesco "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -529,7 +530,7 @@ window.addEventListener("load", () => {
             </div>
             <div class="card-info">
                 <p>Instant style, zero guesswork "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -540,7 +541,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag offer">UP TO 50% OFF</span>
                 <p>Food delivered with precision "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -551,7 +552,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag fest">DINING FEST LIVE</span>
                 <p>Table ready before you are "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -560,7 +561,6 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- CTA CALCIQ -->
     <section>
       <div class="cta-large">
         <div style="display:flex;gap:16px;align-items:center">
@@ -575,12 +575,7 @@ window.addEventListener("load", () => {
 
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-    <!-- GAMING ARENA -->
-    <section class="gaming-arena" id="wallet">
-      <div class="arena-bg">
-        <span class="orb one"></span>
-        <span class="orb two"></span>
-      </div>
+    <section class="gaming-arena">
       <div class="left">
         <span class="tag red"><i class="ri-gift-line"></i> Play & Win Rewards</span>
         <h1>Reward Play <span> Arena</span></h1>
@@ -589,7 +584,7 @@ window.addEventListener("load", () => {
           <div class="feature-box">
             <i class="ri-gamepad-line"></i>
             <div>
-              <h4>Fun Games</h4>
+              <h4>Fun Games  </h4>
               <p>Play Daily</p>
             </div>
           </div>
@@ -603,7 +598,7 @@ window.addEventListener("load", () => {
           <div class="feature-box">
             <i class="ri-trophy-line"></i>
             <div>
-              <h4>Leaderboards</h4>
+              <h4>Leaderboards  </h4>
               <p>Compete & Win</p>
             </div>
           </div>
@@ -645,7 +640,6 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- ABOUT -->
     <section id="about">
       <div class="section-title">
         <div class="small-upper">ABOUT ACCESCO</div>
@@ -707,7 +701,6 @@ window.addEventListener("load", () => {
       </div>
     </section>
 
-    <!-- APP SHOWCASE -->
     <section class="app-showcase">
         <div class="app-header">
             <h2>The Ecosystem. Unlocked.</h2>
@@ -790,7 +783,6 @@ window.addEventListener("load", () => {
         </div>
     </section>
 
-    <!-- STACK / UI INTERACTIONS -->
     <script>
       const stack = document.getElementById('stack');
       const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -859,7 +851,6 @@ window.addEventListener("load", () => {
     </script>
 
 
-  <!-- ================= FOOTER ================= -->
   <footer id="contact">
     <div class="footer-grid">
       <div>
@@ -914,7 +905,6 @@ window.addEventListener("load", () => {
     </div>
   </footer>
 
-  <!-- ================= ACCOUNT POPUP ================= -->
   <div id="accountPopupBackdrop" class="acc-popup-backdrop"></div>
   <div id="accountPopup" class="acc-popup">
       <div class="acc-top">
@@ -939,7 +929,6 @@ window.addEventListener("load", () => {
       </div>
   </div>
 
-  <!-- POPUP STYLES -->
   <style>
   .acc-popup-backdrop {
     position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(3px); display: none; z-index: 2000;
@@ -965,7 +954,6 @@ window.addEventListener("load", () => {
   @media(max-width: 420px) { .acc-popup { width: 90%; padding: 20px; } }
   </style>
 
-  <!-- SIDEBAR / POPUP / SLIDER / SNOW SCRIPTS -->
   <script>
   // --- Sidebar Logic ---
   const sidebar = document.getElementById("sidebar");
