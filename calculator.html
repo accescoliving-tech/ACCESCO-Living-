@@ -5,20 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>ACCESCO CALCULATOR</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-  <!-- ChartJS kept -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <link rel="icon" href="images/accesco.png" type="image/x-icon">
 
   <style>
     /* =========================
-       ACCESCO PREMIUM THEME (Pure CSS)
-       Inspired by index.html visual language.
-       Tailwind removed completely.
+       ACCESCO PREMIUM THEME
        ========================= */
 
     :root {
@@ -39,143 +35,75 @@
       font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: var(--bg);
       color: #222;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       line-height: 1.45;
     }
+
+    /* Utility Classes */
+    .hidden { display: none !important; }
+    .text-red-600 { color: #dc2626 !important; }
+    .text-green-600 { color: #16a34a !important; }
+    .w-full { width: 100%; }
+    .text-center { text-align: center; }
+    .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    .font-black { font-weight: 900; }
+    .outline-none { outline: 2px solid transparent; outline-offset: 2px; }
+    .bg-transparent { background-color: transparent; }
 
     a { color: inherit; text-decoration: none; }
 
     /* Container */
     .wrap { max-width: var(--container); margin: 28px auto; padding: 0 20px; }
 
-    /* Brand strip (not a navbar) */
-    .brand-strip {
-      display:flex;
-      align-items:center;
-      gap:14px;
-      margin-bottom:20px;
-    }
+    /* Brand strip */
+    .brand-strip { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    
     .brand-box {
       width:58px; height:58px; border-radius:14px;
       display:flex; align-items:center; justify-content:center;
-      background: linear-gradient(180deg, var(--accent), #72000a);
-      box-shadow: 0 8px 30px rgba(139,10,20,0.12);
-      color:white; font-weight:800; font-family:"Poppins",sans-serif;
+      /* CHANGED: Background is now identical to body background */
+      background: var(--bg); 
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      /* CHANGED: Text color dark so it is visible */
+      color: #222; 
+      font-weight:800; font-family:"Poppins",sans-serif;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.05);
     }
-    .brand-title {
-      font-family:"Poppins",sans-serif;
-      font-weight:800;
-      font-size:20px;
-      letter-spacing:-0.01em;
-    }
-    .brand-sub {
-      font-size:12px; color:var(--muted); margin-top:4px;
-    }
-    .brand-badge {
-      margin-left:auto;
-      background: rgba(139,10,20,0.06);
-      color:var(--accent);
-      border-radius:999px;
-      padding:8px 12px;
-      font-weight:700;
-      font-size:12px;
-      border: 1px solid rgba(139,10,20,0.08);
-    }
+    
+    .brand-title { font-family:"Poppins",sans-serif; font-weight:800; font-size:20px; letter-spacing:-0.01em; }
+    .brand-sub { font-size:12px; color:var(--muted); margin-top:4px; }
+    .brand-badge { margin-left:auto; background: rgba(139,10,20,0.06); color:var(--accent); border-radius:999px; padding:8px 12px; font-weight:700; font-size:12px; border: 1px solid rgba(139,10,20,0.08); }
 
     /* Layout grid */
-    .grid {
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:24px;
-    }
-    @media(min-width:1024px) {
-      .grid { grid-template-columns: 420px 1fr; }
-    }
+    .grid { display:grid; grid-template-columns: 1fr; gap:24px; }
+    @media(min-width:1024px) { .grid { grid-template-columns: 420px 1fr; } }
 
     /* Card */
-    .card {
-      background: var(--card);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,0.04);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
+    .card { background: var(--card); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,0.04); transition: transform .18s ease; }
     .card:hover { transform: translateY(-4px); }
-
     .card-lg { padding: 28px; border-radius: 22px; }
 
-    /* Section label pill */
-    .pill {
-      display:inline-block;
-      padding:8px 14px;
-      border-radius:999px;
-      background: rgba(139,10,20,0.06);
-      color:var(--accent);
-      font-weight:700;
-      font-size:13px;
-    }
-
-    /* Headings */
-    h1, h2, h3 {
-      margin:0;
-      font-family: "Poppins", sans-serif;
-      color:#111;
-    }
+    /* Elements */
+    .pill { display:inline-block; padding:8px 14px; border-radius:999px; background: rgba(139,10,20,0.06); color:var(--accent); font-weight:700; font-size:13px; }
+    h1, h2, h3 { margin:0; font-family: "Poppins", sans-serif; color:#111; }
     h2 { font-size:18px; font-weight:800; margin-top:8px; }
     .muted { color:var(--muted); font-size:13px; }
 
     /* Inputs */
-    .field {
-      display:block;
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid #eee;
-      background:#fbfbfb;
-      font-size:15px;
-      outline:none;
-      transition: box-shadow .14s ease, border-color .14s ease;
-    }
-    .field:focus {
-      box-shadow: 0 10px 20px rgba(128,0,0,0.06);
-      border-color: var(--accent);
-      background: #fff;
-    }
-
-    .money {
-      display:flex; align-items:center; gap:8px;
-      background:#fbfbfb; border-radius:12px; padding:10px;
-      border:1px solid #eee;
-    }
+    .field { display:block; width:100%; padding:12px 14px; border-radius:12px; border:1px solid #eee; background:#fbfbfb; font-size:15px; outline:none; transition: all .14s ease; }
+    .field:focus { box-shadow: 0 10px 20px rgba(128,0,0,0.06); border-color: var(--accent); background: #fff; }
+    .money { display:flex; align-items:center; gap:8px; background:#fbfbfb; border-radius:12px; padding:10px; border:1px solid #eee; }
     .money .symbol { color:#777; font-weight:700; }
 
     /* Buttons */
-    .btn {
-      display:inline-flex; align-items:center; gap:8px; justify-content:center;
-      padding:12px 16px; border-radius:12px; border:0; cursor:pointer;
-      font-weight:800;
-    }
-    .btn-primary {
-      background: linear-gradient(180deg,var(--accent), var(--accent-2));
-      color:#fff; box-shadow: 0 10px 30px rgba(139,10,20,0.10);
-      transition: transform .14s ease, box-shadow .14s ease;
-    }
+    .btn { display:inline-flex; align-items:center; gap:8px; justify-content:center; padding:12px 16px; border-radius:12px; border:0; cursor:pointer; font-weight:800; }
+    .btn-primary { background: linear-gradient(180deg,var(--accent), var(--accent-2)); color:#fff; box-shadow: 0 10px 30px rgba(139,10,20,0.10); transition: transform .14s ease; }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(139,10,20,0.15); }
-    .btn-ghost {
-      background:#fff; color:var(--accent);
-      border:1px solid rgba(139,10,20,0.08);
-      font-weight:700;
-    }
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .btn-ghost { background:#fff; color:var(--accent); border:1px solid rgba(139,10,20,0.08); font-weight:700; }
 
-    /* Stats row */
-    .stats {
-      display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-    }
-    .stat {
-      min-width:150px;
-    }
+    /* Stats */
+    .stats { display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
     .stat .label { font-size:11px; color:#666; font-weight:700; text-transform:uppercase; }
     .stat .value { font-weight:900; font-size:22px; }
 
@@ -184,79 +112,59 @@
     @media(min-width:720px) { .charts { grid-template-columns: 1fr 1fr; } }
     .chart-card { height:260px; border-radius:14px; overflow:hidden; padding:16px; }
 
-    /* Breakdown grid */
+    /* Breakdown */
     .breakdown { display:grid; grid-template-columns:1fr; gap:16px; }
     @media(min-width:900px){ .breakdown { grid-template-columns: repeat(3, 1fr); } }
-
     .break-card { padding:18px; border-radius:14px; background:#fff; box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
     .break-card .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
 
-    /* Savings input */
-    .inv-large {
-      font-weight:900; font-size:28px; text-align:center; border:none; background:transparent; width:100%;
-    }
+    .inv-large { font-weight:900; font-size:28px; text-align:center; border:none; background:transparent; width:100%; }
 
     /* Toast */
     #toast-container { position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:1200; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
     .toast { background:var(--accent); color:#fff; padding:12px 18px; border-radius:8px; font-weight:700; box-shadow:0 10px 20px rgba(0,0,0,0.12); opacity:0; transform:translateY(-12px); transition: all .28s cubic-bezier(.2,.9,.3,1); pointer-events:auto; }
     .toast.show { opacity:1; transform:translateY(0); }
 
-    /* Small helpers */
+    /* Helpers */
     .muted-sm { color:#777; font-size:13px; }
-    .sep { height:1px; background:#f1f1f1; margin:12px 0; border-radius:4px; }
 
-    /* Modal */
-    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:1400; }
-    .modal { width:100%; max-width:820px; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.35); max-height:92vh; }
-
-    /* responsive */
-    @media(max-width:600px){
-      .brand-title { font-size:16px; }
-      .card { padding:16px; }
-    }
+    @media(max-width:600px){ .brand-title { font-size:16px; } .card { padding:16px; } }
   </style>
 </head>
 <body>
 
   <div class="wrap">
-
-    <!-- Brand strip (no navbar) -->
     <div class="brand-strip">
-      <div class="brand-box"><img src="images/accesco.png" alt="logo" style="width:54px;height:54px;border-radius:8px;object-fit:cover;"></div>
+      <div class="brand-box">
+          <img src="images/accesco.png" alt="logo" style="width:100%;height:100%;object-fit:contain;">
+      </div>
       <div>
         <div class="brand-title">ACCESCO <span style="color:var(--accent)">CALCULATOR</span></div>
-        <div class="brand-sub">Smart budget planner — premium UI</div>
+        <div class="brand-sub">Smart budget planner</div>
       </div>
       <div class="brand-badge">INDIA 2025</div>
     </div>
 
-    <!-- Main grid -->
     <div class="grid">
-
-      <!-- LEFT: Controls (sidebar-like) -->
-      <aside class="card card-lg" aria-labelledby="financial-setup">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
-          <div>
-            <span class="pill">Financial Setup</span>
-            <h2 id="financial-setup" style="margin-top:12px;">Set your income & preferences</h2>
-            <div class="muted">We’ll suggest a balanced plan for needs, wants and savings.</div>
-          </div>
+      <aside class="card card-lg">
+        <div>
+          <span class="pill">Financial Setup</span>
+          <h2 style="margin-top:12px;">Set your income & preferences</h2>
+          <div class="muted">We’ll suggest a balanced plan for needs, wants and savings.</div>
         </div>
 
         <div style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">
-          <!-- income -->
           <div>
             <label class="muted-sm" for="incomeInput">Total Monthly Income</label>
             <div class="money" style="margin-top:8px;">
               <div class="symbol">₹</div>
               <input id="incomeInput" type="number" class="field" placeholder="50000">
             </div>
-            <div id="incomeError" style="display:none;color:#c62828;font-weight:700;font-size:12px;margin-top:6px;">Minimum income ₹500 required.</div>
+            <div id="incomeError" class="hidden" style="color:#c62828;font-weight:700;font-size:12px;margin-top:6px;">Minimum income ₹500 required.</div>
           </div>
 
-          <!-- rent -->
           <div>
-            <label class="muted-sm" for="setupRentInput">Fixed Rent / EMI</label>
+            <label class="muted-sm" for="setupRentInput">Fixed Rent / EMI (Optional)</label>
             <div class="money" style="margin-top:8px;">
               <div class="symbol">₹</div>
               <input id="setupRentInput" type="number" class="field" placeholder="15000">
@@ -283,43 +191,38 @@
             <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
               <i class="fa-solid fa-users" style="color:var(--accent);"></i>
               <input id="headCountInput" type="number" class="field" placeholder="1" value="1" min="1" style="flex:1;">
-              <div style="font-size:12px;color:#888;font-weight:700;">Person(s)</div>
             </div>
           </div>
 
-          <div id="logicStatus" style="display:none;background:rgba(139,10,20,0.06);padding:10px;border-left:4px solid var(--accent);border-radius:10px;color:var(--accent);font-weight:700;font-size:13px;"></div>
+          <div id="logicStatus" class="hidden" style="background:rgba(139,10,20,0.06);padding:10px;border-left:4px solid var(--accent);border-radius:10px;color:var(--accent);font-weight:700;font-size:13px;"></div>
 
           <div style="display:flex;gap:12px;">
             <button id="generateBtn" onclick="performSmartResearchAndCalc()" class="btn btn-primary" style="flex:1;">
               CALCULATE PLAN <i class="fa-solid fa-arrow-right" style="font-size:14px;"></i>
             </button>
-            <button id="analyzeBtn" onclick="getAIAnalysis()" class="btn btn-ghost" style="display:none;">AI Audit</button>
+            <button id="analyzeBtn" onclick="getAIAnalysis()" class="btn btn-ghost hidden">AI Audit</button>
           </div>
         </div>
       </aside>
 
-      <!-- RIGHT: Dashboard -->
       <section>
-
-        <!-- Stats -->
         <div class="card" style="margin-bottom:12px;">
           <div class="stats">
             <div class="stat">
-              <div class="label">Needs (Essentials)</div>
+              <div class="label">Needs</div>
               <div class="value" id="needsTotalDisp">₹0</div>
             </div>
             <div class="stat">
-              <div class="label">Wants (Fun)</div>
+              <div class="label">Wants</div>
               <div class="value" id="wantsTotalDisp" style="color:var(--accent);">₹0</div>
             </div>
             <div class="stat">
-              <div class="label">Savings (Wealth)</div>
+              <div class="label">Savings</div>
               <div class="value" id="savingsTotalDisp" style="color:#16a34a;">₹0</div>
             </div>
           </div>
         </div>
 
-        <!-- Charts -->
         <div class="charts" style="margin-bottom:12px;">
           <div class="card chart-card">
             <canvas id="distributionChart"></canvas>
@@ -329,33 +232,25 @@
           </div>
         </div>
 
-        <!-- Breakdown cards -->
-        <div id="breakdownCards" class="breakdown" style="display:none;">
-          <!-- Needs -->
+        <div id="breakdownCards" class="breakdown hidden">
           <div class="break-card">
             <div class="top">
-              <div>
-                <h3 style="font-size:16px;">NEEDS</h3>
-              </div>
+              <h3 style="font-size:16px;">NEEDS</h3>
               <i class="fa-solid fa-house-chimney" style="color:#777;"></i>
             </div>
-
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div class="muted-sm">RENT</div>
                 <input id="rentInput" type="number" oninput="autoBalanceInvest()" class="field" style="width:110px;text-align:right;background:transparent;border:none;border-bottom:1px solid #eee;padding:6px 8px;">
               </div>
-
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div class="muted-sm">GROCERY</div>
                 <input id="grocInput" type="number" oninput="autoBalanceInvest()" class="field" style="width:110px;text-align:right;background:transparent;border:none;border-bottom:1px solid #eee;padding:6px 8px;">
               </div>
-
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div class="muted-sm">TRANSPORT</div>
                 <input id="transInput" type="number" oninput="autoBalanceInvest()" class="field" style="width:110px;text-align:right;background:transparent;border:none;border-bottom:1px solid #eee;padding:6px 8px;">
               </div>
-
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div class="muted-sm">BILLS</div>
                 <input id="utilInput" type="number" oninput="autoBalanceInvest()" class="field" style="width:110px;text-align:right;background:transparent;border:none;border-bottom:1px solid #eee;padding:6px 8px;">
@@ -363,15 +258,11 @@
             </div>
           </div>
 
-          <!-- Wants -->
           <div class="break-card">
             <div class="top">
-              <div>
-                <h3 style="font-size:16px;color:var(--accent);">WANTS</h3>
-              </div>
+              <h3 style="font-size:16px;color:var(--accent);">WANTS</h3>
               <i class="fa-solid fa-bag-shopping" style="color:#b91c1c;"></i>
             </div>
-
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;justify-content:space-between;align-items:center;">
                 <div class="muted-sm">SHOPPING</div>
@@ -386,274 +277,246 @@
                 <input id="hobInput" type="number" oninput="autoBalanceInvest()" class="field" style="width:110px;text-align:right;background:transparent;border:none;border-bottom:1px solid #eee;padding:6px 8px;">
               </div>
             </div>
-
-            <button onclick="optimizeWants()" class="btn btn-ghost" style="margin-top:12px;width:100%;">✂️ Smart Cuts</button>
           </div>
 
-          <!-- Savings -->
-          <div class="break-card" style="position:relative;">
-            <div style="position:absolute;right:12px;top:12px;background:#16a34a;color:#fff;padding:6px 8px;border-radius:8px;font-weight:800;font-size:12px;">AUTO-FILL</div>
+          <div class="break-card">
             <div class="top">
-              <div>
-                <h3 style="font-size:16px;color:#166534;">SAVINGS</h3>
-              </div>
+              <h3 style="font-size:16px;color:#166534;">SAVINGS</h3>
               <i class="fa-solid fa-piggy-bank" style="color:#16a34a;"></i>
             </div>
-
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
               <input id="invInput" type="number" readonly class="inv-large" value="0">
               <div class="muted-sm">Monthly Surplus</div>
             </div>
-
             <div style="margin-top:12px;border-top:1px solid #f1f1f1;padding-top:12px;">
               <input id="savingsGoal" type="text" class="field" placeholder="E.g. Buy a Car">
               <button onclick="checkSavingsGoal()" class="btn" style="width:100%;margin-top:10px;background:#16a34a;color:#fff;border-radius:12px;font-weight:800;">🎯 Plan Goal</button>
             </div>
           </div>
         </div>
-
       </section>
     </div>
-
   </div>
 
-  <!-- Modal (kept, hidden by default) -->
-  <div id="genericAIModal" style="display:none;">
-    <!-- modal will be controlled by JS (structure preserved if needed) -->
-  </div>
-
-  <!-- Toast container -->
   <div id="toast-container"></div>
 
-  <!-- =================== SCRIPTS (UI changed only; function names and IDs preserved) =================== -->
   <script>
-    // NOTE: The core JS logic has been retained from your original Calculator.html.
-    // The functions, element IDs, and behavior are unchanged. I only adjusted CSS/classes above.
-
-    const apiKey = ""; // Env key — kept as original
+    // ⬇️⬇️ PASTE YOUR API KEY HERE ⬇️⬇️
+    const apiKey = "YOUR_API_KEY_HERE"; 
+    
     let distributionChart, breakdownChart;
     const apiCache = new Map();
 
     window.onload = () => { initCharts(); };
 
-    // Toast
     function showToast(message, type = 'info') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        let icon = '<i class="fa-solid fa-circle-info text-white"></i>';
-        if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation text-red-200"></i>';
-        if (type === 'success') icon = '<i class="fa-solid fa-circle-check text-green-200"></i>';
-        toast.innerHTML = `${icon} <span>${message}</span>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        setTimeout(() => { toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); }, 3000);
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      let icon = '<i class="fa-solid fa-circle-info text-white"></i>';
+      if (type === 'error') icon = '<i class="fa-solid fa-circle-exclamation"></i>';
+      if (type === 'success') icon = '<i class="fa-solid fa-circle-check"></i>';
+      toast.innerHTML = `${icon} <span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => { toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); }, 3000);
     }
 
-    // Charts init (colors matched to maroon theme)
     function initCharts() {
-        const ctx1 = document.getElementById('distributionChart').getContext('2d');
-        const ctx2 = document.getElementById('breakdownChart').getContext('2d');
-        distributionChart = new Chart(ctx1, {
-            type: 'doughnut',
-            data: { labels: ['Needs', 'Wants', 'Savings'], datasets: [{ data: [1,1,1], backgroundColor: ['#800000','#b91c1c','#16a34a'], borderWidth:0 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, font: { family: 'Inter', weight: 'bold' }, color: '#333' } } }, cutout: '70%' }
-        });
-        breakdownChart = new Chart(ctx2, {
-            type: 'bar',
-            data: { labels: ['Rent', 'Groc', 'Trav', 'Fun', 'Save'], datasets: [{ label: '₹', data: [0,0,0,0,0], backgroundColor: '#800000', borderRadius: 6 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: {color:'#666'} }, x: { grid: { display: false }, ticks: {color:'#666'} } }, plugins: { legend: { display: false } } }
-        });
+      const ctx1 = document.getElementById('distributionChart').getContext('2d');
+      const ctx2 = document.getElementById('breakdownChart').getContext('2d');
+      distributionChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: { labels: ['Needs', 'Wants', 'Savings'], datasets: [{ data: [1,1,1], backgroundColor: ['#800000','#b91c1c','#16a34a'], borderWidth:0 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, font: { family: 'Inter', weight: 'bold' }, color: '#333' } } }, cutout: '70%' }
+      });
+      breakdownChart = new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: ['Rent', 'Groc', 'Trav', 'Fun', 'Save'], datasets: [{ label: '₹', data: [0,0,0,0,0], backgroundColor: '#800000', borderRadius: 6 }] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false }, ticks: {color:'#666'} }, x: { grid: { display: false }, ticks: {color:'#666'} } }, plugins: { legend: { display: false } } }
+      });
     }
 
-    // The smart research & calculation engine (kept from your original file)
     async function performSmartResearchAndCalc() {
-        const income = parseFloat(document.getElementById('incomeInput').value);
-        const setupRent = parseFloat(document.getElementById('setupRentInput').value) || 0;
-        const city = document.getElementById('cityInput').value;
-        const lifeStyle = document.getElementById('lifeStyle').value;
-        const members = parseInt(document.getElementById('headCountInput').value) || 1;
-        const errEl = document.getElementById('incomeError');
+      const income = parseFloat(document.getElementById('incomeInput').value);
+      const setupRent = parseFloat(document.getElementById('setupRentInput').value) || 0;
+      const city = document.getElementById('cityInput').value;
+      const lifeStyle = document.getElementById('lifeStyle').value;
+      const members = parseInt(document.getElementById('headCountInput').value) || 1;
+      const errEl = document.getElementById('incomeError');
 
-        if(!income || income < 500) {
-            errEl.classList.remove('hidden');
-            showToast("Income must be at least ₹500", "error");
-            return;
+      if(!income || income < 500) {
+        errEl.classList.remove('hidden');
+        showToast("Income must be at least ₹500", "error");
+        return;
+      }
+      errEl.classList.add('hidden');
+      if(!city){ showToast("Please enter a city!", "error"); return; }
+
+      const btn = document.getElementById('generateBtn');
+      const origText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ANALYZING...`;
+      document.getElementById('logicStatus').classList.add('hidden');
+
+      // 1. OFFLINE FALLBACK LOGIC
+      // We calculate this first so even if API fails, the user gets a result
+      const incomePerCapita = income / members;
+      let baseFoodCost = lifeStyle === 'frugal' ? 2500 : (lifeStyle === 'luxury' ? 5000 : 3000);
+      let scaleFactor = 1;
+      if (members > 1) scaleFactor += 0.7;
+      if (members > 2) scaleFactor += (members - 2) * 0.6;
+      let idealGrocery = Math.floor(baseFoodCost * scaleFactor);
+
+      let baseUtil = lifeStyle === 'frugal' ? 600 : (lifeStyle === 'luxury' ? 2000 : 1000);
+      let utilScale = 1 + ((members-1) * 0.3);
+      let idealUtility = Math.floor(baseUtil * utilScale);
+
+      let baseTrans = 1500;
+      let transScale = members > 2 ? members * 0.8 : members;
+      let idealTransport = Math.floor(baseTrans * transScale);
+
+      const disposable = Math.max(0, income - (setupRent > 0 ? setupRent : 0));
+      let remaining = disposable - (idealGrocery + idealUtility + idealTransport);
+      let shopping = 0, dining = 0, entertainment = 0;
+
+      if (remaining > 0) {
+        shopping = Math.floor(remaining * 0.2);
+        dining = Math.floor(remaining * 0.2);
+        entertainment = Math.floor(remaining * 0.1);
+      } else {
+        let totalNeeds = idealGrocery + idealUtility + idealTransport;
+        let scaleDown = disposable / totalNeeds;
+        idealGrocery = Math.floor(idealGrocery * scaleDown);
+        idealUtility = Math.floor(idealUtility * scaleDown);
+        idealTransport = Math.floor(idealTransport * scaleDown);
+      }
+
+      let budget = {
+        rent: setupRent > 0 ? setupRent : Math.floor(income * 0.30),
+        grocery: idealGrocery,
+        transport: idealTransport,
+        utility: idealUtility,
+        shopping: shopping,
+        dining: dining,
+        entertainment: entertainment,
+        reasoning: `Budget tailored for ${lifeStyle} lifestyle with ${members} member(s).`
+      };
+
+      // 2. API CALL
+      let aiSuccess = false;
+      try {
+        if(apiKey && apiKey.length > 10) {
+          const rentInstruction = setupRent > 0 ? `Rent is FIXED at ₹${setupRent}.` : `Estimate rent for ${city}.`;
+          const prompt = `Act as an Indian financial planner. Create a monthly budget for a family of ${members} in ${city} with Income ₹${income} and lifestyle '${lifeStyle}'. ${rentInstruction}
+          CRITICAL INSTRUCTION:
+          1. Prioritize Grocery & Utilities.
+          2. Ensure total expenses do not exceed ₹${income}.
+          3. Return STRICT JSON format only: { "rent": int, "grocery": int, "transport": int, "utility": int, "shopping": int, "dining": int, "entertainment": int, "reasoning": "short sentence" }`;
+
+          const data = await callGeminiJSON(prompt);
+          if(data && data.rent !== undefined) {
+            budget = data;
+            if (setupRent > 0) budget.rent = setupRent;
+            aiSuccess = true;
+          }
         }
-        errEl.classList.add('hidden');
-        if(!city){ showToast("Please enter a city!", "error"); return; }
+      } catch(e) {
+        console.error("AI Failed", e);
+      }
 
-        const btn = document.getElementById('generateBtn');
-        const origText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ANALYZING...`;
-        document.getElementById('logicStatus').classList.add('hidden');
+      // 3. APPLY RESULTS
+      if(!aiSuccess) {
+         if(!apiKey || apiKey === "YOUR_API_KEY_HERE") {
+             showToast("⚠️ Using offline logic. Add API Key for AI results.", "info");
+         } else {
+             showToast("⚠️ API Offline. Using calculated estimate.", "error");
+         }
+      } else {
+          showToast("AI Budget Generated!", "success");
+      }
 
-        const incomePerCapita = income / members;
-        const isVeryLowBudget = income < 12000 || incomePerCapita < 5000;
+      const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
 
-        let baseFoodCost = 3000;
-        if(lifeStyle === 'frugal') baseFoodCost = 2500;
-        if(lifeStyle === 'luxury') baseFoodCost = 5000;
+      set('rentInput', budget.rent);
+      set('grocInput', budget.grocery);
+      set('transInput', budget.transport);
+      set('utilInput', budget.utility);
+      set('shopInput', budget.shopping);
+      set('dineInput', budget.dining);
+      set('hobInput', budget.entertainment);
 
-        let scaleFactor = 1;
-        if (members > 1) scaleFactor += 0.7;
-        if (members > 2) scaleFactor += (members - 2) * 0.6;
+      const statusEl = document.getElementById('logicStatus');
+      statusEl.classList.remove('hidden');
+      statusEl.innerHTML = `<strong>${aiSuccess ? 'AI' : 'Standard'} Insight:</strong> ${budget.reasoning}`;
 
-        let idealGrocery = Math.floor(baseFoodCost * scaleFactor);
+      // Show the results section (This was the bug before!)
+      document.getElementById('breakdownCards').classList.remove('hidden');
+      document.getElementById('analyzeBtn').classList.remove('hidden');
 
-        let baseUtil = 1000;
-        if(lifeStyle === 'frugal') baseUtil = 600;
-        if(lifeStyle === 'luxury') baseUtil = 2000;
-        let utilScale = 1 + ((members-1) * 0.3);
-        let idealUtility = Math.floor(baseUtil * utilScale);
+      autoBalanceInvest();
 
-        let baseTrans = 1500;
-        let transScale = members;
-        if(members > 2) transScale = members * 0.8;
-        let idealTransport = Math.floor(baseTrans * transScale);
-
-        const disposable = Math.max(0, income - (setupRent > 0 ? setupRent : 0));
-        let remaining = disposable - (idealGrocery + idealUtility + idealTransport);
-        let shopping = 0, dining = 0, entertainment = 0;
-
-        if (remaining > 0) {
-            shopping = Math.floor(remaining * 0.2);
-            dining = Math.floor(remaining * 0.2);
-            entertainment = Math.floor(remaining * 0.1);
-        } else {
-            let deficit = Math.abs(remaining);
-            let totalNeeds = idealGrocery + idealUtility + idealTransport;
-            let scaleDown = disposable / totalNeeds;
-            idealGrocery = Math.floor(idealGrocery * scaleDown);
-            idealUtility = Math.floor(idealUtility * scaleDown);
-            idealTransport = Math.floor(idealTransport * scaleDown);
-        }
-
-        let budget = {
-            rent: setupRent > 0 ? setupRent : Math.floor(income * 0.30),
-            reasoning: `Budget tailored for ${lifeStyle} lifestyle with ${members} member(s) (AI Offline).`
-        };
-
-        // Try AI call but do not block if offline (kept original behavior)
-        let aiSuccess = false;
-        try {
-            const rentInstruction = setupRent > 0 ? `Rent is FIXED at ₹${setupRent}.` : `Estimate rent for ${city}.`;
-            const prompt = `Act as an Indian financial planner. Create a monthly budget for a family of ${members} in ${city} with Income ₹${income} and lifestyle '${lifeStyle}'. ${rentInstruction}
-            CRITICAL INSTRUCTION:
-            1. **Prioritize Grocery & Utilities**
-            2. **Wants Logic**
-            3. **Hard Limits: Total expenses <= Income**
-            Return JSON: { 'rent': int, 'grocery': int, 'transport': int, 'utility': int, 'shopping': int, 'dining': int, 'entertainment': int, 'reasoning': "string" }`;
-
-            const data = await callGeminiJSON(prompt);
-            if(data && data.rent !== undefined) {
-                budget = data;
-                if (setupRent > 0) budget.rent = setupRent;
-                aiSuccess = true;
-            }
-        } catch(e) {
-            console.error("AI Failed", e);
-        }
-
-        if(!aiSuccess) showToast("⚠️ You are offline. A much more personal budget can be created when online.", "error");
-
-        let totalEx = budget.rent + budget.grocery + budget.transport + budget.utility + budget.shopping + budget.dining + budget.entertainment;
-        if (totalEx > income) {
-            if(budget.shopping > 0) { budget.shopping = 0; totalEx = recalculateTotal(budget); }
-            if(totalEx > income && budget.dining > 0) { budget.dining = 0; totalEx = recalculateTotal(budget); }
-            if(totalEx > income && budget.entertainment > 0) { budget.entertainment = 0; totalEx = recalculateTotal(budget); }
-
-            if (totalEx > income) {
-                const nonRentIncome = Math.max(0, income - budget.rent);
-                const nonRentExpenses = totalEx - budget.rent;
-                if(nonRentExpenses > 0) {
-                    const scale = nonRentIncome / nonRentExpenses;
-                    budget.grocery = Math.floor(budget.grocery * scale);
-                    budget.transport = Math.floor(budget.transport * scale);
-                    budget.utility = Math.floor(budget.utility * scale);
-                }
-                budget.reasoning += " [Auto-adjusted to fit income limit]";
-            }
-        }
-
-        const set = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
-
-        set('rentInput', budget.rent);
-        set('grocInput', budget.grocery);
-        set('transInput', budget.transport);
-        set('utilInput', budget.utility);
-        set('shopInput', budget.shopping);
-        set('dineInput', budget.dining);
-        set('hobInput', budget.entertainment);
-
-        const statusEl = document.getElementById('logicStatus');
-        statusEl.classList.remove('hidden');
-        statusEl.innerHTML = `<strong>AI Insight:</strong> ${budget.reasoning || "Budget optimized for your household size."}`;
-
-        document.getElementById('breakdownCards').classList.remove('hidden');
-        document.getElementById('analyzeBtn').classList.remove('hidden');
-
-        autoBalanceInvest();
-
-        btn.disabled = false;
-        btn.innerHTML = origText;
-    }
-
-    function recalculateTotal(b) {
-        return b.rent + b.grocery + b.transport + b.utility + b.shopping + b.dining + b.entertainment;
+      btn.disabled = false;
+      btn.innerHTML = origText;
     }
 
     function autoBalanceInvest() {
-        const get = (id) => parseFloat(document.getElementById(id).value)||0;
-        const income = parseFloat(document.getElementById('incomeInput').value)||0;
+      const get = (id) => parseFloat(document.getElementById(id).value)||0;
+      const income = parseFloat(document.getElementById('incomeInput').value)||0;
 
-        const rent=get('rentInput'), groc=get('grocInput'), trans=get('transInput'), util=get('utilInput');
-        const shop=get('shopInput'), dine=get('dineInput'), hob=get('hobInput');
+      const rent=get('rentInput'), groc=get('grocInput'), trans=get('transInput'), util=get('utilInput');
+      const shop=get('shopInput'), dine=get('dineInput'), hob=get('hobInput');
 
-        const expenses = rent+groc+trans+util+shop+dine+hob;
-        const invest = income - expenses;
+      const expenses = rent+groc+trans+util+shop+dine+hob;
+      const invest = income - expenses;
 
-        const invField = document.getElementById('invInput');
-        invField.value = invest;
+      const invField = document.getElementById('invInput');
+      invField.value = invest;
 
-        invField.className = `w-full text-center text-3xl font-black outline-none bg-transparent ${invest<0 ? 'text-red-600' : 'text-green-600'} invest-highlight`;
-        setTimeout(()=>invField.classList.remove('invest-highlight'), 500);
+      invField.className = `w-full text-center text-3xl font-black outline-none bg-transparent ${invest<0 ? 'text-red-600' : 'text-green-600'} inv-large`;
 
-        document.getElementById('needsTotalDisp').innerText = '₹'+(rent+groc+trans+util).toLocaleString();
-        document.getElementById('wantsTotalDisp').innerText = '₹'+(shop+dine+hob).toLocaleString();
-        document.getElementById('savingsTotalDisp').innerText = '₹'+Math.max(0,invest).toLocaleString();
+      document.getElementById('needsTotalDisp').innerText = '₹'+(rent+groc+trans+util).toLocaleString();
+      document.getElementById('wantsTotalDisp').innerText = '₹'+(shop+dine+hob).toLocaleString();
+      document.getElementById('savingsTotalDisp').innerText = '₹'+Math.max(0,invest).toLocaleString();
 
-        distributionChart.data.datasets[0].data = [rent+groc+trans+util, shop+dine+hob, Math.max(0,invest)];
-        distributionChart.update();
-        breakdownChart.data.datasets[0].data = [rent, groc, trans, shop, Math.max(0,invest)];
-        breakdownChart.update();
+      distributionChart.data.datasets[0].data = [rent+groc+trans+util, shop+dine+hob, Math.max(0,invest)];
+      distributionChart.update();
+      breakdownChart.data.datasets[0].data = [rent, groc, trans, shop, Math.max(0,invest)];
+      breakdownChart.update();
     }
 
-    // placeholder functions used by UI
-    function checkSavingsGoal(){ showToast("Goal planner invoked", "info"); }
-    function optimizeWants(){ showToast("Smart cuts applied", "success"); }
-    function getAIAnalysis(){ showToast("AI Audit (offline) — feature placeholder", "info"); }
-    function goToMart(){ showToast("Accesco Mart not part of standalone calculator", "info"); }
+    function checkSavingsGoal(){ showToast("Goal planner coming soon!", "info"); }
+    function getAIAnalysis(){ showToast("AI Audit requires Pro version", "info"); }
 
-    // callGeminiJSON is kept (original structure)
-    async function callGeminiJSON(prompt, useSearch = false) {
-        if(apiCache.has(prompt)) return apiCache.get(prompt);
+    // REAL AI CALL FUNCTION
+    async function callGeminiJSON(prompt) {
+      if(apiCache.has(prompt)) return apiCache.get(prompt);
 
-        // original code used Google Generative API endpoint; leave behavior unchanged
-        // For local/offline usage this will return null gracefully
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }]
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        const text = data.candidates[0].content.parts[0].text;
+        
+        // Clean markdown if present
+        const jsonStr = text.replace(/```json/g, '').replace(/```/g, '');
+        const json = JSON.parse(jsonStr);
+        
+        apiCache.set(prompt, json);
+        return json;
+      } catch (error) {
+        console.error("Gemini API Error:", error);
         return null;
+      }
     }
-
-    // end script
   </script>
-
-  <!--
-    Note: I preserved the original script's function names, IDs and logic where possible.
-    If you want me to fully paste the *entire* original inline JS (untruncated) back into this file
-    (instead of the shortened callGeminiJSON stub above), tell me and I will insert the full original script body exactly as it was in your uploaded Calculator.html (no functional changes).
-  -->
-
 </body>
 </html>
-
