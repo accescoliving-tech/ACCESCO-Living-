@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>ACCESCO | Winter Edition</title>
+  <title>ACCESCO| Winter Edition</title>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" href="images/accesco.png" />
@@ -108,7 +108,9 @@
       z-index: 1; 
     }
 
-    .hero-grid { position: relative; z-index: 2; max-width: var(--container); margin: auto; display: grid; grid-template-columns: 1fr; gap: 34px; }
+    /* EDITED: Changed margin to align "a bit on the left" */
+    .hero-grid { position: relative; z-index: 2; max-width: var(--container); margin: 0 auto 0 8%; display: grid; grid-template-columns: 1fr; gap: 34px; }
+    
     .hero-title { font-family: Poppins, sans-serif; font-size: 64px; margin-top: 18px; margin-bottom: 12px; font-weight: 900; line-height: 1.05; }
     .hero-sub { font-size: 16px; color: rgb(64, 89, 85); }
     .hero-ctas { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
@@ -136,7 +138,12 @@
 
     /* SERVICES CARDS */
     .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 30px; }
-    .card { position: relative; height: 260px; padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; }
+    .card { 
+        position: relative; 
+        min-height: 260px; /* CHANGED from height to min-height to fix text overflow */
+        height: auto;
+        padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
+    }
     .card::before { content: ""; position: absolute; inset: 0; background: rgba(56, 4, 45, 0.62); border-radius: 18px; z-index: 1; }
     .card > * { position: relative; z-index: 2; }
     .badge h3 { font-size: 26px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #fff !important; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin: 0;}
@@ -147,7 +154,10 @@
     .card-tag.fest { background: rgba(255, 255, 255, 0.25); color: #fff; }
     .new-badge { margin-left: 8px; background: #ff3b3b; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
     @media (max-width: 1024px) { .cards { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 650px) { .cards { grid-template-columns: 1fr; } .card { height: 220px; width: 100%; } }
+
+    /* EDITED: Changed height to min-height and height:auto to fix text coming out of box */
+    @media (max-width: 650px) { .cards { grid-template-columns: 1fr; } .card { min-height: 220px; height: auto; width: 100%; } }
+    
     .learn { margin-top: 8px; background: rgba(255, 255, 255, 0.18); padding: 6px 12px; border-radius: 12px; font-weight: 600; display: inline-block; color: rgba(255,255,255,0.95); transition: transform 0.2s ease; }
     .card:hover .learn { transform: translateX(6px); }
 
@@ -167,10 +177,19 @@
     .start-btn { background: var(--accent); color: #fff; border: none; padding: 16px 32px; font-size: 17px; border-radius: 14px; display: inline-flex; gap: 10px; align-items: center; cursor: pointer; font-weight: 600; }
     .gaming-arena .right { flex: 1.3; display: flex; flex-direction: column; align-items: flex-end; }
     .game-grid { width: 85%; max-width: 520px; background: rgba(112, 4, 87, 0.05); padding: 40px 32px; border-radius: 32px; box-shadow: inset 0 0 24px rgba(112, 4, 87, 0.1); display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
-    .game-card { background: white; padding: 24px 20px; border-radius: 20px; box-shadow: 0 3px 10px rgba(112, 4, 87, 0.1); transition: 0.2s; }
+    
+    .game-card { 
+        background: white; padding: 24px 20px; border-radius: 20px; 
+        box-shadow: 0 3px 10px rgba(112, 4, 87, 0.1); 
+        transition: 0.2s; 
+        text-decoration: none; color: inherit; display: block;
+    }
     .game-card:hover { transform: translateY(-5px); }
     .game-card img, .game-card .fallback-icon { width: 54px; height: 54px; object-fit: contain; }
     .fallback-icon { font-size: 48px; color: var(--accent); display: none; }
+    .game-card h3 { font-size: 19px; margin-top: 12px; color: #2d0100; font-weight: 700; }
+    .game-card p { font-size: 15px; color: #777; margin-top: 4px; }
+
     @media(max-width: 1100px) { .gaming-arena { flex-direction: column; padding: 50px 20px; } .gaming-arena .left, .gaming-arena .right { width: 100%; max-width: 100%; } .gaming-arena .right { align-items: center; } .game-grid { width: 100%; max-width: 100%; } .gaming-arena h1 { font-size: 42px; } }
     @media(max-width: 750px) { .game-grid { grid-template-columns: 1fr; padding: 30px 20px; } .features { flex-direction: column; gap: 14px; width: 100%; } .feature-box { width: 100%; } .gaming-arena h1 { font-size: 32px; } .start-btn { font-size: 16px; width: 100%; justify-content: center; } .tag.offer { float: none; display: table; margin-bottom: 10px;} }
 
@@ -360,6 +379,17 @@
     .app-btn-img { height: 40px; width: 135px; border-radius: 6px; cursor: pointer; object-fit: contain; }
     @media(max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 40px; } .social-links { justify-content: flex-start; } }
     .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
+    
+    /* EDITED: REMOVED SOCIAL DOCK STYLES */
+    /* .social-dock-container { ... } */
+    /* .social-dock { ... } */
+    /* .dock-socials { ... } */
+    /* .dock-icon { ... } */
+    /* .dock-divider { ... } */
+    /* .dock-app { ... } */
+    /* .app-icons-row { ... } */
+    /* .app-icon-link { ... } */
+
 
     /* LOADING SCREEN */
     #loadingScreen { position: fixed; inset: 0; background: #ffffff; z-index: 5000; transition: opacity 0.6s ease; overflow: hidden; }
@@ -416,7 +446,7 @@ window.addEventListener("load", () => {
       <button class="menu-toggle" id="openMenu">☰</button>
       <div class="brand" id="openSidebar">
         <div class="logo"><img src="images/accesco.png" style="width: 44px; height: 44px; "></div>
-        <h1>ACCESCO</h1>
+        <h1>ACCESCO LIVING</h1>
       </div>
       <div class="nav-actions">
         <i id="userIcon" class="fa-regular fa-user" style="font-size:22px;cursor:pointer;"></i>
@@ -435,14 +465,13 @@ window.addEventListener("load", () => {
           <br>
           <span class="small-pill">Welcome to the Future of Digital Services</span>
           <h2 class="hero-title">
-            Transform Your Digital<br>Experience with <span style="color:var(--accent)">ACCESCO</span>
+            Redefining Everyday<br>Living with <span style="color:var(--accent)">ACCESCO</span>
           </h2>
           <p class="hero-sub">
-            ACCESCO brings together digital services, intelligent tools, and lifestyle experiences into one unified
-            ecosystem — designed for simplicity, speed, and excellence.
+            Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
           </p>
           <div class="hero-ctas">
-            <a href="services.html" style="text-decoration:none;">
+            <a href="#services" style="text-decoration:none;">
                 <button class="cta-pill">Explore Services →</button>
             </a>
           </div>
@@ -587,12 +616,14 @@ window.addEventListener("load", () => {
             <h3>Card Match</h3>
             <p>Memory game</p>
           </div>
-          <div class="game-card">
+          
+          <a href="game/flappybird/race.html" class="game-card">
             <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
             <i class="ri-roadster-line fallback-icon"></i>
-             <h3><a href="game/flappybird/race.html" style="text-decoration:none; color:inherit;">Accesco Racer</a></h3>
+             <h3>Accesco Racer</h3>
             <p>High speed racing</p>
-          </div>
+          </a>
+
           </div>
       </div>
     </section>
@@ -845,10 +876,9 @@ window.addEventListener("load", () => {
         <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
         
         <div class="social-links">
-            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
             <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://x.com/accesco_living?s=21" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@accescoliving" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
 
@@ -859,9 +889,7 @@ window.addEventListener("load", () => {
       </div>
     </div>
 
-    <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px;">
-      By continuing past this page, you agree to our Terms of Service, Cookie Policy, Privacy Policy and Content Policies. 
-      <br><br>
+    <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px; text-align: center;">
       © 2025 ACCESCO — All rights reserved.
     </div>
   </footer>
@@ -916,45 +944,93 @@ window.addEventListener("load", () => {
   </style>
 
   <script>
+  // --- Sidebar Logic ---
+  const sidebar = document.getElementById("sidebar");
+  const backdrop = document.getElementById("backdrop");
+  const openBtn = document.getElementById("openMenu");
+  const closeBtn = document.getElementById("closeSidebarBtn");
+
+  function toggleSidebar(show) {
+      if (show) {
+          sidebar.classList.add("open");
+          backdrop.classList.add("open");
+      } else {
+          sidebar.classList.remove("open");
+          backdrop.classList.remove("open");
+      }
+  }
+
+  openBtn.addEventListener("click", () => toggleSidebar(true));
+  closeBtn.addEventListener("click", () => toggleSidebar(false));
+  backdrop.addEventListener("click", () => toggleSidebar(false));
+  document.addEventListener("keydown", (e) => { if(e.key === "Escape") toggleSidebar(false); });
+  
+  // Close sidebar on link click
+  document.querySelectorAll(".side-list a").forEach(link => {
+      link.addEventListener("click", () => toggleSidebar(false));
+  });
+
+  // --- Account Popup Logic ---
   const userIcon = document.getElementById("userIcon");
   const accPopup = document.getElementById("accountPopup");
   const accBackdrop = document.getElementById("accountPopupBackdrop");
   const accClose = document.getElementById("closeAccPopup");
-  function openAccPopup() { accPopup.style.display = "block"; accBackdrop.style.display = "block"; }
-  function closeAccPopupFn() { accPopup.style.display = "none"; accBackdrop.style.display = "none"; }
-  userIcon.onclick = openAccPopup;
-  accClose.onclick = closeAccPopupFn;
-  accBackdrop.onclick = closeAccPopupFn;
-  </script>
 
-  <script>
+  function toggleAccount(show) {
+      const display = show ? "block" : "none";
+      accPopup.style.display = display;
+      accBackdrop.style.display = display;
+  }
+
+  userIcon.addEventListener("click", () => toggleAccount(true));
+  accClose.addEventListener("click", () => toggleAccount(false));
+  accBackdrop.addEventListener("click", () => toggleAccount(false));
+
+  // --- Resource Slider Logic ---
+  const slider = document.querySelector(".resource-slider");
+  const leftBtn = document.querySelector(".resource-nav.left");
+  const rightBtn = document.querySelector(".resource-nav.right");
+  if (slider && leftBtn && rightBtn) {
+    const scrollAmount = 260;
+    rightBtn.onclick = () => { slider.scrollBy({ left: scrollAmount, behavior: "smooth" }); };
+    leftBtn.onclick = () => { slider.scrollBy({ left: -scrollAmount, behavior: "smooth" }); };
+  }
+
+  // --- Arrow Animation ---
+  document.querySelectorAll(".resource-arrow").forEach(arrow => {
+    arrow.addEventListener("click", () => {
+        arrow.classList.add("shoot");
+        setTimeout(() => { arrow.classList.remove("shoot"); }, 350);
+    });
+  });
+
+  // --- Snowfall Script (Reduced by 50% vs previous) ---
   function createSnow() {
     const snow = document.createElement('div');
     snow.innerHTML = "❄";
     snow.classList.add('snowflake');
     document.body.appendChild(snow);
     
-    // Randomize
-    const startLeft = Math.random() * 100; // Start pos
+    const startLeft = Math.random() * 100; 
     snow.style.left = startLeft + 'vw';
     
-    const duration = Math.random() * 3 + 4; // Between 4-7s
+    const duration = Math.random() * 3 + 4; 
     snow.style.animationDuration = duration + 's';
     
-    const size = Math.random() * 15 + 10; // 10px to 25px
+    const size = Math.random() * 15 + 10; 
     snow.style.fontSize = size + 'px';
     
     snow.style.opacity = Math.random() * 0.6 + 0.4;
     
-    // Remove after animation
     setTimeout(() => {
         snow.remove();
     }, duration * 1000);
   }
 
   // Determine interval based on screen width
+  // Desktop: 400ms (was 200ms) | Mobile: 700ms (was 350ms) -> Significant reduction
   const isMobile = window.innerWidth < 768;
-  const interval = isMobile ? 350 : 200; // 350ms for mobile (less snow), 200ms for desktop
+  const interval = isMobile ? 700 : 400; 
 
   setInterval(createSnow, interval);
   </script>
