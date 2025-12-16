@@ -403,13 +403,14 @@
 </head>
 
 <body>
-  <!-- ================= LOADING SCREEN ================= -->
-  <div id="loadingScreen">
+
+
+<div id="loadingScreen">
   <video class="plane-video" autoplay muted loop playsinline>
     <source src="images/plane.mp4" type="video/mp4">
   </video>
   <div class="loading-text">LOADING...</div>
-  </div>
+</div>
 
 <script>
 window.addEventListener("load", () => {
@@ -421,7 +422,7 @@ window.addEventListener("load", () => {
 });
 </script>
 
-  <!-- ================= SIDEBAR ================= -->
+
   <div id="backdrop" class="sidebar-backdrop"></div>
   <aside id="sidebar" class="sidebar">
     <div class="sidebar-top">
@@ -440,7 +441,6 @@ window.addEventListener("load", () => {
     </ul>
   </aside>
 
-  <!-- ================= NAVBAR ================= -->
   <header class="navbar" id="nav">
     <div class="nav-inner">
       <button class="menu-toggle" id="openMenu">☰</button>
@@ -455,9 +455,7 @@ window.addEventListener("load", () => {
   </header>
 
 
-  <!-- ================= MAIN CONTENT ================= -->
   <main id="home">
-    <!-- HERO -->
     <section class="hero">
       <video class="hero-bg-video" autoplay muted loop playsinline>
           <source src="images/start.mp4" type="video/mp4">
@@ -465,11 +463,11 @@ window.addEventListener("load", () => {
       <div class="hero-grid">
         <div class="hero-left">
           <br>
-          <span class="small-pill">Welcome to the Future of Digital Services</span>
+          <span class="small-pill">Welcome to Smarter Living</span>
           <h2 class="hero-title">
             Redefining Everyday<br>Living with <span style="color:var(--accent)">ACCESCO</span>
           </h2>
-          <p class="hero-sub">
+          <p class=" small-pill">
             Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
           </p>
           <div class="hero-ctas">
@@ -482,11 +480,10 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- SERVICES GRID -->
     <section id="services">
       <div class="section-title">
         <div class="small-upper">OUR SERVICES</div>
-        <h3 class="big-h">Everything You Need, All in One Place</h3>
+        <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
         <p class="muted-center">Explore our comprehensive suite of digital services "</p>
       </div>
 
@@ -498,7 +495,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag offer">60% OFF + CASHBACK</span>
                 <p>Eat Right. Live Better "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -509,7 +506,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag time">⚡ 14 MINS</span>
                 <p>Why Buy? Just Accesco "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -522,7 +519,7 @@ window.addEventListener("load", () => {
             </div>
             <div class="card-info">
                 <p>Instant style, zero guesswork "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -533,7 +530,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag offer">UP TO 50% OFF</span>
                 <p>Food delivered with precision "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -544,7 +541,7 @@ window.addEventListener("load", () => {
             <div class="card-info">
                 <span class="card-tag fest">DINING FEST LIVE</span>
                 <p>Table ready before you are "</p>
-                <div class="learn">→</div>
+                <div>→</div>
             </div>
             </div>
         </a>
@@ -553,7 +550,6 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- CTA CALCIQ -->
     <section>
       <div class="cta-large">
         <div style="display:flex;gap:16px;align-items:center">
@@ -568,7 +564,6 @@ window.addEventListener("load", () => {
 
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 
-    <!-- GAMING ARENA -->
     <section class="gaming-arena">
       <div class="left">
         <span class="tag red"><i class="ri-gift-line"></i> Play & Win Rewards</span>
@@ -578,7 +573,7 @@ window.addEventListener("load", () => {
           <div class="feature-box">
             <i class="ri-gamepad-line"></i>
             <div>
-              <h4>Fun Games</h4>
+              <h4>Fun Games  </h4>
               <p>Play Daily</p>
             </div>
           </div>
@@ -592,7 +587,7 @@ window.addEventListener("load", () => {
           <div class="feature-box">
             <i class="ri-trophy-line"></i>
             <div>
-              <h4>Leaderboards</h4>
+              <h4>Leaderboards  </h4>
               <p>Compete & Win</p>
             </div>
           </div>
@@ -634,7 +629,6 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <!-- ABOUT -->
     <section id="about">
       <div class="section-title">
         <div class="small-upper">ABOUT ACCESCO</div>
@@ -696,7 +690,6 @@ window.addEventListener("load", () => {
       </div>
     </section>
 
-    <!-- APP SHOWCASE -->
     <section class="app-showcase">
         <div class="app-header">
             <h2>The Ecosystem. Unlocked.</h2>
@@ -779,7 +772,6 @@ window.addEventListener("load", () => {
         </div>
     </section>
 
-    <!-- STACK / UI INTERACTIONS -->
     <script>
       const stack = document.getElementById('stack');
       const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -848,7 +840,6 @@ window.addEventListener("load", () => {
     </script>
 
 
-  <!-- ================= FOOTER ================= -->
   <footer id="contact">
     <div class="footer-grid">
       <div>
@@ -903,7 +894,6 @@ window.addEventListener("load", () => {
     </div>
   </footer>
 
-  <!-- ================= ACCOUNT POPUP ================= -->
   <div id="accountPopupBackdrop" class="acc-popup-backdrop"></div>
   <div id="accountPopup" class="acc-popup">
       <div class="acc-top">
@@ -928,7 +918,6 @@ window.addEventListener("load", () => {
       </div>
   </div>
 
-  <!-- POPUP STYLES -->
   <style>
   .acc-popup-backdrop {
     position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(3px); display: none; z-index: 2000;
@@ -954,7 +943,6 @@ window.addEventListener("load", () => {
   @media(max-width: 420px) { .acc-popup { width: 90%; padding: 20px; } }
   </style>
 
-  <!-- SIDEBAR / POPUP / SLIDER / SNOW SCRIPTS -->
   <script>
   // --- Sidebar Logic ---
   const sidebar = document.getElementById("sidebar");
