@@ -845,11 +845,11 @@ window.addEventListener("load", () => {
         <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
         
         <div class="social-links">
-            <a href="https://www.linkedin.com/company/acceso-living/" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
-            <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
             <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
             <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
 
         <div class="app-buttons">
@@ -952,8 +952,11 @@ window.addEventListener("load", () => {
     }, duration * 1000);
   }
 
-  // Generate snow every 200ms (Reduced density)
-  setInterval(createSnow, 200);
+  // Determine interval based on screen width
+  const isMobile = window.innerWidth < 768;
+  const interval = isMobile ? 350 : 200; // 350ms for mobile (less snow), 200ms for desktop
+
+  setInterval(createSnow, interval);
   </script>
 
 </body>
