@@ -124,8 +124,51 @@
     }
     .cta-pill:hover { transform: scale(1.05); }
 
+    /* New CSS for hero app buttons - LARGER */
+    .hero-app-buttons {
+        display: flex;
+        gap: 16px;
+        margin-top: 24px;
+        justify-content: center;
+    }
+    .app-btn-link img {
+        height: 60px; /* Increased height for larger icons */
+        width: auto;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .app-btn-link img:hover {
+        transform: scale(1.05);
+    }
+
+    /* New CSS for scroll down button - SINGLE ARROW */
+    .scroll-down-btn {
+        margin-top: 40px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .scroll-down-btn:hover {
+        opacity: 0.8;
+    }
+    .scroll-down-btn i {
+        font-size: 18px;
+    }
+
     @media(max-width: 900px) { .hero-title { font-size: 42px; } }
-    @media(max-width: 480px) { .hero-title { font-size: 32px; } .hero-logo-img { width: 90px; height: 90px; } }
+    @media(max-width: 480px) {
+        .hero-title { font-size: 32px; }
+        .hero-logo-img { width: 90px; height: 90px; }
+        .hero-app-buttons { flex-direction: column; gap: 12px; } /* Stack buttons on mobile */
+        .app-btn-link img { height: 50px; }
+        .scroll-down-btn { margin-top: 30px; }
+    }
 
     /* SECTIONS */
     section { padding: 60px 20px; }
@@ -544,12 +587,6 @@
     @media(max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 40px; } .social-links { justify-content: flex-start; } }
     .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
     
-    /* LOADING SCREEN */
-    #loadingScreen { position: fixed; inset: 0; background: #ffffff; z-index: 5000; transition: opacity 0.6s ease; overflow: hidden; }
-    .plane-video { position: absolute; top: 50%; left: 50%; width: 30vw; transform: translate(-50%, -50%); height: auto; z-index: 2; }
-    @media (max-width: 600px) { .plane-video { width: 100vw; } .loading-text { top: calc(50% + 30vh); font-size: 16px; } }
-    .loading-text { position: absolute; top: calc(50% + 28vh); left: 50%; transform: translateX(-50%); font-size: 20px; color: rgba(112, 4, 87, 1); font-weight: 600; opacity: 0; animation: fadeIn 1.2s ease forwards; animation-delay: 0.8s; z-index: 3; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* ==================================
        DOWNLOAD APP SECTION (REVISED: CLEAN & DARK)
@@ -672,23 +709,6 @@
 <body>
 
 
-<div id="loadingScreen">
-  <video class="plane-video" autoplay muted loop playsinline>
-    <source src="images/plane.mp4" type="video/mp4">
-  </video>
-  <div class="loading-text">LOADING...</div>
-</div>
-
-<script>
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loadingScreen");
-  setTimeout(() => {
-    loader.style.opacity = "0";
-    setTimeout(() => loader.style.display = "none", 600);
-  }, 2500); 
-});
-</script>
-
   <main id="home">
     <section class="hero">
       <video class="hero-bg-video" autoplay muted loop playsinline>
@@ -708,6 +728,19 @@ window.addEventListener("load", () => {
                 <button class="cta-pill">Explore Services</button>
             </a>
         </div>
+        
+        <div class="hero-app-buttons">
+            <a href="#" class="app-btn-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
+            </a>
+            <a href="#" class="app-btn-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store">
+            </a>
+        </div>
+
+        <a href="#services" class="scroll-down-btn" style="text-decoration: none;">
+            Scroll down <i class="ri-arrow-down-s-line"></i>
+        </a>
 
       </div>
     </section>
