@@ -10,7 +10,7 @@
   <link rel="icon" href="images/accesco.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Poppins:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap"
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
@@ -24,13 +24,6 @@
         user-select: none; pointer-events: none; z-index: 9999; animation: fall linear forwards;
     }
     @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
-
-    .brand .logo { position: relative; overflow: visible !important; }
-    .brand .logo::after {
-        content: ""; position: absolute; top: -22px; left: -18px; width: 55px; height: 55px;
-        background-size: contain; background-repeat: no-repeat; transform: rotate(-15deg);
-        z-index: 100; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    }
     /* =========================
        CHRISTMAS EFFECTS END
        ========================= */
@@ -42,7 +35,6 @@
     h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.5px; }
     .big-h, .hero-title { font-weight: 900; letter-spacing: -1px; }
     button, .cta-pill, .cta-outline, .start-btn { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
-    .navbar, .side-list a { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; letter-spacing: 0.6px; font-weight: 700; }
     .small-pill { font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; }
     
     html { scroll-behavior: smooth; }
@@ -55,81 +47,85 @@
     a { color: inherit; text-decoration: none; }
     img { width: 100%; height: auto; display: block; border-radius: 14px; } 
 
-    /* NAVBAR */
-    .navbar { position: fixed; top: 7px; width: 100%; align-items: center; justify-content: center; border-radius: 50px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(6px); z-index: 999; }
-    @media(min-width: 900px) { .navbar { width: 90%; left: 50%; transform: translateX(-50%); border-radius: 50px; } }
-    @media(max-width: 899px) { .navbar { width: 96%; left: 2%; transform: none; top: 10px; } }
-    .nav-inner { max-width: var(--container); margin: auto; padding: 14px 20px; display: flex; align-items: center; gap: 14px; justify-content: center; position: relative; }
-    .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; position: relative; margin: auto; }
-    .brand .logo { width: 43px; height: 43px; border-radius: 15px; background: linear-gradient(180deg, var(--accent), ); display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-family: Poppins, sans-serif; }
-    .brand h1 { font-size: 18px; margin: 0; font-weight: 700; }
-    .menu-toggle { position: absolute; left: 10px; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.1); background: #fff; cursor: pointer; }
-    .nav-actions { position: absolute; right: 10px; display: flex; align-items: center; gap: 10px; }
-    .btn-outline { padding: 8px 14px; border-radius: 10px; border: 2px solid rgba(112, 4, 87, 1); color: rgba(112, 4, 87, 1); background: transparent; font-weight: 600; cursor: pointer; display: inline-block; text-align: center; }
-    .btn-cta { padding: 9px 14px; border-radius: 10px; font-weight: 700; color: #fff; background: linear-gradient(180deg, var(--accent), var(--accent-2)); }
-    @media(max-width: 900px) { .btn-outline, .btn-cta { display: none; } }
+    /* ================= HERO (ZOMATO STYLE) ================= */
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center horizontally */
+      overflow: hidden; 
+      text-align: center; /* Center text */
+    }
 
-    /* SIDEBAR */
-    .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); opacity: 0; pointer-events: none; transition: 0.25s; z-index: 1200; }
-    .sidebar-backdrop.open { opacity: 1; pointer-events: auto; }
-    .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 80%; background: #fff; padding: 0; transform: translateX(-100%); transition: 0.3s ease; z-index: 2000; overflow-y: auto; }
-    @media(min-width: 900px) { .sidebar { width: 30%; max-width: 420px; box-shadow: 0 0 40px rgba(0,0,0,0.15); } }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-top { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #ddd; position: relative; }
-    .sidebar-logo { width: 120px; height: auto; }
-    .sidebar-close { background: transparent; border: none; font-size: 26px; cursor: pointer; }
-    .sidebar-label { padding: 16px 20px; font-weight: 700; font-size: 13px; color: var(--accent); }
-    .side-list { list-style: none; padding: 0; margin: 0; }
-    .side-list li a { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; border-bottom: 1px solid #eee; }
-    .side-list li a span { font-size: 20px; font-weight: 400; }
-    .side-list a:hover { color: var(--accent); transform: translateX(10px); }
-
-    /* ================= HERO (WITH VIDEO) ================= */
- /* ================= HERO (WITH VIDEO) ================= */
-.hero {
-  padding: 40px 20px;
-  position: relative;
-  
-  /* CHANGED: Use 100vh to fill the entire screen height */
-  height: 100vh; 
-  width: 100%;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Optional: centers content horizontally too */
-  overflow: hidden; 
-}
-
-.hero-bg-video {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%;
-    object-fit: cover; 
-    z-index: 0; 
-}
-
-    @media (max-width: 600px) { .hero { min-height: 500px; padding-top: 100px; } }
+    .hero-bg-video {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover; z-index: 0; 
+    }
 
     .hero::before {
       content: ""; position: absolute; inset: 0;
       backdrop-filter: blur(1.5px);
-      background: rgba(255, 255, 255, 0.42); 
+      background: rgba(0, 0, 0, 0.3); /* Darker overlay for text pop */
       z-index: 1; 
     }
 
-    /* EDITED: Changed margin to align "a bit on the left" */
-    .hero-grid { position: relative; z-index: 2; max-width: var(--container); margin: 0 auto 0 8%; display: grid; grid-template-columns: 1fr; gap: 34px; }
+    .hero-grid { 
+        position: relative; 
+        z-index: 2; 
+        max-width: 900px; 
+        margin: auto; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+    }
     
-    .hero-title { font-family: Poppins, sans-serif; font-size: 64px; margin-top: 18px; margin-bottom: 12px; font-weight: 900; line-height: 1.05; }
-    .hero-sub { font-size: 16px; color: rgb(64, 89, 85); }
-    .hero-ctas { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-    .cta-pill, .cta-outline { padding: 14px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; }
-    .cta-pill { background: linear-gradient(180deg, var(--accent), var(--accent-2)); color: #fff; }
-    .cta-outline { border: 2px solid var(--accent); color: var(--accent); background: transparent; }
+    /* Centered Logo */
+    .hero-logo-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        margin-bottom: 10px;
+    }
+
+    .hero-title { 
+        font-family: Poppins, sans-serif; 
+        font-size: 64px; 
+        margin: 0;
+        font-weight: 900; 
+        line-height: 1.1; 
+        color: #fff;
+    }
+    
+    .hero-sub { 
+        font-size: 30px; 
+        color: rgba(255, 255, 255, 0.9); 
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
+    
+    /* UPDATED BUTTON STYLE: WHITE BACKGROUND */
+    .cta-pill { 
+        padding: 16px 32px; 
+        border-radius: 50px; 
+        font-weight: 700; 
+        cursor: pointer; 
+        border: none; 
+        background: #fff;  /* Changed to White */
+        color: var(--accent); /* Changed text to Accent for contrast */
+        font-size: 16px;
+        transition: transform 0.2s;
+    }
+    .cta-pill:hover { transform: scale(1.05); }
+
     @media(max-width: 900px) { .hero-title { font-size: 42px; } }
-    @media(max-width: 480px) { .hero-title { font-size: 32px; } }
+    @media(max-width: 480px) { .hero-title { font-size: 32px; } .hero-logo-img { width: 90px; height: 90px; } }
 
     /* SECTIONS */
     section { padding: 60px 20px; }
@@ -151,7 +147,7 @@
     .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 30px; }
     .card { 
         position: relative; 
-        min-height: 260px; /* CHANGED from height to min-height to fix text overflow */
+        min-height: 260px;
         height: auto;
         padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
     }
@@ -166,43 +162,200 @@
     .new-badge { margin-left: 8px; background: #ff3b3b; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
     @media (max-width: 1024px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
-    /* EDITED: Changed height to min-height and height:auto to fix text coming out of box */
     @media (max-width: 650px) { .cards { grid-template-columns: 1fr; } .card { min-height: 220px; height: auto; width: 100%; } }
     
     .learn { margin-top: 8px; background: rgba(255, 255, 255, 0.18); padding: 6px 12px; border-radius: 12px; font-weight: 600; display: inline-block; color: rgba(255,255,255,0.95); transition: transform 0.2s ease; }
     .card:hover .learn { transform: translateX(6px); }
 
-    /* CTA & GAMING */
-    .cta-large { max-width: 1100px; margin: auto; background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff; padding: 28px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-    @media(max-width: 900px) { .cta-large { flex-direction: column; text-align: center; } }
-    .gaming-arena { display: flex; justify-content: space-between; align-items: center; padding: 80px 60px; gap: 70px; }
-    .gaming-arena .left { flex: 1; max-width: 480px; }
-    .tag { padding: 8px 18px; border-radius: 18px; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
-    .tag.red { background: rgba(112, 4, 87, 0.08); color: var(--accent); }
-    .tag.offer { background: var(--accent); color: white; float: right; margin-bottom: 18px; margin-right: 20px;}
-    .gaming-arena h1 { font-size: 50px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; color: #2d0100; margin-top: 20px; }
-    .gaming-arena h1 span { color: var(--accent); }
-    .features { display: flex; gap: 18px; margin: 35px 0; }
-    .feature-box { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); width: 160px; }
-    .feature-box i { font-size: 26px; color: var(--accent); }
-    .start-btn { background: var(--accent); color: #fff; border: none; padding: 16px 32px; font-size: 17px; border-radius: 14px; display: inline-flex; gap: 10px; align-items: center; cursor: pointer; font-weight: 600; }
-    .gaming-arena .right { flex: 1.3; display: flex; flex-direction: column; align-items: flex-end; }
-    .game-grid { width: 85%; max-width: 520px; background: rgba(112, 4, 87, 0.05); padding: 40px 32px; border-radius: 32px; box-shadow: inset 0 0 24px rgba(112, 4, 87, 0.1); display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
-    
-    .game-card { 
-        background: white; padding: 24px 20px; border-radius: 20px; 
-        box-shadow: 0 3px 10px rgba(112, 4, 87, 0.1); 
-        transition: 0.2s; 
-        text-decoration: none; color: inherit; display: block;
-    }
-    .game-card:hover { transform: translateY(-5px); }
-    .game-card img, .game-card .fallback-icon { width: 54px; height: 54px; object-fit: contain; }
-    .fallback-icon { font-size: 48px; color: var(--accent); display: none; }
-    .game-card h3 { font-size: 19px; margin-top: 12px; color: #2d0100; font-weight: 700; }
-    .game-card p { font-size: 15px; color: #777; margin-top: 4px; }
 
-    @media(max-width: 1100px) { .gaming-arena { flex-direction: column; padding: 50px 20px; } .gaming-arena .left, .gaming-arena .right { width: 100%; max-width: 100%; } .gaming-arena .right { align-items: center; } .game-grid { width: 100%; max-width: 100%; } .gaming-arena h1 { font-size: 42px; } }
-    @media(max-width: 750px) { .game-grid { grid-template-columns: 1fr; padding: 30px 20px; } .features { flex-direction: column; gap: 14px; width: 100%; } .feature-box { width: 100%; } .gaming-arena h1 { font-size: 32px; } .start-btn { font-size: 16px; width: 100%; justify-content: center; } .tag.offer { float: none; display: table; margin-bottom: 10px;} }
+    /* ==================================
+       REDESIGNED CALC IQ: "The Floating Interface"
+       ================================== */
+    .calciq-section {
+        max-width: 1100px;
+        margin: auto;
+        padding-top: 40px;
+    }
+
+    .calciq-container {
+        background: radial-gradient(circle at 20% 50%, rgb(112, 4, 87) 0%, #1a0014 100%);
+        border-radius: 30px;
+        padding: 50px 60px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 20px 60px rgba(112, 4, 87, 0.4);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+    
+    .calciq-container::before {
+        content: ""; position: absolute; inset: 0;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none; opacity: 0.5;
+    }
+
+    .calciq-info { position: relative; z-index: 2; max-width: 480px; }
+    
+    .calciq-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+        padding: 6px 14px; border-radius: 20px;
+        font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #fff;
+        margin-bottom: 20px;
+    }
+    
+    .calciq-info h2 {
+        font-size: 46px; line-height: 1.1; margin: 0 0 16px; color: #fff;
+    }
+    .calciq-info h2 span {
+        background: linear-gradient(90deg, #fff, #ffb3ea);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    
+    .calciq-info p { color: #ffdbf0; font-size: 17px; margin-bottom: 30px; line-height: 1.6; opacity: 0.9; }
+
+    .calciq-btn {
+        background: #fff;
+        color: rgb(112, 4, 87); 
+        padding: 16px 36px; border-radius: 14px;
+        font-weight: 800; font-size: 16px; text-decoration: none;
+        display: inline-flex; align-items: center; gap: 10px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+    .calciq-btn:hover { 
+        transform: translateY(-3px); 
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3); 
+        color: rgb(112, 4, 87); 
+    }
+
+    .calciq-visual { position: relative; z-index: 2; width: 380px; height: 260px; perspective: 1000px; }
+    
+    .glass-interface {
+        width: 100%; height: 100%;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 24px;
+        transform: rotateY(-12deg) rotateX(5deg);
+        box-shadow: -20px 20px 50px rgba(0,0,0,0.5);
+        padding: 24px;
+        display: flex; flex-direction: column; justify-content: space-between;
+        transition: transform 0.4s ease;
+    }
+    .calciq-container:hover .glass-interface { transform: rotateY(-8deg) rotateX(2deg) translateY(-5px); }
+    
+    .ui-header { display: flex; justify-content: space-between; align-items: center; color: #fff; font-size: 14px; font-weight: 600; opacity: 0.9; }
+    .ui-balance { font-size: 32px; color: #fff; font-weight: 700; margin-top: 4px; }
+    .ui-balance span { font-size: 16px; color: #00ff88; font-weight: 500; margin-left: 8px; }
+    
+    .ui-graph { display: flex; align-items: flex-end; gap: 8px; height: 100px; margin-top: 20px; }
+    .ui-bar { width: 100%; background: rgba(255,255,255,0.15); border-radius: 4px; position: relative; overflow: hidden; }
+    
+    .ui-bar::after { content:""; position: absolute; bottom:0; left:0; width:100%; background: #fff; }
+    
+    .b1::after { height: 40%; } .b2::after { height: 70%; } .b3::after { height: 50%; } 
+    .b4::after { height: 90%; background: #00ff88; box-shadow: 0 0 15px #00ff88; } .b5::after { height: 60%; }
+
+    @media(max-width: 900px) {
+        .calciq-container { flex-direction: column; text-align: center; padding: 40px 20px; }
+        .calciq-info { max-width: 100%; margin-bottom: 40px; }
+        .calciq-info h2 { font-size: 36px; }
+        .calciq-visual { width: 100%; max-width: 320px; height: 220px; margin: auto; }
+        .glass-interface { transform: rotateY(0) rotateX(0); }
+    }
+
+
+    /* ==================================
+       REDESIGNED GAMING ARENA (CLEAN)
+       ================================== */
+    .gaming-arena { 
+        display: flex; justify-content: space-between; align-items: center; 
+        padding: 80px 40px; gap: 60px; max-width: 1200px; margin: auto;
+    }
+    
+    .arena-left { flex: 1; max-width: 450px; }
+    .badge-pill { 
+        background: rgba(112, 4, 87, 0.08); color: var(--accent); 
+        padding: 8px 16px; border-radius: 30px; 
+        font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 14px; 
+        letter-spacing: 0.5px;
+    }
+    
+    .arena-title { font-size: 48px; line-height: 1.1; margin: 0 0 16px; color: #111; }
+    .arena-title span { color: var(--accent); }
+    .arena-desc { color: #666; font-size: 17px; margin-bottom: 30px; }
+
+    .arena-features { list-style: none; padding: 0; margin: 0 0 30px; display: flex; flex-direction: column; gap: 14px; }
+    .arena-features li { display: flex; align-items: center; gap: 12px; font-weight: 600; color: #333; font-size: 15px; }
+    .arena-features li i { color: var(--accent); font-size: 20px; background: rgba(112,4,87,0.1); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+
+    .play-btn-main {
+        background: var(--accent); color: #fff; border: none; 
+        padding: 16px 32px; font-size: 16px; border-radius: 12px; 
+        display: inline-flex; gap: 10px; align-items: center; 
+        cursor: pointer; font-weight: 700; transition: 0.2s;
+        box-shadow: 0 10px 20px rgba(112, 4, 87, 0.15);
+    }
+    .play-btn-main:hover { transform: translateY(-2px); box-shadow: 0 14px 25px rgba(112, 4, 87, 0.25); }
+
+    /* New Grid Design */
+    .arena-right { flex: 1.2; width: 100%; }
+    .games-grid-clean { 
+        display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; 
+    }
+    
+    .game-card-new { 
+        background: #fff; padding: 24px; border-radius: 20px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
+        border: 1px solid rgba(0,0,0,0.04);
+        transition: all 0.3s ease; 
+        text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; text-align: center;
+        position: relative; overflow: hidden;
+    }
+    
+    .game-card-new:hover { 
+        transform: translateY(-8px); 
+        box-shadow: 0 20px 40px rgba(112, 4, 87, 0.12); 
+        border-color: rgba(112, 4, 87, 0.2);
+    }
+
+    .game-icon-box {
+        width: 64px; height: 64px; border-radius: 16px;
+        background: #f8f8f8; display: flex; align-items: center; justify-content: center;
+        margin-bottom: 16px; transition: 0.3s;
+    }
+    .game-card-new:hover .game-icon-box { background: rgba(112, 4, 87, 0.08); }
+    
+    .game-icon-box img { width: 40px; height: 40px; object-fit: contain; }
+    .game-icon-box i { font-size: 32px; color: var(--accent); }
+
+    .game-card-new h4 { font-size: 18px; font-weight: 800; margin: 0 0 4px; color: #222; }
+    .game-card-new span { font-size: 13px; color: #888; font-weight: 500; }
+
+    /* Hover "Play" Text */
+    .play-hover {
+        margin-top: 12px; font-size: 13px; font-weight: 700; 
+        color: var(--accent); opacity: 0; transform: translateY(10px); 
+        transition: all 0.3s ease;
+    }
+    .game-card-new:hover .play-hover { opacity: 1; transform: translateY(0); }
+
+    @media(max-width: 900px) {
+        .gaming-arena { flex-direction: column; text-align: center; padding: 50px 20px; gap: 40px; }
+        .arena-left, .arena-right { width: 100%; max-width: 100%; }
+        .arena-features { align-items: center; }
+        .games-grid-clean { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .arena-title { font-size: 36px; }
+    }
+    @media(max-width: 500px) {
+        .games-grid-clean { grid-template-columns: 1fr; }
+    }
+
 
     /* RESOURCES */
     .resource-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
@@ -391,23 +544,126 @@
     @media(max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 40px; } .social-links { justify-content: flex-start; } }
     .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
     
-    /* EDITED: REMOVED SOCIAL DOCK STYLES */
-    /* .social-dock-container { ... } */
-    /* .social-dock { ... } */
-    /* .dock-socials { ... } */
-    /* .dock-icon { ... } */
-    /* .dock-divider { ... } */
-    /* .dock-app { ... } */
-    /* .app-icons-row { ... } */
-    /* .app-icon-link { ... } */
-
-
     /* LOADING SCREEN */
     #loadingScreen { position: fixed; inset: 0; background: #ffffff; z-index: 5000; transition: opacity 0.6s ease; overflow: hidden; }
     .plane-video { position: absolute; top: 50%; left: 50%; width: 30vw; transform: translate(-50%, -50%); height: auto; z-index: 2; }
     @media (max-width: 600px) { .plane-video { width: 100vw; } .loading-text { top: calc(50% + 30vh); font-size: 16px; } }
     .loading-text { position: absolute; top: calc(50% + 28vh); left: 50%; transform: translateX(-50%); font-size: 20px; color: rgba(112, 4, 87, 1); font-weight: 600; opacity: 0; animation: fadeIn 1.2s ease forwards; animation-delay: 0.8s; z-index: 3; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ==================================
+       DOWNLOAD APP SECTION (REVISED: CLEAN & DARK)
+       ================================== */
+    .download-section {
+        padding: 80px 20px;
+        background: #fff; 
+        display: flex;
+        justify-content: center;
+    }
+
+    .download-card {
+        width: 100%;
+        max-width: 1100px;
+        /* Sleek Dark Gradient */
+        background: radial-gradient(circle at 10% 20%, rgb(40, 4, 30) 0%, rgb(10, 0, 10) 100%);
+        border-radius: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 60px 80px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Abstract Background Shapes */
+    .download-card::before {
+        content: ""; position: absolute; top: -50%; left: -20%; width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(112, 4, 87, 0.2), transparent 70%);
+        pointer-events: none;
+    }
+
+    .download-text {
+        max-width: 500px;
+        z-index: 2;
+        color: #fff;
+    }
+
+    .download-text h2 {
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        letter-spacing: -1px;
+        line-height: 1.1;
+    }
+    
+    .highlight {
+        background: linear-gradient(90deg, #fff, #ff80df);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .download-text p {
+        font-size: 17px;
+        color: rgba(255,255,255,0.8);
+        line-height: 1.7;
+        margin-bottom: 36px;
+    }
+    
+    .download-text b { color: #fff; }
+
+    .download-buttons {
+        display: flex;
+        gap: 16px;
+    }
+    
+    .store-btn {
+        height: 50px;
+        cursor: pointer;
+        opacity: 0.9;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+    .store-btn:hover { transform: translateY(-3px); opacity: 1; }
+
+    /* --- GLASS QR CARD (Replaces Phone) --- */
+    .dl-visual {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .mobile-frame {
+        width: 240px;
+        height: 320px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        transform: rotate(-3deg);
+        transition: transform 0.3s ease;
+    }
+    .download-card:hover .mobile-frame { transform: rotate(0deg) scale(1.02); }
+
+    .qr-box {
+        background: #fff;
+        padding: 16px;
+        border-radius: 16px;
+        text-align: center;
+    }
+    
+    .qr-box img { width: 140px; height: 140px; display: block; margin-bottom: 10px; }
+    .qr-box span { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    @media(max-width: 950px) {
+        .download-card { flex-direction: column; text-align: center; padding: 50px 24px; gap: 40px; }
+        .download-text { max-width: 100%; margin-bottom: 0; }
+        .download-buttons { justify-content: center; }
+        .mobile-frame { margin: auto; transform: rotate(0); }
+    }
 
   </style>
 
@@ -433,60 +689,26 @@ window.addEventListener("load", () => {
 });
 </script>
 
-
-  <div id="backdrop" class="sidebar-backdrop"></div>
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-top">
-        <img src="images/accesco.png" class="sidebar-logo">
-        <button id="closeSidebarBtn" class="sidebar-close">✕</button>
-    </div>
-    <div class="sidebar-label">MENU</div>
-    <ul class="side-list">
-      <li><a href="#home">HOME <span>›</span></a></li>
-      <li><a href="services.html">SERVICES <span>›</span></a></li>
-      <li><a href="#wallet">WALLET <span>›</span></a></li>
-      <li><a href="#transactions">YOUR TRANSACTIONS <span>›</span></a></li>
-      <li><a href="#resources">RESOURCES <span>›</span></a></li>
-      <li><a href="#contact">CONTACT <span>›</span></a></li>
-      <li><a href="#about">ABOUT <span>›</span></a></li>
-    </ul>
-  </aside>
-
-  <header class="navbar" id="nav">
-    <div class="nav-inner">
-      <button class="menu-toggle" id="openMenu">☰</button>
-      <div class="brand" id="openSidebar">
-        <div class="logo"><img src="images/accesco.png" style="width: 44px; height: 44px; "></div>
-        <h1>ACCESCO LIVING</h1>
-      </div>
-      <div class="nav-actions">
-        <i id="userIcon" class="fa-regular fa-user" style="font-size:22px;cursor:pointer;"></i>
-      </div>
-    </div>
-  </header>
-
-
   <main id="home">
     <section class="hero">
       <video class="hero-bg-video" autoplay muted loop playsinline>
           <source src="images/start.mp4" type="video/mp4">
       </video>
       <div class="hero-grid">
-        <div class="hero-left">
-          <br>
-          <span class="small-pill">Welcome to Smarter Living</span>
-          <h2 class="hero-title">
-            Redefining Everyday<br>Living with <span style="color:var(--accent)">ACCESCO</span>
-          </h2>
-          <p class=" small-pill">
-            Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
-          </p>
-          <div class="hero-ctas">
+        
+        <img src="images/accesco.png" class="hero-logo-img" alt="Accesco Logo">
+        
+        <h2 class="hero-title">ACCESCO LIVING</h2>
+        <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
+
+</p>
+        
+        <div class="hero-ctas">
             <a href="#services" style="text-decoration:none;">
-                <button class="cta-pill">Explore Services →</button>
+                <button class="cta-pill">Explore Services</button>
             </a>
-          </div>
         </div>
+
       </div>
     </section>
 
@@ -494,8 +716,8 @@ window.addEventListener("load", () => {
     <section id="services">
       <div class="section-title">
         <div class="small-upper">OUR SERVICES</div>
-        <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
-        <p class="muted-center">Welcome to Accesco Living — discover timeless essentials designed to elevate your everyday living.</p>
+        <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
+        <p class="muted-center">Welcome to Accesco Living — discover timeless essentials designed to elevate your everyday living.</p>
       </div>
 
       <div class="cards">
@@ -561,81 +783,94 @@ window.addEventListener("load", () => {
     </section>
 
 
-    <section>
-      <div class="cta-large">
-        <div style="display:flex;gap:16px;align-items:center">
-          <div>
-            <div style="font-size:22px;font-weight:800">CalcIQ</div>
-            <div style="opacity:0.95;font-size:15px"> The Brain behind budget. </div>
+    <section class="calciq-section">
+      <div class="calciq-container">
+        <div class="calciq-info">
+          <div class="calciq-badge"><i class="ri-sparkling-2-fill"></i> POWERED BY AI</div>
+          <h2>CalcIQ <span>Intelligence</span></h2>
+          <p>Stop guessing where your money goes. Visualize your savings, track expenses, and forecast your future wealth with one tap.</p>
+          <a href="calculator.html" class="calciq-btn">
+              Launch Calculator <i class="ri-arrow-right-line"></i>
+          </a>
+        </div>
+
+        <div class="calciq-visual">
+          <div class="glass-interface">
+             <div class="ui-header">
+                <span>Total Savings</span>
+                <i class="ri-more-fill"></i>
+             </div>
+             <div class="ui-balance">₹24,500 <span>+12% <i class="ri-arrow-up-fill"></i></span></div>
+             
+             <div class="ui-graph">
+                <div class="ui-bar b1"></div>
+                <div class="ui-bar b2"></div>
+                <div class="ui-bar b3"></div>
+                <div class="ui-bar b4"></div> <div class="ui-bar b5"></div>
+             </div>
           </div>
         </div>
-        <a href="calculator.html" class="btn-outline launch-btn" style="background:#fff; font-weight:700; display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">Launch Tool</a>
       </div>
     </section>
 
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-
     <section class="gaming-arena">
-      <div class="left">
-        <span class="tag red"><i class="ri-gift-line"></i> Play & Win Rewards</span>
-        <h1>Reward Play <span> Arena</span></h1>
-        <p>Your Lifestyle, gamified.</p>
-        <div class="features">
-          <div class="feature-box">
-            <i class="ri-gamepad-line"></i>
-            <div>
-              <h4>Fun Games  </h4>
-              <p>Play Daily</p>
-            </div>
-          </div>
-          <div class="feature-box">
-            <i class="ri-gift-line"></i>
-            <div>
-              <h4>Win Coupons</h4>
-              <p>Exclusive Deals</p>
-            </div>
-          </div>
-          <div class="feature-box">
-            <i class="ri-trophy-line"></i>
-            <div>
-              <h4>Leaderboards  </h4>
-              <p>Compete & Win</p>
-            </div>
-          </div>
-        </div>
-        <button class="start-btn"><i class="ri-gamepad-line"></i> Start Playing Now</button>
+      <div class="arena-left">
+        <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
+        <h2 class="arena-title">Accesco<br><span>Game Arena</span></h2>
+        <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
+        
+        <ul class="arena-features">
+            <li><i class="ri-gamepad-line"></i> Daily Mini-Games</li>
+            <li><i class="ri-coupon-3-line"></i> Win Real Coupons</li>
+        </ul>
+
+        <a href="game/flappybird/race.html"><button class="play-btn-main">Start Playing Now <i class="ri-arrow-right-line"></i></button></a>
       </div>
 
-      <div class="right">
-        <span class="tag offer"><i class="ri-gift-2-line"></i> Win Up to 50% Off!</span>
-        <div class="game-grid">
-          <div class="game-card">
-            <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="ri-loop-right-line fallback-icon"></i>
-            <h3>Spin & Win</h3>
-            <p>Daily spins</p>
-          </div>
-          <div class="game-card">
-            <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
-            <i class="ri-target-line fallback-icon"></i>
-            <h3><a href="quiz.html" style="text-decoration:none; color:inherit;">Quiz Time</a></h3>
-            <p>Test knowledge</p>
-          </div>
-          <div class="game-card">
-            <img src="img/cardmatch.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="ri-shapes-line fallback-icon"></i>
-            <h3>Card Match</h3>
-            <p>Memory game</p>
-          </div>
+      <div class="arena-right">
+        <div class="games-grid-clean">
           
-          <a href="game/flappybird/race.html" class="game-card">
-            <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="height: 60px; width: 64px;">
-            <i class="ri-roadster-line fallback-icon"></i>
-             <h3>Accesco Racer</h3>
-            <p>High speed racing</p>
+          <a href="#" class="game-card-new">
+            <div class="game-icon-box">
+                <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
+            </div>
+            <h4>Spin & Win</h4>
+            <span>Daily Jackpots</span>
+            <div class="play-hover">PLAY NOW →</div>
           </a>
 
-          </div>
+          <a href="quiz.html" class="game-card-new">
+            <div class="game-icon-box">
+                <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <i class="ri-question-answer-line" style="display:none; font-size:30px"></i>
+            </div>
+            <h4>Quiz Time</h4>
+            <span>Test Your IQ</span>
+            <div class="play-hover">PLAY NOW →</div>
+          </a>
+
+          <a href="#" class="game-card-new">
+            <div class="game-icon-box">
+                <img src="img/cardmatch.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <i class="ri-grid-fill" style="display:none; font-size:30px"></i>
+            </div>
+            <h4>Card Match</h4>
+            <span>Memory Game</span>
+            <div class="play-hover">PLAY NOW →</div>
+          </a>
+          
+          <a href="game/flappybird/race.html" class="game-card-new">
+            <div class="game-icon-box">
+                <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <i class="ri-roadster-line" style="display:none; font-size:30px"></i>
+            </div>
+            <h4>Accesco Racer</h4>
+            <span>High Speed</span>
+            <div class="play-hover">PLAY NOW →</div>
+          </a>
+
+        </div>
       </div>
     </section>
 
@@ -689,11 +924,9 @@ window.addEventListener("load", () => {
           </div>
           
           <p style="color:var(--muted);font-size:16px;margin-top:20px; font-family: 'Davetica', sans-serif;">
-            Accesco Living is designed for the modern Indian household: efficient, affordable, health-conscious, and technology-driven.
-          </p>
+We are developing a unified platform that brings together ultra-fast groceries, intelligent financial planning, curated fashion, smart rentals, immersive dining, community-driven rewards, and advanced Al tools - all under one seamless experience.          </p>
           <p style="color:var(--muted);font-size:16px;margin-top:20px; font-family: 'Davetica', sans-serif;">
-            Our goal is simple: Make daily life smarter, smoother, and more connected through innovation that genuinely matters.
-          </p>
+Accesco Living is designed for the modern Indian household: efficient, affordable, health-conscious, and technology-driven. Our goal is simple - make daily life smarter, smoother, and more connected through innovation that genuinely matters.          </p>
           <p style="color:var(--accent);font-size:18px;margin-top:20px;font-weight:900; font-family: 'Davetica', sans-serif; text-transform: uppercase;">
             THIS IS EVERYDAY LIVING, REIMAGINED FOR THE FUTURE.
           </p>
@@ -712,21 +945,21 @@ window.addEventListener("load", () => {
                 <div class="gen-z-card grocery">
                     <div class="icon-container"><i class="ri-shopping-basket-line"></i></div>
                     <div>
-                        <h4>Groceries</h4>
+                        <h4>Gromart</h4>
                         <p>10-min Turbo Delivery</p>
                     </div>
                 </div>
                 <div class="gen-z-card fashion">
                     <div class="icon-container"><i class="ri-t-shirt-air-line"></i></div>
                     <div>
-                        <h4>Fashion</h4>
+                        <h4>InstaStyle</h4>
                         <p>Rent or Buy the Look</p>
                     </div>
                 </div>
                 <div class="gen-z-card budget">
                     <div class="icon-container"><i class="ri-calculator-line"></i></div>
                     <div>
-                        <h4>Budget AI</h4>
+                        <h4>Calc AI</h4>
                         <p>Smart Expense Tracker</p>
                     </div>
                 </div>
@@ -849,6 +1082,29 @@ window.addEventListener("load", () => {
           }, 300); // Wait for transition
       }
     </script>
+    
+    <section class="download-section">
+        <div class="download-card">
+            <div class="download-text">
+                <h2>One App. <span class="highlight">Infinite Possibilities.</span></h2>
+                <p>From 10-minute <b>Gromart</b> deliveries to <b>InstaStyle</b> fashion rentals. Download Accesco today.</p>
+                
+                <div class="download-buttons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="store-btn" alt="Get it on Google Play">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="store-btn" alt="Download on the App Store">
+                </div>
+            </div>
+
+            <div class="dl-visual">
+                <div class="mobile-frame">
+                    <div class="qr-box">
+                        <img src="images/QR.png" alt="Scan QR">
+                        <span>Scan to Download</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
   <footer id="contact">
@@ -905,116 +1161,7 @@ window.addEventListener("load", () => {
     </div>
   </footer>
 
-  <div id="accountPopupBackdrop" class="acc-popup-backdrop"></div>
-  <div id="accountPopup" class="acc-popup">
-      <div class="acc-top">
-          <img src="images/accesco.png" class="acc-logo">
-          <button id="closeAccPopup" class="acc-close">✕</button>
-      </div>
-      <h2 class="acc-title">LOG IN OR SIGN UP</h2>
-      <p class="acc-sub">Enjoy members-only access to exclusive products, rewards, offers and more.</p>
-      <div class="acc-social">
-          <button><i class="fa-brands fa-apple"></i></button>
-          <button><i class="fa-brands fa-facebook"></i></button>
-          <button><i class="fa-brands fa-google"></i></button>
-      </div>
-      <input type="email" placeholder="EMAIL ADDRESS *" class="acc-input">
-      <label class="acc-check">
-          <input type="checkbox">
-          <span>I agree to receive personalised marketing messages from ACCESCO.</span>
-      </label>
-      <div class="acc-actions">
-          <button class="acc-btn primary">Sign In</button>
-          <button class="acc-btn secondary">Sign Up</button>
-      </div>
-  </div>
-
-  <style>
-  .acc-popup-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(3px); display: none; z-index: 2000;
-  }
-  .acc-popup {
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 360px;
-    background: #fff; padding: 24px; border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-    display: none; z-index: 2050;
-  }
-  .acc-top { display: flex; justify-content: space-between; align-items: center; }
-  .acc-logo { width: 120px; border-radius: 0; }
-  .acc-close { background: transparent; border: none; font-size: 22px; cursor: pointer; }
-  .acc-title { font-size: 24px; font-weight: 800; margin: 20px 0 6px; }
-  .acc-sub { color: #444; font-size: 14px; margin-bottom: 20px; }
-  .acc-social { display: flex; gap: 10px; }
-  .acc-social button { flex: 1; border: 1px solid #ccc; padding: 14px 0; background: #fff; border-radius: 10px; font-size: 22px; cursor: pointer; }
-  .acc-input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 10px; margin-top: 18px; font-size: 14px; }
-  .acc-check { margin-top: 16px; font-size: 13px; display: flex; gap: 8px; align-items: flex-start; }
-  .acc-actions { margin-top: 20px; display: flex; gap: 10px; }
-  .acc-btn { flex: 1; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
-  .acc-btn.primary { background: black; color: #fff; }
-  .acc-btn.secondary { background: #f1f1f1; }
-  @media(max-width: 420px) { .acc-popup { width: 90%; padding: 20px; } }
-  </style>
-
   <script>
-  // --- Sidebar Logic ---
-  const sidebar = document.getElementById("sidebar");
-  const backdrop = document.getElementById("backdrop");
-  const openBtn = document.getElementById("openMenu");
-  const closeBtn = document.getElementById("closeSidebarBtn");
-
-  function toggleSidebar(show) {
-      if (show) {
-          sidebar.classList.add("open");
-          backdrop.classList.add("open");
-      } else {
-          sidebar.classList.remove("open");
-          backdrop.classList.remove("open");
-      }
-  }
-
-  openBtn.addEventListener("click", () => toggleSidebar(true));
-  closeBtn.addEventListener("click", () => toggleSidebar(false));
-  backdrop.addEventListener("click", () => toggleSidebar(false));
-  document.addEventListener("keydown", (e) => { if(e.key === "Escape") toggleSidebar(false); });
-  
-  // Close sidebar on link click
-  document.querySelectorAll(".side-list a").forEach(link => {
-      link.addEventListener("click", () => toggleSidebar(false));
-  });
-
-  // --- Account Popup Logic ---
-  const userIcon = document.getElementById("userIcon");
-  const accPopup = document.getElementById("accountPopup");
-  const accBackdrop = document.getElementById("accountPopupBackdrop");
-  const accClose = document.getElementById("closeAccPopup");
-
-  function toggleAccount(show) {
-      const display = show ? "block" : "none";
-      accPopup.style.display = display;
-      accBackdrop.style.display = display;
-  }
-
-  userIcon.addEventListener("click", () => toggleAccount(true));
-  accClose.addEventListener("click", () => toggleAccount(false));
-  accBackdrop.addEventListener("click", () => toggleAccount(false));
-
-  // --- Resource Slider Logic ---
-  const slider = document.querySelector(".resource-slider");
-  const leftBtn = document.querySelector(".resource-nav.left");
-  const rightBtn = document.querySelector(".resource-nav.right");
-  if (slider && leftBtn && rightBtn) {
-    const scrollAmount = 260;
-    rightBtn.onclick = () => { slider.scrollBy({ left: scrollAmount, behavior: "smooth" }); };
-    leftBtn.onclick = () => { slider.scrollBy({ left: -scrollAmount, behavior: "smooth" }); };
-  }
-
-  // --- Arrow Animation ---
-  document.querySelectorAll(".resource-arrow").forEach(arrow => {
-    arrow.addEventListener("click", () => {
-        arrow.classList.add("shoot");
-        setTimeout(() => { arrow.classList.remove("shoot"); }, 350);
-    });
-  });
-
   // --- Snowfall Script (Reduced by 50% vs previous) ---
   function createSnow() {
     const snow = document.createElement('div');
