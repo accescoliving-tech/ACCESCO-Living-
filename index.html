@@ -1190,23 +1190,52 @@
                     <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day rollout options</div>
                     <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Compliance-ready handoff</div>
                 </div>
-                <form class="form-grid">
-                    <div class="form-group">
-                        <label>Your Name</label>
-                        <input type="text" class="form-control" placeholder="Virat Singh">
-                    </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" class="form-control" placeholder="virat@example.com">
-                    </div>
-                    <div class="form-group full-width">
-                        <label>Message</label>
-                        <textarea class="form-control" rows="5" placeholder="Tell us about your request"></textarea>
-                    </div>
-                    <div class="form-group full-width" style="text-align: center;">
-                        <button type="button" class="submit-btn">Send Message</button>
-                    </div>
-                </form>
+                <form action="https://formspree.io/f/xnneelwy" method="POST" class="form-grid">
+
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input 
+                        type="text" 
+                        id="name"
+                        name="name" 
+                        class="form-control" 
+                        placeholder="John Doe" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email"
+                        name="email" 
+                        class="form-control" 
+                        placeholder="john@example.com" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="message">Message</label>
+                    <textarea 
+                        id="message"
+                        name="message" 
+                        class="form-control" 
+                        rows="5" 
+                        placeholder="How can we help you?" 
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="form-group full-width" style="text-align: center;">
+                    <button type="submit" class="submit-btn">
+                        Send Message
+                    </button>
+                </div>
+
+            </form>
+
             </div>
         </div>
     </section>
