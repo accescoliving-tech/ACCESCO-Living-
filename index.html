@@ -31,7 +31,7 @@
     @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
 
     /* GLOBAL FONTS & RESETS */
-    body, p, li, a, button, input, label, span { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; letter-spacing: 0.2px; }
+    body, p, li, a, button, input, label, span, textarea { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; letter-spacing: 0.2px; }
     h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.5px; }
     .big-h, .hero-title { font-weight: 900; letter-spacing: -1px; }
     button, .cta-pill, .cta-outline, .start-btn { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
@@ -51,12 +51,14 @@
     .hero {
       position: relative;
       height: 100vh;
+      /* On mobile, allow height to grow if content is tall */
+      min-height: 100vh; 
       width: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center; /* Center horizontally */
+      align-items: center; 
+      justify-content: center; 
       overflow: hidden; 
-      text-align: center; /* Center text */
+      text-align: center; 
     }
 
     .hero-bg-video {
@@ -67,7 +69,7 @@
     .hero::before {
       content: ""; position: absolute; inset: 0;
       backdrop-filter: blur(1.5px);
-      background: rgba(0, 0, 0, 0.3); /* Darker overlay for text pop */
+      background: rgba(0, 0, 0, 0.3); 
       z-index: 1; 
     }
 
@@ -79,8 +81,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 12px; 
         padding: 20px;
+        padding-top: 5vh; 
+        width: 100%;
     }
     
     /* Centered Logo */
@@ -95,7 +99,7 @@
     .hero-title { 
         font-family: Poppins, sans-serif; 
         font-size: 64px; 
-        margin: 0;
+        margin: 0; 
         font-weight: 900; 
         line-height: 1.1; 
         color: #fff;
@@ -103,88 +107,166 @@
     
     .hero-sub { 
         font-size: 30px; 
-        color: rgba(255, 255, 255, 0.9); 
+        color: rgba(255, 255, 255, 0.95); 
+        margin-top: 0px; 
         margin-bottom: 20px;
         font-weight: 500;
+        padding: 0 10px;
     }
 
     .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
     
-    /* UPDATED BUTTON STYLE: WHITE BACKGROUND */
     .cta-pill { 
         padding: 16px 32px; 
         border-radius: 50px; 
         font-weight: 700; 
         cursor: pointer; 
         border: none; 
-        background: #fff;  /* Changed to White */
-        color: var(--accent); /* Changed text to Accent for contrast */
+        background: #fff;  
+        color: var(--accent); 
         font-size: 16px;
         transition: transform 0.2s;
     }
     .cta-pill:hover { transform: scale(1.05); }
 
-    /* New CSS for hero app buttons - LARGER */
+    /* Hero App Buttons - Responsive */
     .hero-app-buttons {
         display: flex;
-        gap: 16px;
-        margin-top: 24px;
+        gap: 20px;
+        margin-top: 30px;
         justify-content: center;
+        flex-wrap: wrap; /* Allows wrapping on very small screens */
     }
     .app-btn-link img {
-        height: 60px; /* Increased height for larger icons */
+        height: 64px; 
         width: auto;
         border-radius: 8px;
         cursor: pointer;
         transition: transform 0.2s;
     }
-    .app-btn-link img:hover {
-        transform: scale(1.05);
-    }
+    .app-btn-link img:hover { transform: scale(1.05); }
 
-    /* New CSS for scroll down button - SINGLE ARROW */
+    /* Scroll Down Button - Responsive */
     .scroll-down-btn {
-        margin-top: 40px;
+        margin-top: 40px; 
         color: #fff;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         cursor: pointer;
         transition: opacity 0.2s;
+        text-decoration: none;
+        padding-bottom: 20px; /* Safe space on mobile */
     }
-    .scroll-down-btn:hover {
-        opacity: 0.8;
-    }
-    .scroll-down-btn i {
-        font-size: 18px;
+    .scroll-down-btn:hover { opacity: 0.8; }
+    .scroll-down-btn i { font-size: 24px; animation: bounce 2s infinite; }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+        40% {transform: translateY(-5px);}
+        60% {transform: translateY(-3px);}
     }
 
-    @media(max-width: 900px) { .hero-title { font-size: 42px; } }
+    /* Mobile Breakpoints for Hero */
+    @media(max-width: 900px) { 
+        .hero-title { font-size: 42px; } 
+    }
+    
     @media(max-width: 480px) {
-        .hero-title { font-size: 32px; }
-        .hero-logo-img { width: 90px; height: 90px; }
-        .hero-app-buttons { flex-direction: column; gap: 12px; } /* Stack buttons on mobile */
-        .app-btn-link img { height: 50px; }
-        .scroll-down-btn { margin-top: 30px; }
+        .hero-title { font-size: 32px; line-height: 1.2; }
+        .hero-sub { font-size: 18px; line-height: 1.4; }
+        .hero-logo-img { width: 80px; height: 80px; }
+        
+        .hero-app-buttons { 
+            gap: 12px; 
+            margin-top: 20px; 
+        }
+        .app-btn-link img { height: 48px; } /* Smaller buttons on mobile */
+        
+        .cta-pill { padding: 12px 24px; font-size: 14px; }
+        .scroll-down-btn { margin-top: 20px; font-size: 12px; }
     }
 
     /* SECTIONS */
-    section { padding: 60px 20px; }
+    section { padding: 80px 20px; }
+    @media(max-width: 600px) { section { padding: 50px 20px; } }
+
     .section-title { text-align: center; max-width: 700px; margin: auto; margin-bottom: 28px; }
     .small-upper { font-weight: 700; color: var(--accent); letter-spacing: 1px; font-size: 13px; }
     .big-h { font-family: Poppins, sans-serif; font-size: 40px; font-weight: 800; margin: 10px 0; }
     @media(max-width: 600px) { .big-h { font-size: 28px; } }
     .muted-center { color: var(--muted); font-size: 16px; max-width: 800px; margin: auto; }
 
-    /* ABOUT SECTION */
-    .about-grid { max-width: var(--container); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-    @media(max-width: 900px) { .about-grid { grid-template-columns: 1fr; } .about-grid img { width: 100%; height: auto; } }
-    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 20px; }
-    .feature { background: #fff; padding: 24px; border-radius: 16px; display: flex; gap: 16px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.05); }
-    @media(max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px; } }
-    @media (max-width: 450px) { .features-grid { gap: 12px; } }
+    /* REDESIGNED ABOUT SECTION */
+    .about-new-layout {
+        max-width: var(--container);
+        margin: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .about-text-content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        text-align: left;
+    }
+    
+    .about-text-content h3 {
+        font-family: 'Davetica', sans-serif;
+        font-size: 48px;
+        font-weight: 900;
+        line-height: 1.1;
+        margin: 0;
+        background: linear-gradient(90deg, #222, var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .about-text-content p {
+        font-family: 'Davetica', sans-serif;
+        font-size: 18px;
+        line-height: 1.7;
+        color: #555;
+        margin: 0;
+    }
+    
+    .highlight-text {
+        color: var(--accent);
+        font-weight: 700;
+    }
+    
+    .about-image-wrapper {
+        position: relative;
+    }
+    
+    .about-image-wrapper img {
+        width: 100%;
+        height: auto;
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        transform: rotate(2deg);
+        transition: transform 0.3s ease;
+    }
+    
+    .about-image-wrapper:hover img {
+        transform: rotate(0deg) scale(1.02);
+    }
+    
+    @media(max-width: 900px) {
+        .about-new-layout { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+        .about-text-content { text-align: center; }
+        .about-text-content h3 { font-size: 36px; }
+        .about-image-wrapper img { transform: rotate(0deg); max-width: 100%; }
+    }
+
 
     /* SERVICES CARDS */
     .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 30px; }
@@ -205,14 +287,17 @@
     .new-badge { margin-left: 8px; background: #ff3b3b; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
     @media (max-width: 1024px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 
-    @media (max-width: 650px) { .cards { grid-template-columns: 1fr; } .card { min-height: 220px; height: auto; width: 100%; } }
+    @media (max-width: 650px) { 
+        .cards { grid-template-columns: 1fr; } 
+        .card { min-height: 220px; height: auto; width: 100%; } 
+    }
     
     .learn { margin-top: 8px; background: rgba(255, 255, 255, 0.18); padding: 6px 12px; border-radius: 12px; font-weight: 600; display: inline-block; color: rgba(255,255,255,0.95); transition: transform 0.2s ease; }
     .card:hover .learn { transform: translateX(6px); }
 
 
     /* ==================================
-       REDESIGNED CALC IQ: "The Floating Interface"
+       REDESIGNED CALC IQ
        ================================== */
     .calciq-section {
         max-width: 1100px;
@@ -314,7 +399,7 @@
 
 
     /* ==================================
-       REDESIGNED GAMING ARENA (CLEAN)
+       GAMING ARENA
        ================================== */
     .gaming-arena { 
         display: flex; justify-content: space-between; align-items: center; 
@@ -400,30 +485,8 @@
     }
 
 
-    /* RESOURCES */
-    .resource-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 30px; }
-    .resource { padding: 22px; border-radius: 14px; background: #fff; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.04); }
-    @media(max-width: 900px) { .resource-row { grid-template-columns: repeat(2, 1fr) !important; gap: 16px; } }
-    @media (max-width: 450px) { .resource-row { gap: 12px; } }
-    .resource-arrow { display: inline-block; font-size: 22px; font-weight: 700; color: var(--accent); margin-top: 8px; transition: transform 0.2s ease; cursor: pointer; }
-    .resource-arrow:hover { transform: translateX(6px); }
-    .resource-arrow.shoot { animation: shootRight 0.35s ease-out; }
-    @keyframes shootRight { 0% { transform: translateX(0); } 40% { transform: translateX(14px); } 100% { transform: translateX(0); } }
-
-    /* Resource Slider Mobile */
-    @media (max-width: 900px) {
-      .resource-slider-wrapper { position: relative; width: 100%; }
-      .resource-slider { display: flex !important; gap: 16px; overflow-x: auto; scroll-behavior: smooth; padding: 10px 5px; }
-      .resource-slider::-webkit-scrollbar { display: none; }
-      .resource { min-width: 240px; flex-shrink: 0; }
-      .resource-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: none; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.15); font-size: 22px; font-weight: 700; color: var(--accent); cursor: pointer; z-index: 10; }
-      .resource-nav.left { left: 0px; } .resource-nav.right { right: 0px; }
-    }
-    @media (min-width: 901px) { .resource-nav { display: none; } }
-
-
     /* ==================================== 
-       GEN Z ECOSYSTEM STYLES (UPDATED) 
+       GEN Z ECOSYSTEM STYLES 
        ==================================== */
     .app-showcase {
       background: #0f0c10;
@@ -576,17 +639,104 @@
       .gen-z-card:hover { transform: translateY(-5px) scale(1.05); }
     }
 
-    /* FOOTER */
-    footer { background: rgba(0, 0, 0, 0.95); padding: 60px 20px; border-top: 1px solid rgba(0, 0, 0, 0.07); }
-    .footer-grid { max-width: var(--container); margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; }
-    .social-links { display: flex; gap: 8px; margin-top: 10px; }
-    .social-icon { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background-color: #ffffff; color: #000000; border-radius: 50%; font-size: 14px; transition: transform 0.2s ease; }
-    .social-icon:hover { transform: translateY(-3px); background-color: var(--accent); color: white; }
-    .app-buttons { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-    .app-btn-img { height: 40px; width: 135px; border-radius: 6px; cursor: pointer; object-fit: contain; }
-    @media(max-width: 900px) { .footer-grid { grid-template-columns: 1fr; gap: 40px; } .social-links { justify-content: flex-start; } }
-    .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
+    /* ==================================
+       CONTACT FORM (NEW PREMIUM SECTION)
+       ================================== */
+    .contact-section {
+        padding: 80px 20px;
+        background: #f9f9f9;
+        display: flex;
+        justify-content: center;
+    }
     
+    .contact-card {
+        width: 100%;
+        max-width: 900px;
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        padding: 60px;
+        border: 1px solid rgba(0,0,0,0.04);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .contact-header h2 {
+        font-size: 36px;
+        color: #111;
+        margin: 0 0 10px;
+        font-family: Poppins, sans-serif;
+    }
+    .contact-header p {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 40px;
+        max-width: 500px;
+        margin-left: auto; margin-right: auto;
+    }
+    
+    .form-grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        text-align: left;
+    }
+    .full-width { grid-column: span 2; }
+    
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid #eee;
+        border-radius: 12px;
+        font-size: 16px;
+        font-family: inherit;
+        transition: border-color 0.2s;
+        outline: none;
+        background: #fdfdfd;
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent);
+        background: #fff;
+    }
+    
+    .submit-btn {
+        margin-top: 10px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 18px 40px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 10px 20px rgba(112, 4, 87, 0.2);
+    }
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 25px rgba(112, 4, 87, 0.3);
+    }
+    
+    @media(max-width: 700px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .full-width { grid-column: span 1; }
+        .contact-card { padding: 40px 20px; }
+    }
+
 
     /* ==================================
        DOWNLOAD APP SECTION (REVISED: CLEAN & DARK)
@@ -702,6 +852,22 @@
         .mobile-frame { margin: auto; transform: rotate(0); }
     }
 
+    /* FOOTER - Restored to clean dark 4-column layout */
+    footer { background: rgba(0, 0, 0, 0.95); padding: 60px 20px; border-top: 1px solid rgba(0, 0, 0, 0.07); }
+    .footer-grid { max-width: var(--container); margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 24px; }
+    .social-links { display: flex; gap: 8px; margin-top: 10px; }
+    .social-icon { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background-color: #ffffff; color: #000000; border-radius: 50%; font-size: 14px; transition: transform 0.2s ease; }
+    .social-icon:hover { transform: translateY(-3px); background-color: var(--accent); color: white; }
+    .app-buttons { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .app-btn-img { height: 40px; width: 135px; border-radius: 6px; cursor: pointer; object-fit: contain; }
+    
+    /* Footer Mobile Responsiveness */
+    @media(max-width: 900px) { 
+        .footer-grid { grid-template-columns: 1fr; gap: 40px; } 
+        .social-links { justify-content: flex-start; } 
+    }
+    .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
+
   </style>
 
 </head>
@@ -738,8 +904,9 @@
             </a>
         </div>
 
-        <a href="#services" class="scroll-down-btn" style="text-decoration: none;">
-            Scroll down <i class="ri-arrow-down-s-line"></i>
+        <a href="#services" class="scroll-down-btn">
+            Scroll down 
+            <i class="ri-arrow-down-s-line"></i>
         </a>
 
       </div>
@@ -857,7 +1024,7 @@
             <li><i class="ri-coupon-3-line"></i> Win Real Coupons</li>
         </ul>
 
-        <a href="game/flappybird/race.html"><button class="play-btn-main">Start Playing Now <i class="ri-arrow-right-line"></i></button></a>
+        <button class="play-btn-main">Start Playing Now <i class="ri-arrow-right-line"></i></button>
       </div>
 
       <div class="arena-right">
@@ -907,62 +1074,31 @@
       </div>
     </section>
 
-
     <section id="about">
       <div class="section-title">
         <div class="small-upper">ABOUT ACCESCO</div>
-        <h3 class="big-h" style="font-family: 'Davetica', sans-serif; font-weight: 800; font-size: 42px;">ACCESCO LIVING</h3>
-        <p class="muted-center" style="font-family: 'Davetica', sans-serif; font-size: 18px;">
-          Accesco Living is a next-generation ecosystem built to simplify and elevate everyday living for millions of Indians.
-        </p>
       </div>
 
-      <div class="about-grid">
-        <div>
-          <img src="images/teamwork.jpg" alt="About Image" style="width: 100%; height: auto; object-fit:cover;border-radius:18px;box-shadow:var(--shadow)" />
+      <div class="about-new-layout">
+        <div class="about-image-wrapper">
+          <img src="images/teamwork.jpg" alt="Accesco Team">
         </div>
 
-        <div>
-          <div class="features-grid" style="margin-top:0">
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Ultra-fast groceries</h4>
-              </div>
-            </div>
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Intelligent financial planning</h4>
-              </div>
-            </div>
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Curated fashion</h4>
-              </div>
-            </div>
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Smart rentals</h4>
-              </div>
-            </div>
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Immersive dining</h4>
-              </div>
-            </div>
-            <div class="feature">
-              <div>
-                <h4 style="color: var(--accent); font-family: 'Davetica', sans-serif; font-weight: 700;">Community-driven rewards</h4>
-              </div>
-            </div>
-          </div>
-          
-          <p style="color:var(--muted);font-size:16px;margin-top:20px; font-family: 'Davetica', sans-serif;">
-We are developing a unified platform that brings together ultra-fast groceries, intelligent financial planning, curated fashion, smart rentals, immersive dining, community-driven rewards, and advanced Al tools - all under one seamless experience.          </p>
-          <p style="color:var(--muted);font-size:16px;margin-top:20px; font-family: 'Davetica', sans-serif;">
-Accesco Living is designed for the modern Indian household: efficient, affordable, health-conscious, and technology-driven. Our goal is simple - make daily life smarter, smoother, and more connected through innovation that genuinely matters.          </p>
-          <p style="color:var(--accent);font-size:18px;margin-top:20px;font-weight:900; font-family: 'Davetica', sans-serif; text-transform: uppercase;">
-            THIS IS EVERYDAY LIVING, REIMAGINED FOR THE FUTURE.
-          </p>
+        <div class="about-text-content">
+            <h3>ACCESCO LIVING</h3>
+            <p>
+                We are building the future of daily living. Accesco isn't just an app; it's a unified ecosystem where <span class="highlight-text">ultra-fast groceries</span>, <span class="highlight-text">smart rentals</span>, and <span class="highlight-text">intelligent finance</span> converge.
+            </p>
+            <p>
+                From curated fashion rentals to immersive dining experiences, we are redesigning how modern Indian households operate—efficient, affordable, and technology-driven.
+            </p>
+            <p>
+                <b>This is everyday living, reimagined.</b>
+            </p>
+            
+            <a href="#contact" style="margin-top: 10px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                Join the Revolution <i class="ri-arrow-right-line"></i>
+            </a>
         </div>
       </div>
     </section>
@@ -1136,6 +1272,33 @@ Accesco Living is designed for the modern Indian household: efficient, affordabl
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section id="contact-form" class="contact-section">
+        <div class="contact-card">
+            <div class="contact-header">
+                <h2>Get in Touch</h2>
+                <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            </div>
+            
+            <form class="form-grid">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" class="form-control" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" placeholder="john@example.com">
+                </div>
+                <div class="form-group full-width">
+                    <label>Message</label>
+                    <textarea class="form-control" rows="5" placeholder="How can we help you?"></textarea>
+                </div>
+                <div class="form-group full-width" style="text-align: center;">
+                    <button type="button" class="submit-btn">Send Message</button>
+                </div>
+            </form>
         </div>
     </section>
 
