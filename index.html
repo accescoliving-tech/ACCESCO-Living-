@@ -226,6 +226,7 @@
         line-height: 1.1;
         margin: 0;
         background: linear-gradient(90deg, #222, var(--accent));
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
@@ -341,7 +342,9 @@
     }
     .calciq-info h2 span {
         background: linear-gradient(90deg, #fff, #ffb3ea);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     
     .calciq-info p { color: #ffdbf0; font-size: 17px; margin-bottom: 30px; line-height: 1.6; opacity: 0.9; }
@@ -507,7 +510,10 @@
     .app-header h2 {
       font-size: 48px; margin-bottom: 16px;
       background: linear-gradient(90deg, #fff, #ff80df);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
     }
     .app-header p { color: #bbb; max-width: 600px; margin: auto; font-size: 18px; }
 
@@ -640,102 +646,49 @@
     }
 
     /* ==================================
-       CONTACT FORM (NEW PREMIUM SECTION)
+       CONTACT FORM (ELEVATED, ANIMATED)
        ================================== */
-    .contact-section {
-        padding: 80px 20px;
-        background: #f9f9f9;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .contact-card {
-        width: 100%;
-        max-width: 900px;
-        background: #fff;
-        border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-        padding: 60px;
-        border: 1px solid rgba(0,0,0,0.04);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .contact-header h2 {
-        font-size: 36px;
-        color: #111;
-        margin: 0 0 10px;
-        font-family: Poppins, sans-serif;
-    }
-    .contact-header p {
-        color: #666;
-        font-size: 16px;
-        margin-bottom: 40px;
-        max-width: 500px;
-        margin-left: auto; margin-right: auto;
-    }
-    
-    .form-grid {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        text-align: left;
-    }
+    .contact-section { padding: 90px 20px; background: radial-gradient(circle at 12% 18%, rgba(112,4,87,0.06), transparent 34%), radial-gradient(circle at 80% 12%, rgba(160,30,125,0.05), transparent 32%), #fbf9fc; display: flex; justify-content: center; }
+    .contact-card { position: relative; width: 100%; max-width: 980px; background: linear-gradient(150deg, #ffffff 0%, #f8f0fb 100%); border-radius: 28px; padding: 56px 64px; overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,0.1); border: 1px solid rgba(112,4,87,0.12); backdrop-filter: blur(8px); animation: riseIn 0.8s ease forwards; transform-style: preserve-3d; transition: transform 0.5s ease, box-shadow 0.4s ease; isolation: isolate; }
+    .contact-card:hover { transform: translateY(-8px) scale(1.003); box-shadow: 0 34px 90px rgba(112,4,87,0.22); }
+    .contact-card::before, .contact-card::after { content: ""; position: absolute; width: 260px; height: 260px; border-radius: 50%; filter: blur(80px); opacity: 0.6; z-index: 0; }
+    .contact-card::before { top: -120px; left: -80px; background: rgba(112,4,87,0.22); animation: floatPulse 10s ease-in-out infinite; }
+    .contact-card::after { bottom: -140px; right: -100px; background: rgba(160,30,125,0.22); animation: floatPulse 12s ease-in-out infinite reverse; }
+    .contact-glow { position: absolute; inset: -30%; background: conic-gradient(from 90deg, rgba(112,4,87,0.4), rgba(160,30,125,0.35), rgba(112,4,87,0.4)); filter: blur(90px); opacity: 0.45; mix-blend-mode: screen; z-index: 0; animation: orbitGlow 18s linear infinite; }
+    .contact-gridlines { position: absolute; inset: 0; background-image: linear-gradient(rgba(112,4,87,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(112,4,87,0.06) 1px, transparent 1px); background-size: 38px 38px; opacity: 0.5; mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.7), rgba(0,0,0,0)); z-index: 1; pointer-events: none; animation: drift 16s ease-in-out infinite alternate; }
+    .contact-inner { position: relative; z-index: 2; display: grid; gap: 32px; }
+    .contact-header { text-align: center; display: grid; gap: 10px; }
+    .contact-badge { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: rgba(112,4,87,0.14); color: var(--accent); font-weight: 900; letter-spacing: 0.7px; text-transform: uppercase; margin: 0 auto; box-shadow: 0 12px 28px rgba(112,4,87,0.12); position: relative; overflow: hidden; }
+    .contact-badge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.16), transparent 50%); animation: badgeShine 2.6s ease-in-out infinite; }
+    .contact-header h2 { font-size: 36px; color: #0f0c10; margin: 0; font-family: Poppins, sans-serif; letter-spacing: -0.5px; }
+    .contact-header p { color: #4a3f4d; font-size: 16px; margin: 0 auto; max-width: 560px; line-height: 1.7; }
+    .contact-meta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .info-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 14px; background: rgba(255,255,255,0.82); border: 1px solid rgba(112,4,87,0.14); color: #2c1c2b; font-weight: 800; box-shadow: 0 14px 34px rgba(112,4,87,0.1); transition: transform 0.4s ease; }
+    .info-chip:nth-child(1) { animation: floatY 7s ease-in-out infinite; }
+    .info-chip:nth-child(2) { animation: floatY 7.5s ease-in-out infinite reverse; }
+    .info-chip:nth-child(3) { animation: floatY 8s ease-in-out infinite; }
+    .info-chip i { color: var(--accent); }
+    .contact-ribbon { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .ribbon-pill { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; background: linear-gradient(135deg, rgba(112,4,87,0.12), rgba(160,30,125,0.12)); border: 1px solid rgba(112,4,87,0.18); color: #2a1a29; font-weight: 800; box-shadow: 0 10px 26px rgba(112,4,87,0.12); }
+    .ribbon-pill i { color: var(--accent); }
+    .form-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
     .full-width { grid-column: span 2; }
-    
-    .form-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 700;
-        color: #333;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .form-control {
-        width: 100%;
-        padding: 16px;
-        border: 2px solid #eee;
-        border-radius: 12px;
-        font-size: 16px;
-        font-family: inherit;
-        transition: border-color 0.2s;
-        outline: none;
-        background: #fdfdfd;
-    }
-    
-    .form-control:focus {
-        border-color: var(--accent);
-        background: #fff;
-    }
-    
-    .submit-btn {
-        margin-top: 10px;
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        padding: 18px 40px;
-        font-size: 16px;
-        font-weight: 700;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 10px 20px rgba(112, 4, 87, 0.2);
-    }
-    .submit-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 14px 25px rgba(112, 4, 87, 0.3);
-    }
-    
-    @media(max-width: 700px) {
-        .form-grid { grid-template-columns: 1fr; }
-        .full-width { grid-column: span 1; }
-        .contact-card { padding: 40px 20px; }
-    }
+    .form-group label { display: block; font-size: 13px; font-weight: 800; color: #2a1a29; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-control { width: 100%; padding: 16px 18px; border: 2px solid rgba(112,4,87,0.1); border-radius: 14px; font-size: 16px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; outline: none; background: #fdfbff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); }
+    .form-control:focus { border-color: var(--accent); box-shadow: 0 10px 28px rgba(112,4,87,0.18), inset 0 1px 0 rgba(255,255,255,0.9); background: #fff; transform: translateY(-1px); }
+    .submit-btn { margin-top: 10px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; padding: 18px 40px; font-size: 16px; font-weight: 900; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.25s ease; box-shadow: 0 18px 38px rgba(112,4,87,0.25); width: 100%; position: relative; overflow: hidden; }
+    .submit-btn::after { content: ""; position: absolute; top: 0; left: -40%; width: 30%; height: 100%; background: linear-gradient(120deg, rgba(255,255,255,0.5), rgba(255,255,255,0)); transform: skewX(-18deg); opacity: 0; transition: opacity 0.3s; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 26px 55px rgba(112,4,87,0.32); }
+    .submit-btn:hover::after { opacity: 1; animation: shine 1s ease; }
+    .submit-btn:active { transform: translateY(0); box-shadow: 0 12px 28px rgba(112,4,87,0.24); }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes orbitGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes floatPulse { 0%, 100% { transform: scale(1); opacity: 0.55; } 50% { transform: scale(1.08); opacity: 0.75; } }
+    @keyframes drift { 0% { transform: translate3d(-6px, 0, 0); opacity: 0.45; } 100% { transform: translate3d(6px, -4px, 0); opacity: 0.65; } }
+    @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes badgeShine { 0% { transform: translateX(-80%); opacity: 0; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(120%); opacity: 0; } }
+    @keyframes shine { 0% { transform: translateX(-60%) skewX(-18deg); } 100% { transform: translateX(220%) skewX(-18deg); } }
+    @media(max-width: 900px) { .contact-card { padding: 44px 26px; } .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } .contact-ribbon { grid-template-columns: 1fr; } }
 
 
     /* ==================================
@@ -787,6 +740,7 @@
     
     .highlight {
         background: linear-gradient(90deg, #fff, #ff80df);
+        background-clip: text;
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
@@ -876,6 +830,7 @@
 
 
   <main id="home">
+        <!-- HERO: Landing with looping video background -->
     <section class="hero">
       <video class="hero-bg-video" autoplay muted loop playsinline>
           <source src="images/start.mp4" type="video/mp4">
@@ -913,6 +868,7 @@
     </section>
 
 
+    <!-- SERVICES: Core offerings grid -->
     <section id="services">
       <div class="section-title">
         <div class="small-upper">OUR SERVICES</div>
@@ -983,6 +939,7 @@
     </section>
 
 
+    <!-- CALCIQ: Finance intelligence promo -->
     <section class="calciq-section">
       <div class="calciq-container">
         <div class="calciq-info">
@@ -1013,6 +970,7 @@
       </div>
     </section>
 
+    <!-- GAMING ARENA: Play-and-earn tiles -->
     <section class="gaming-arena">
       <div class="arena-left">
         <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
@@ -1074,6 +1032,7 @@
       </div>
     </section>
 
+    <!-- ABOUT: Brand story -->
     <section id="about">
       <div class="section-title">
         <div class="small-upper">ABOUT ACCESCO</div>
@@ -1103,6 +1062,7 @@
       </div>
     </section>
 
+    <!-- APP SHOWCASE: Gen Z ecosystem UI -->
     <section class="app-showcase">
         <div class="app-header">
             <h2>The Ecosystem. Unlocked.</h2>
@@ -1184,74 +1144,8 @@
             </div>
         </div>
     </section>
-
-    <script>
-      const stack = document.getElementById('stack');
-      const cards = Array.from(stack.querySelectorAll('.stack-card'));
-      let isAnimating = false;
-
-      // Click/Drag logic variables
-      let startX = 0;
-      let startY = 0;
-
-      // Mouse/Touch Events
-      stack.addEventListener('mousedown', startSwipe);
-      stack.addEventListener('touchstart', startSwipe);
-
-      function startSwipe(e) {
-          if(isAnimating) return;
-          startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-          document.addEventListener('mouseup', endSwipe);
-          document.addEventListener('touchend', endSwipe);
-      }
-
-      function endSwipe(e) {
-          if(isAnimating) return;
-          const endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
-          const diff = endX - startX;
-          
-          // Threshold for swipe
-          if(Math.abs(diff) > 50) {
-              const direction = diff > 0 ? 'right' : 'left';
-              animateStack(direction);
-          } else if (diff === 0 && e.target.closest('.stack-card')) {
-              // Click to cycle (default left)
-              animateStack('left');
-          }
-          
-          document.removeEventListener('mouseup', endSwipe);
-          document.removeEventListener('touchend', endSwipe);
-      }
-
-      function animateStack(direction) {
-          isAnimating = true;
-          // Identify current positions
-          const front = cards.find(c => c.classList.contains('pos-1'));
-          const mid = cards.find(c => c.classList.contains('pos-2'));
-          const back = cards.find(c => c.classList.contains('pos-3'));
-
-          // 1. Animate Front Card AWAY
-          front.classList.add(direction === 'right' ? 'swipe-right' : 'swipe-left');
-
-          // 2. Wait, then shuffle classes
-          setTimeout(() => {
-              // Front moves to back
-              front.classList.remove('pos-1', 'swipe-right', 'swipe-left');
-              front.classList.add('pos-3');
-
-              // Mid moves to front
-              mid.classList.remove('pos-2');
-              mid.classList.add('pos-1');
-
-              // Back moves to mid
-              back.classList.remove('pos-3');
-              back.classList.add('pos-2');
-
-              isAnimating = false;
-          }, 300); // Wait for transition
-      }
-    </script>
     
+    <!-- DOWNLOAD: App badges + QR -->
     <section class="download-section">
         <div class="download-card">
             <div class="download-text">
@@ -1275,35 +1169,51 @@
         </div>
     </section>
 
+    <!-- CONTACT: Concierge form -->
     <section id="contact-form" class="contact-section">
         <div class="contact-card">
-            <div class="contact-header">
-                <h2>Get in Touch</h2>
-                <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+            <div class="contact-glow"></div>
+            <div class="contact-gridlines"></div>
+            <div class="contact-inner">
+                <div class="contact-header">
+                    <span class="contact-badge"><i class="ri-sparkling-2-fill"></i> Concierge Desk</span>
+                    <h2>Need something tailored?</h2>
+                    <p>Tell us what you need and our team will reach back with the right solution—usually within a couple of hours.</p>
+                    <div class="contact-meta">
+                        <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
+                        <span class="info-chip"><i class="ri-shield-check-line"></i> Secure & private</span>
+                        <span class="info-chip"><i class="ri-chat-1-line"></i> Live follow-ups</span>
+                    </div>
+                </div>
+                <div class="contact-ribbon">
+                    <div class="ribbon-pill"><i class="ri-star-smile-line"></i>White-glove onboarding</div>
+                    <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day rollout options</div>
+                    <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Compliance-ready handoff</div>
+                </div>
+                <form class="form-grid">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" class="form-control" placeholder="Virat Singh">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="virat@example.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Message</label>
+                        <textarea class="form-control" rows="5" placeholder="Tell us about your request"></textarea>
+                    </div>
+                    <div class="form-group full-width" style="text-align: center;">
+                        <button type="button" class="submit-btn">Send Message</button>
+                    </div>
+                </form>
             </div>
-            
-            <form class="form-grid">
-                <div class="form-group">
-                    <label>Your Name</label>
-                    <input type="text" class="form-control" placeholder="John Doe">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" class="form-control" placeholder="john@example.com">
-                </div>
-                <div class="form-group full-width">
-                    <label>Message</label>
-                    <textarea class="form-control" rows="5" placeholder="How can we help you?"></textarea>
-                </div>
-                <div class="form-group full-width" style="text-align: center;">
-                    <button type="button" class="submit-btn">Send Message</button>
-                </div>
-            </form>
         </div>
     </section>
 
 
-  <footer id="contact">
+    <!-- FOOTER -->
+    <footer id="contact">
     <div class="footer-grid">
       <div>
         <div style="display:flex;gap:14px;align-items:center">
@@ -1357,37 +1267,93 @@
     </div>
   </footer>
 
-  <script>
-  // --- Snowfall Script (Reduced by 50% vs previous) ---
-  function createSnow() {
-    const snow = document.createElement('div');
-    snow.innerHTML = "❄";
-    snow.classList.add('snowflake');
-    document.body.appendChild(snow);
-    
-    const startLeft = Math.random() * 100; 
-    snow.style.left = startLeft + 'vw';
-    
-    const duration = Math.random() * 3 + 4; 
-    snow.style.animationDuration = duration + 's';
-    
-    const size = Math.random() * 15 + 10; 
-    snow.style.fontSize = size + 'px';
-    
-    snow.style.opacity = Math.random() * 0.6 + 0.4;
-    
-    setTimeout(() => {
-        snow.remove();
-    }, duration * 1000);
-  }
+    <!-- SCRIPT: Swipeable stack interaction -->
+    <script>
+        const stack = document.getElementById('stack');
+        const cards = Array.from(stack.querySelectorAll('.stack-card'));
+        let isAnimating = false;
 
-  // Determine interval based on screen width
-  // Desktop: 400ms (was 200ms) | Mobile: 700ms (was 350ms) -> Significant reduction
-  const isMobile = window.innerWidth < 768;
-  const interval = isMobile ? 700 : 400; 
+        let startX = 0;
+        let startY = 0;
 
-  setInterval(createSnow, interval);
-  </script>
+        stack.addEventListener('mousedown', startSwipe);
+        stack.addEventListener('touchstart', startSwipe);
+
+        function startSwipe(e) {
+                if (isAnimating) return;
+                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                document.addEventListener('mouseup', endSwipe);
+                document.addEventListener('touchend', endSwipe);
+        }
+
+        function endSwipe(e) {
+                if (isAnimating) return;
+                const endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+                const diff = endX - startX;
+
+                if (Math.abs(diff) > 50) {
+                        const direction = diff > 0 ? 'right' : 'left';
+                        animateStack(direction);
+                } else if (diff === 0 && e.target.closest('.stack-card')) {
+                        animateStack('left');
+                }
+
+                document.removeEventListener('mouseup', endSwipe);
+                document.removeEventListener('touchend', endSwipe);
+        }
+
+        function animateStack(direction) {
+                isAnimating = true;
+                const front = cards.find(c => c.classList.contains('pos-1'));
+                const mid = cards.find(c => c.classList.contains('pos-2'));
+                const back = cards.find(c => c.classList.contains('pos-3'));
+
+                front.classList.add(direction === 'right' ? 'swipe-right' : 'swipe-left');
+
+                setTimeout(() => {
+                        front.classList.remove('pos-1', 'swipe-right', 'swipe-left');
+                        front.classList.add('pos-3');
+
+                        mid.classList.remove('pos-2');
+                        mid.classList.add('pos-1');
+
+                        back.classList.remove('pos-3');
+                        back.classList.add('pos-2');
+
+                        isAnimating = false;
+                }, 300);
+        }
+    </script>
+
+    <!-- SCRIPT: Snowfall effect -->
+    <script>
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.innerHTML = "❄";
+            snow.classList.add('snowflake');
+            document.body.appendChild(snow);
+
+            const startLeft = Math.random() * 100;
+            snow.style.left = startLeft + 'vw';
+
+            const duration = Math.random() * 3 + 4;
+            snow.style.animationDuration = duration + 's';
+
+            const size = Math.random() * 15 + 10;
+            snow.style.fontSize = size + 'px';
+
+            snow.style.opacity = Math.random() * 0.6 + 0.4;
+
+            setTimeout(() => {
+                    snow.remove();
+            }, duration * 1000);
+        }
+
+        const isMobile = window.innerWidth < 768;
+        const interval = isMobile ? 700 : 400;
+
+        setInterval(createSnow, interval);
+    </script>
 
 </body>
 </html>
