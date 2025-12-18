@@ -406,75 +406,115 @@
        ================================== */
     .gaming-arena { 
         display: flex; justify-content: space-between; align-items: center; 
-        padding: 80px 40px; gap: 60px; max-width: 1200px; margin: auto;
+        padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
+        background: radial-gradient(circle at 18% 22%, rgba(112, 4, 87, 0.22), transparent 32%),
+                    radial-gradient(circle at 78% 18%, rgba(160, 30, 125, 0.24), transparent 36%),
+                    linear-gradient(135deg, #0b0710, #150017);
+        border-radius: 28px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+        isolation: isolate;
+        opacity: 0;
+        transform: translateY(32px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
     }
+    .gaming-arena.is-visible { opacity: 1; transform: translateY(0); }
+    .gaming-arena::before { content: ""; position: absolute; inset: -20%; background: conic-gradient(from 120deg, rgba(255, 215, 128, 0.18), rgba(255, 191, 71, 0.08), rgba(255, 215, 128, 0.2), rgba(255, 191, 71, 0.08)); filter: blur(90px); opacity: 0.7; z-index: 0; animation: orbitGlow 22s linear infinite reverse; }
+    .gaming-arena::after { content: ""; position: absolute; top: -30%; right: -25%; width: 70%; height: 160%; background: linear-gradient(110deg, rgba(255, 215, 128, 0.06) 0%, rgba(255, 191, 71, 0.2) 38%, rgba(112, 4, 87, 0.0) 70%); filter: blur(12px); opacity: 0.65; transform: rotate(-6deg); animation: sweepLight 14s ease-in-out infinite; z-index: 0; }
     
-    .arena-left { flex: 1; max-width: 450px; }
+    .arena-left { flex: 1; max-width: 450px; position: relative; z-index: 1; }
     .badge-pill { 
-        background: rgba(112, 4, 87, 0.08); color: var(--accent); 
+        background: rgba(255, 198, 109, 0.18); color: #ffd86f; 
         padding: 8px 16px; border-radius: 30px; 
         font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 14px; 
-        letter-spacing: 0.5px;
+        letter-spacing: 0.5px; box-shadow: 0 10px 30px rgba(255, 198, 109, 0.18);
+        position: relative; overflow: hidden;
     }
+    .badge-pill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); opacity: 0; transform: translateX(-60%); transition: opacity 0.4s, transform 0.6s; }
+    .badge-pill:hover::after { opacity: 1; transform: translateX(60%); }
     
-    .arena-title { font-size: 48px; line-height: 1.1; margin: 0 0 16px; color: #111; }
-    .arena-title span { color: var(--accent); }
-    .arena-desc { color: #666; font-size: 17px; margin-bottom: 30px; }
+    .arena-title { font-size: 48px; line-height: 1.1; margin: 0 0 16px; color: #f7f2ff; position: relative; }
+    .arena-title span { 
+        background: linear-gradient(90deg, #ffe7a6, #ffbe3b, #ffe7a6); 
+        background-clip: text; 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+    }
+    .arena-desc { color: #d7cde8; font-size: 17px; margin-bottom: 30px; }
 
     .arena-features { list-style: none; padding: 0; margin: 0 0 30px; display: flex; flex-direction: column; gap: 14px; }
-    .arena-features li { display: flex; align-items: center; gap: 12px; font-weight: 600; color: #333; font-size: 15px; }
-    .arena-features li i { color: var(--accent); font-size: 20px; background: rgba(112,4,87,0.1); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .arena-features li { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #f5e7ff; font-size: 15px; position: relative; overflow: hidden; }
+    .arena-features li::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: linear-gradient(90deg, #ffd86f, rgba(255, 215, 128, 0)); transition: width 0.35s ease; opacity: 0.8; }
+    .arena-features li:hover::after { width: 48%; }
+    .arena-features li i { color: #ffcf5f; font-size: 20px; background: rgba(255, 207, 95, 0.15); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 10px 24px rgba(255, 207, 95, 0.18); }
 
     .play-btn-main {
-        background: var(--accent); color: #fff; border: none; 
-        padding: 16px 32px; font-size: 16px; border-radius: 12px; 
+        background: linear-gradient(120deg, #ffe18a, #ffb13b, #ffd45f); color: #201222; border: none; 
+        padding: 16px 32px; font-size: 16px; border-radius: 14px; 
         display: inline-flex; gap: 10px; align-items: center; 
-        cursor: pointer; font-weight: 700; transition: 0.2s;
-        box-shadow: 0 10px 20px rgba(112, 4, 87, 0.15);
+        cursor: pointer; font-weight: 800; transition: 0.25s ease; text-transform: uppercase;
+        box-shadow: 0 16px 38px rgba(255, 184, 70, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.8px; position: relative; overflow: hidden;
+        background-size: 220% 220%;
+        animation: goldFlow 7s ease infinite;
     }
-    .play-btn-main:hover { transform: translateY(-2px); box-shadow: 0 14px 25px rgba(112, 4, 87, 0.25); }
+    .play-btn-main::after { content: ""; position: absolute; inset: -40%; background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 55%); opacity: 0; transition: opacity 0.3s; }
+    .play-btn-main:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 24px 48px rgba(255, 184, 70, 0.35); }
+    .play-btn-main:hover::after { opacity: 1; }
 
     /* New Grid Design */
-    .arena-right { flex: 1.2; width: 100%; }
+    .arena-right { flex: 1.2; width: 100%; position: relative; z-index: 1; }
     .games-grid-clean { 
         display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; 
     }
     
     .game-card-new { 
-        background: #fff; padding: 24px; border-radius: 20px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
-        border: 1px solid rgba(0,0,0,0.04);
+        background: linear-gradient(160deg, rgba(30, 12, 36, 0.9), rgba(14, 8, 18, 0.95)); padding: 24px; border-radius: 20px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
+        border: 1px solid rgba(255, 191, 71, 0.12);
         transition: all 0.3s ease; 
-        text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; text-align: center;
+        text-decoration: none; color: #f5e7ff; display: flex; flex-direction: column; align-items: center; text-align: center;
         position: relative; overflow: hidden;
+        opacity: 0; transform: translateY(18px) scale(0.98);
     }
+    
+    .game-card-new::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(120deg, rgba(255, 215, 128, 0.12), rgba(255, 215, 128, 0), rgba(255, 215, 128, 0.18)); transform: translateX(-120%); transition: transform 0.6s ease, opacity 0.6s ease; opacity: 0; }
     
     .game-card-new:hover { 
         transform: translateY(-8px); 
-        box-shadow: 0 20px 40px rgba(112, 4, 87, 0.12); 
-        border-color: rgba(112, 4, 87, 0.2);
+        box-shadow: 0 22px 44px rgba(255, 191, 71, 0.22); 
+        border-color: rgba(255, 191, 71, 0.26);
     }
+    .game-card-new:hover::after { transform: translateX(80%); opacity: 1; }
+    
+    .game-card-new.card-in { opacity: 1; transform: translateY(0) scale(1); }
 
     .game-icon-box {
         width: 64px; height: 64px; border-radius: 16px;
-        background: #f8f8f8; display: flex; align-items: center; justify-content: center;
-        margin-bottom: 16px; transition: 0.3s;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 191, 71, 0.32), rgba(30, 12, 36, 0.9)); display: flex; align-items: center; justify-content: center;
+        margin-bottom: 16px; transition: 0.3s; border: 1px solid rgba(255, 191, 71, 0.24);
     }
-    .game-card-new:hover .game-icon-box { background: rgba(112, 4, 87, 0.08); }
+    .game-card-new:hover .game-icon-box { background: radial-gradient(circle at 70% 20%, rgba(255, 223, 133, 0.46), rgba(30, 12, 36, 0.9)); }
     
-    .game-icon-box img { width: 40px; height: 40px; object-fit: contain; }
-    .game-icon-box i { font-size: 32px; color: var(--accent); }
+    .game-icon-box img { width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(255, 191, 71, 0.35)); transition: transform 0.3s ease; }
+    .game-icon-box i { font-size: 32px; color: #ffcf5f; }
 
-    .game-card-new h4 { font-size: 18px; font-weight: 800; margin: 0 0 4px; color: #222; }
-    .game-card-new span { font-size: 13px; color: #888; font-weight: 500; }
+    .game-card-new h4 { font-size: 18px; font-weight: 900; margin: 0 0 4px; color: #ffdf85; }
+    .game-card-new span { font-size: 13px; color: #cbbbe0; font-weight: 600; }
 
     /* Hover "Play" Text */
     .play-hover {
-        margin-top: 12px; font-size: 13px; font-weight: 700; 
-        color: var(--accent); opacity: 0; transform: translateY(10px); 
+        margin-top: 12px; font-size: 13px; font-weight: 800; 
+        color: #ffcf5f; opacity: 0; transform: translateY(10px); 
         transition: all 0.3s ease;
+        text-transform: uppercase;
     }
+    .game-card-new:hover .game-icon-box img { transform: translateY(-4px) scale(1.04); }
     .game-card-new:hover .play-hover { opacity: 1; transform: translateY(0); }
+
+    @keyframes goldFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes sweepLight { 0% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } 50% { transform: rotate(-6deg) translateX(-6%); opacity: 0.8; } 100% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } }
 
     @media(max-width: 900px) {
         .gaming-arena { flex-direction: column; text-align: center; padding: 50px 20px; gap: 40px; }
@@ -676,11 +716,19 @@
     .form-group label { display: block; font-size: 13px; font-weight: 800; color: #2a1a29; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-control { width: 100%; padding: 16px 18px; border: 2px solid rgba(112,4,87,0.1); border-radius: 14px; font-size: 16px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; outline: none; background: #fdfbff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); }
     .form-control:focus { border-color: var(--accent); box-shadow: 0 10px 28px rgba(112,4,87,0.18), inset 0 1px 0 rgba(255,255,255,0.9); background: #fff; transform: translateY(-1px); }
-    .submit-btn { margin-top: 10px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; padding: 18px 40px; font-size: 16px; font-weight: 900; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.25s ease; box-shadow: 0 18px 38px rgba(112,4,87,0.25); width: 100%; position: relative; overflow: hidden; }
+    .submit-btn { margin-top: 10px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; padding: 18px 40px; font-size: 16px; font-weight: 900; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.25s ease; box-shadow: 0 18px 38px rgba(112,4,87,0.25); width: 100%; position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 0.6px; text-transform: uppercase; --tiltX: 0deg; --tiltY: 0deg; transform: translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX)); }
     .submit-btn::after { content: ""; position: absolute; top: 0; left: -40%; width: 30%; height: 100%; background: linear-gradient(120deg, rgba(255,255,255,0.5), rgba(255,255,255,0)); transform: skewX(-18deg); opacity: 0; transition: opacity 0.3s; }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 26px 55px rgba(112,4,87,0.32); }
+    .submit-btn::before { content: ""; position: absolute; inset: -1px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.38); opacity: 0; transform: scale(0.96); transition: opacity 0.3s, transform 0.4s; z-index: 1; pointer-events: none; }
+    .submit-btn .btn-blur { position: absolute; inset: -14px; background: conic-gradient(from 40deg, rgba(255,255,255,0.3), rgba(255,255,255,0), rgba(255,255,255,0.45), rgba(255,255,255,0)); filter: blur(18px); opacity: 0; transform: scale(0.9); transition: opacity 0.35s ease, transform 0.6s ease; z-index: 0; }
+    .submit-btn .btn-text { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 8px; }
+    .submit-btn .btn-text i { font-size: 18px; }
+    .submit-btn:hover { transform: translateY(-2px) rotateX(var(--tiltY)) rotateY(var(--tiltX)); box-shadow: 0 26px 55px rgba(112,4,87,0.32); filter: saturate(1.1); }
     .submit-btn:hover::after { opacity: 1; animation: shine 1s ease; }
-    .submit-btn:active { transform: translateY(0); box-shadow: 0 12px 28px rgba(112,4,87,0.24); }
+    .submit-btn:hover::before { opacity: 1; transform: scale(1.05); }
+    .submit-btn:hover .btn-blur { opacity: 0.9; transform: scale(1.06) rotate(6deg); }
+    .submit-btn:active { transform: translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX)); box-shadow: 0 12px 28px rgba(112,4,87,0.24); }
+    .submit-btn:active .btn-blur { transform: scale(1.02); opacity: 0.8; }
+    .submit-ripple { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.8); transform: translate(-50%,-50%) scale(0); animation: ripple 0.9s ease-out forwards; pointer-events: none; mix-blend-mode: screen; }
     @keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes orbitGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes floatPulse { 0%, 100% { transform: scale(1); opacity: 0.55; } 50% { transform: scale(1.08); opacity: 0.75; } }
@@ -688,6 +736,7 @@
     @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
     @keyframes badgeShine { 0% { transform: translateX(-80%); opacity: 0; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(120%); opacity: 0; } }
     @keyframes shine { 0% { transform: translateX(-60%) skewX(-18deg); } 100% { transform: translateX(220%) skewX(-18deg); } }
+    @keyframes ripple { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0.9; } 100% { transform: translate(-50%,-50%) scale(12); opacity: 0; } }
     @media(max-width: 900px) { .contact-card { padding: 44px 26px; } .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } .contact-ribbon { grid-template-columns: 1fr; } }
 
 
@@ -1230,7 +1279,8 @@
 
                 <div class="form-group full-width" style="text-align: center;">
                     <button type="submit" class="submit-btn">
-                        Send Message
+                        <span class="btn-blur"></span>
+                        <span class="btn-text"><i class="ri-send-plane-2-fill"></i> Send Message</span>
                     </button>
                 </div>
 
@@ -1291,12 +1341,33 @@
       </div>
     </div>
 
-    <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px; text-align: center;">
-      © 2025 ACCESCO — All rights reserved.
-    </div>
-  </footer>
+        <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px; text-align: center;">
+            © 2025 ACCESCO — All rights reserved.
+        </div>
+    </footer>
 
-    <!-- SCRIPT: Swipeable stack interaction -->
+        <!-- SCRIPT: Gaming Arena reveal + stagger -->
+        <script>
+                (() => {
+                        const arena = document.querySelector('.gaming-arena');
+                        if (!arena) return;
+                        const cards = Array.from(arena.querySelectorAll('.game-card-new'));
+                        const observer = new IntersectionObserver((entries) => {
+                                entries.forEach((entry) => {
+                                        if (entry.isIntersecting) {
+                                                arena.classList.add('is-visible');
+                                                cards.forEach((card, idx) => {
+                                                        setTimeout(() => card.classList.add('card-in'), idx * 120);
+                                                });
+                                                observer.disconnect();
+                                        }
+                                });
+                        }, { threshold: 0.25 });
+                        observer.observe(arena);
+                })();
+        </script>
+
+        <!-- SCRIPT: Swipeable stack interaction -->
     <script>
         const stack = document.getElementById('stack');
         const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -1382,6 +1453,39 @@
         const interval = isMobile ? 700 : 400;
 
         setInterval(createSnow, interval);
+    </script>
+
+    <!-- SCRIPT: Animated submit button tilt + ripple -->
+    <script>
+        (() => {
+            const btn = document.querySelector('.submit-btn');
+            if (!btn) return;
+
+            btn.addEventListener('pointermove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const offsetY = e.clientY - rect.top;
+                const tiltX = ((offsetX / rect.width) - 0.5) * 10;
+                const tiltY = -((offsetY / rect.height) - 0.5) * 6;
+                btn.style.setProperty('--tiltX', `${tiltX}deg`);
+                btn.style.setProperty('--tiltY', `${tiltY}deg`);
+            });
+
+            btn.addEventListener('pointerleave', () => {
+                btn.style.setProperty('--tiltX', '0deg');
+                btn.style.setProperty('--tiltY', '0deg');
+            });
+
+            btn.addEventListener('click', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'submit-ripple';
+                ripple.style.left = `${e.clientX - rect.left}px`;
+                ripple.style.top = `${e.clientY - rect.top}px`;
+                btn.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+            });
+        })();
     </script>
 
 </body>
