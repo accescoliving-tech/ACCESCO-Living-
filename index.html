@@ -48,23 +48,25 @@
     img { width: 100%; height: auto; display: block; border-radius: 14px; } 
 
     /* ================= HERO (ZOMATO STYLE) ================= */
-    .hero {
-      position: relative;
-      height: 100vh;
-      /* On mobile, allow height to grow if content is tall */
-      min-height: 100vh; 
-      width: 100%;
-      display: flex;
-      align-items: center; 
-      justify-content: center; 
-      overflow: hidden; 
-      text-align: center; 
-    }
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 100svh;
+            width: 100%;
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            text-align: center; 
+        }
 
-    .hero-bg-video {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; z-index: 0; 
-    }
+        .hero-bg-video {
+                position: absolute; inset: 0; width: cover; height: cover;
+                min-width: 100%; min-height: 100%;
+                object-fit: cover; object-position: center;
+                z-index: 0; pointer-events: none;
+                background: #050308;
+        }
 
     .hero::before {
       content: ""; position: absolute; inset: 0;
@@ -515,6 +517,29 @@
 
     @keyframes goldFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     @keyframes sweepLight { 0% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } 50% { transform: rotate(-6deg) translateX(-6%); opacity: 0.8; } 100% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } }
+
+    /* ==================================
+       GLOBAL SCROLL REVEAL ANIMATION
+       ================================== */
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(22px) scale(0.982) rotateX(0.6deg);
+        filter: blur(6px);
+        transition:
+            opacity 0.78s cubic-bezier(0.33, 1, 0.68, 1),
+            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+            filter 0.7s ease;
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform, filter;
+    }
+    .scroll-reveal[data-reveal="left"] { transform: translateX(-32px) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal[data-reveal="right"] { transform: translateX(32px) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal[data-reveal="fade"] { transform: translateY(0) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal.is-visible { opacity: 1; transform: translate3d(0,0,0) scale(1) rotateX(0deg); filter: blur(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+        .scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
 
     @media(max-width: 900px) {
         .gaming-arena { flex-direction: column; text-align: center; padding: 50px 20px; gap: 40px; }
@@ -1346,25 +1371,54 @@
         </div>
     </footer>
 
-        <!-- SCRIPT: Gaming Arena reveal + stagger -->
+        <!-- SCRIPT: Global scroll reveal (sections + arena cards) -->
         <script>
-                (() => {
-                        const arena = document.querySelector('.gaming-arena');
-                        if (!arena) return;
-                        const cards = Array.from(arena.querySelectorAll('.game-card-new'));
-                        const observer = new IntersectionObserver((entries) => {
-                                entries.forEach((entry) => {
-                                        if (entry.isIntersecting) {
-                                                arena.classList.add('is-visible');
-                                                cards.forEach((card, idx) => {
-                                                        setTimeout(() => card.classList.add('card-in'), idx * 120);
-                                                });
-                                                observer.disconnect();
-                                        }
+            (() => {
+                        const targets = Array.from(document.querySelectorAll('section, footer'));
+                        const extras = ['.cards', '.calciq-container', '.download-card', '.contact-card', '.app-showcase'];
+                extras.forEach(sel => document.querySelectorAll(sel).forEach(el => targets.push(el)));
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, idx) => {
+                        const el = entry.target;
+                        const stagger = el.dataset.stagger || `${(idx % 6) * 60}ms`;
+                        el.style.setProperty('--reveal-delay', stagger);
+                        if (entry.isIntersecting) {
+                            el.classList.add('is-visible');
+                        } else {
+                            el.classList.remove('is-visible');
+                        }
+                    });
+                }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
+
+                targets.forEach((el, i) => {
+                    if (!el.classList.contains('scroll-reveal')) {
+                        el.classList.add('scroll-reveal');
+                    }
+                    const dir = el.dataset.reveal || (i % 2 === 0 ? 'left' : 'right');
+                    el.dataset.reveal = dir;
+                    observer.observe(el);
+                });
+
+                const arena = document.querySelector('.gaming-arena');
+                if (arena) {
+                    const cards = Array.from(arena.querySelectorAll('.game-card-new'));
+                    const cardObserver = new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                arena.classList.add('is-visible');
+                                cards.forEach((card, idx) => {
+                                    setTimeout(() => card.classList.add('card-in'), idx * 120);
                                 });
-                        }, { threshold: 0.25 });
-                        observer.observe(arena);
-                })();
+                            } else {
+                                arena.classList.remove('is-visible');
+                                cards.forEach(card => card.classList.remove('card-in'));
+                            }
+                        });
+                    }, { threshold: 0.25 });
+                    cardObserver.observe(arena);
+                }
+            })();
         </script>
 
         <!-- SCRIPT: Swipeable stack interaction -->
