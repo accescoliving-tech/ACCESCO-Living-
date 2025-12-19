@@ -279,7 +279,14 @@
         height: auto;
         padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
     }
-    .card::before { content: ""; position: absolute; inset: 0; background: rgba(56, 4, 45, 0.62); border-radius: 18px; z-index: 1; }
+    .card::before { 
+    content: ""; 
+    position: absolute; 
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.7); /* Changed from maroon to black */
+    border-radius: 18px; 
+    z-index: 1; 
+}
     .card > * { position: relative; z-index: 2; }
     .badge h3 { font-size: 26px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #fff !important; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin: 0;}
     .card-info { display: flex; flex-direction: column; gap: 6px; }
@@ -1126,8 +1133,8 @@
                             <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
                         </div>
-                        <h4>Spin & Win</h4>
-                        <span>Daily Jackpots</span>
+                        <h4>Flappy bird</h4>
+                        <span>Play and Earn</span>
                         <div class="play-hover">PLAY NOW →</div>
                     </a>
 
@@ -1248,7 +1255,7 @@
                     <div class="gen-z-card health">
                         <div class="icon-container"><i class="ri-heart-pulse-line"></i></div>
                         <div>
-                            <h4>Health</h4>
+                            <h4>Health Passport</h4>
                             <p>Nutri-Score & Vitals</p>
                         </div>
                     </div>
