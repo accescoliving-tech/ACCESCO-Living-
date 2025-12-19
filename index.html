@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ACCESCO| Winter Edition</title>
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,23 +48,25 @@
     img { width: 100%; height: auto; display: block; border-radius: 14px; } 
 
     /* ================= HERO (ZOMATO STYLE) ================= */
-    .hero {
-      position: relative;
-      height: 100vh;
-      /* On mobile, allow height to grow if content is tall */
-      min-height: 100vh; 
-      width: 100%;
-      display: flex;
-      align-items: center; 
-      justify-content: center; 
-      overflow: hidden; 
-      text-align: center; 
-    }
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 100svh;
+            width: 100%;
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            text-align: center; 
+        }
 
-    .hero-bg-video {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover; z-index: 0; 
-    }
+        .hero-bg-video {
+                position: absolute; inset: 0; width: 100%; height: 100%;
+                min-width: 100%; min-height: 100%;
+                object-fit: cover; object-position: center;
+                z-index: 0; pointer-events: none;
+                background: #050308;
+        }
 
     .hero::before {
       content: ""; position: absolute; inset: 0;
@@ -277,16 +279,7 @@
         height: auto;
         padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
     }
-    /* Update the maroon overlay to a dark/black gradient */
-.card::before { 
-    content: ""; 
-    position: absolute; 
-    inset: 0; 
-    /* Changed from rgba(56, 4, 45, 0.62) to a dark charcoal/black gradient */
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%); 
-    border-radius: 18px; 
-    z-index: 1; 
-}
+    .card::before { content: ""; position: absolute; inset: 0; background: rgba(56, 4, 45, 0.62); border-radius: 18px; z-index: 1; }
     .card > * { position: relative; z-index: 2; }
     .badge h3 { font-size: 26px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #fff !important; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin: 0;}
     .card-info { display: flex; flex-direction: column; gap: 6px; }
@@ -415,75 +408,138 @@
        ================================== */
     .gaming-arena { 
         display: flex; justify-content: space-between; align-items: center; 
-        padding: 80px 40px; gap: 60px; max-width: 1200px; margin: auto;
+        padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
+        background: radial-gradient(circle at 18% 22%, rgba(112, 4, 87, 0.22), transparent 32%),
+                    radial-gradient(circle at 78% 18%, rgba(160, 30, 125, 0.24), transparent 36%),
+                    linear-gradient(135deg, #0b0710, #150017);
+        border-radius: 28px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+        isolation: isolate;
+        opacity: 0;
+        transform: translateY(32px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
     }
+    .gaming-arena.is-visible { opacity: 1; transform: translateY(0); }
+    .gaming-arena::before { content: ""; position: absolute; inset: -20%; background: conic-gradient(from 120deg, rgba(255, 215, 128, 0.18), rgba(255, 191, 71, 0.08), rgba(255, 215, 128, 0.2), rgba(255, 191, 71, 0.08)); filter: blur(90px); opacity: 0.7; z-index: 0; animation: orbitGlow 22s linear infinite reverse; }
+    .gaming-arena::after { content: ""; position: absolute; top: -30%; right: -25%; width: 70%; height: 160%; background: linear-gradient(110deg, rgba(255, 215, 128, 0.06) 0%, rgba(255, 191, 71, 0.2) 38%, rgba(112, 4, 87, 0.0) 70%); filter: blur(12px); opacity: 0.65; transform: rotate(-6deg); animation: sweepLight 14s ease-in-out infinite; z-index: 0; }
     
-    .arena-left { flex: 1; max-width: 450px; }
+    .arena-left { flex: 1; max-width: 450px; position: relative; z-index: 1; }
     .badge-pill { 
-        background: rgba(112, 4, 87, 0.08); color: var(--accent); 
+        background: rgba(255, 198, 109, 0.18); color: #ffd86f; 
         padding: 8px 16px; border-radius: 30px; 
         font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 14px; 
-        letter-spacing: 0.5px;
+        letter-spacing: 0.5px; box-shadow: 0 10px 30px rgba(255, 198, 109, 0.18);
+        position: relative; overflow: hidden;
     }
+    .badge-pill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); opacity: 0; transform: translateX(-60%); transition: opacity 0.4s, transform 0.6s; }
+    .badge-pill:hover::after { opacity: 1; transform: translateX(60%); }
     
-    .arena-title { font-size: 48px; line-height: 1.1; margin: 0 0 16px; color: #111; }
-    .arena-title span { color: var(--accent); }
-    .arena-desc { color: #666; font-size: 17px; margin-bottom: 30px; }
+    .arena-title { font-size: 48px; line-height: 1.1; margin: 0 0 16px; color: #f7f2ff; position: relative; }
+    .arena-title span { 
+        background: linear-gradient(90deg, #ffe7a6, #ffbe3b, #ffe7a6); 
+        background-clip: text; 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+    }
+    .arena-desc { color: #d7cde8; font-size: 17px; margin-bottom: 30px; }
 
     .arena-features { list-style: none; padding: 0; margin: 0 0 30px; display: flex; flex-direction: column; gap: 14px; }
-    .arena-features li { display: flex; align-items: center; gap: 12px; font-weight: 600; color: #333; font-size: 15px; }
-    .arena-features li i { color: var(--accent); font-size: 20px; background: rgba(112,4,87,0.1); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .arena-features li { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #f5e7ff; font-size: 15px; position: relative; overflow: hidden; }
+    .arena-features li::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: linear-gradient(90deg, #ffd86f, rgba(255, 215, 128, 0)); transition: width 0.35s ease; opacity: 0.8; }
+    .arena-features li:hover::after { width: 48%; }
+    .arena-features li i { color: #ffcf5f; font-size: 20px; background: rgba(255, 207, 95, 0.15); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 10px 24px rgba(255, 207, 95, 0.18); }
 
     .play-btn-main {
-        background: var(--accent); color: #fff; border: none; 
-        padding: 16px 32px; font-size: 16px; border-radius: 12px; 
+        background: linear-gradient(120deg, #ffe18a, #ffb13b, #ffd45f); color: #201222; border: none; 
+        padding: 16px 32px; font-size: 16px; border-radius: 14px; 
         display: inline-flex; gap: 10px; align-items: center; 
-        cursor: pointer; font-weight: 700; transition: 0.2s;
-        box-shadow: 0 10px 20px rgba(112, 4, 87, 0.15);
+        cursor: pointer; font-weight: 800; transition: 0.25s ease; text-transform: uppercase;
+        box-shadow: 0 16px 38px rgba(255, 184, 70, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.8px; position: relative; overflow: hidden;
+        background-size: 220% 220%;
+        animation: goldFlow 7s ease infinite;
     }
-    .play-btn-main:hover { transform: translateY(-2px); box-shadow: 0 14px 25px rgba(112, 4, 87, 0.25); }
+    .play-btn-main::after { content: ""; position: absolute; inset: -40%; background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 55%); opacity: 0; transition: opacity 0.3s; }
+    .play-btn-main:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 24px 48px rgba(255, 184, 70, 0.35); }
+    .play-btn-main:hover::after { opacity: 1; }
 
     /* New Grid Design */
-    .arena-right { flex: 1.2; width: 100%; }
+    .arena-right { flex: 1.2; width: 100%; position: relative; z-index: 1; }
     .games-grid-clean { 
         display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; 
     }
     
     .game-card-new { 
-        background: #fff; padding: 24px; border-radius: 20px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.06); 
-        border: 1px solid rgba(0,0,0,0.04);
+        background: linear-gradient(160deg, rgba(30, 12, 36, 0.9), rgba(14, 8, 18, 0.95)); padding: 24px; border-radius: 20px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
+        border: 1px solid rgba(255, 191, 71, 0.12);
         transition: all 0.3s ease; 
-        text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; text-align: center;
+        text-decoration: none; color: #f5e7ff; display: flex; flex-direction: column; align-items: center; text-align: center;
         position: relative; overflow: hidden;
+        opacity: 0; transform: translateY(18px) scale(0.98);
     }
+    
+    .game-card-new::after { content: ""; position: absolute; inset: -20%; background: linear-gradient(120deg, rgba(255, 215, 128, 0.12), rgba(255, 215, 128, 0), rgba(255, 215, 128, 0.18)); transform: translateX(-120%); transition: transform 0.6s ease, opacity 0.6s ease; opacity: 0; }
     
     .game-card-new:hover { 
         transform: translateY(-8px); 
-        box-shadow: 0 20px 40px rgba(112, 4, 87, 0.12); 
-        border-color: rgba(112, 4, 87, 0.2);
+        box-shadow: 0 22px 44px rgba(255, 191, 71, 0.22); 
+        border-color: rgba(255, 191, 71, 0.26);
     }
+    .game-card-new:hover::after { transform: translateX(80%); opacity: 1; }
+    
+    .game-card-new.card-in { opacity: 1; transform: translateY(0) scale(1); }
 
     .game-icon-box {
         width: 64px; height: 64px; border-radius: 16px;
-        background: #f8f8f8; display: flex; align-items: center; justify-content: center;
-        margin-bottom: 16px; transition: 0.3s;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 191, 71, 0.32), rgba(30, 12, 36, 0.9)); display: flex; align-items: center; justify-content: center;
+        margin-bottom: 16px; transition: 0.3s; border: 1px solid rgba(255, 191, 71, 0.24);
     }
-    .game-card-new:hover .game-icon-box { background: rgba(112, 4, 87, 0.08); }
+    .game-card-new:hover .game-icon-box { background: radial-gradient(circle at 70% 20%, rgba(255, 223, 133, 0.46), rgba(30, 12, 36, 0.9)); }
     
-    .game-icon-box img { width: 40px; height: 40px; object-fit: contain; }
-    .game-icon-box i { font-size: 32px; color: var(--accent); }
+    .game-icon-box img { width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(255, 191, 71, 0.35)); transition: transform 0.3s ease; }
+    .game-icon-box i { font-size: 32px; color: #ffcf5f; }
 
-    .game-card-new h4 { font-size: 18px; font-weight: 800; margin: 0 0 4px; color: #222; }
-    .game-card-new span { font-size: 13px; color: #888; font-weight: 500; }
+    .game-card-new h4 { font-size: 18px; font-weight: 900; margin: 0 0 4px; color: #ffdf85; }
+    .game-card-new span { font-size: 13px; color: #cbbbe0; font-weight: 600; }
 
     /* Hover "Play" Text */
     .play-hover {
-        margin-top: 12px; font-size: 13px; font-weight: 700; 
-        color: var(--accent); opacity: 0; transform: translateY(10px); 
+        margin-top: 12px; font-size: 13px; font-weight: 800; 
+        color: #ffcf5f; opacity: 0; transform: translateY(10px); 
         transition: all 0.3s ease;
+        text-transform: uppercase;
     }
+    .game-card-new:hover .game-icon-box img { transform: translateY(-4px) scale(1.04); }
     .game-card-new:hover .play-hover { opacity: 1; transform: translateY(0); }
+
+    @keyframes goldFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes sweepLight { 0% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } 50% { transform: rotate(-6deg) translateX(-6%); opacity: 0.8; } 100% { transform: rotate(-6deg) translateX(0); opacity: 0.5; } }
+
+    /* ==================================
+       GLOBAL SCROLL REVEAL ANIMATION
+       ================================== */
+    .scroll-reveal {
+        opacity: 0;
+        transform: translateY(22px) scale(0.982) rotateX(0.6deg);
+        filter: blur(6px);
+        transition:
+            opacity 0.78s cubic-bezier(0.33, 1, 0.68, 1),
+            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+            filter 0.7s ease;
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform, filter;
+    }
+    .scroll-reveal[data-reveal="left"] { transform: translateX(-32px) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal[data-reveal="right"] { transform: translateX(32px) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal[data-reveal="fade"] { transform: translateY(0) scale(0.982) rotateX(0.6deg); }
+    .scroll-reveal.is-visible { opacity: 1; transform: translate3d(0,0,0) scale(1) rotateX(0deg); filter: blur(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+        .scroll-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    }
 
     @media(max-width: 900px) {
         .gaming-arena { flex-direction: column; text-align: center; padding: 50px 20px; gap: 40px; }
@@ -685,11 +741,19 @@
     .form-group label { display: block; font-size: 13px; font-weight: 800; color: #2a1a29; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
     .form-control { width: 100%; padding: 16px 18px; border: 2px solid rgba(112,4,87,0.1); border-radius: 14px; font-size: 16px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; outline: none; background: #fdfbff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8); }
     .form-control:focus { border-color: var(--accent); box-shadow: 0 10px 28px rgba(112,4,87,0.18), inset 0 1px 0 rgba(255,255,255,0.9); background: #fff; transform: translateY(-1px); }
-    .submit-btn { margin-top: 10px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; padding: 18px 40px; font-size: 16px; font-weight: 900; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.25s ease; box-shadow: 0 18px 38px rgba(112,4,87,0.25); width: 100%; position: relative; overflow: hidden; }
+    .submit-btn { margin-top: 10px; background: linear-gradient(135deg, var(--accent-2), var(--accent)); color: #fff; border: none; padding: 18px 40px; font-size: 16px; font-weight: 900; border-radius: 50px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.25s ease, filter 0.25s ease; box-shadow: 0 18px 38px rgba(112,4,87,0.25); width: 100%; position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 0.6px; text-transform: uppercase; --tiltX: 0deg; --tiltY: 0deg; transform: translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX)); }
     .submit-btn::after { content: ""; position: absolute; top: 0; left: -40%; width: 30%; height: 100%; background: linear-gradient(120deg, rgba(255,255,255,0.5), rgba(255,255,255,0)); transform: skewX(-18deg); opacity: 0; transition: opacity 0.3s; }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 26px 55px rgba(112,4,87,0.32); }
+    .submit-btn::before { content: ""; position: absolute; inset: -1px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.38); opacity: 0; transform: scale(0.96); transition: opacity 0.3s, transform 0.4s; z-index: 1; pointer-events: none; }
+    .submit-btn .btn-blur { position: absolute; inset: -14px; background: conic-gradient(from 40deg, rgba(255,255,255,0.3), rgba(255,255,255,0), rgba(255,255,255,0.45), rgba(255,255,255,0)); filter: blur(18px); opacity: 0; transform: scale(0.9); transition: opacity 0.35s ease, transform 0.6s ease; z-index: 0; }
+    .submit-btn .btn-text { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 8px; }
+    .submit-btn .btn-text i { font-size: 18px; }
+    .submit-btn:hover { transform: translateY(-2px) rotateX(var(--tiltY)) rotateY(var(--tiltX)); box-shadow: 0 26px 55px rgba(112,4,87,0.32); filter: saturate(1.1); }
     .submit-btn:hover::after { opacity: 1; animation: shine 1s ease; }
-    .submit-btn:active { transform: translateY(0); box-shadow: 0 12px 28px rgba(112,4,87,0.24); }
+    .submit-btn:hover::before { opacity: 1; transform: scale(1.05); }
+    .submit-btn:hover .btn-blur { opacity: 0.9; transform: scale(1.06) rotate(6deg); }
+    .submit-btn:active { transform: translateY(0) rotateX(var(--tiltY)) rotateY(var(--tiltX)); box-shadow: 0 12px 28px rgba(112,4,87,0.24); }
+    .submit-btn:active .btn-blur { transform: scale(1.02); opacity: 0.8; }
+    .submit-ripple { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,0.8); transform: translate(-50%,-50%) scale(0); animation: ripple 0.9s ease-out forwards; pointer-events: none; mix-blend-mode: screen; }
     @keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes orbitGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes floatPulse { 0%, 100% { transform: scale(1); opacity: 0.55; } 50% { transform: scale(1.08); opacity: 0.75; } }
@@ -697,6 +761,7 @@
     @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
     @keyframes badgeShine { 0% { transform: translateX(-80%); opacity: 0; } 30% { opacity: 1; } 70% { opacity: 1; } 100% { transform: translateX(120%); opacity: 0; } }
     @keyframes shine { 0% { transform: translateX(-60%) skewX(-18deg); } 100% { transform: translateX(220%) skewX(-18deg); } }
+    @keyframes ripple { 0% { transform: translate(-50%,-50%) scale(0); opacity: 0.9; } 100% { transform: translate(-50%,-50%) scale(12); opacity: 0; } }
     @media(max-width: 900px) { .contact-card { padding: 44px 26px; } .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } .contact-ribbon { grid-template-columns: 1fr; } }
 
 
@@ -836,481 +901,484 @@
 </head>
 
 <body>
-
-
-  <main id="home">
+    <main id="home">
         <!-- HERO: Landing with looping video background -->
-    <section class="hero">
-      <video class="hero-bg-video" autoplay muted loop playsinline>
-          <source src="images/start.mp4" type="video/mp4">
-      </video>
-      <div class="hero-grid">
-        
-        <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo">
-        
-        <h2 class="hero-title">ACCESCO LIVING</h2>
-        <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
+        <section class="hero">
+            <video class="hero-bg-video" autoplay muted loop playsinline>
+                <source src="images/start.mp4" type="video/mp4">
+            </video>
+            <div class="hero-grid">
+                <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo">
+                <h2 class="hero-title">ACCESCO LIVING</h2>
+                <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.</p>
 
-</p>
-        
-        <div class="hero-ctas">
-            <a href="#services" style="text-decoration:none;">
-                <button class="cta-pill">Explore Services</button>
-            </a>
-        </div>
-        
-        <div class="hero-app-buttons">
-            <a href="#" class="app-btn-link">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
-            </a>
-            <a href="#" class="app-btn-link">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store">
-            </a>
-        </div>
-
-        <a href="#services" class="scroll-down-btn">
-            Scroll down 
-            <i class="ri-arrow-down-s-line"></i>
-        </a>
-
-      </div>
-    </section>
-
-
-    <!-- SERVICES: Core offerings grid -->
-    <section id="services">
-      <div class="section-title">
-        <div class="small-upper">OUR SERVICES</div>
-        <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
-        <p class="muted-center">Welcome to Accesco Living — discover timeless essentials designed to elevate your everyday living.</p>
-      </div>
-
-      <div class="cards">
-        
-        <a href="services-gromart.html">
-            <div class="card" style="background-image:url('images/mart.jpg')">
-            <div class="badge"><h3>Gromart</h3></div>
-            <div class="card-info">
-                <span class="card-tag offer">60% OFF + CASHBACK</span>
-                <p>Eat Right. Live Better "</p>
-                <div>→</div>
-            </div>
-            </div>
-        </a>
-
-        <a href="services-vault.html">
-            <div class="card" style="background-image:url('images/hub.jpeg')">
-            <div class="badge"><h3>Vault</h3></div>
-            <div class="card-info">
-                <span class="card-tag time">⚡ 14 MINS</span>
-                <p>Why Buy? Just Accesco "</p>
-                <div>→</div>
-            </div>
-            </div>
-        </a>
-
-        <a href="services-instastyle.html">
-            <div class="card" style="background-image:url('images/fashion.jpg')">
-            <div class="badge">
-                <h3>InstaStyle</h3>
-                <span class="new-badge">NEW</span>
-            </div>
-            <div class="card-info">
-                <p>Instant style, zero guesswork "</p>
-                <div>→</div>
-            </div>
-            </div>
-        </a>
-
-        <a href="services-eatfeast.html">
-            <div class="card" style="background-image:url('images/eat.jpg')">
-            <div class="badge"><h3>EatFeast</h3></div>
-            <div class="card-info">
-                <span class="card-tag offer">UP TO 50% OFF</span>
-                <p>Food delivered with precision "</p>
-                <div>→</div>
-            </div>
-            </div>
-        </a>
-
-        <a href="services-dineout.html">
-            <div class="card" style="background-image:url('images/dinout.jpg')">
-            <div class="badge"><h3>Dineout</h3></div>
-            <div class="card-info">
-                <span class="card-tag fest">DINING FEST LIVE</span>
-                <p>Table ready before you are "</p>
-                <div>→</div>
-            </div>
-            </div>
-        </a>
-
-      </div>
-    </section>
-
-
-    <!-- CALCIQ: Finance intelligence promo -->
-    <section class="calciq-section">
-      <div class="calciq-container">
-        <div class="calciq-info">
-          <div class="calciq-badge"><i class="ri-sparkling-2-fill"></i> POWERED BY AI</div>
-          <h2>CalcIQ <span>Intelligence</span></h2>
-          <p>Stop guessing where your money goes. Visualize your savings, track expenses, and forecast your future wealth with one tap.</p>
-          <a href="calculator.html" class="calciq-btn">
-              Launch Calculator <i class="ri-arrow-right-line"></i>
-          </a>
-        </div>
-
-        <div class="calciq-visual">
-          <div class="glass-interface">
-             <div class="ui-header">
-                <span>Total Savings</span>
-                <i class="ri-more-fill"></i>
-             </div>
-             <div class="ui-balance">₹24,500 <span>+12% <i class="ri-arrow-up-fill"></i></span></div>
-             
-             <div class="ui-graph">
-                <div class="ui-bar b1"></div>
-                <div class="ui-bar b2"></div>
-                <div class="ui-bar b3"></div>
-                <div class="ui-bar b4"></div> <div class="ui-bar b5"></div>
-             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- GAMING ARENA: Play-and-earn tiles -->
-    <section class="gaming-arena">
-      <div class="arena-left">
-        <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
-        <h2 class="arena-title">Accesco<br><span>Game Arena</span></h2>
-        <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
-        
-        <ul class="arena-features">
-            <li><i class="ri-gamepad-line"></i> Daily Mini-Games</li>
-            <li><i class="ri-coupon-3-line"></i> Win Real Coupons</li>
-        </ul>
-
-        <button class="play-btn-main">Start Playing Now <i class="ri-arrow-right-line"></i></button>
-      </div>
-
-      <div class="arena-right">
-        <div class="games-grid-clean">
-          
-          <a href="#" class="game-card-new">
-            <div class="game-icon-box">
-                <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
-            </div>
-            <h4>Flappy Bird</h4>
-            <span>Daily Jackpots</span>
-            <div class="play-hover">PLAY NOW →</div>
-          </a>
-
-          <a href="quiz.html" class="game-card-new">
-            <div class="game-icon-box">
-                <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <i class="ri-question-answer-line" style="display:none; font-size:30px"></i>
-            </div>
-            <h4>Quiz Time</h4>
-            <span>Test Your IQ</span>
-            <div class="play-hover">PLAY NOW →</div>
-          </a>
-
-          <a href="#" class="game-card-new">
-            <div class="game-icon-box">
-                <img src="img/cardmatch.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <i class="ri-grid-fill" style="display:none; font-size:30px"></i>
-            </div>
-            <h4>Card Match</h4>
-            <span>Memory Game</span>
-            <div class="play-hover">PLAY NOW →</div>
-          </a>
-          
-          <a href="game/flappybird/race.html" class="game-card-new">
-            <div class="game-icon-box">
-                <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <i class="ri-roadster-line" style="display:none; font-size:30px"></i>
-            </div>
-            <h4>Accesco Racer</h4>
-            <span>High Speed</span>
-            <div class="play-hover">PLAY NOW →</div>
-          </a>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT: Brand story -->
-    <section id="about">
-      <div class="section-title">
-        <div class="small-upper">ABOUT ACCESCO</div>
-      </div>
-
-      <div class="about-new-layout">
-        <div class="about-image-wrapper">
-          <img src="images/teamwork.jpg" alt="Accesco Team">
-        </div>
-
-        <div class="about-text-content">
-            <h3>ACCESCO LIVING</h3>
-            <p>
-                We are building the future of daily living. Accesco isn't just an app; it's a unified ecosystem where <span class="highlight-text">ultra-fast groceries</span>, <span class="highlight-text">smart rentals</span>, and <span class="highlight-text">intelligent finance</span> converge.
-            </p>
-            <p>
-                From curated fashion rentals to immersive dining experiences, we are redesigning how modern Indian households operate—efficient, affordable, and technology-driven.
-            </p>
-            <p>
-                <b>This is everyday living, reimagined.</b>
-            </p>
-            
-            <a href="#contact" style="margin-top: 10px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px;">
-                Join the Revolution <i class="ri-arrow-right-line"></i>
-            </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- APP SHOWCASE: Gen Z ecosystem UI -->
-    <section class="app-showcase">
-        <div class="app-header">
-            <h2>The Ecosystem. Unlocked.</h2>
-            <p>Experience the ultimate super-app interface. Zero clutter. Pure utility.</p>
-        </div>
-
-        <div class="app-container">
-            <div class="features-col">
-                <div class="gen-z-card grocery">
-                    <div class="icon-container"><i class="ri-shopping-basket-line"></i></div>
-                    <div>
-                        <h4>Grokly</h4>
-                        <p>10-min Turbo Delivery</p>
-                    </div>
+                <div class="hero-ctas">
+                    <a href="#services" style="text-decoration:none;">
+                        <button class="cta-pill">Explore Services</button>
+                    </a>
                 </div>
-                <div class="gen-z-card fashion">
-                    <div class="icon-container"><i class="ri-t-shirt-air-line"></i></div>
-                    <div>
-                        <h4>InstaStyle</h4>
-                        <p>Rent or Buy the Look</p>
-                    </div>
+
+                <div class="hero-app-buttons">
+                    <a href="#" class="app-btn-link">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
+                    </a>
+                    <a href="#" class="app-btn-link">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store">
+                    </a>
                 </div>
-                <div class="gen-z-card budget">
-                    <div class="icon-container"><i class="ri-calculator-line"></i></div>
-                    <div>
-                        <h4>Calc AI</h4>
-                        <p>Smart Expense Tracker</p>
+
+                <a href="#services" class="scroll-down-btn">
+                    Scroll down
+                    <i class="ri-arrow-down-s-line"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- SERVICES: Core offerings grid -->
+        <section id="services">
+            <div class="section-title">
+                <div class="small-upper">OUR SERVICES</div>
+                <h3 class="big-h">Life Set Hai, Accesco hai.</h3>
+                <p class="muted-center">Welcome to Accesco Living — discover timeless essentials designed to elevate your everyday living.</p>
+            </div>
+
+            <div class="cards">
+                <a href="services-gromart.html">
+                    <div class="card" style="background-image:url('images/mart.jpg')">
+                        <div class="badge"><h3>Gromart</h3></div>
+                        <div class="card-info">
+                            <span class="card-tag offer">60% OFF + CASHBACK</span>
+                            <p>Eat right. Live better.</p>
+                            <div>→</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="services-vault.html">
+                    <div class="card" style="background-image:url('images/hub.jpeg')">
+                        <div class="badge"><h3>Vault</h3></div>
+                        <div class="card-info">
+                            <span class="card-tag time">⚡ 14 MINS</span>
+                            <p>Why buy? Just Accesco.</p>
+                            <div>→</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="services-instastyle.html">
+                    <div class="card" style="background-image:url('images/fashion.jpg')">
+                        <div class="badge">
+                            <h3>InstaStyle</h3>
+                            <span class="new-badge">NEW</span>
+                        </div>
+                        <div class="card-info">
+                            <p>Instant style, zero guesswork.</p>
+                            <div>→</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="services-eatfeast.html">
+                    <div class="card" style="background-image:url('images/eat.jpg')">
+                        <div class="badge"><h3>EatFeast</h3></div>
+                        <div class="card-info">
+                            <span class="card-tag offer">UP TO 50% OFF</span>
+                            <p>Food delivered with precision.</p>
+                            <div>→</div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="services-dineout.html">
+                    <div class="card" style="background-image:url('images/dinout.jpg')">
+                        <div class="badge"><h3>Dineout</h3></div>
+                        <div class="card-info">
+                            <span class="card-tag fest">DINING FEST LIVE</span>
+                            <p>Table ready before you are.</p>
+                            <div>→</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- CALCIQ: Finance intelligence promo -->
+        <section class="calciq-section">
+            <div class="calciq-container">
+                <div class="calciq-info">
+                    <div class="calciq-badge"><i class="ri-sparkling-2-fill"></i> POWERED BY AI</div>
+                    <h2>CalcIQ <span>Intelligence</span></h2>
+                    <p>Stop guessing where your money goes. Visualize your savings, track expenses, and forecast your future wealth with one tap.</p>
+                    <a href="calculator.html" class="calciq-btn">Launch Calculator <i class="ri-arrow-right-line"></i></a>
+                </div>
+
+                <div class="calciq-visual">
+                    <div class="glass-interface">
+                        <div class="ui-header">
+                            <span>Total Savings</span>
+                            <i class="ri-more-fill"></i>
+                        </div>
+                        <div class="ui-balance">₹24,500 <span>+12% <i class="ri-arrow-up-fill"></i></span></div>
+                        <div class="ui-graph">
+                            <div class="ui-bar b1"></div>
+                            <div class="ui-bar b2"></div>
+                            <div class="ui-bar b3"></div>
+                            <div class="ui-bar b4"></div>
+                            <div class="ui-bar b5"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="glass-stack-container" id="stack">
-                <div class="stack-card pos-3" data-idx="3">
-                    <div class="ui-row"><span class="ui-text">Monthly Spend</span></div>
-                    <div class="ui-circle" style="border-color:#00eaff; color:#00eaff;">₹12k</div>
-                    <div class="ui-row"><span class="ui-sub">Limit: ₹15k</span> <span class="ui-sub" style="color:#00eaff">Safe</span></div>
-                    <div class="ui-bar"><div class="ui-fill" style="width:80%; background:#00eaff"></div></div>
+        <!-- GAMING ARENA: Play-and-earn tiles -->
+        <section class="gaming-arena">
+            <div class="arena-left">
+                <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
+                <h2 class="arena-title">Accesco<br><span>Game Arena</span></h2>
+                <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
+
+                <ul class="arena-features">
+                    <li><i class="ri-gamepad-line"></i> Daily Mini-Games</li>
+                    <li><i class="ri-coupon-3-line"></i> Win Real Coupons</li>
+                </ul>
+
+                <button class="play-btn-main">Start Playing Now <i class="ri-arrow-right-line"></i></button>
+            </div>
+
+            <div class="arena-right">
+                <div class="games-grid-clean">
+                    <a href="#" class="game-card-new">
+                        <div class="game-icon-box">
+                            <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
+                        </div>
+                        <h4>Spin & Win</h4>
+                        <span>Daily Jackpots</span>
+                        <div class="play-hover">PLAY NOW →</div>
+                    </a>
+
+                    <a href="quiz.html" class="game-card-new">
+                        <div class="game-icon-box">
+                            <img src="images/quiz.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="ri-question-answer-line" style="display:none; font-size:30px"></i>
+                        </div>
+                        <h4>Quiz Time</h4>
+                        <span>Test Your IQ</span>
+                        <div class="play-hover">PLAY NOW →</div>
+                    </a>
+
+                    <a href="#" class="game-card-new">
+                        <div class="game-icon-box">
+                            <img src="img/cardmatch.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="ri-grid-fill" style="display:none; font-size:30px"></i>
+                        </div>
+                        <h4>Card Match</h4>
+                        <span>Memory Game</span>
+                        <div class="play-hover">PLAY NOW →</div>
+                    </a>
+
+                    <a href="game/flappybird/race.html" class="game-card-new">
+                        <div class="game-icon-box">
+                            <img src="images/racer.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <i class="ri-roadster-line" style="display:none; font-size:30px"></i>
+                        </div>
+                        <h4>Accesco Racer</h4>
+                        <span>High Speed</span>
+                        <div class="play-hover">PLAY NOW →</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT: Brand story -->
+        <section id="about">
+            <div class="section-title">
+                <div class="small-upper">ABOUT ACCESCO</div>
+            </div>
+
+            <div class="about-new-layout">
+                <div class="about-image-wrapper">
+                    <img src="images/teamwork.jpg" alt="Accesco Team">
                 </div>
 
-                <div class="stack-card pos-2" data-idx="2">
-                    <div class="ui-row"><span class="ui-text">Health Score</span> <span class="ui-text" style="color:#ff3333">92%</span></div>
-                    <div class="ui-bar"><div class="ui-fill" style="width:92%; background:#ff3333"></div></div>
-                    <br>
-                    <div class="ui-row"><span class="ui-text">Calories</span> <span class="ui-sub">1250 / 2200</span></div>
-                    <div class="ui-bar"><div class="ui-fill" style="width:55%; background:#ff8800"></div></div>
+                <div class="about-text-content">
+                    <h3>ACCESCO LIVING</h3>
+                    <p>We are building the future of daily living. Accesco isn't just an app; it's a unified ecosystem where <span class="highlight-text">ultra-fast groceries</span>, <span class="highlight-text">smart rentals</span>, and <span class="highlight-text">intelligent finance</span> converge.</p>
+                    <p>From curated fashion rentals to immersive dining experiences, we are redesigning how modern Indian households operate—efficient, affordable, and technology-driven.</p>
+                    <p><b>This is everyday living, reimagined.</b></p>
+                    <a href="#contact" style="margin-top: 10px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                        Join the Revolution <i class="ri-arrow-right-line"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- APP SHOWCASE: Gen Z ecosystem UI -->
+        <section class="app-showcase">
+            <div class="app-header">
+                <h2>The Ecosystem. Unlocked.</h2>
+                <p>Experience the ultimate super-app interface. Zero clutter. Pure utility.</p>
+            </div>
+
+            <div class="app-container">
+                <div class="features-col">
+                    <div class="gen-z-card grocery">
+                        <div class="icon-container"><i class="ri-shopping-basket-line"></i></div>
+                        <div>
+                            <h4>Gromart</h4>
+                            <p>10-min Turbo Delivery</p>
+                        </div>
+                    </div>
+                    <div class="gen-z-card fashion">
+                        <div class="icon-container"><i class="ri-t-shirt-air-line"></i></div>
+                        <div>
+                            <h4>InstaStyle</h4>
+                            <p>Rent or Buy the Look</p>
+                        </div>
+                    </div>
+                    <div class="gen-z-card budget">
+                        <div class="icon-container"><i class="ri-calculator-line"></i></div>
+                        <div>
+                            <h4>Calc AI</h4>
+                            <p>Smart Expense Tracker</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="stack-card pos-1" data-idx="1">
-                    <div style="text-align:center">
-                        <div style="font-size:12px; letter-spacing:2px; color:rgba(255,255,255,0.6); margin-bottom:8px">WELCOME BACK</div>
-                        <h2 style="font-size:32px; margin:0; color:#fff; text-shadow:0 0 10px rgba(255,255,255,0.5)">ACCESCO</h2>
-                        <button style="margin-top:20px; padding:8px 20px; background:white; color:black; border:none; border-radius:20px; font-weight:700; font-size:12px; cursor:pointer;">LAUNCH APP</button>
+                <div class="glass-stack-container" id="stack">
+                    <div class="stack-card pos-3" data-idx="3">
+                        <div class="ui-row"><span class="ui-text">Monthly Spend</span></div>
+                        <div class="ui-circle" style="border-color:#00eaff; color:#00eaff;">₹12k</div>
+                        <div class="ui-row"><span class="ui-sub">Limit: ₹15k</span> <span class="ui-sub" style="color:#00eaff">Safe</span></div>
+                        <div class="ui-bar"><div class="ui-fill" style="width:80%; background:#00eaff"></div></div>
+                    </div>
+
+                    <div class="stack-card pos-2" data-idx="2">
+                        <div class="ui-row"><span class="ui-text">Health Score</span> <span class="ui-text" style="color:#ff3333">92%</span></div>
+                        <div class="ui-bar"><div class="ui-fill" style="width:92%; background:#ff3333"></div></div>
+                        <br>
+                        <div class="ui-row"><span class="ui-text">Calories</span> <span class="ui-sub">1250 / 2200</span></div>
+                        <div class="ui-bar"><div class="ui-fill" style="width:55%; background:#ff8800"></div></div>
+                    </div>
+
+                    <div class="stack-card pos-1" data-idx="1">
+                        <div style="text-align:center">
+                            <div style="font-size:12px; letter-spacing:2px; color:rgba(255,255,255,0.6); margin-bottom:8px">WELCOME BACK</div>
+                            <h2 style="font-size:32px; margin:0; color:#fff; text-shadow:0 0 10px rgba(255,255,255,0.5)">ACCESCO</h2>
+                            <button style="margin-top:20px; padding:8px 20px; background:white; color:black; border:none; border-radius:20px; font-weight:700; font-size:12px; cursor:pointer;">LAUNCH APP</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="features-col col-right">
+                    <div class="gen-z-card health">
+                        <div class="icon-container"><i class="ri-heart-pulse-line"></i></div>
+                        <div>
+                            <h4>Health</h4>
+                            <p>Nutri-Score & Vitals</p>
+                        </div>
+                    </div>
+                    <div class="gen-z-card vault">
+                        <div class="icon-container"><i class="ri-safe-2-line"></i></div>
+                        <div>
+                            <h4>Vault</h4>
+                            <p>Encrypted Digital Safe</p>
+                        </div>
+                    </div>
+                    <div class="gen-z-card dine">
+                        <div class="icon-container"><i class="ri-restaurant-2-line"></i></div>
+                        <div>
+                            <h4>Dineout</h4>
+                            <p>VIP Table Booking</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DOWNLOAD: App badges + QR -->
+        <section class="download-section">
+            <div class="download-card">
+                <div class="download-text">
+                    <h2>One App. <span class="highlight">Infinite Possibilities.</span></h2>
+                    <p>From 10-minute <b>Gromart</b> deliveries to <b>InstaStyle</b> fashion rentals. Download Accesco today.</p>
+
+                    <div class="download-buttons">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="store-btn" alt="Get it on Google Play">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="store-btn" alt="Download on the App Store">
+                    </div>
+                </div>
+
+                <div class="dl-visual">
+                    <div class="mobile-frame">
+                        <div class="qr-box">
+                            <img src="images/QR.png" alt="Scan QR">
+                            <span>Scan to Download</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT: Concierge form -->
+        <section id="contact-form" class="contact-section">
+            <div class="contact-card">
+                <div class="contact-glow"></div>
+                <div class="contact-gridlines"></div>
+                <div class="contact-inner">
+                    <div class="contact-header">
+                        <span class="contact-badge"><i class="ri-sparkling-2-fill"></i> Concierge Desk</span>
+                        <h2>Need something tailored?</h2>
+                        <p>Tell us what you need and our team will reach back with the right solution—usually within a couple of hours.</p>
+                        <div class="contact-meta">
+                            <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
+                            <span class="info-chip"><i class="ri-shield-check-line"></i> Secure & private</span>
+                            <span class="info-chip"><i class="ri-chat-1-line"></i> Live follow-ups</span>
+                        </div>
+                    </div>
+
+                    <div class="contact-ribbon">
+                        <div class="ribbon-pill"><i class="ri-star-smile-line"></i>White-glove onboarding</div>
+                        <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day rollout options</div>
+                        <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Compliance-ready handoff</div>
+                    </div>
+
+                    <form action="https://formspree.io/f/xnneelwy" method="POST" class="form-grid">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" rows="5" placeholder="How can we help you?" required></textarea>
+                        </div>
+
+                        <div class="form-group full-width" style="text-align: center;">
+                            <button type="submit" class="submit-btn">
+                                <span class="btn-blur"></span>
+                                <span class="btn-text"><i class="ri-send-plane-2-fill"></i> Send Message</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer id="contact">
+            <div class="footer-grid">
+                <div>
+                    <div style="display:flex;gap:14px;align-items:center">
+                        <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco.png" alt="Accesco"></div>
+                        <div>
+                            <div style="font-weight:800;color: white; font-size: 24px;">ACCESCO</div>
+                            <div style="color:var(--muted);margin-top:6px; max-width: 250px;">Empowering digital excellence through innovative solutions.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="color: white; letter-spacing: 1px;">COMPANY</h4>
+                    <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
+                        <a href="#"><li>About Us</li></a>
+                        <a href="#"><li>Careers</li></a>
+                        <a href="#"><li>Partner With Us</li></a>
+                        <a href="#"><li>Terms & Conditions</li></a>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: white; letter-spacing: 1px;">RESOURCES</h4>
+                    <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
+                        <a href="#"><li>Metrics & Certificates</li></a>
+                        <a href="#"><li>QTC Videos</li></a>
+                        <a href="#"><li>Blogs</li></a>
+                        <a href="#"><li>Help & Support</li></a>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/accesco_living?s=21" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/@accescoliving" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+
+                    <div class="app-buttons">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-btn-img" alt="App Store">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-btn-img" alt="Google Play">
                     </div>
                 </div>
             </div>
 
-            <div class="features-col col-right">
-                <div class="gen-z-card health">
-                    <div class="icon-container"><i class="ri-heart-pulse-line"></i></div>
-                    <div>
-                        <h4>Health Passport</h4>
-                        <p>Nutri-Score & Vitals</p>
-                    </div>
-                </div>
-                <div class="gen-z-card vault">
-                    <div class="icon-container"><i class="ri-safe-2-line"></i></div>
-                    <div>
-                        <h4>Vault</h4>
-                        <p>Encrypted Digital Safe</p>
-                    </div>
-                </div>
-                <div class="gen-z-card dine">
-                    <div class="icon-container"><i class="ri-restaurant-2-line"></i></div>
-                    <div>
-                        <h4>Eat Feast</h4>
-                        <p>VIP Table Booking</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- DOWNLOAD: App badges + QR -->
-    <section class="download-section">
-        <div class="download-card">
-            <div class="download-text">
-                <h2>One App. <span class="highlight">Infinite Possibilities.</span></h2>
-                <p>From 10-minute <b>Gromart</b> deliveries to <b>InstaStyle</b> fashion rentals. Download Accesco today.</p>
-                
-                <div class="download-buttons">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="store-btn" alt="Get it on Google Play">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="store-btn" alt="Download on the App Store">
-                </div>
-            </div>
+            <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px; text-align: center;">© 2025 ACCESCO — All rights reserved.</div>
+        </footer>
+    </main>
 
-            <div class="dl-visual">
-                <div class="mobile-frame">
-                    <div class="qr-box">
-                        <img src="images/QR.png" alt="Scan QR">
-                        <span>Scan to Download</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- SCRIPT: Global scroll reveal (sections + arena cards) -->
+    <script>
+        (() => {
+            const targets = Array.from(document.querySelectorAll('section, footer'));
+            const extras = ['.cards', '.calciq-container', '.download-card', '.contact-card', '.app-showcase'];
+            extras.forEach(sel => document.querySelectorAll(sel).forEach(el => targets.push(el)));
 
-    <!-- CONTACT: Concierge form -->
-    <section id="contact-form" class="contact-section">
-        <div class="contact-card">
-            <div class="contact-glow"></div>
-            <div class="contact-gridlines"></div>
-            <div class="contact-inner">
-                <div class="contact-header">
-                    <span class="contact-badge"><i class="ri-sparkling-2-fill"></i> Concierge Desk</span>
-                    <h2>Need something tailored?</h2>
-                    <p>Tell us what you need and our team will reach back with the right solution—usually within a couple of hours.</p>
-                    <div class="contact-meta">
-                        <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
-                        <span class="info-chip"><i class="ri-shield-check-line"></i> Secure & private</span>
-                        <span class="info-chip"><i class="ri-chat-1-line"></i> Live follow-ups</span>
-                    </div>
-                </div>
-                <div class="contact-ribbon">
-                    <div class="ribbon-pill"><i class="ri-star-smile-line"></i>White-glove onboarding</div>
-                    <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day rollout options</div>
-                    <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Compliance-ready handoff</div>
-                </div>
-                <form action="https://formspree.io/f/xnneelwy" method="POST" class="form-grid">
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, idx) => {
+                    const el = entry.target;
+                    const stagger = el.dataset.stagger || `${(idx % 6) * 60}ms`;
+                    el.style.setProperty('--reveal-delay', stagger);
+                    if (entry.isIntersecting) {
+                        el.classList.add('is-visible');
+                    } else {
+                        el.classList.remove('is-visible');
+                    }
+                });
+            }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
 
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input 
-                        type="text" 
-                        id="name"
-                        name="name" 
-                        class="form-control" 
-                        placeholder="John Doe" 
-                        required
-                    >
-                </div>
+            targets.forEach((el, i) => {
+                if (!el.classList.contains('scroll-reveal')) {
+                    el.classList.add('scroll-reveal');
+                }
+                const dir = el.dataset.reveal || (i % 2 === 0 ? 'left' : 'right');
+                el.dataset.reveal = dir;
+                observer.observe(el);
+            });
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email"
-                        name="email" 
-                        class="form-control" 
-                        placeholder="john@example.com" 
-                        required
-                    >
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="message">Message</label>
-                    <textarea 
-                        id="message"
-                        name="message" 
-                        class="form-control" 
-                        rows="5" 
-                        placeholder="How can we help you?" 
-                        required
-                    ></textarea>
-                </div>
-
-                <div class="form-group full-width" style="text-align: center;">
-                    <button type="submit" class="submit-btn">
-                        Send Message
-                    </button>
-                </div>
-
-            </form>
-
-            </div>
-        </div>
-    </section>
-
-
-    <!-- FOOTER -->
-    <footer id="contact">
-    <div class="footer-grid">
-      <div>
-        <div style="display:flex;gap:14px;align-items:center">
-          <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco.png"></div>
-          <div>
-            <div style="font-weight:800;color: white; font-size: 24px;">ACCESCO</div>
-            <div style="color:var(--muted);margin-top:6px; max-width: 250px;">Empowering digital excellence through innovative solutions.</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h4 style="color: white; letter-spacing: 1px;">COMPANY</h4>
-        <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
-          <a href="#"><li>About Us</li></a>
-          <a href="#"><li>Careers</li></a>
-          <a href="#"><li>Partner With Us</li></a>
-          <a href="#"><li>Terms & Conditions</li></a>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="color: white; letter-spacing: 1px;">RESOURCES</h4>
-        <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
-          <a href="#"><li>Metrics & Certificates</li></a>
-          <a href="#"><li>QTC Videos</li></a>
-          <a href="#"><li>Blogs</li></a>
-          <a href="#"><li>Help & Support</li></a>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
-        
-        <div class="social-links">
-            <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://x.com/accesco_living?s=21" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://www.youtube.com/@accescoliving" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
-
-        <div class="app-buttons">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-btn-img" alt="App Store">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-btn-img" alt="Google Play">
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top:50px; padding-top: 20px; border-top: 1px solid #333; color:var(--muted); font-size:13px; text-align: center;">
-      © 2025 ACCESCO — All rights reserved.
-    </div>
-  </footer>
+            const arena = document.querySelector('.gaming-arena');
+            if (arena) {
+                const cards = Array.from(arena.querySelectorAll('.game-card-new'));
+                const cardObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            arena.classList.add('is-visible');
+                            cards.forEach((card, idx) => {
+                                setTimeout(() => card.classList.add('card-in'), idx * 120);
+                            });
+                        } else {
+                            arena.classList.remove('is-visible');
+                            cards.forEach(card => card.classList.remove('card-in'));
+                        }
+                    });
+                }, { threshold: 0.25 });
+                cardObserver.observe(arena);
+            }
+        })();
+    </script>
 
     <!-- SCRIPT: Swipeable stack interaction -->
     <script>
         const stack = document.getElementById('stack');
         const cards = Array.from(stack.querySelectorAll('.stack-card'));
         let isAnimating = false;
-
         let startX = 0;
         let startY = 0;
 
@@ -1318,48 +1386,48 @@
         stack.addEventListener('touchstart', startSwipe);
 
         function startSwipe(e) {
-                if (isAnimating) return;
-                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-                document.addEventListener('mouseup', endSwipe);
-                document.addEventListener('touchend', endSwipe);
+            if (isAnimating) return;
+            startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            document.addEventListener('mouseup', endSwipe);
+            document.addEventListener('touchend', endSwipe);
         }
 
         function endSwipe(e) {
-                if (isAnimating) return;
-                const endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
-                const diff = endX - startX;
+            if (isAnimating) return;
+            const endX = e.type.includes('mouse') ? e.clientX : e.changedTouches[0].clientX;
+            const diff = endX - startX;
 
-                if (Math.abs(diff) > 50) {
-                        const direction = diff > 0 ? 'right' : 'left';
-                        animateStack(direction);
-                } else if (diff === 0 && e.target.closest('.stack-card')) {
-                        animateStack('left');
-                }
+            if (Math.abs(diff) > 50) {
+                const direction = diff > 0 ? 'right' : 'left';
+                animateStack(direction);
+            } else if (diff === 0 && e.target.closest('.stack-card')) {
+                animateStack('left');
+            }
 
-                document.removeEventListener('mouseup', endSwipe);
-                document.removeEventListener('touchend', endSwipe);
+            document.removeEventListener('mouseup', endSwipe);
+            document.removeEventListener('touchend', endSwipe);
         }
 
         function animateStack(direction) {
-                isAnimating = true;
-                const front = cards.find(c => c.classList.contains('pos-1'));
-                const mid = cards.find(c => c.classList.contains('pos-2'));
-                const back = cards.find(c => c.classList.contains('pos-3'));
+            isAnimating = true;
+            const front = cards.find(c => c.classList.contains('pos-1'));
+            const mid = cards.find(c => c.classList.contains('pos-2'));
+            const back = cards.find(c => c.classList.contains('pos-3'));
 
-                front.classList.add(direction === 'right' ? 'swipe-right' : 'swipe-left');
+            front.classList.add(direction === 'right' ? 'swipe-right' : 'swipe-left');
 
-                setTimeout(() => {
-                        front.classList.remove('pos-1', 'swipe-right', 'swipe-left');
-                        front.classList.add('pos-3');
+            setTimeout(() => {
+                front.classList.remove('pos-1', 'swipe-right', 'swipe-left');
+                front.classList.add('pos-3');
 
-                        mid.classList.remove('pos-2');
-                        mid.classList.add('pos-1');
+                mid.classList.remove('pos-2');
+                mid.classList.add('pos-1');
 
-                        back.classList.remove('pos-3');
-                        back.classList.add('pos-2');
+                back.classList.remove('pos-3');
+                back.classList.add('pos-2');
 
-                        isAnimating = false;
-                }, 300);
+                isAnimating = false;
+            }, 300);
         }
     </script>
 
@@ -1383,7 +1451,7 @@
             snow.style.opacity = Math.random() * 0.6 + 0.4;
 
             setTimeout(() => {
-                    snow.remove();
+                snow.remove();
             }, duration * 1000);
         }
 
@@ -1393,5 +1461,37 @@
         setInterval(createSnow, interval);
     </script>
 
+    <!-- SCRIPT: Animated submit button tilt + ripple -->
+    <script>
+        (() => {
+            const btn = document.querySelector('.submit-btn');
+            if (!btn) return;
+
+            btn.addEventListener('pointermove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const offsetY = e.clientY - rect.top;
+                const tiltX = ((offsetX / rect.width) - 0.5) * 10;
+                const tiltY = -((offsetY / rect.height) - 0.5) * 6;
+                btn.style.setProperty('--tiltX', `${tiltX}deg`);
+                btn.style.setProperty('--tiltY', `${tiltY}deg`);
+            });
+
+            btn.addEventListener('pointerleave', () => {
+                btn.style.setProperty('--tiltX', '0deg');
+                btn.style.setProperty('--tiltY', '0deg');
+            });
+
+            btn.addEventListener('click', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                ripple.className = 'submit-ripple';
+                ripple.style.left = `${e.clientX - rect.left}px`;
+                ripple.style.top = `${e.clientY - rect.top}px`;
+                btn.appendChild(ripple);
+                ripple.addEventListener('animationend', () => ripple.remove());
+            });
+        })();
+    </script>
 </body>
 </html>
