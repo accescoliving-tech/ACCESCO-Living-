@@ -61,11 +61,11 @@
         }
 
         .hero-bg-video {
-                position: absolute; inset: 0; width: cover; height: cover;
-                min-width: 100%; min-height: 100%;
-                object-fit: cover; object-position: center;
-                z-index: 0; pointer-events: none;
-                background: #050308;
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center;
+            z-index: 0; pointer-events: none;
+            background: #050308;
         }
 
     .hero::before {
@@ -272,7 +272,7 @@
 
 
     /* SERVICES CARDS */
-    .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 30px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 30px; }
     .card { 
         position: relative; 
         min-height: 260px;
@@ -288,10 +288,7 @@
     .card-tag.time { background: rgba(0, 0, 0, 0.25); color: #fff; }
     .card-tag.fest { background: rgba(255, 255, 255, 0.25); color: #fff; }
     .new-badge { margin-left: 8px; background: #ff3b3b; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
-    @media (max-width: 1024px) { .cards { grid-template-columns: repeat(3, 1fr); } }
-
     @media (max-width: 650px) { 
-        .cards { grid-template-columns: 1fr; } 
         .card { min-height: 220px; height: auto; width: 100%; } 
     }
     
@@ -896,6 +893,62 @@
     }
     .footer-grid a:hover { color: rgba(112, 4, 87, 0.566); }
 
+        /* Extra mobile polish to avoid overflow on small screens */
+        @media(max-width: 900px) {
+            .app-container { flex-direction: column; gap: 48px; }
+            .download-card { padding: 42px 28px; gap: 28px; }
+        }
+
+        @media(max-width: 768px) {
+            section { padding: 60px 16px; }
+            .hero { min-height: 90vh; }
+            .download-card { padding: 36px 20px; }
+            .app-container { gap: 32px; }
+            .glass-stack-container { width: 260px; height: 340px; }
+        }
+
+        @media(max-width: 540px) {
+            .hero-sub { font-size: 16px; }
+            .download-card { padding: 28px 16px; }
+            .download-buttons { flex-direction: column; align-items: center; }
+            .store-btn { width: 200px; height: auto; }
+            .footer-grid { gap: 24px; }
+        }
+
+        /* Floating AI chat widget */
+        .ai-chat-fab {
+            position: fixed; bottom: 22px; right: 22px;
+            width: 64px; height: 64px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+            border: none; cursor: grab; z-index: 9999;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .ai-chat-fab:active { cursor: grabbing; }
+        .ai-chat-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(0,0,0,0.32); }
+
+        .ai-chat-window {
+            position: fixed; bottom: 96px; right: 22px; width: 340px; max-width: calc(100vw - 40px);
+            background: #0f0c10; color: #fff; border-radius: 18px; overflow: hidden;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.36);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: none; flex-direction: column; z-index: 9998;
+        }
+        .ai-chat-window.open { display: flex; }
+        .ai-chat-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); font-weight: 700; letter-spacing: 0.2px; }
+        .ai-chat-body { padding: 14px 16px; display: grid; gap: 10px; max-height: 320px; overflow-y: auto; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 46%); }
+        .ai-chat-input { display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.35); }
+        .ai-chat-input input { flex: 1; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #fff; }
+        .ai-chat-input button { padding: 10px 14px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-weight: 700; cursor: pointer; }
+        .ai-msg { padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.06); font-size: 14px; line-height: 1.4; }
+        .ai-msg.me { background: rgba(112,4,87,0.3); text-align: right; }
+
+        @media(max-width: 540px) {
+            .ai-chat-window { bottom: 82px; right: 12px; }
+            .ai-chat-fab { bottom: 14px; right: 14px; width: 58px; height: 58px; }
+        }
+
   </style>
 
 </head>
@@ -1324,6 +1377,25 @@
         </footer>
     </main>
 
+    <!-- Floating AI chat widget -->
+    <button class="ai-chat-fab" id="aiChatFab" aria-label="Open AI chat">
+        <i class="ri-robot-2-line" style="font-size:24px"></i>
+    </button>
+
+    <div class="ai-chat-window" id="aiChatWindow" aria-live="polite">
+        <div class="ai-chat-header">
+            <span>ACCESCO AI</span>
+            <button id="aiChatClose" style="background:none;border:none;color:#fff;cursor:pointer;font-size:18px;">×</button>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-msg">Hi there! I am your Accesco assistant. Ask me about services, offers, or anything else.</div>
+        </div>
+        <div class="ai-chat-input">
+            <input id="aiChatInput" type="text" placeholder="Type your question..." aria-label="Chat input">
+            <button id="aiChatSend">Send</button>
+        </div>
+    </div>
+
     <!-- SCRIPT: Global scroll reveal (sections + arena cards) -->
     <script>
         (() => {
@@ -1491,6 +1563,129 @@
                 btn.appendChild(ripple);
                 ripple.addEventListener('animationend', () => ripple.remove());
             });
+        })();
+    </script>
+
+    <!-- SCRIPT: Floating AI chat widget (toggle + drag) -->
+    <script>
+        (() => {
+            const fab = document.getElementById('aiChatFab');
+            const win = document.getElementById('aiChatWindow');
+            const closeBtn = document.getElementById('aiChatClose');
+            const input = document.getElementById('aiChatInput');
+            const sendBtn = document.getElementById('aiChatSend');
+            const body = document.getElementById('aiChatBody');
+
+            let drag = { active: false, offsetX: 0, offsetY: 0 };
+
+            function toggle(open) {
+                const isOpen = win.classList.contains('open');
+                if (open === true || (!isOpen && open === undefined)) {
+                    win.classList.add('open');
+                    input.focus();
+                } else {
+                    win.classList.remove('open');
+                }
+            }
+
+            function appendMessage(text, mine = false) {
+                const div = document.createElement('div');
+                div.className = mine ? 'ai-msg me' : 'ai-msg';
+                div.textContent = text;
+                body.appendChild(div);
+                body.scrollTop = body.scrollHeight;
+            }
+
+            function send() {
+                const text = input.value.trim();
+                if (!text) return;
+                appendMessage(text, true);
+                input.value = '';
+                // Placeholder AI reply for now
+                setTimeout(() => appendMessage('Got it! I will share personalized suggestions soon.'), 400);
+            }
+
+            fab.addEventListener('click', () => toggle());
+            closeBtn.addEventListener('click', () => toggle(false));
+            sendBtn.addEventListener('click', send);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
+
+            const move = (clientX, clientY) => {
+                const x = clientX - drag.offsetX;
+                const y = clientY - drag.offsetY;
+                const clampedX = Math.min(Math.max(12, x), window.innerWidth - fab.offsetWidth - 12);
+                const clampedY = Math.min(Math.max(12, y), window.innerHeight - fab.offsetHeight - 12);
+                fab.style.left = clampedX + 'px';
+                fab.style.top = clampedY + 'px';
+                fab.style.right = 'auto';
+                fab.style.bottom = 'auto';
+                win.style.right = 'auto';
+                win.style.bottom = 'auto';
+                win.style.left = fab.offsetLeft + 'px';
+                win.style.top = fab.offsetTop - (win.offsetHeight + 12) + 'px';
+            };
+
+            const snapToEdge = () => {
+                const margin = 12;
+                const fabRect = fab.getBoundingClientRect();
+                const centerX = fabRect.left + fabRect.width / 2;
+                const prefersLeft = centerX < window.innerWidth / 2;
+
+                const snapY = Math.min(Math.max(margin, fabRect.top), window.innerHeight - fabRect.height - margin);
+                fab.style.top = snapY + 'px';
+                fab.style.bottom = 'auto';
+
+                if (prefersLeft) {
+                    fab.style.left = margin + 'px';
+                    fab.style.right = 'auto';
+                    win.style.left = margin + 'px';
+                    win.style.right = 'auto';
+                } else {
+                    fab.style.right = margin + 'px';
+                    fab.style.left = 'auto';
+                    win.style.right = margin + 'px';
+                    win.style.left = 'auto';
+                }
+
+                const winHeight = win.offsetHeight || 0;
+                let winTop = snapY - winHeight - 12;
+                if (winTop < margin) {
+                    winTop = snapY + fabRect.height + 12;
+                }
+                win.style.top = winTop + 'px';
+                win.style.bottom = 'auto';
+            };
+
+            const startDrag = (e) => {
+                drag.active = true;
+                const rect = fab.getBoundingClientRect();
+                drag.offsetX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                drag.offsetY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('touchmove', onDrag, { passive: false });
+                document.addEventListener('touchend', endDrag);
+            };
+
+            const onDrag = (e) => {
+                if (!drag.active) return;
+                const x = e.touches ? e.touches[0].clientX : e.clientX;
+                const y = e.touches ? e.touches[0].clientY : e.clientY;
+                move(x, y);
+                e.preventDefault();
+            };
+
+            const endDrag = () => {
+                drag.active = false;
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', endDrag);
+                document.removeEventListener('touchmove', onDrag);
+                document.removeEventListener('touchend', endDrag);
+                snapToEdge();
+            };
+
+            fab.addEventListener('mousedown', startDrag);
+            fab.addEventListener('touchstart', startDrag, { passive: true });
         })();
     </script>
 </body>
