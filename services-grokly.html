@@ -96,13 +96,13 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="page" id="home">
     <header class="reveal">
       <div class="brand"><span class="dot"></span><span>Grokly</span></div>
       <nav aria-label="Primary">
         <a href="#deals">Deals</a>
-        <a href="#categories">Fruits</a>
-        <a href="#picks">Dairy</a>
+        <a href="#categories">Categories</a>
+        <a href="#picks">Picks</a>
         <a href="#help">Help</a>
       </nav>
       <div class="actions">
@@ -197,7 +197,7 @@
         <div class="meta"><span class="tag">Cage-free</span><a class="add" href="#">Add</a></div>
       </div>
       <div class="product">
-        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80" alt="Bread loaf">
+        <img src="https://images.unsplash.com/photo-1514958964811-2f0c02b49d95?auto=format&fit=crop&w=1200&q=80" alt="Artisan sourdough loaf">
         <div class="meta"><span>Sourdough loaf</span><span class="price">$3.9</span></div>
         <div class="meta"><span class="tag">Daily bake</span><a class="add" href="#">Add</a></div>
       </div>
@@ -235,28 +235,9 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.14 });
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-  </script>
-</body>
-</html>
-          observer.unobserve(entry.target);
-        }
-      });
     }, { threshold: 0.16 });
 
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-
-    const parallaxTargets = document.querySelectorAll('.parallax');
-    window.addEventListener('pointermove', (e) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX / innerWidth - 0.5) * 10;
-      const y = (e.clientY / innerHeight - 0.5) * 10;
-      parallaxTargets.forEach((el, idx) => {
-        const depth = 1 + idx * 0.3;
-        el.style.transform = `translate3d(${x / depth}px, ${y / depth}px, 0)`;
-      });
-    });
   </script>
 </body>
 </html>
