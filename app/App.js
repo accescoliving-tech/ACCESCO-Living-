@@ -707,8 +707,8 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
       <View style={styles.section} onLayout={(event) => onSectionLayout && onSectionLayout('services', event.nativeEvent.layout.y)}>
         <Text style={styles.sectionTitle}>Explore Services</Text>
         <View style={styles.grid}>
-          <ServiceCard onPress={() => onLaunchService('GroMart')} title="GroMart" subTitle="Fresh Groceries" badge="FAST DELIVERY" img="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop" />
-          <ServiceCard onPress={() => onLaunchService('Eat-Feast')} title="Eat-Feast" subTitle="Food Delivery" badge="Collect coupons" img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={() => onLaunchService('Grokly')} title="Grokly" subTitle="Fresh Groceries" badge="FAST DELIVERY" img="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={() => onLaunchService('Swadisht')} title="Swadisht" subTitle="Food Delivery" badge="Collect coupons" img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop" />
           <ServiceCard onPress={() => onLaunchService('Dineout')} title="Dineout" subTitle="Book Tables" badge="FLAT 20% OFF" img="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" />
           <ServiceCard onPress={() => onLaunchService('InstaStyle')} title="InstaStyle" subTitle="Fashion Store" badge="NEW ARRIVALS" img="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1000&auto=format&fit=crop" />
           <ServiceCard onPress={onLaunchCalculator} title="CalcIQ" subTitle="Smart Budget Planner" badge="PREMIUM" img="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1000&auto=format&fit=crop" isFullWidth={true} />
