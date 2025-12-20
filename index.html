@@ -1078,9 +1078,15 @@
 <body>
     
     <div class="top-nav">
-        <button class="nav-user-btn" onclick="handleUserClick()">
-            <i class="ri-user-line"></i>
+         <button class="nav-user-btn" id="userBtn">
+        <img
+            id="profileAvatar"
+            src="images/user.png"
+            alt="User"
+            style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
+        />
         </button>
+
     </div>
 
     <main id="home">
@@ -1840,40 +1846,47 @@
 
   const supabase = createClient(
     "https://nfdrnbikwzfmijrqmoqt.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
+    "YOUR_PUBLIC_ANON_KEY"
   );
 
-  const loginOverlay = document.getElementById("loginOverlay");
-  const profileAvatar = document.getElementById("profileAvatar");
+  const overlay = document.getElementById("loginOverlay");
+  const avatar = document.getElementById("profileAvatar");
 
-  // Check session
+  // Safety
+  if (overlay) overlay.classList.remove("show");
+
+  // Check session on load
   const { data } = await supabase.auth.getSession();
 
   if (data?.session) {
-    // ✅ USER LOGGED IN
-
-    // Hide login overlay
-    if (loginOverlay) {
-      loginOverlay.style.display = "none";
-    }
-
-    // Replace profile icon with Google avatar
-    const user = data.session.user;
-    const avatarUrl = user.user_metadata?.avatar_url;
-
-    if (avatarUrl && profileAvatar) {
-      profileAvatar.src = avatarUrl;
-    }
-
+    handleLoggedIn(data.session);
   } else {
-    // ❌ USER NOT LOGGED IN
+    showOverlay();
+  }
 
-    // Show login overlay
-    if (loginOverlay) {
-      loginOverlay.style.display = "block";
+  // React to future login/logout
+  supabase.auth.onAuthStateChange((_event, session) => {
+    if (session) {
+      handleLoggedIn(session);
+    } else {
+      showOverlay();
+    }
+  });
+
+  function handleLoggedIn(session) {
+    if (overlay) overlay.classList.remove("show");
+
+    const avatarUrl = session.user.user_metadata?.avatar_url;
+    if (avatarUrl && avatar) {
+      avatar.src = avatarUrl;
     }
   }
+
+  function showOverlay() {
+    if (overlay) overlay.classList.add("show");
+  }
 </script>
+
 
 
 </body>
