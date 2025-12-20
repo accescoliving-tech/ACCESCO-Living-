@@ -17,6 +17,18 @@
   
   <style>
 
+    /* =========================
+       CHRISTMAS EFFECTS START
+       ========================= */
+    .snowflake {
+        position: fixed; top: -20px; color: #fff; text-shadow: 0 0 5px #000;
+        user-select: none; pointer-events: none; z-index: 9999; animation: fall linear forwards;
+    }
+    @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+    /* =========================
+       CHRISTMAS EFFECTS END
+       ========================= */
+
     @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
 
     /* GLOBAL FONTS & RESETS */
@@ -268,7 +280,14 @@
         height: auto;
         padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
     }
-    .card::before { content: ""; position: absolute; inset: 0; background: rgba(56, 4, 45, 0.62); border-radius: 18px; z-index: 1; }
+    .card::before { 
+        content: ""; 
+        position: absolute; 
+        inset: 0; 
+        background: rgba(0, 0, 0, 0.7); /* Black Overlay */
+        border-radius: 18px; 
+        z-index: 1; 
+    }
     .card > * { position: relative; z-index: 2; }
     .badge h3 { font-size: 26px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #fff !important; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin: 0;}
     .card-info { display: flex; flex-direction: column; gap: 6px; }
@@ -670,8 +689,8 @@
     }
     
     /* Glow effect on hover */
-    .gen-z-card:hover {
-       transform: translateX(10px);
+    .gen-z-card:hover { 
+       transform: translateX(10px); 
        background: rgba(255,255,255,0.07);
        border-color: rgba(255,255,255,0.2);
     }
@@ -958,13 +977,121 @@
             .ai-chat-fab { bottom: 14px; right: 14px; width: 58px; height: 58px; }
         }
 
+        /* =========================================
+           NEW LOGIN SYSTEM DESIGN
+           ========================================= */
+        .login-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none; /* Hidden by default */
+            align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .login-overlay.show { display: flex; opacity: 1; }
+
+        .login-modal {
+            background: #fff;
+            width: 100%; max-width: 420px;
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            transform: translateY(20px); transition: transform 0.3s ease;
+        }
+        .login-overlay.show .login-modal { transform: translateY(0); }
+
+        .close-login {
+            position: absolute; top: 16px; right: 20px;
+            font-size: 24px; cursor: pointer; border: none; background: none; color: #000;
+        }
+        .login-logo {
+            width: 80px; height: 80px; margin: 0 auto 20px;
+            display: block; object-fit: contain;
+        }
+        .login-modal h2 {
+            font-size: 24px; font-weight: 900; color: #000; margin-bottom: 8px; text-transform: uppercase; letter-spacing: -0.5px;
+        }
+        .login-modal p {
+            color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 24px; max-width: 300px; margin-left: auto; margin-right: auto;
+        }
+
+        .login-socials { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+        .social-btn {
+            width: 80px; height: 50px;
+            border: 1px solid #ddd; border-radius: 12px;
+            background: #fff; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #000;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .social-btn:hover { background: #f9f9f9; border-color: #bbb; }
+
+        .login-input {
+            width: 100%; padding: 14px 16px;
+            border: 1px solid #ddd; border-radius: 12px;
+            font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-bottom: 16px; outline: none; transition: border-color 0.2s;
+            color: #333;
+        }
+        .login-input:focus { border-color: #000; }
+        .login-input::placeholder { color: #999; }
+
+        .login-checkbox-row {
+            display: flex; align-items: flex-start; gap: 10px; text-align: left; margin-bottom: 24px; cursor: pointer;
+        }
+        .login-checkbox-row input { margin-top: 3px; accent-color: #000; }
+        .login-checkbox-row span { font-size: 12px; color: #555; line-height: 1.4; }
+
+        .login-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .login-btn {
+            padding: 16px; border-radius: 12px; font-weight: 800; font-size: 13px; letter-spacing: 0.5px; cursor: pointer; border: none; text-transform: uppercase;
+        }
+        .btn-black { background: #000; color: #fff; }
+        .btn-black:hover { opacity: 0.9; }
+        .btn-light { background: #f0f0f0; color: #000; }
+        .btn-light:hover { background: #e0e0e0; }
+
+        /* HEADER / TOP RIGHT NAV (ADDED PER REQUEST) */
+        .top-nav {
+            position: fixed; top: 24px; right: 24px; z-index: 900;
+            display: flex; align-items: center; gap: 16px;
+        }
+        /* LOGO REMOVED AS REQUESTED */
+        
+        /* USER ICON - Transparent Background + Black Icon */
+        .nav-user-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: transparent; /* No Background */
+            color: #000000;          /* Black Icon */
+            border: none;            /* Removed border */
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;         /* Size adjusted */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: none;        /* Removed shadow */
+            z-index: 1001;
+        }
+        .nav-user-btn:hover { 
+            transform: scale(1.1); 
+        }
+
   </style>
 
 </head>
 
 <body>
+    
+    <div class="top-nav">
+        <button class="nav-user-btn" onclick="openLoginModal()">
+            <i class="ri-user-line"></i>
+        </button>
+    </div>
+
     <main id="home">
-        <!-- HERO: Landing with looping video background -->
         <section class="hero">
             <video class="hero-bg-video" autoplay muted loop playsinline>
                 <source src="images/start.mp4" type="video/mp4">
@@ -996,7 +1123,6 @@
             </div>
         </section>
 
-        <!-- SERVICES: Core offerings grid -->
         <section id="services">
             <div class="section-title">
                 <div class="small-upper">OUR SERVICES</div>
@@ -1005,7 +1131,7 @@
             </div>
 
             <div class="cards">
-                <a href="services-gromart.html">
+                <a href="services-grokly.html">
                     <div class="card" style="background-image:url('images/mart.jpg')">
                         <div class="badge"><h3>Grokly</h3></div>
                         <div class="card-info">
@@ -1016,7 +1142,7 @@
                     </div>
                 </a>
 
-                <a href="services-eatfeast.html">
+                <a href="services-swadisht.html">
                     <div class="card" style="background-image:url('images/eat.jpg')">
                         <div class="badge"><h3>Swadisht</h3></div>
                         <div class="card-info">
@@ -1064,7 +1190,6 @@
             </div>
         </section>
 
-        <!-- CALCIQ: Finance intelligence promo -->
         <section class="calciq-section">
             <div class="calciq-container">
                 <div class="calciq-info">
@@ -1093,7 +1218,6 @@
             </div>
         </section>
 
-        <!-- GAMING ARENA: Play-and-earn tiles -->
         <section class="gaming-arena">
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
@@ -1115,8 +1239,8 @@
                             <img src="img/spin.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
                         </div>
-                        <h4>Spin & Win</h4>
-                        <span>Daily Jackpots</span>
+                        <h4>Flappy bird</h4>
+                        <span>Play and Earn</span>
                         <div class="play-hover">PLAY NOW →</div>
                     </a>
 
@@ -1153,7 +1277,6 @@
             </div>
         </section>
 
-        <!-- ABOUT: Brand story -->
         <section id="about">
             <div class="section-title">
                 <div class="small-upper">ABOUT ACCESCO</div>
@@ -1176,7 +1299,6 @@
             </div>
         </section>
 
-        <!-- APP SHOWCASE: Gen Z ecosystem UI -->
         <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
@@ -1237,7 +1359,7 @@
                     <div class="gen-z-card health">
                         <div class="icon-container"><i class="ri-heart-pulse-line"></i></div>
                         <div>
-                            <h4>Health</h4>
+                            <h4>Health Passport</h4>
                             <p>Nutri-Score & Vitals</p>
                         </div>
                     </div>
@@ -1259,7 +1381,6 @@
             </div>
         </section>
 
-        <!-- DOWNLOAD: App badges + QR -->
         <section class="download-section">
             <div class="download-card">
                 <div class="download-text">
@@ -1283,7 +1404,6 @@
             </div>
         </section>
 
-        <!-- CONTACT: Concierge form -->
         <section id="contact-form" class="contact-section">
             <div class="contact-card">
                 <div class="contact-glow"></div>
@@ -1333,7 +1453,6 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
         <footer id="contact">
             <div class="footer-grid">
                 <div>
@@ -1386,7 +1505,52 @@
         </footer>
     </main>
 
-    <!-- SCRIPT: Global scroll reveal (sections + arena cards) -->
+    <button class="ai-chat-fab" id="aiChatFab" aria-label="Open AI chat">
+        <i class="ri-robot-2-line" style="font-size:24px"></i>
+    </button>
+
+    <div class="ai-chat-window" id="aiChatWindow" aria-live="polite">
+        <div class="ai-chat-header">
+            <span>ACCESCO AI</span>
+            <button id="aiChatClose" style="background:none;border:none;color:#fff;cursor:pointer;font-size:18px;">×</button>
+        </div>
+        <div class="ai-chat-body" id="aiChatBody">
+            <div class="ai-msg">Hi there! I am your Accesco assistant. Ask me about services, offers, or anything else.</div>
+        </div>
+        <div class="ai-chat-input">
+            <input id="aiChatInput" type="text" placeholder="Type your question..." aria-label="Chat input">
+            <button id="aiChatSend">Send</button>
+        </div>
+    </div>
+    
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-modal">
+            <button class="close-login" onclick="closeLoginModal()">&times;</button>
+            <img src="images/accesco.png" alt="Logo" class="login-logo">
+            
+            <h2>LOG IN OR SIGN UP</h2>
+            <p>Enjoy members-only access to exclusive products, rewards, offers and more.</p>
+
+            <div class="login-socials">
+                <div class="social-btn"><i class="fa-brands fa-apple"></i></div>
+                <div class="social-btn"><i class="fa-brands fa-facebook-f"></i></div>
+                <div class="social-btn"><i class="fa-brands fa-google"></i></div>
+            </div>
+
+            <input type="email" class="login-input" placeholder="EMAIL ADDRESS *">
+
+            <label class="login-checkbox-row">
+                <input type="checkbox">
+                <span>I agree to receive personalised marketing messages from ACCESCO.</span>
+            </label>
+
+            <div class="login-actions">
+                <button class="login-btn btn-black">SIGN IN</button>
+                <button class="login-btn btn-light">SIGN UP</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         (() => {
             const targets = Array.from(document.querySelectorAll('section, footer'));
@@ -1436,7 +1600,6 @@
         })();
     </script>
 
-    <!-- SCRIPT: Swipeable stack interaction -->
     <script>
         const stack = document.getElementById('stack');
         const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -1493,9 +1656,35 @@
         }
     </script>
 
-    
+    <script>
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.innerHTML = "❄";
+            snow.classList.add('snowflake');
+            document.body.appendChild(snow);
 
-    <!-- SCRIPT: Animated submit button tilt + ripple -->
+            const startLeft = Math.random() * 100;
+            snow.style.left = startLeft + 'vw';
+
+            const duration = Math.random() * 3 + 4;
+            snow.style.animationDuration = duration + 's';
+
+            const size = Math.random() * 15 + 10;
+            snow.style.fontSize = size + 'px';
+
+            snow.style.opacity = Math.random() * 0.6 + 0.4;
+
+            setTimeout(() => {
+                snow.remove();
+            }, duration * 1000);
+        }
+
+        const isMobile = window.innerWidth < 768;
+        const interval = isMobile ? 700 : 400;
+
+        setInterval(createSnow, interval);
+    </script>
+
     <script>
         (() => {
             const btn = document.querySelector('.submit-btn');
@@ -1528,67 +1717,142 @@
         })();
     </script>
 
-<style>
-  df-messenger {
-    /* Font */
-    --df-messenger-font-family: system-ui, -apple-system, BlinkMacSystemFont;
+    <script>
+        (() => {
+            const fab = document.getElementById('aiChatFab');
+            const win = document.getElementById('aiChatWindow');
+            const closeBtn = document.getElementById('aiChatClose');
+            const input = document.getElementById('aiChatInput');
+            const sendBtn = document.getElementById('aiChatSend');
+            const body = document.getElementById('aiChatBody');
 
-    /* Title bar */
-    --df-messenger-button-titlebar-color: linear-gradient(135deg, #8a2be2, #ff2fa0);
-    --df-messenger-titlebar-background: linear-gradient(135deg, #8a2be2, #ff2fa0);
-    --df-messenger-titlebar-font-color: #ffffff;
+            let drag = { active: false, offsetX: 0, offsetY: 0 };
 
-    /* ===== LAUNCHER BUTTON ===== */
-    --df-messenger-button-titlebar-color: #000000;
+            function toggle(open) {
+                const isOpen = win.classList.contains('open');
+                if (open === true || (!isOpen && open === undefined)) {
+                    win.classList.add('open');
+                    input.focus();
+                } else {
+                    win.classList.remove('open');
+                }
+            }
 
-    /* Chat background */
-    --df-messenger-chat-background-color: rgba(0, 0, 0, 0.95);
+            function appendMessage(text, mine = false) {
+                const div = document.createElement('div');
+                div.className = mine ? 'ai-msg me' : 'ai-msg';
+                div.textContent = text;
+                body.appendChild(div);
+                body.scrollTop = body.scrollHeight;
+            }
 
-    /* Bot messages */
-    --df-messenger-message-bot-background: #000000;
-    --df-messenger-message-bot-font-color: #111827;
+            function send() {
+                const text = input.value.trim();
+                if (!text) return;
+                appendMessage(text, true);
+                input.value = '';
+                // Placeholder AI reply for now
+                setTimeout(() => appendMessage('Got it! I will share personalized suggestions soon.'), 400);
+            }
 
-    /* User messages */
-    --df-messenger-message-user-background: #2563eb;
-    --df-messenger-message-user-font-color: #ffffff;
+            fab.addEventListener('click', () => toggle());
+            closeBtn.addEventListener('click', () => toggle(false));
+            sendBtn.addEventListener('click', send);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
 
-    /* Input */
-    --df-messenger-input-box-background: #000000;
-    --df-messenger-input-font-color: #111827;
-    --df-messenger-input-placeholder-font-color: #6b7280;
+            const move = (clientX, clientY) => {
+                const x = clientX - drag.offsetX;
+                const y = clientY - drag.offsetY;
+                const clampedX = Math.min(Math.max(12, x), window.innerWidth - fab.offsetWidth - 12);
+                const clampedY = Math.min(Math.max(12, y), window.innerHeight - fab.offsetHeight - 12);
+                fab.style.left = clampedX + 'px';
+                fab.style.top = clampedY + 'px';
+                fab.style.right = 'auto';
+                fab.style.bottom = 'auto';
+                win.style.right = 'auto';
+                win.style.bottom = 'auto';
+                win.style.left = fab.offsetLeft + 'px';
+                win.style.top = fab.offsetTop - (win.offsetHeight + 12) + 'px';
+            };
 
-    /* Send icon */
-    --df-messenger-send-icon-color: #2563eb;
+            const snapToEdge = () => {
+                const margin = 12;
+                const fabRect = fab.getBoundingClientRect();
+                const centerX = fabRect.left + fabRect.width / 2;
+                const prefersLeft = centerX < window.innerWidth / 2;
 
-    /* Card styling */
-    width: 360px;
-    max-width: 95%;
-    height: 540px;
-    border-radius: 16px;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-  }
+                const snapY = Math.min(Math.max(margin, fabRect.top), window.innerHeight - fabRect.height - margin);
+                fab.style.top = snapY + 'px';
+                fab.style.bottom = 'auto';
 
-  /* Mobile full screen */
-  @media (max-width: 480px) {
-    df-messenger {
-      width: 100%;
-      height: 100%;
-      border-radius: 0;
-    }
-  }
-</style>
+                if (prefersLeft) {
+                    fab.style.left = margin + 'px';
+                    fab.style.right = 'auto';
+                    win.style.left = margin + 'px';
+                    win.style.right = 'auto';
+                } else {
+                    fab.style.right = margin + 'px';
+                    fab.style.left = 'auto';
+                    win.style.right = margin + 'px';
+                    win.style.left = 'auto';
+                }
 
-<!-- Dialogflow Messenger -->
-<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+                const winHeight = win.offsetHeight || 0;
+                let winTop = snapY - winHeight - 12;
+                if (winTop < margin) {
+                    winTop = snapY + fabRect.height + 12;
+                }
+                win.style.top = winTop + 'px';
+                win.style.bottom = 'auto';
+            };
 
-<df-messenger
-  intent="WELCOME"
-  chat-title="ACCESCO AI"
-  agent-id="8beafa4a-339b-44ff-a386-62d386a2481b"
-  language-code="en"
-  chat-icon="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
-</df-messenger>
+            const startDrag = (e) => {
+                drag.active = true;
+                const rect = fab.getBoundingClientRect();
+                drag.offsetX = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                drag.offsetY = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('touchmove', onDrag, { passive: false });
+                document.addEventListener('touchend', endDrag);
+            };
 
+            const onDrag = (e) => {
+                if (!drag.active) return;
+                const x = e.touches ? e.touches[0].clientX : e.clientX;
+                const y = e.touches ? e.touches[0].clientY : e.clientY;
+                move(x, y);
+                e.preventDefault();
+            };
 
+            const endDrag = () => {
+                drag.active = false;
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', endDrag);
+                document.removeEventListener('touchmove', onDrag);
+                document.removeEventListener('touchend', endDrag);
+                snapToEdge();
+            };
+
+            fab.addEventListener('mousedown', startDrag);
+            fab.addEventListener('touchstart', startDrag, { passive: true });
+        })();
+    </script>
+    
+    <script>
+        function openLoginModal() {
+            document.getElementById('loginOverlay').classList.add('show');
+        }
+        function closeLoginModal() {
+            document.getElementById('loginOverlay').classList.remove('show');
+        }
+        // Close if clicked outside
+        document.getElementById('loginOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeLoginModal();
+        });
+        
+        // Expose to window so console users can test it easily
+        window.openLoginModal = openLoginModal;
+    </script>
 </body>
 </html>
