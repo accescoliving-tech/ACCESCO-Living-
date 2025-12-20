@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, DateTime
+from sqlalchemy import Column, Integer, String, JSON, DateTime, Text
 from datetime import datetime
 from Accesco_chatbot.app.database import Base
 
@@ -12,3 +12,4 @@ class Orders(Base):
     items = Column(JSON, nullable=True)
     status = Column(String, default="pending")
     created_at = Column(DateTime, default=datetime.utcnow)
+    customization = Column(Text, nullable=True)
