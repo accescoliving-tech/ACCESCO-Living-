@@ -1098,22 +1098,28 @@
 
 <body>
     
-    <div class="top-nav">
-         <button class="nav-user-btn" id="userBtn">
-        <img
-            id="profileAvatar"
-            src="images/user.png"
-            alt="User"
-            style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
-        />
-        </button>
+    <!-- TOP RIGHT AUTH AREA -->
+<div class="top-nav">
 
-        <div class="profile-dropdown" id="profileDropdown">
-        <a href="/dashboard.html">Your Dashboard</a>
-        <a href="/settings.html">Settings</a>
-        <button id="logoutBtn">Logout</button>
-        </div>
+  <!-- WHEN USER IS NOT LOGGED IN -->
+  <div id="guestActions">
+    <button id="openLogin" class="nav-user-btn">
+      <i class="ri-user-3-line"></i>
+    </button>
+  </div>
 
+  <!-- WHEN USER IS LOGGED IN -->
+  <div id="userMenu" class="user-menu" style="display:none;">
+    <img id="userAvatar" class="user-avatar" src="images/user.png" />
+
+    <div id="userDropdown" class="user-dropdown">
+      <a href="/dashboard.html">Your Dashboard</a>
+      <a href="/settings.html">Settings</a>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+</div>
 
         <style>
 
@@ -1156,6 +1162,66 @@
                 .profile-dropdown button {
                 color: #ff6b6b;
                 }
+
+
+
+                /* DEFAULT USER ICON BUTTON */
+.nav-user-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* GOOGLE PROFILE PHOTO (PERFECT CIRCLE) */
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* DROPDOWN */
+.user-menu {
+  position: relative;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  min-width: 180px;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  color: black;
+}
+
+.user-dropdown button {
+  color: red;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  background: #f2f2f2;
+}
+
 
 
         </style>
@@ -1920,62 +1986,58 @@
 
   const supabase = createClient(
     "https://nfdrnbikwzfmijrqmoqt.supabase.co",
-    "YOUR_PUBLIC_ANON_KEY"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
   );
 
-  const overlay = document.getElementById("loginOverlay");
-  const userBtn = document.getElementById("userBtn");
-  const avatar = document.getElementById("profileAvatar");
-  const dropdown = document.getElementById("profileDropdown");
+  const loginOverlay = document.querySelector(".login-overlay");
+  const openLogin = document.getElementById("openLogin");
+
+  const guestActions = document.getElementById("guestActions");
+  const userMenu = document.getElementById("userMenu");
+  const userAvatar = document.getElementById("userAvatar");
+  const userDropdown = document.getElementById("userDropdown");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // ---- INITIAL SESSION CHECK ----
+  // OPEN LOGIN OVERLAY
+  openLogin.addEventListener("click", () => {
+    loginOverlay.classList.add("show");
+  });
+
+  // CHECK SESSION
   const { data } = await supabase.auth.getSession();
 
-  if (data?.session) {
-    onLogin(data.session);
+  if (data.session) {
+    // USER LOGGED IN
+    guestActions.style.display = "none";
+    userMenu.style.display = "block";
+    loginOverlay.classList.remove("show");
+
+    userAvatar.src = data.session.user.user_metadata.avatar_url;
   } else {
-    showOverlay();
+    // USER NOT LOGGED IN
+    guestActions.style.display = "block";
+    userMenu.style.display = "none";
   }
 
-  // ---- AUTH STATE CHANGES ----
-  supabase.auth.onAuthStateChange((_event, session) => {
-    if (session) {
-      onLogin(session);
-    } else {
-      onLogout();
+  // DROPDOWN TOGGLE
+  userAvatar.addEventListener("click", () => {
+    userDropdown.style.display =
+      userDropdown.style.display === "flex" ? "none" : "flex";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!userMenu.contains(e.target)) {
+      userDropdown.style.display = "none";
     }
   });
 
-  function onLogin(session) {
-    overlay?.classList.remove("show");
-
-    const photo = session.user.user_metadata?.avatar_url;
-    if (photo) avatar.src = photo;
-
-    dropdown?.classList.remove("show");
-  }
-
-  function onLogout() {
-    overlay?.classList.add("show");
-    dropdown?.classList.remove("show");
-  }
-
-  // ---- DROPDOWN TOGGLE ----
-  userBtn?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    dropdown.classList.toggle("show");
-  });
-
-  document.addEventListener("click", () => {
-    dropdown?.classList.remove("show");
-  });
-
-  // ---- LOGOUT ----
-  logoutBtn?.addEventListener("click", async () => {
+  // LOGOUT
+  logoutBtn.addEventListener("click", async () => {
     await supabase.auth.signOut();
+    location.reload();
   });
 </script>
+
 
 
 
