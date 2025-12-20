@@ -1071,6 +1071,27 @@
             transform: scale(1.1); 
         }
 
+        /* FORCE PERFECT CIRCULAR AVATAR */
+        .nav-user-btn {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: 50%;
+        overflow: hidden;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        }
+
+        .nav-user-btn img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        }
+
+
   </style>
 
 </head>
@@ -1086,6 +1107,59 @@
             style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
         />
         </button>
+
+        <div class="profile-dropdown" id="profileDropdown">
+        <a href="/dashboard.html">Your Dashboard</a>
+        <a href="/settings.html">Settings</a>
+        <button id="logoutBtn">Logout</button>
+        </div>
+
+
+        <style>
+
+            .profile-dropdown {
+                position: absolute;
+                top: 64px;
+                right: 0;
+                background: rgba(15, 10, 18, 0.95);
+                backdrop-filter: blur(12px);
+                border-radius: 14px;
+                min-width: 190px;
+                display: none;
+                flex-direction: column;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+                border: 1px solid rgba(255,255,255,0.08);
+                z-index: 9999;
+                }
+
+                .profile-dropdown.show {
+                display: flex;
+                }
+
+                .profile-dropdown a,
+                .profile-dropdown button {
+                padding: 14px 18px;
+                background: none;
+                border: none;
+                color: #fff;
+                text-align: left;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                }
+
+                .profile-dropdown a:hover,
+                .profile-dropdown button:hover {
+                background: rgba(255,255,255,0.08);
+                }
+
+                .profile-dropdown button {
+                color: #ff6b6b;
+                }
+
+
+        </style>
+
 
     </div>
 
@@ -1850,42 +1924,59 @@
   );
 
   const overlay = document.getElementById("loginOverlay");
+  const userBtn = document.getElementById("userBtn");
   const avatar = document.getElementById("profileAvatar");
+  const dropdown = document.getElementById("profileDropdown");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  // Safety
-  if (overlay) overlay.classList.remove("show");
-
-  // Check session on load
+  // ---- INITIAL SESSION CHECK ----
   const { data } = await supabase.auth.getSession();
 
   if (data?.session) {
-    handleLoggedIn(data.session);
+    onLogin(data.session);
   } else {
     showOverlay();
   }
 
-  // React to future login/logout
+  // ---- AUTH STATE CHANGES ----
   supabase.auth.onAuthStateChange((_event, session) => {
     if (session) {
-      handleLoggedIn(session);
+      onLogin(session);
     } else {
-      showOverlay();
+      onLogout();
     }
   });
 
-  function handleLoggedIn(session) {
-    if (overlay) overlay.classList.remove("show");
+  function onLogin(session) {
+    overlay?.classList.remove("show");
 
-    const avatarUrl = session.user.user_metadata?.avatar_url;
-    if (avatarUrl && avatar) {
-      avatar.src = avatarUrl;
-    }
+    const photo = session.user.user_metadata?.avatar_url;
+    if (photo) avatar.src = photo;
+
+    dropdown?.classList.remove("show");
   }
 
-  function showOverlay() {
-    if (overlay) overlay.classList.add("show");
+  function onLogout() {
+    overlay?.classList.add("show");
+    dropdown?.classList.remove("show");
   }
+
+  // ---- DROPDOWN TOGGLE ----
+  userBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("show");
+  });
+
+  document.addEventListener("click", () => {
+    dropdown?.classList.remove("show");
+  });
+
+  // ---- LOGOUT ----
+  logoutBtn?.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+  });
 </script>
+
 
 
 
