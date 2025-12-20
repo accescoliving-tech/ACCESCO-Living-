@@ -6,6 +6,7 @@
   <title>ACCESCO | Login</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/accesco.png" />
 
   <style>
     * {
@@ -338,30 +339,29 @@
 
   const googleBtn = document.getElementById("googleBtn");
 
-  // 1️⃣ Start Google OAuth flow
+  // 1️⃣ Start Google OAuth flow (PRODUCTION DOMAIN)
   googleBtn.addEventListener("click", async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        // Supabase will redirect back here with auth hash
-        redirectTo: `${location.origin}/login.html`
+        redirectTo: "https://accesco.co.in/login.html"
       }
     });
   });
 
-  // 2️⃣ IMPORTANT: Consume OAuth hash & establish session
-  // This removes #access_token from URL automatically
+  // 2️⃣ Consume OAuth hash & establish session
   const { data, error } = await supabase.auth.getSession();
 
   if (error) {
     console.error("Auth error:", error.message);
   }
 
-  // 3️⃣ If session exists, redirect cleanly
+  // 3️⃣ If session exists, redirect to production home
   if (data?.session) {
-    window.location.replace("/index.html");
+    window.location.replace("https://accesco.co.in/index.html");
   }
 </script>
+
 
 
 </body>
