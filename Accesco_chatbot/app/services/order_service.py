@@ -61,6 +61,11 @@ def handle_add_item(
         elif v:
             new_items = [str(v)]
 
+    # ---------------- 1A) Extract NEW customizations ----------------
+    new_customizations = params.get("food_customization", [])
+    if not isinstance(new_customizations, list):
+        new_customizations = [new_customizations]
+
     # ---------------- 2) Extract NEW quantities ----------------
     new_qtys = params.get("number", [])
     if not isinstance(new_qtys, list):
@@ -68,11 +73,14 @@ def handle_add_item(
 
     while len(new_qtys) < len(new_items):
         new_qtys.append(1)
-        print(f"Extending new_qtys: {new_qtys}")
+
+    while len(new_customizations) < len(new_items):
+        new_customizations.append(None)
 
     # ---------------- 3) Extract OLD context items ----------------
     ctx_items: List[str] = []
     ctx_qtys: List[Any] = []
+    ctx_customizations: List[Any] = []
 
     order_context_name = _find_order_context_name(platform).lower()
 
@@ -80,30 +88,30 @@ def handle_add_item(
         ctx_name_last = ctx.get("name", "").split("/")[-1].lower()
 
         if ctx_name_last == order_context_name:
-
             ctx_params = ctx.get("parameters", {}) or {}
+
             raw_items = ctx_params.get("items_list") or []
             raw_qtys = ctx_params.get("qty_list") or []
+            raw_customizations = ctx_params.get("customization_list") or []
 
-            if isinstance(raw_items, list):
-                ctx_items = [str(x) for x in raw_items]
-            else:
-                ctx_items = [str(raw_items)]
-
-            if isinstance(raw_qtys, list):
-                ctx_qtys = raw_qtys.copy()
-            else:
-                ctx_qtys = [raw_qtys]
-
+            ctx_items = raw_items if isinstance(raw_items, list) else [raw_items]
+            ctx_qtys = raw_qtys if isinstance(raw_qtys, list) else [raw_qtys]
+            ctx_customizations = (
+                raw_customizations if isinstance(raw_customizations, list)
+                else [raw_customizations]
+            )
             break
 
     while len(ctx_qtys) < len(ctx_items):
         ctx_qtys.append(1)
 
-    # ---------------- 4) Merge NEW + OLD ----------------
+    while len(ctx_customizations) < len(ctx_items):
+        ctx_customizations.append(None)
+
+    # ---------------- 4) Merge OLD + NEW ----------------
     all_items = ctx_items + new_items
     all_qtys = ctx_qtys + new_qtys
-    print(f"All items: {all_items}, All qtys: {all_qtys}")
+    all_customizations = ctx_customizations + new_customizations
 
     if not all_items:
         return None, {
@@ -115,7 +123,10 @@ def handle_add_item(
 
     order = (
         db.query(Orders)
-        .filter(Orders.session_id == session_id, Orders.status == "pending")
+        .filter(
+            Orders.session_id == session_id,
+            Orders.status == "pending"
+        )
         .order_by(Orders.id.desc())
         .first()
     )
@@ -131,23 +142,35 @@ def handle_add_item(
         )
         db.add(order)
 
+    # Save items with customization
     order.items = [
-        {"item": it, "quantity": qt}
-        for it, qt in zip(all_items, all_qtys)
+        {
+            "item": it,
+            "quantity": qt,
+            "customization": cust
+        }
+        for it, qt, cust in zip(all_items, all_qtys, all_customizations)
     ]
+
     db.commit()
 
-    # ---------------- 6) Write back DF context ----------------
+    # ---------------- 6) Write back Dialogflow context ----------------
     out_ctx = {
         "name": f"{body['session']}/contexts/{order_context_name}",
         "lifespanCount": 10,
         "parameters": {
             "items_list": all_items,
             "qty_list": all_qtys,
+            "customization_list": all_customizations
         },
     }
 
-    added_text = ", ".join([f"{q} {i}" for i, q in zip(all_qtys, all_items)])
+    # ---------------- 7) Response text ----------------
+    added_text = ", ".join([
+    f"{int(q)} {i}" + (f" ({c})" if c else "")
+    for i, q, c in zip(all_items, all_qtys, all_customizations)
+])
+    print(f"Added text: {added_text}")
 
     return order.order_id, {
         "fulfillmentText": f"Added {added_text} to your {platform} order. Anything else?",

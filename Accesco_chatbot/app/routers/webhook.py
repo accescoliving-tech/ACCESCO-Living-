@@ -56,6 +56,7 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
     # CONFIRM ORDER — Swadisht
     if intent_lower.startswith("order swadisht - custom - no"):
         reply = handle_confirm_order(body=body, db=db, platform="Swadisht")
+        print (f"reply: {reply}")
         return {"fulfillmentText": reply}
 
     # -------------------------------------------------------
