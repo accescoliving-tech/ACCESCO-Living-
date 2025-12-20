@@ -17,18 +17,6 @@
   
   <style>
 
-    /* =========================
-       CHRISTMAS EFFECTS START
-       ========================= */
-    .snowflake {
-        position: fixed; top: -20px; color: #fff; text-shadow: 0 0 5px #000;
-        user-select: none; pointer-events: none; z-index: 9999; animation: fall linear forwards;
-    }
-    @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
-    /* =========================
-       CHRISTMAS EFFECTS END
-       ========================= */
-
     @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
 
     /* GLOBAL FONTS & RESETS */
@@ -1505,35 +1493,7 @@
         }
     </script>
 
-    <!-- SCRIPT: Snowfall effect -->
-    <script>
-        function createSnow() {
-            const snow = document.createElement('div');
-            snow.innerHTML = "❄";
-            snow.classList.add('snowflake');
-            document.body.appendChild(snow);
-
-            const startLeft = Math.random() * 100;
-            snow.style.left = startLeft + 'vw';
-
-            const duration = Math.random() * 3 + 4;
-            snow.style.animationDuration = duration + 's';
-
-            const size = Math.random() * 15 + 10;
-            snow.style.fontSize = size + 'px';
-
-            snow.style.opacity = Math.random() * 0.6 + 0.4;
-
-            setTimeout(() => {
-                snow.remove();
-            }, duration * 1000);
-        }
-
-        const isMobile = window.innerWidth < 768;
-        const interval = isMobile ? 700 : 400;
-
-        setInterval(createSnow, interval);
-    </script>
+    
 
     <!-- SCRIPT: Animated submit button tilt + ripple -->
     <script>
