@@ -1500,7 +1500,13 @@
     <div id="loginOverlay" class="login-overlay">
     <div class="login-modal">
         <button class="close-login" onclick="closeLoginModal()">&times;</button>
-        <img src="images/accesco.png" alt="Logo" class="login-logo">
+        <img
+            id="profileAvatar"
+            src="images/user-icon.png"
+            alt="User"
+            style="width:36px;height:36px;border-radius:50%;cursor:pointer;"
+            />
+
         
         <h2>LOG IN OR SIGN UP</h2>
         <p>Enjoy members-only access to exclusive products, rewards, offers and more.</p>
@@ -1827,6 +1833,48 @@
         language-code="en"
         chat-icon="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
     </df-messenger>
+
+
+    <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const supabase = createClient(
+    "https://nfdrnbikwzfmijrqmoqt.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
+  );
+
+  const loginOverlay = document.getElementById("loginOverlay");
+  const profileAvatar = document.getElementById("profileAvatar");
+
+  // Check session
+  const { data } = await supabase.auth.getSession();
+
+  if (data?.session) {
+    // ✅ USER LOGGED IN
+
+    // Hide login overlay
+    if (loginOverlay) {
+      loginOverlay.style.display = "none";
+    }
+
+    // Replace profile icon with Google avatar
+    const user = data.session.user;
+    const avatarUrl = user.user_metadata?.avatar_url;
+
+    if (avatarUrl && profileAvatar) {
+      profileAvatar.src = avatarUrl;
+    }
+
+  } else {
+    // ❌ USER NOT LOGGED IN
+
+    // Show login overlay
+    if (loginOverlay) {
+      loginOverlay.style.display = "block";
+    }
+  }
+</script>
+
 
 </body>
 </html>
