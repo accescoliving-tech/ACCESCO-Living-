@@ -330,6 +330,7 @@
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+  // Initialize Supabase client
   const supabase = createClient(
     "https://nfdrnbikwzfmijrqmoqt.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
@@ -337,32 +338,29 @@
 
   const googleBtn = document.getElementById("googleBtn");
 
-  // Trigger Google OAuth
-  googleBtn.onclick = async () => {
+  // 1️⃣ Start Google OAuth flow
+  googleBtn.addEventListener("click", async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        // After Google auth, Supabase redirects back here
+        // Supabase will redirect back here with auth hash
         redirectTo: `${location.origin}/login.html`
       }
     });
-  };
-
-  // Handle OAuth redirect & session
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN" && session) {
-      // Successful Google login
-      window.location.href = "/index.html";
-    }
   });
 
-  // Optional: auto-redirect if already logged in
-  (async () => {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      window.location.href = "/index.html";
-    }
-  })();
+  // 2️⃣ IMPORTANT: Consume OAuth hash & establish session
+  // This removes #access_token from URL automatically
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error) {
+    console.error("Auth error:", error.message);
+  }
+
+  // 3️⃣ If session exists, redirect cleanly
+  if (data?.session) {
+    window.location.replace("/index.html");
+  }
 </script>
 
 
