@@ -15,13 +15,8 @@
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   
-  <style>
-    @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
-    /* =========================
-       CHRISTMAS EFFECTS END
-       ========================= */
-
-    @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
+    <style>
+        @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
 
     /* GLOBAL FONTS & RESETS */
     body, p, li, a, button, input, label, span, textarea { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; letter-spacing: 0.2px; }
@@ -406,9 +401,9 @@
     .gaming-arena { 
         display: flex; justify-content: space-between; align-items: center; 
         padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
-        background: radial-gradient(circle at 18% 22%, rgba(112, 4, 87, 0.22), transparent 32%),
-                    radial-gradient(circle at 78% 18%, rgba(160, 30, 125, 0.24), transparent 36%),
-                    linear-gradient(135deg, #0b0710, #150017);
+        background: radial-gradient(circle at 18% 22%, rgba(255, 0, 153, 0.28), transparent 32%),
+                    radial-gradient(circle at 78% 18%, rgba(255, 0, 153, 0.2), transparent 36%),
+                    linear-gradient(135deg, #000000, #0a030d 55%, #000000);
         border-radius: 28px;
         position: relative;
         overflow: hidden;
@@ -419,8 +414,8 @@
         transition: opacity 0.8s ease, transform 0.8s ease;
     }
     .gaming-arena.is-visible { opacity: 1; transform: translateY(0); }
-    .gaming-arena::before { content: ""; position: absolute; inset: -20%; background: conic-gradient(from 120deg, rgba(255, 215, 128, 0.18), rgba(255, 191, 71, 0.08), rgba(255, 215, 128, 0.2), rgba(255, 191, 71, 0.08)); filter: blur(90px); opacity: 0.7; z-index: 0; animation: orbitGlow 22s linear infinite reverse; }
-    .gaming-arena::after { content: ""; position: absolute; top: -30%; right: -25%; width: 70%; height: 160%; background: linear-gradient(110deg, rgba(255, 215, 128, 0.06) 0%, rgba(255, 191, 71, 0.2) 38%, rgba(112, 4, 87, 0.0) 70%); filter: blur(12px); opacity: 0.65; transform: rotate(-6deg); animation: sweepLight 14s ease-in-out infinite; z-index: 0; }
+    .gaming-arena::before { content: ""; position: absolute; inset: -20%; background: conic-gradient(from 120deg, rgba(255, 0, 153, 0.26), rgba(255, 0, 153, 0.08), rgba(255, 0, 153, 0.3), rgba(255, 0, 153, 0.08)); filter: blur(90px); opacity: 0.8; z-index: 0; animation: orbitGlow 22s linear infinite reverse; }
+    .gaming-arena::after { content: ""; position: absolute; top: -30%; right: -25%; width: 70%; height: 160%; background: linear-gradient(110deg, rgba(255, 0, 153, 0.12) 0%, rgba(255, 0, 153, 0.3) 38%, rgba(0, 0, 0, 0)); filter: blur(12px); opacity: 0.7; transform: rotate(-6deg); animation: sweepLight 14s ease-in-out infinite; z-index: 0; }
     
     .arena-left { flex: 1; max-width: 450px; position: relative; z-index: 1; }
     .badge-pill { 
@@ -1359,7 +1354,7 @@
         <section class="gaming-arena">
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
-                <h2 class="arena-title">Accesco<br><span>Game Arena</span></h2>
+                <h2 class="arena-title">Accesco<br><span>Rewards Play Arena</span></h2>
                 <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
 
                 <ul class="arena-features">
@@ -1440,7 +1435,7 @@
         <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
-                <p>Experience the ultimate super-app interface. Zero clutter. Pure utility.</p>
+                <p>Powering a Smart Ecosystem That Simplifies Everyday Living.</p>
             </div>
 
             <div class="app-container">
@@ -1549,8 +1544,8 @@
                 <div class="contact-inner">
                     <div class="contact-header">
                         <span class="contact-badge"><i class="ri-sparkling-2-fill"></i> Concierge Desk</span>
-                        <h2>Need something tailored?</h2>
-                        <p>Tell us what you need and our team will reach back with the right solution—usually within a couple of hours.</p>
+                        <h2>Need Help? Connect With Us.</h2>
+                        <p>Tell us what you need—orders, dining, rentals, finance, or product support—and a concierge will respond within 2 hours with clear next steps.</p>
                         <div class="contact-meta">
                             <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
                             <span class="info-chip"><i class="ri-shield-check-line"></i> Secure & private</span>
@@ -1559,9 +1554,9 @@
                     </div>
 
                     <div class="contact-ribbon">
-                        <div class="ribbon-pill"><i class="ri-star-smile-line"></i>White-glove onboarding</div>
-                        <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day rollout options</div>
-                        <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Compliance-ready handoff</div>
+                        <div class="ribbon-pill"><i class="ri-star-smile-line"></i>Personalised fixes for your issue</div>
+                        <div class="ribbon-pill"><i class="ri-flashlight-fill"></i>Same-day action on most requests</div>
+                        <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Private, compliant handoff</div>
                     </div>
 
                     <form action="https://formspree.io/f/xnneelwy" method="POST" class="form-grid">
@@ -1797,35 +1792,6 @@
                 isAnimating = false;
             }, 300);
         }
-    </script>
-
-    <script>
-        function createSnow() {
-            const snow = document.createElement('div');
-            snow.innerHTML = "❄";
-            snow.classList.add('snowflake');
-            document.body.appendChild(snow);
-
-            const startLeft = Math.random() * 100;
-            snow.style.left = startLeft + 'vw';
-
-            const duration = Math.random() * 3 + 4;
-            snow.style.animationDuration = duration + 's';
-
-            const size = Math.random() * 15 + 10;
-            snow.style.fontSize = size + 'px';
-
-            snow.style.opacity = Math.random() * 0.6 + 0.4;
-
-            setTimeout(() => {
-                snow.remove();
-            }, duration * 1000);
-        }
-
-        const isMobile = window.innerWidth < 768;
-        const interval = isMobile ? 700 : 400;
-
-        setInterval(createSnow, interval);
     </script>
 
     <script>
