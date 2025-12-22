@@ -6,6 +6,7 @@ from Accesco_chatbot.app.database import get_db
 from Accesco_chatbot.app.services.order_service import (
     handle_add_item,
     handle_confirm_order,
+    handle_create_custom_food,
     handle_track_order
 )
 from Accesco_chatbot.app.services.cancel_service import (
@@ -59,27 +60,43 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
         print (f"reply: {reply}")
         return {"fulfillmentText": reply}
 
+    if intent_lower.startswith("create-custom-food - confirm"):
+        print("Confirming custom food creation for Swadisht...")
+        reply = handle_confirm_order(
+            body=body,
+            db=db,
+            platform="Swadisht"
+        )
+        print(f"reply: {reply}")
+        return {"fulfillmentText": reply}
+
     # -------------------------------------------------------
     # 🛒 ADD ITEM — GROMART
     # -------------------------------------------------------
-    if intent_lower.startswith("order gromart - custom") and "- no" not in intent_lower:
+    if intent_lower.startswith("order grokly - custom") and "- no" not in intent_lower:
+        print(f"Adding item to Grokly order...{params}")
         order_id, response = handle_add_item(
             body=body,
             db=db,
             platform="Grokly",
-            item_param=[
-                "gromart-grocery",
-                "GroMart-grocery",
-                "GroMArt-grocery",
-                "grocery"
-            ]
+            item_param="GroMArt-grocery"
         )
+        print(f"response: {response}")
         return response
 
     # CONFIRM ORDER — GroMart
-    if intent_lower.startswith("order gromart - custom - no"):
+    if intent_lower.startswith("order grokly - custom - no"):
         reply = handle_confirm_order(body=body, db=db, platform="Grokly")
         return {"fulfillmentText": reply}
+    
+    #custom order for swadisht
+    if intent_lower == "create-custom-food":
+        return handle_create_custom_food(
+            body=body,
+            db=db,
+            platform="Swadisht"  # or detect dynamically
+        )
+
 
     # -------------------------------------------------------
     # ❌ CANCEL ORDER (Ask)
