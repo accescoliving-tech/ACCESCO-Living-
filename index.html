@@ -1159,10 +1159,30 @@
 
         /* HEADER / TOP RIGHT NAV (ADDED PER REQUEST) */
         .top-nav {
-            position: fixed; top: 24px; right: 24px; z-index: 900;
+            position: absolute; top: 24px; right: 24px; z-index: 900;
             display: flex; align-items: center; gap: 16px;
         }
         /* LOGO REMOVED AS REQUESTED */
+        .nav-login-btn {
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.35);
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.26);
+            backdrop-filter: blur(6px);
+        }
+        .nav-login-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.28); background: rgba(255,255,255,0.26); }
+        .nav-login-btn:active { transform: translateY(0); }
         
         /* USER ICON - Transparent Background + Black Icon */
         .nav-user-btn {
@@ -1211,6 +1231,12 @@
     <main id="home">
         <!-- ===== HERO: LANDING HEADLINE + VIDEO ===== -->
         <section class="hero">
+            <div class="top-nav">
+                <button class="nav-login-btn" onclick="window.location.href='login.html'">
+                    <i class="ri-user-line" aria-hidden="true"></i>
+                    <span>Login</span>
+                </button>
+            </div>
             <video class="hero-bg-video" autoplay muted loop playsinline>
                 <source src="images/start.mp4" type="video/mp4">
             </video>
