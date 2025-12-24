@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -114,38 +114,44 @@
         gap: 10px;
         padding: 10px 18px;
         border-radius: 999px;
-        background: linear-gradient(90deg, #ffd86f, #ffb347);
-        color: #1b0a13;
+        background: rgb(112, 4, 87);
+        color: #ffffff;
         font-weight: 900;
         letter-spacing: 1.2px;
         text-transform: uppercase;
         font-size: 13px;
-        box-shadow: 0 14px 40px rgba(255,167,51,0.18), 0 6px 18px rgba(0,0,0,0.22);
+        box-shadow: 0 14px 40px rgba(112, 4, 87, 0.18), 0 6px 18px rgba(0,0,0,0.22);
     }
     .hero-kicker::before {
         content: "";
         width: 12px;
         height: 12px;
         border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, #fff8e7, #ffd86f);
+        background: radial-gradient(circle at 30% 30%, #ffffff, #d649ae);
         box-shadow: 0 0 18px rgba(255,184,70,0.9);
     }
 
     .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
     
+    /* CTA PILL (Big & Black) */
     .cta-pill { 
-        padding: 16px 32px; 
+        padding: 22px 48px;  
         border-radius: 50px; 
-        font-weight: 700; 
+        font-weight: 800; 
         cursor: pointer; 
-        border: none; 
-        background: #fff2eb;
-        color: var(--accent); 
-        font-size: 16px;
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid rgba(255,255,255,0.2); 
+        background: #000000; 
+        color: #ffffff;      
+        font-size: 18px;     
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s;
     }
-    .cta-pill:hover { transform: scale(1.05); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24); }
+    .cta-pill:hover { 
+        transform: scale(1.05); 
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4); 
+        background: #111;
+        border-color: #fff;
+    }
 
     /* Hero App Buttons - Responsive */
     .hero-app-buttons {
@@ -206,7 +212,7 @@
         }
         .app-btn-link img { height: 48px; } /* Smaller buttons on mobile */
         
-        .cta-pill { padding: 12px 24px; font-size: 14px; }
+        .cta-pill { padding: 16px 32px; font-size: 16px; }
         .scroll-down-btn { margin-top: 20px; font-size: 12px; }
     }
 
@@ -215,7 +221,16 @@
     @media(max-width: 600px) { section { padding: 50px 20px; } }
 
     .section-title { text-align: center; max-width: 700px; margin: auto; margin-bottom: 28px; }
-    .small-upper { font-weight: 700; color: gold; letter-spacing: 1px; font-size: 15px; }
+    
+    /* MODIFIED: Section Title Style (Black & Bigger) */
+    .small-upper { 
+        font-weight: 800; 
+        color: #000000; /* Solid Black */
+        letter-spacing: 1px; 
+        font-size: 18px; /* Bigger font */
+        text-transform: uppercase;
+    }
+    
     .big-h { font-family: Poppins, sans-serif; font-size: 40px; font-weight: 800; margin: 10px 0; }
     @media(max-width: 600px) { .big-h { font-size: 28px; } }
     .muted-center { color: var(--muted); font-size: 15px; max-width: 800px; margin: auto; }
@@ -387,11 +402,62 @@
     .card-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: #222; }
     .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 9px; background: #f5f5f5; border: 1px solid rgba(0,0,0,0.05); }
     .meta-chip i { color: #ff7a00; }
-    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
-    .cta-text { font-weight: 900; font-size: 12px; letter-spacing: 0.4px; color: #ff7a00; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
-    @media (max-width: 650px) { 
-        .card { width: 100%; }
-        .card-img { height: 160px; }
+    
+    /* Card Footer (Order Now Button) */
+    .card-footer { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-top: 12px; 
+    }
+    
+    .cta-text { 
+        font-weight: 800; 
+        font-size: 14px;
+        letter-spacing: 0.5px; 
+        color: #fff;
+        background: #000;
+        display: inline-flex; 
+        align-items: center; 
+        justify-content: center;
+        gap: 8px; 
+        text-transform: uppercase; 
+        width: 100%;
+        padding: 14px 0;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+    
+    .cta-text:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(112, 4, 87, 0.25);
+    }
+    
+    .cta-text i { transition: transform 0.2s; }
+    .cta-text:hover i { transform: translateX(4px); }
+
+    /* MODIFIED: Mobile Horizontal Scroll */
+    @media (max-width: 768px) {
+        .cards {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 16px;
+            padding-bottom: 20px;
+            /* Hide scrollbar */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .cards::-webkit-scrollbar { display: none; }
+        
+        .card {
+            min-width: 270px; /* Reduced width for mobile */
+            max-width: 270px;
+            scroll-snap-align: center;
+            flex-shrink: 0;
+        }
+        .card-img { height: 150px; } /* Slightly smaller image on mobile */
     }
 
 
@@ -506,7 +572,8 @@
     .gaming-arena {
         display: flex; justify-content: space-between; align-items: center;
         padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
-        background: linear-gradient(140deg, #2b0c24 0%, #700c46 55%, #12000d 100%);
+        /* Black to Dark Purple Gradient */
+        background: linear-gradient(135deg, #1a0510 0%, #000000 100%);
         border-radius: 28px;
         position: relative;
         overflow: hidden;
@@ -1227,7 +1294,6 @@
     </div>
 
     <main id="home">
-        <!-- ===== HERO SECTION ===== -->
         <section class="hero">
             <div class="top-nav">
                 <button class="nav-login-btn" onclick="window.location.href='login.html'">
@@ -1266,7 +1332,6 @@
             </div>
         </section>
 
-        <!-- ===== SERVICES SECTION ===== -->
         <section id="services">
             <div class="section-title">
                 <div class="small-upper">OUR SERVICES</div>
@@ -1367,7 +1432,6 @@
             </div>
         </section>
 
-        <!-- ===== CALCIQ SECTION ===== -->
         <section class="calciq-section">
             <div class="calciq-container">
                 <div class="calciq-info">
@@ -1396,11 +1460,10 @@
             </div>
         </section>
 
-        <!-- ===== GAMING ARENA SECTION ===== -->
         <section class="gaming-arena">
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
-                <h2 class="arena-title">Accesco<br><span>Rewards Play Arena</span></h2>
+                <h2 class="arena-title"><span>Reward Play Arena</span></h2>
                 <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
 
                 <ul class="arena-features">
@@ -1456,7 +1519,6 @@
             </div>
         </section>
 
-        <!-- ===== ABOUT SECTION ===== -->
         <section id="about">
             <div class="section-title">
                 <div class="small-upper">ABOUT ACCESCO</div>
@@ -1497,7 +1559,6 @@
             </div>
         </section>
 
-        <!-- ===== APP SHOWCASE SECTION ===== -->
         <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
@@ -1580,7 +1641,6 @@
             </div>
         </section>
 
-        <!-- ===== DOWNLOAD SECTION ===== -->
         <section class="download-section">
             <div class="download-card">
                 <div class="download-text">
@@ -1604,7 +1664,6 @@
             </div>
         </section>
 
-        <!-- ===== CONTACT SECTION ===== -->
         <section id="contact-form" class="contact-section">
             <div class="contact-card">
                 <div class="contact-glow"></div>
@@ -1654,7 +1713,6 @@
             </div>
         </section>
 
-        <!-- ===== FOOTER SECTION ===== -->
         <footer id="contact">
             <div class="footer-grid">
                 <div>
@@ -1961,7 +2019,6 @@
             }
         }
     </style>
-    <!-- Dialogflow Messenger -->
     <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
     
     <df-messenger
@@ -2030,13 +2087,5 @@
   });
 </script>
 
-
-
-
-
 </body>
 </html>
-
-
-
-
