@@ -39,7 +39,7 @@
     a { color: inherit; text-decoration: none; }
     img { width: 100%; height: auto; display: block; border-radius: 14px; } 
 
-    /* ================= HERO (ZOMATO STYLE) ================= */
+    /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
             height: 100vh;
@@ -100,7 +100,7 @@
     }
     
     .hero-sub { 
-        font-size: 30px; 
+        font-size: 17px; 
         color: rgba(255, 255, 255, 0.95); 
         margin-top: 0px; 
         margin-bottom: 20px;
@@ -112,23 +112,23 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        padding: 8px 14px;
+        padding: 10px 18px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        color: #fff2eb;
-        font-weight: 800;
-        letter-spacing: 1px;
+        background: linear-gradient(90deg, #ffd86f, #ffb347);
+        color: #1b0a13;
+        font-weight: 900;
+        letter-spacing: 1.2px;
         text-transform: uppercase;
-        font-size: 12px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        font-size: 13px;
+        box-shadow: 0 14px 40px rgba(255,167,51,0.18), 0 6px 18px rgba(0,0,0,0.22);
     }
     .hero-kicker::before {
         content: "";
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #ffd86f, #ffb347);
-        box-shadow: 0 0 12px rgba(255, 184, 70, 0.7);
+        background: radial-gradient(circle at 30% 30%, #fff8e7, #ffd86f);
+        box-shadow: 0 0 18px rgba(255,184,70,0.9);
     }
 
     .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
@@ -197,7 +197,7 @@
     
     @media(max-width: 480px) {
         .hero-title { font-size: 32px; line-height: 1.2; }
-        .hero-sub { font-size: 18px; line-height: 1.4; }
+        .hero-sub { font-size: 17px; line-height: 1.4; }
         .hero-logo-img { width: 80px; height: 80px; }
         
         .hero-app-buttons { 
@@ -364,41 +364,38 @@
     }
 
 
-    /* SERVICES CARDS */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 30px; }
+    /* SERVICES GRID - SWIGGY-INSPIRED, MINIMAL */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 30px; }
     .card { 
-        position: relative; 
-        min-height: 260px;
-        height: auto;
-        padding: 20px; border-radius: 18px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 10px; color: #ffffff; background-size: cover; background-position: center; 
+        background: #fff; 
+        border-radius: 16px; 
+        overflow: hidden; 
+        box-shadow: 0 12px 26px rgba(0,0,0,0.12); 
+        display: flex; 
+        flex-direction: column; 
+        transition: transform 0.18s ease, box-shadow 0.18s ease; 
+        border: 1px solid rgba(0,0,0,0.04);
     }
-    .card::before { 
-        content: ""; 
-        position: absolute; 
-        inset: 0; 
-        background: rgba(0, 0, 0, 0.7); /* Black Overlay */
-        border-radius: 18px; 
-        z-index: 1; 
-    }
-    .card > * { position: relative; z-index: 2; }
-    .badge h3 { font-size: 26px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #fff !important; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin: 0;}
-    .card-info { display: flex; flex-direction: column; gap: 6px; }
-    .card-tag { display: inline-block; width: fit-content; padding: 6px 10px; border-radius: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
-    .card-tag.offer { background: rgba(255, 82, 0, 0.18); color: #ff5200; }
-    .card-tag.time { background: rgba(0, 0, 0, 0.25); color: #fff; }
-    .card-tag.fest { background: rgba(255, 255, 255, 0.25); color: #fff; }
-    .new-badge { margin-left: 8px; background: #ff3b3b; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: 800; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(0,0,0,0.16); }
+    .card-img { position: relative; height: 180px; background-size: cover; background-position: center; }
+    .card-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%); }
+    .card-body { padding: 14px 16px 16px; display: grid; gap: 8px; }
+    .card-title-row { display: flex; align-items: center; gap: 8px; }
+    .card-title-row h3 { margin: 0; font-size: 18px; letter-spacing: -0.1px; color: #111; }
+    .card-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.2px; background: #fff3e0; color: #d35400; border: 1px solid rgba(211,84,0,0.22); }
+    .card-sub { margin: 0; color: #444; font-size: 14px; line-height: 1.45; }
+    .card-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: #222; }
+    .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 9px; background: #f5f5f5; border: 1px solid rgba(0,0,0,0.05); }
+    .meta-chip i { color: #ff7a00; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+    .cta-text { font-weight: 900; font-size: 12px; letter-spacing: 0.4px; color: #ff7a00; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
     @media (max-width: 650px) { 
-        .card { min-height: 220px; height: auto; width: 100%; } 
+        .card { width: 100%; }
+        .card-img { height: 160px; }
     }
-    
-    .learn { margin-top: 8px; background: rgba(255, 255, 255, 0.18); padding: 6px 12px; border-radius: 12px; font-weight: 600; display: inline-block; color: rgba(255,255,255,0.95); transition: transform 0.2s ease; }
-    .card:hover .learn { transform: translateX(6px); }
 
 
-    /* ==================================
-       REDESIGNED CALC IQ
-       ================================== */
+    /* ===== CALCIQ SECTION ===== */
     .calciq-section {
         max-width: 1100px;
         margin: 0 auto;
@@ -505,9 +502,7 @@
     }
 
 
-    /* ==================================
-       GAMING ARENA
-       ================================== */
+    /* ===== GAMING ARENA SECTION ===== */
     .gaming-arena {
         display: flex; justify-content: space-between; align-items: center;
         padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
@@ -653,9 +648,7 @@
     }
 
 
-    /* ==================================== 
-       GEN Z ECOSYSTEM STYLES 
-       ==================================== */
+    /* ===== APP SHOWCASE SECTION ===== */
     .app-showcase {
       background: #0f0c10;
       padding: 100px 20px;
@@ -769,7 +762,7 @@
     .gen-z-card.fashion { --theme: #ff00de; } /* Neon Pink */
     .gen-z-card.budget  { --theme: #00eaff; } /* Neon Cyan */
     .gen-z-card.health  { --theme: #ff3333; } /* Neon Red */
-    .gen-z-card.accesgo { --theme: #ffd86f; } /* Gold Mobility */
+    .gen-z-card.accesgo { --theme: #ffd86f; } /* Gold Mobility (AccesGO) */
     .gen-z-card.dine    { --theme: #ff8800; } /* Neon Orange */
 
     .icon-container {
@@ -812,9 +805,7 @@
       .gen-z-card:hover { transform: translateY(-5px) scale(1.05); }
     }
 
-    /* ==================================
-       CONTACT FORM (ELEVATED, ANIMATED)
-       ================================== */
+    /* ===== CONTACT SECTION ===== */
     .contact-section { padding: 90px 20px; background: #fff2eb; display: flex; justify-content: center; }
     .contact-card { position: relative; width: 100%; max-width: 980px; background: linear-gradient(150deg, #ffffff 0%, #f8f0fb 100%); border-radius: 28px; padding: 56px 64px; overflow: hidden; box-shadow: 0 28px 80px rgba(0,0,0,0.1); border: 1px solid rgba(112,4,87,0.12); backdrop-filter: blur(8px); animation: riseIn 0.8s ease forwards; transform-style: preserve-3d; transition: transform 0.5s ease, box-shadow 0.4s ease; isolation: isolate; }
     .contact-card:hover { transform: translateY(-8px) scale(1.003); box-shadow: 0 34px 90px rgba(112,4,87,0.22); }
@@ -828,6 +819,13 @@
     .contact-badge { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: rgba(112,4,87,0.14); color: var(--accent); font-weight: 900; letter-spacing: 0.7px; text-transform: uppercase; margin: 0 auto; box-shadow: 0 12px 28px rgba(112,4,87,0.12); position: relative; overflow: hidden; }
     .contact-badge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.16), transparent 50%); animation: badgeShine 2.6s ease-in-out infinite; }
     .contact-header h2 { font-size: 36px; color: #0f0c10; margin: 0; font-family: Poppins, sans-serif; letter-spacing: -0.5px; }
+    .contact-header h2 .contact-title-gold { 
+        background: linear-gradient(120deg, #ffd86f, #ffb347);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    }
     .contact-header p { color: #4a3f4d; font-size: 16px; margin: 0 auto; max-width: 560px; line-height: 1.7; }
     .contact-meta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
     .info-chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 14px; background: rgba(255,255,255,0.82); border: 1px solid rgba(112,4,87,0.14); color: #2c1c2b; font-weight: 800; box-shadow: 0 14px 34px rgba(112,4,87,0.1); transition: transform 0.4s ease; }
@@ -877,7 +875,7 @@
         justify-content: center;
     }
 
-    .download-card {
+     .download-card {
         width: 100%;
         max-width: 1100px;
         /* Sleek Dark Gradient */
@@ -893,7 +891,7 @@
         border: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* Abstract Background Shapes */
+   /* Abstract Background Shapes */
     .download-card::before {
         content: ""; position: absolute; top: -50%; left: -20%; width: 600px; height: 600px;
         background: radial-gradient(circle, rgba(112, 4, 87, 0.2), transparent 70%);
@@ -1019,7 +1017,7 @@
         }
 
         @media(max-width: 540px) {
-            .hero-sub { font-size: 16px; }
+            .hero-sub { font-size: 17px; }
             .download-card { padding: 28px 16px; }
             .download-buttons { flex-direction: column; align-items: center; }
             .store-btn { width: 200px; height: auto; }
@@ -1038,7 +1036,7 @@
 
         @media(max-width: 480px) {
             .hero-title { font-size: 30px; }
-            .hero-sub { font-size: 15px; }
+            .hero-sub { font-size: 17px; }
             .cta-pill { padding: 10px 18px; font-size: 13px; }
             .badge h3 { font-size: 22px !important; }
             .gaming-arena { gap: 28px; }
@@ -1229,7 +1227,7 @@
     </div>
 
     <main id="home">
-        <!-- ===== HERO: LANDING HEADLINE + VIDEO ===== -->
+        <!-- ===== HERO SECTION ===== -->
         <section class="hero">
             <div class="top-nav">
                 <button class="nav-login-btn" onclick="window.location.href='login.html'">
@@ -1242,8 +1240,8 @@
             </video>
             <div class="hero-grid">
                 <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo">
-                <div class="hero-kicker">India's First Intelligent-commerce Brand</div>
                 <h2 class="hero-title">ACCESCO LIVING</h2>
+                <div class="hero-kicker">India's First Intelligent-commerce Brand</div>
                 <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.</p>
 
                 <div class="hero-ctas">
@@ -1268,7 +1266,7 @@
             </div>
         </section>
 
-        <!-- ===== SERVICES GRID: Grokly, Swadisht, InstaStyle, Dineout, Accesgo ===== -->
+        <!-- ===== SERVICES SECTION ===== -->
         <section id="services">
             <div class="section-title">
                 <div class="small-upper">OUR SERVICES</div>
@@ -1277,66 +1275,99 @@
             </div>
 
             <div class="cards">
-                <a href="services-grokly.html">
-                    <div class="card" style="background-image:url('images/mart.jpg')">
-                        <div class="badge"><h3>Grokly</h3></div>
-                        <div class="card-info">
-                            <span class="card-tag offer">60% OFF + CASHBACK</span>
-                            <p>Eat right. Live better.</p>
-                            <div>→</div>
+                <a href="services-grokly.html" class="card">
+                    <div class="card-img" style="background-image:url('images/mart.jpg')"></div>
+                    <div class="card-body">
+                        <div class="card-title-row">
+                            <h3>Grokly</h3>
+                            <span class="card-pill">60% OFF</span>
+                        </div>
+                        <p class="card-sub">Farm-fresh groceries, daily staples, and chef bundles—fast.</p>
+                        <div class="card-meta">
+                            <span class="meta-chip"><i class="ri-timer-2-line"></i>14 min</span>
+                            <span class="meta-chip"><i class="ri-shield-check-line"></i>Cashback</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="cta-text">Order now <i class="ri-arrow-right-s-line"></i></span>
                         </div>
                     </div>
                 </a>
 
-                <a href="services-swadisht.html">
-                    <div class="card" style="background-image:url('images/eat.jpg')">
-                        <div class="badge"><h3>Swadisht</h3></div>
-                        <div class="card-info">
-                            <span class="card-tag offer">UP TO 50% OFF</span>
-                            <p>Food delivered with ♡</p>
-                            <div>→</div>
+                <a href="services-swadisht.html" class="card">
+                    <div class="card-img" style="background-image:url('images/eat.jpg')"></div>
+                    <div class="card-body">
+                        <div class="card-title-row">
+                            <h3>Swadisht</h3>
+                            <span class="card-pill">UP TO 50% OFF</span>
+                        </div>
+                        <p class="card-sub">Hot meals, mood-based menus, and late-night kitchens.</p>
+                        <div class="card-meta">
+                            <span class="meta-chip"><i class="ri-timer-2-line"></i>30 min</span>
+                            <span class="meta-chip"><i class="ri-restaurant-2-line"></i>Chef picks</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="cta-text">Order now <i class="ri-arrow-right-s-line"></i></span>
                         </div>
                     </div>
                 </a>
 
-                <a href="services-instastyle.html">
-                    <div class="card" style="background-image:url('images/fashion.jpg')">
-                        <div class="badge">
+                <a href="services-instastyle.html" class="card">
+                    <div class="card-img" style="background-image:url('images/fashion.jpg')"></div>
+                    <div class="card-body">
+                        <div class="card-title-row">
                             <h3>InstaStyle</h3>
-                            <span class="new-badge">NEW</span>
+                            <span class="card-pill">NEW</span>
                         </div>
-                        <div class="card-info">
-                            <p>Instant style, zero guesswork.</p>
-                            <div>→</div>
+                        <p class="card-sub">Rent or buy curated looks—styled in seconds.</p>
+                        <div class="card-meta">
+                            <span class="meta-chip"><i class="ri-star-smile-line"></i>Try in AR</span>
+                            <span class="meta-chip"><i class="ri-flashlight-line"></i>Fresh drops</span>
                         </div>
-                    </div>
-                </a>
-
-                <a href="services-dineout.html">
-                    <div class="card" style="background-image:url('images/dinout.jpg')">
-                        <div class="badge"><h3>Dineout</h3></div>
-                        <div class="card-info">
-                            <span class="card-tag fest">DINING FEST LIVE</span>
-                            <p>Table ready before you are.</p>
-                            <div>→</div>
+                        <div class="card-footer">
+                            <span class="cta-text">Explore <i class="ri-arrow-right-s-line"></i></span>
                         </div>
                     </div>
                 </a>
 
-                <a href="services-accesgo.html">
-                    <div class="card" style="background-image:url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80')">
-                        <div class="badge"><h3>Accesgo</h3></div>
-                        <div class="card-info">
-                            <span class="card-tag time">⚡ 14 MINS</span>
-                            <p>Move faster. Just Accesgo.</p>
-                            <div>→</div>
+                <a href="services-dineout.html" class="card">
+                    <div class="card-img" style="background-image:url('images/dinout.jpg')"></div>
+                    <div class="card-body">
+                        <div class="card-title-row">
+                            <h3>Dineout</h3>
+                            <span class="card-pill">Cashback</span>
+                        </div>
+                        <p class="card-sub">Priority seating, chef tables, and verified spots.</p>
+                        <div class="card-meta">
+                            <span class="meta-chip"><i class="ri-calendar-check-line"></i>Reserve</span>
+                            <span class="meta-chip"><i class="ri-coupon-3-line"></i>Offers</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="cta-text">Reserve <i class="ri-arrow-right-s-line"></i></span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="services-accesgo.html" class="card">
+                    <div class="card-img" style="background-image:url('https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80')"></div>
+                    <div class="card-body">
+                        <div class="card-title-row">
+                            <h3>AccesGO</h3>
+                            <span class="card-pill">14 mins</span>
+                        </div>
+                        <p class="card-sub">City hops without surge or haggling—just go.</p>
+                        <div class="card-meta">
+                            <span class="meta-chip"><i class="ri-route-line"></i>EV Pods</span>
+                            <span class="meta-chip"><i class="ri-time-line"></i>24/7</span>
+                        </div>
+                        <div class="card-footer">
+                            <span class="cta-text">Book now <i class="ri-arrow-right-s-line"></i></span>
                         </div>
                     </div>
                 </a>
             </div>
         </section>
 
-        <!-- ===== CALCIQ HIGHLIGHT ===== -->
+        <!-- ===== CALCIQ SECTION ===== -->
         <section class="calciq-section">
             <div class="calciq-container">
                 <div class="calciq-info">
@@ -1365,7 +1396,7 @@
             </div>
         </section>
 
-        <!-- ===== REWARDS PLAY ARENA ===== -->
+        <!-- ===== GAMING ARENA SECTION ===== -->
         <section class="gaming-arena">
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
@@ -1425,7 +1456,7 @@
             </div>
         </section>
 
-        <!-- ===== ABOUT ACCESCO ===== -->
+        <!-- ===== ABOUT SECTION ===== -->
         <section id="about">
             <div class="section-title">
                 <div class="small-upper">ABOUT ACCESCO</div>
@@ -1466,7 +1497,7 @@
             </div>
         </section>
 
-        <!-- ===== ECOSYSTEM / APP SHOWCASE (The Ecosystem. Unlocked.) ===== -->
+        <!-- ===== APP SHOWCASE SECTION ===== -->
         <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
@@ -1534,7 +1565,7 @@
                     <a href="services.html" class="gen-z-card accesgo">
                         <div class="icon-container"><i class="ri-route-line"></i></div>
                         <div>
-                            <h4>AccesGo</h4>
+                            <h4>AccesGO</h4>
                             <p>On-demand mobility & drops</p>
                         </div>
                     </a>
@@ -1549,7 +1580,7 @@
             </div>
         </section>
 
-        <!-- ===== DOWNLOAD CTA + QR ===== -->
+        <!-- ===== DOWNLOAD SECTION ===== -->
         <section class="download-section">
             <div class="download-card">
                 <div class="download-text">
@@ -1573,7 +1604,7 @@
             </div>
         </section>
 
-        <!-- ===== CONTACT FORM / CONCIERGE ===== -->
+        <!-- ===== CONTACT SECTION ===== -->
         <section id="contact-form" class="contact-section">
             <div class="contact-card">
                 <div class="contact-glow"></div>
@@ -1581,7 +1612,7 @@
                 <div class="contact-inner">
                     <div class="contact-header">
                         <span class="contact-badge"><i class="ri-sparkling-2-fill"></i>Assistance</span>
-                        <h2>Need Help? We've Got You.</h2>
+                        <h2><span class="contact-title-gold">Need Help?</span> We've Got You.</h2>
                         <p>Tell us what you need orders, dining, rentals, finance, or product support and a concierge will respond within 2 hours with clear next steps.</p>
                         <div class="contact-meta">
                             <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
@@ -1623,7 +1654,7 @@
             </div>
         </section>
 
-        <!-- ===== FOOTER ===== -->
+        <!-- ===== FOOTER SECTION ===== -->
         <footer id="contact">
             <div class="footer-grid">
                 <div>
