@@ -222,7 +222,7 @@
 
     .section-title { text-align: center; max-width: 700px; margin: auto; margin-bottom: 28px; }
     
-    /* MODIFIED: Section Title Style (Black & Bigger) */
+    /* Section Title Style (Black & Bigger) */
     .small-upper { 
         font-weight: 800; 
         color: #000000; /* Solid Black */
@@ -392,7 +392,24 @@
         border: 1px solid rgba(0,0,0,0.04);
     }
     .card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(0,0,0,0.16); }
-    .card-img { position: relative; height: 180px; background-size: cover; background-position: center; }
+    
+    /* UPDATED: General style for card images (backgrounds) */
+    .card-img { 
+        position: relative; 
+        height: 180px; 
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+    }
+    /* UPDATED: Specific style for when an img tag is used inside (Swadisht logo) */
+    .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Ensures entire logo is visible, no cropping */
+        display: block;
+        background-color: #980000; /* Optional: light gray background for logo area */
+    }
+    
     .card-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%); }
     .card-body { padding: 14px 16px 16px; display: grid; gap: 8px; }
     .card-title-row { display: flex; align-items: center; gap: 8px; }
@@ -437,7 +454,7 @@
     .cta-text i { transition: transform 0.2s; }
     .cta-text:hover i { transform: translateX(4px); }
 
-    /* MODIFIED: Mobile Horizontal Scroll */
+    /* Mobile Horizontal Scroll for Services */
     @media (max-width: 768px) {
         .cards {
             display: flex;
@@ -710,8 +727,21 @@
         .games-grid-clean { grid-template-columns: repeat(2, 1fr); gap: 16px; }
         .arena-title { font-size: 36px; }
     }
+    /* CHANGED: Force 2 columns on mobile for games */
     @media(max-width: 500px) {
-        .games-grid-clean { grid-template-columns: 1fr; }
+        .games-grid-clean { 
+            grid-template-columns: repeat(2, 1fr) !important; 
+            gap: 12px;
+        }
+        .game-card-new {
+            padding: 16px 10px;
+        }
+        .game-icon-box {
+            width: 48px; height: 48px; margin-bottom: 10px;
+        }
+        .game-icon-box img { width: 28px; height: 28px; }
+        .game-card-new h4 { font-size: 14px; }
+        .game-card-new span { font-size: 11px; }
     }
 
 
@@ -887,11 +917,11 @@
     .contact-badge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,0.16), transparent 50%); animation: badgeShine 2.6s ease-in-out infinite; }
     .contact-header h2 { font-size: 36px; color: #0f0c10; margin: 0; font-family: Poppins, sans-serif; letter-spacing: -0.5px; }
     .contact-header h2 .contact-title-gold { 
-        background: linear-gradient(120deg, #ffd86f, #ffb347);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
+        background: none;
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: initial;
+        background-clip: unset;
+        color: #000000;
     }
     .contact-header p { color: #4a3f4d; font-size: 16px; margin: 0 auto; max-width: 560px; line-height: 1.7; }
     .contact-meta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -1307,7 +1337,7 @@
             <div class="hero-grid">
                 <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo">
                 <h2 class="hero-title">ACCESCO LIVING</h2>
-                <div class="hero-kicker">India's First Intelligent-commerce Brand</div>
+                <div class="hero-kicker">Simplifying smarter living</div>
                 <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.</p>
 
                 <div class="hero-ctas">
@@ -1359,7 +1389,9 @@
                 </a>
 
                 <a href="services-swadisht.html" class="card">
-                    <div class="card-img" style="background-image:url('images/eat.jpg')"></div>
+                    <div class="card-img">
+                        <img src="images/swadisht_logo.JPG" alt="Swadisht Logo">
+                    </div>
                     <div class="card-body">
                         <div class="card-title-row">
                             <h3>Swadisht</h3>
@@ -1532,7 +1564,7 @@
                 <div class="about-text-content">
                     <div class="about-kicker">Everyday Living OS</div>
                     <h3>ACCESCO LIVING</h3>
-                    <p>Accesco is the operating system for modern households—blending ultra-fast groceries, smart rentals, and intelligent finance into one seamless flow.</p>
+                    <p>Accesco Living is India’s unified daily-living ecosystem designed to simplify and elevate everyday life. Built on the idea of Intelligent Commerce, we combine essential lifestyle services into one seamless platform that understands your needs and enhances your daily experience.</p>
                     <ul class="about-points">
                         <li><i class="ri-flashlight-line"></i>Instant access to essentials without hopping across apps.</li>
                         <li><i class="ri-sparkling-2-line"></i>Curated lifestyle drops, fashion rentals, and premium dining in one tap.</li>
@@ -1674,6 +1706,7 @@
                         <h2><span class="contact-title-gold">Need Help?</span> We've Got You.</h2>
                         <p>Tell us what you need orders, dining, rentals, finance, or product support and a concierge will respond within 2 hours with clear next steps.</p>
                         <div class="contact-meta">
+                            <span class="info-chip"><i class="ri-time-line"></i> Avg. reply: 2 hrs</span>
                             <span class="info-chip"><i class="ri-shield-check-line"></i> Secure & private</span>
                             <span class="info-chip"><i class="ri-chat-1-line"></i> Live follow-ups</span>
                         </div>
@@ -2085,7 +2118,5 @@
     location.reload();
   });
 </script>
-
 </body>
 </html>
-
