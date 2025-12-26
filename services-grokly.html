@@ -403,6 +403,95 @@ header{
   }
 }
 
+/* ================= ADDRESS MODAL ================= */
+.address-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:120;
+}
+
+.address-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.address-modal{
+  position:fixed;
+  left:50%;
+  bottom:-100%;
+  transform:translateX(-50%);
+  width:420px;
+  max-width:95%;
+  background:white;
+  border-radius:20px 20px 0 0;
+  z-index:130;
+  transition:.35s;
+  display:flex;
+  flex-direction:column;
+}
+
+.address-modal.show{
+  bottom:0;
+}
+
+/* Header */
+.address-header{
+  padding:16px;
+  font-size:18px;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+}
+
+.address-header i{
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* Body */
+.address-body{
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.address-body label{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.address-body input{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:14px;
+}
+
+/* Footer */
+.address-footer{
+  padding:16px;
+  border-top:1px solid var(--border);
+}
+
+.address-footer button{
+  width:100%;
+  padding:14px;
+  background:#22c55e;
+  color:white;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:600;
+}
+
+
 
 /* ================= MOBILE ================= */
 @media(max-width:768px){
@@ -420,7 +509,11 @@ header{
       <div class="brand">Grokly</div>
       <div class="subtitle">Fresh groceries, fast</div>
     </div>
-    <div class="location">📍 Bengaluru</div>
+    <div class="location" id="openAddress">
+      <i class="ri-map-pin-line"></i>
+    <span id="currentCity">Bengaluru</span>
+</div>
+
   </div>
 
   <div class="header-row">
@@ -480,6 +573,40 @@ header{
   </div>
 </div>
 
+<!-- ADDRESS MODAL -->
+<div class="address-backdrop" id="addressBackdrop" display="none"></div>
+
+<div class="address-modal" id="addressModal">
+  <div class="address-header">
+    <span>Add Delivery Address</span>
+    <i class="ri-close-line" id="closeAddress"></i>
+  </div>
+
+  <div class="address-body">
+    <label>Full Name</label>
+    <input id="addrName" placeholder="Eg. Aditya Prasad">
+
+    <label>Phone Number</label>
+    <input id="addrPhone" placeholder="10-digit mobile number">
+
+    <label>House / Flat No.</label>
+    <input id="addrHouse" placeholder="Flat 302, Block B">
+
+    <label>Area / Street</label>
+    <input id="addrStreet" placeholder="MG Road">
+
+    <label>City</label>
+    <input id="addrCity" value="Bengaluru">
+
+    <label>Pincode</label>
+    <input id="addrPin" placeholder="560001">
+  </div>
+
+  <div class="address-footer">
+    <button id="saveAddressBtn">Save & Continue</button>
+  </div>
+</div>
+
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
@@ -506,6 +633,51 @@ const applyBtn = document.getElementById('applyBtn')
 const resetBtn = document.getElementById('resetBtn')
 const fCategory = document.getElementById('fCategory')
 const fPrice = document.getElementById('fPrice')
+
+// ================= ADDRESS LOGIC =================
+const addressBackdrop = document.getElementById('addressBackdrop')
+const addressModal = document.getElementById('addressModal')
+const closeAddress = document.getElementById('closeAddress')
+const saveAddressBtn = document.getElementById('saveAddressBtn')
+
+// Button already exists in your cart
+const checkoutBtn = document.querySelector('.checkout button')
+
+checkoutBtn.onclick = () => {
+  addressBackdrop.classList.add('show')
+  addressModal.classList.add('show')
+}
+
+closeAddress.onclick = closeAddressModal
+addressBackdrop.onclick = closeAddressModal
+
+function closeAddressModal(){
+  addressBackdrop.classList.remove('show')
+  addressModal.classList.remove('show')
+}
+
+saveAddressBtn.onclick = () => {
+  const address = {
+    name: addrName.value.trim(),
+    phone: addrPhone.value.trim(),
+    house: addrHouse.value.trim(),
+    street: addrStreet.value.trim(),
+    city: addrCity.value.trim(),
+    pin: addrPin.value.trim()
+  }
+
+  // Simple validation
+  if(!address.name || !address.phone || !address.house || !address.pin){
+    alert("Please fill all required fields")
+    return
+  }
+
+  localStorage.setItem('delivery_address', JSON.stringify(address))
+  closeAddressModal()
+
+  alert("Address saved! Ready to place order 🚀")
+}
+
 
 /* ================= LOAD PRODUCTS ================= */
 const { data } = await supabase.from('products').select('*')
