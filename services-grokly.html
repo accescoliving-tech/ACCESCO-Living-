@@ -5,23 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Grokly Market</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
 :root{
   --bg:#f8fafc;
-  --surface:#ffffff;
-  --primary:rgb(112,4,87);
-  --primary-soft:rgba(112,4,87,.12);
+  --primary:#700457;
+  --soft:#f3e6ef;
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
-  --danger:#ef4444;
+  --success:#22c55e;
 }
 
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:'Outfit',sans-serif;
@@ -30,9 +28,9 @@ body{
 }
 
 main{
-  max-width:1400px;
+  max-width:1200px;
   margin:auto;
-  padding:24px 16px 96px;
+  padding:16px 12px 90px;
 }
 
 /* ================= HEADER ================= */
@@ -40,58 +38,57 @@ header{
   position:sticky;
   top:0;
   background:var(--bg);
-  z-index:100;
+  z-index:10;
 }
 
 .header-top{
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
+  align-items:center;
 }
 
 .brand{
-  font-size:30px;
+  font-size:26px;
   font-weight:800;
   color:var(--primary);
 }
 
 .subtitle{
+  font-size:13px;
   color:var(--muted);
-  margin-bottom:12px;
 }
 
 .location{
-  display:flex;
-  align-items:center;
-  gap:6px;
   padding:8px 12px;
-  border-radius:12px;
   background:white;
+  border-radius:12px;
   border:1px solid var(--border);
-  font-size:14px;
 }
 
-/* SEARCH ROW */
+/* Search Row */
 .header-row{
   display:flex;
   gap:10px;
-  align-items:center;
+  margin-top:12px;
+  background:white;
+  padding:10px;
+  border-radius:16px;
+  border:1px solid var(--border);
 }
 
 .search-bar{
   flex:1;
-  display:flex;
-  gap:10px;
-  padding:14px 16px;
   background:#f1f5f9;
-  border-radius:16px;
+  padding:12px 14px;
+  border-radius:14px;
+  display:flex;
+  gap:8px;
 }
 
 .search-bar input{
   border:none;
   background:none;
   width:100%;
-  font-size:15px;
   outline:none;
 }
 
@@ -99,17 +96,12 @@ header{
   width:44px;
   height:44px;
   border-radius:14px;
-  background:white;
   border:1px solid var(--border);
+  background:white;
   display:grid;
   place-items:center;
-  font-size:20px;
-  cursor:pointer;
   position:relative;
-}
-
-.filter-btn{
-  background:var(--primary-soft);
+  cursor:pointer;
 }
 
 .cart-badge{
@@ -126,49 +118,51 @@ header{
   place-items:center;
 }
 
-/* DIVIDER */
-.header-divider{
-  height:1px;
-  background:linear-gradient(to right, transparent, var(--border), transparent);
-  margin:28px 0 40px;
-}
-
 /* ================= GRID ================= */
-/* 4 items desktop */
 .grid{
+  margin-top:20px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:18px;
+  gap:16px;
 }
 
-/* ================= CARD (SMALLER) ================= */
+/* ================= PRODUCT CARD ================= */
 .card{
   background:white;
-  border-radius:14px;
-  padding:12px;
+  border-radius:16px;
   border:1px solid var(--border);
+  padding:10px;
+  transition:.2s ease;
+}
+
+.card:hover{
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  transform:translateY(-2px);
 }
 
 .card-img{
-  height:110px;
+  height:100px;
   background:#f9fafb;
-  border-radius:10px;
-  margin-bottom:6px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .card-img img{
-  width:100%;
-  height:100%;
+  max-width:100%;
+  max-height:100%;
   object-fit:contain;
 }
 
 .card-title{
+  font-size:13px;
   font-weight:600;
-  font-size:14px;
+  margin-top:8px;
 }
 
 .card-desc{
-  font-size:12px;
+  font-size:11px;
   color:var(--muted);
 }
 
@@ -183,203 +177,237 @@ header{
   background:var(--primary);
   color:white;
   border:none;
-  padding:6px 12px;
-  border-radius:8px;
-  font-size:12px;
+  padding:5px 14px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* ================= CART ================= */
-.cart-dropdown{
-  position:absolute;
-  top:54px;
-  right:0;
-  width:320px;
-  background:white;
-  border-radius:16px;
-  box-shadow:0 20px 50px rgba(0,0,0,.15);
-  opacity:0;
-  transform:translateY(-10px);
-  pointer-events:none;
-  transition:.25s;
-}
-
-.cart-dropdown.show{
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
-}
-
-.cart-item{
-  display:flex;
-  gap:10px;
-  padding:10px;
-  align-items:center;
-}
-
-.cart-item img{
-  width:42px;
-  height:42px;
-  border-radius:8px;
-}
-
-.qty{
-  display:flex;
-  gap:6px;
-  margin-left:auto;
-}
-
-.qty button{
-  border:none;
-  background:#eee;
-  width:22px;
-  height:22px;
-  border-radius:6px;
-}
-
-.cart-total{
-  padding:12px;
-  border-top:1px solid var(--border);
-  font-weight:700;
-}
-
-/* ================= FILTER PANEL (IMPROVED) ================= */
+/* ================= FILTER MODAL ================= */
 .filter-modal{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.45);
   display:none;
-  z-index:999;
+  z-index:50;
 }
 
-.filter-modal.show{display:block}
+.filter-modal.show{display:flex}
 
 .filter-panel{
-  position:absolute;
-  right:0;
-  top:0;
-  width:340px;
-  height:100%;
+  margin:auto;
   background:white;
+  width:320px;
+  border-radius:18px;
   padding:20px;
-  border-radius:16px 0 0 16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 }
 
-.filter-group{
-  margin-bottom:16px;
-}
+.filter-panel h3{margin-bottom:16px}
 
-.filter-group label{
-  font-weight:600;
-  font-size:14px;
-  margin-bottom:6px;
-  display:block;
-}
-
-.filter-group input,
-.filter-group select{
+.filter-panel select,
+.filter-panel input{
   width:100%;
   padding:10px;
   border-radius:10px;
   border:1px solid var(--border);
+  margin-bottom:12px;
 }
 
 .filter-actions{
   display:flex;
   gap:10px;
-  margin-top:20px;
 }
 
-.apply-btn{
+.filter-actions button{
   flex:1;
-  background:var(--primary);
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+
+.apply{background:var(--primary);color:white}
+.reset{background:#f1f5f9}
+
+/* ================= CART CENTER LAYOUT ================= */
+
+.cart-container{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* Header */
+.cart-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:16px;
+  font-size:18px;
+  font-weight:700;
+  border-bottom:1px solid #eee;
+}
+
+/* Savings banner */
+.savings{
+  max-width:760px;
+  margin:12px auto;
+  background:#e8f9ef;
+  color:#15803d;
+  padding:10px;
+  border-radius:10px;
+  font-size:14px;
+  text-align:center;
+}
+
+/* Cart card */
+.cart-card{
+  background:white;
+  border-radius:16px;
+  padding:14px;
+  border:1px solid #eee;
+  margin-bottom:14px;
+}
+
+/* Item row */
+.cart-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+}
+
+.cart-item:not(:last-child){
+  border-bottom:1px dashed #e5e7eb;
+}
+
+.cart-item img{
+  width:48px;
+  height:48px;
+  border-radius:10px;
+}
+
+.item-info{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  font-size:14px;
+}
+
+.item-info span{
+  color:#6b7280;
+  font-size:13px;
+}
+
+/* Quantity */
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.qty button{
+  width:28px;
+  height:28px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:#f9fafb;
+  font-size:16px;
+}
+
+/* Bill */
+.bill-card{
+  background:white;
+  border-radius:16px;
+  padding:14px;
+  border:1px solid #eee;
+}
+
+.bill-card div{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.bill-card .free{
+  color:#16a34a;
+  font-weight:600;
+}
+
+.bill-card .pay{
+  font-weight:700;
+  font-size:16px;
+  border-top:1px solid #eee;
+  padding-top:10px;
+}
+
+/* Checkout */
+.checkout{
+  position:sticky;
+  bottom:0;
+  background:white;
+  padding:12px;
+  border-top:1px solid #eee;
+}
+
+.checkout button{
+  width:100%;
+  padding:14px;
+  background:#ec407a;
   color:white;
   border:none;
-  padding:12px;
-  border-radius:12px;
+  border-radius:14px;
+  font-size:16px;
 }
 
-.reset-btn{
-  flex:1;
-  background:#f1f5f9;
-  border:none;
-  padding:12px;
-  border-radius:12px;
+/* ================= SIDE CART ================= */
+.cart-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:90;
 }
+
+.cart-backdrop.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.side-cart{
+  position:fixed;
+  top:0;
+  right:-420px;
+  width:400px;
+  height:100vh;
+  background:white;
+  box-shadow:-10px 0 30px rgba(0,0,0,.15);
+  transition:.35s ease;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+}
+
+.side-cart.show{
+  right:0;
+}
+
+@media(max-width:768px){
+  .side-cart{
+    width:100%;
+  }
+}
+
 
 /* ================= MOBILE ================= */
-@media(max-width:640px){
-
-  /* Grid tighter */
-  .grid{
-  padding:12px;
-  display:grid;
-  grid-template-columns: repeat(3, 1fr); /* ALWAYS 3 */
-  gap:10px;
+@media(max-width:768px){
+  .grid{grid-template-columns:repeat(3,1fr)}
 }
-  /* ================= CARD ================= */
-  .card{
-    background:white;
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:8px;
-    display:flex;
-    flex-direction:column;
-    height:100%;
-  }
-
-  .card-img{
-    height:72px;
-    background:#f9fafb;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  .card-img img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain;
-  }
-
-  .card-title{
-    font-size:12px;
-    font-weight:600;
-    margin-top:6px;
-    line-height:1.2;
-    display:-webkit-box;
-    -webkit-line-clamp:1;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
-  }
-
-  .card-desc{
-    font-size:10px;
-    color:var(--muted);
-    line-height:1.2;
-    display:-webkit-box;
-    -webkit-line-clamp:1;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
-  }
-
-  /* Footer tighter */
-  .card-footer{
-    margin-top:4px;
-  }
-
-  .price{
-    font-size:6px;
-  }
-
-  /* Smaller ADD button */
-  .add-btn{
-    padding:3px 7px;
-    font-size:11px;
-    border-radius:6px;
-  }
-}
-
 </style>
 </head>
 
@@ -392,54 +420,62 @@ header{
       <div class="brand">Grokly</div>
       <div class="subtitle">Fresh groceries, fast</div>
     </div>
-    <div class="location"><i class="ri-map-pin-line"></i>Bengaluru</div>
+    <div class="location">📍 Bengaluru</div>
   </div>
 
   <div class="header-row">
     <div class="search-bar">
       <i class="ri-search-line"></i>
-      <input id="search" placeholder="Search groceries…">
+      <input id="search" placeholder="Search groceries">
     </div>
-
-    <div class="icon-btn filter-btn" onclick="openFilters()">
-      <i class="ri-equalizer-line"></i>
-    </div>
-
-    <div class="icon-btn" onclick="toggleCart(event)">
+    <div class="icon-btn" id="filterBtn"><i class="ri-equalizer-line"></i></div>
+    <div class="icon-btn" id="cartBtn">
       <i class="ri-shopping-cart-line"></i>
       <span class="cart-badge" id="cart-count">0</span>
-      <div class="cart-dropdown" id="cart"></div>
     </div>
   </div>
 </header>
 
-<div class="header-divider"></div>
 <div class="grid" id="grid"></div>
 </main>
 
+<!-- CART BACKDROP -->
+<div class="cart-backdrop" id="cartBackdrop"></div>
+
+<!-- SIDE CART -->
+<aside class="side-cart" id="cartView">
+
+  <div class="cart-header">
+    <i class="ri-arrow-left-line" id="closeCart"></i>
+    Your Cart
+  </div>
+
+  <div class="savings">Yay! You saved ₹281 on this order 😊</div>
+
+  <div class="cart-card" id="cartItems"></div>
+
+  <div class="bill-card" id="bill"></div>
+
+  <div class="checkout">
+    <button>Add Address to proceed</button>
+  </div>
+
+</aside>
+
 <!-- FILTER -->
-<div class="filter-modal" id="filterModal" onclick="closeFilters()">
-  <div class="filter-panel" onclick="event.stopPropagation()">
+<div class="filter-modal" id="filterModal">
+  <div class="filter-panel">
     <h3>Filters</h3>
-
-    <div class="filter-group">
-      <label>Category</label>
-      <select id="fCategory">
-        <option value="">All</option>
-        <option>Fruits & Vegetables</option>
-        <option>Dairy</option>
-        <option>Snacks</option>
-      </select>
-    </div>
-
-    <div class="filter-group">
-      <label>Max Price</label>
-      <input type="number" id="fPrice">
-    </div>
-
+    <select id="fCategory">
+      <option value="">All categories</option>
+      <option>Fruits & Vegetables</option>
+      <option>Dairy</option>
+      <option>Snacks</option>
+    </select>
+    <input id="fPrice" type="number" placeholder="Max price">
     <div class="filter-actions">
-      <button class="reset-btn" onclick="resetFilters()">Reset</button>
-      <button class="apply-btn" onclick="applyFilters()">Apply</button>
+      <button class="reset" id="resetBtn">Reset</button>
+      <button class="apply" id="applyBtn">Apply</button>
     </div>
   </div>
 </div>
@@ -447,107 +483,150 @@ header{
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabase=createClient(
+const supabase = createClient(
   'https://jgliqmqielkvncjpiowx.supabase.co',
   'sb_publishable_XXKvo7uRkmGIKmYK-xIxhg_an2IvBTO'
 )
 
-let products=[],filtered=[],cart=JSON.parse(localStorage.getItem('grokly_cart'))||[]
+let products = []
+let filtered = []
+let cart = JSON.parse(localStorage.getItem('cart')) || []
 
-const grid=document.getElementById('grid')
-const cartBox=document.getElementById('cart')
-const cartCount=document.getElementById('cart-count')
+const grid = document.getElementById('grid')
+const cartBtn = document.getElementById('cartBtn')
+const cartView = document.getElementById('cartView')
+const closeCart = document.getElementById('closeCart')
+const cartItems = document.getElementById('cartItems')
+const bill = document.getElementById('bill')
+const cartCount = document.getElementById('cart-count')
 
-async function init(){
-  const {data}=await supabase.from('products').select('*')
-  products=data||[]
-  filtered=[...products]
-  renderProducts(filtered)
-  updateCart()
-}
-init()
+const filterBtn = document.getElementById('filterBtn')
+const filterModal = document.getElementById('filterModal')
+const applyBtn = document.getElementById('applyBtn')
+const resetBtn = document.getElementById('resetBtn')
+const fCategory = document.getElementById('fCategory')
+const fPrice = document.getElementById('fPrice')
 
-function renderProducts(list){
-  grid.innerHTML=list.map(p=>`
+/* ================= LOAD PRODUCTS ================= */
+const { data } = await supabase.from('products').select('*')
+products = data || []
+filtered = [...products]
+renderProducts()
+updateBadge()
+
+/* ================= RENDER PRODUCTS ================= */
+function renderProducts(){
+  grid.innerHTML = filtered.map(p => `
     <div class="card">
       <div class="card-img"><img src="${p.image_url}"></div>
       <div class="card-title">${p.title}</div>
-      <div class="card-desc">${p.description||''}</div>
+      <div class="card-desc">${p.description || ''}</div>
       <div class="card-footer">
-        <strong>₹${p.price}</strong>
+        ₹${p.price}
         <button class="add-btn" onclick="addToCart(${p.id})">ADD</button>
       </div>
-    </div>`).join('')
+    </div>
+  `).join('')
 }
 
-window.addToCart=id=>{
-  const i=cart.find(x=>x.id===id)
-  if(i)i.qty++
-  else{
-    const p=products.find(p=>p.id===id)
-    cart.push({id:p.id,title:p.title,image_url:p.image_url,price:p.price,qty:1})
-  }
-  localStorage.setItem('grokly_cart',JSON.stringify(cart))
-  updateCart()
-  cartBox.classList.add('show')
+/* ================= CART ================= */
+window.addToCart = id => {
+  const item = cart.find(i => i.id === id)
+  item ? item.qty++ : cart.push({ ...products.find(p=>p.id===id), qty:1 })
+  saveCart()
 }
 
-function updateCart(){
-  cartCount.innerText=cart.reduce((s,i)=>s+i.qty,0)
+function saveCart(){
+  localStorage.setItem('cart', JSON.stringify(cart))
+  updateBadge()
+}
+
+function updateBadge(){
+  cartCount.innerText = cart.reduce((s,i)=>s+i.qty,0)
+}
+
+/* ================= OPEN CART ================= */
+const cartBackdrop = document.getElementById('cartBackdrop')
+
+cartBtn.onclick = () => {
+  renderCart()
+  cartView.classList.add('show')
+  cartBackdrop.classList.add('show')
+}
+
+closeCart.onclick = closeCartView
+cartBackdrop.onclick = closeCartView
+
+function closeCartView(){
+  cartView.classList.remove('show')
+  cartBackdrop.classList.remove('show')
+}
+
+
+function renderCart(){
   if(!cart.length){
-    cartBox.innerHTML='<p style="padding:14px;color:#777">Cart is empty</p>'
+    cartItems.innerHTML = `<p style="text-align:center;color:#777">Cart is empty</p>`
+    bill.innerHTML = ''
     return
   }
-  let total=0
-  cartBox.innerHTML=cart.map((i,idx)=>{
-    total+=i.price*i.qty
-    return`
+
+  let total = 0
+  cartItems.innerHTML = cart.map((i,idx)=>{
+    total += i.price * i.qty
+    return `
       <div class="cart-item">
         <img src="${i.image_url}">
-        <div>${i.title}</div>
+        <div class="item-info">
+          ${i.title}
+          <span>₹${i.price}</span>
+        </div>
         <div class="qty">
-          <button onclick="changeQty(${idx},-1)">−</button>${i.qty}
+          <button onclick="changeQty(${idx},-1)">−</button>
+          ${i.qty}
           <button onclick="changeQty(${idx},1)">+</button>
         </div>
-      </div>`}).join('')+`<div class="cart-total">Total ₹${total}</div>`
+      </div>
+    `
+  }).join('')
+
+  bill.innerHTML = `
+    <div><span>Item Total</span><span>₹${total}</span></div>
+    <div><span>Delivery Fee</span><span class="free">FREE</span></div>
+    <div class="pay"><span>To Pay</span><span>₹${total}</span></div>
+  `
 }
 
-window.changeQty=(i,d)=>{
-  cart[i].qty+=d
-  if(cart[i].qty<=0)cart.splice(i,1)
-  localStorage.setItem('grokly_cart',JSON.stringify(cart))
-  updateCart()
+window.changeQty = (i,d)=>{
+  cart[i].qty += d
+  if(cart[i].qty <= 0) cart.splice(i,1)
+  saveCart()
+  renderCart()
 }
 
-window.toggleCart=e=>{
-  e.stopPropagation()
-  cartBox.classList.toggle('show')
+/* ================= FILTER ================= */
+filterBtn.onclick = () => filterModal.classList.add('show')
+
+filterModal.onclick = e => {
+  if(e.target === filterModal) filterModal.classList.remove('show')
 }
 
-document.addEventListener('click',()=>cartBox.classList.remove('show'))
-
-document.getElementById('search').addEventListener('input',e=>{
-  const t=e.target.value.toLowerCase()
-  renderProducts(filtered.filter(p=>p.title.toLowerCase().includes(t)))
-})
-
-window.openFilters=()=>filterModal.classList.add('show')
-window.closeFilters=()=>filterModal.classList.remove('show')
-
-window.applyFilters=()=>{
-  const cat=fCategory.value
-  const max=Number(fPrice.value)||Infinity
-  filtered=products.filter(p=>(!cat||p.category===cat)&&p.price<=max)
-  renderProducts(filtered)
-  closeFilters()
+applyBtn.onclick = () => {
+  const cat = fCategory.value
+  const max = Number(fPrice.value) || Infinity
+  filtered = products.filter(p =>
+    (!cat || p.category === cat) && p.price <= max
+  )
+  renderProducts()
+  filterModal.classList.remove('show')
 }
 
-window.resetFilters=()=>{
-  fCategory.value=''
-  fPrice.value=''
-  filtered=[...products]
-  renderProducts(filtered)
+resetBtn.onclick = () => {
+  fCategory.value = ''
+  fPrice.value = ''
+  filtered = [...products]
+  renderProducts()
 }
 </script>
+
 </body>
 </html>
