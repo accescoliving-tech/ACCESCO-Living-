@@ -6,28 +6,37 @@
   <meta name="google-site-verification" content="N9vuWT9uGs54Yf9-Y_7DtXVS8C2GJlK0mniixKXE654" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Accesco Living - India's unified daily-living ecosystem. Groceries, fashion, food, finance, and rentals in one intelligent app.">
+  <meta name="theme-color" content="#fff2eb">
   <title>ACCESCO - Access Everything </title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  
   <link rel="icon" href="images/accesco.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="images/accesco_chrome.png">
   <link rel="icon" href="images/accesco_original.png" type="image/x-icon">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap"
-    rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"></noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   
      <style>
-        /* KEPT YOUR EXISTING CSS AS IS */
+        /* KEPT YOUR CSS EXACTLY AS IS */
         @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
     body, p, li, a, button, input, label, span, textarea { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; letter-spacing: 0.2px; }
     h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.5px; }
     .big-h, .hero-title { font-weight: 900; letter-spacing: -1px; }
     button, .cta-pill, .cta-outline, .start-btn { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
     .small-pill { font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; }
+    
     html { scroll-behavior: smooth; }
         :root {
             --bg: #fff2eb; --muted: #8a8a8a; --accent: rgba(112, 4, 87, 1); --accent-2: rgba(160, 30, 125, 1);
@@ -137,8 +146,8 @@
         font-weight: 800; 
         cursor: pointer; 
         border: 1px solid rgba(255,255,255,0.2); 
-        background: #000000; 
-        color: #ffffff;      
+        background: #fff; 
+        color: #000;      
         font-size: 18px;     
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         transition: all 0.2s;
@@ -1283,10 +1292,12 @@
                     <span>Login</span>
                 </button>
             </div>
-            <video class="hero-bg-video" autoplay muted loop playsinline poster="images/poster.jpg">
+            
+            <video class="hero-bg-video" autoplay muted loop playsinline poster="images/poster.jpg" fetchpriority="high">
                 <source src="images/start.mp4" type="video/mp4">
             </video>
             <div class="hero-grid">
+                
                 <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo" width="120" height="120">
                 <h2 class="hero-title">ACCESCO LIVING</h2>
                 <div class="hero-kicker">Simplifying smarter living</div>
@@ -1342,7 +1353,7 @@
 
                 <a href="services-swadisht.html" class="card">
                     <div class="card-img">
-                        <img src="images/swadisht_logo.JPG" alt="Swadisht Logo" width="300" height="200" loading="lazy">
+                        <img src="images/swadisht_logo.JPG" alt="Swadisht Logo" width="300" height="200" loading="lazy" decoding="async">
                     </div>
                     <div class="card-body">
                         <div class="card-title-row">
@@ -1462,7 +1473,7 @@
                 <div class="games-grid-clean">
                     <a href="#" class="game-card-new">
                         <div class="game-icon-box">
-                            <img src="img/spin.png" alt="Spin Game" width="40" height="40" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="img/spin.png" alt="Spin Game" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
                         </div>
                         <h4>Flappy bird</h4>
@@ -1472,7 +1483,7 @@
 
                     <a href="quiz.html" class="game-card-new">
                         <div class="game-icon-box">
-                             <img src="images/quiz.png" alt="Quiz Game" width="40" height="40" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="images/quiz.png" alt="Quiz Game" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-question-answer-line" style="display:none; font-size:30px"></i>
                         </div>
                         <h4>Quiz Time</h4>
@@ -1482,7 +1493,7 @@
 
                     <a href="#" class="game-card-new">
                         <div class="game-icon-box">
-                             <img src="img/cardmatch.png" alt="Card Match" width="40" height="40" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="img/cardmatch.png" alt="Card Match" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-grid-fill" style="display:none; font-size:30px"></i>
                         </div>
                         <h4>Card Match</h4>
@@ -1492,7 +1503,7 @@
 
                     <a href="game/flappybird/race.html" class="game-card-new">
                         <div class="game-icon-box">
-                             <img src="images/racer.png" alt="Racer Game" width="40" height="40" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="images/racer.png" alt="Racer Game" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-roadster-line" style="display:none; font-size:30px"></i>
                         </div>
                         <h4>Accesco Racer</h4>
@@ -1510,7 +1521,7 @@
 
             <div class="about-new-layout">
                 <div class="about-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=85" alt="Accesco Team Collaboration" width="600" height="400" loading="lazy">
+                    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=85" alt="Accesco Team Collaboration" width="600" height="400" loading="lazy" decoding="async">
                 </div>
 
                 <div class="about-text-content">
@@ -1632,15 +1643,15 @@
                     <p>From 10-minute <b><span class="highlight-gold">Grokly</span></b> deliveries to <b><span class="highlight-gold">InstaStyle</span></b> fashion rentals. Download Accesco today.</p>
 
                     <div class="download-buttons">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="store-btn" alt="Get it on Google Play" width="150" height="50" loading="lazy">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="store-btn" alt="Download on the App Store" width="150" height="50" loading="lazy">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="store-btn" alt="Get it on Google Play" width="150" height="50" loading="lazy" decoding="async">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="store-btn" alt="Download on the App Store" width="150" height="50" loading="lazy" decoding="async">
                     </div>
                 </div>
 
                 <div class="dl-visual">
                     <div class="mobile-frame">
                         <div class="qr-box">
-                             <img src="images/QR.png" alt="Scan QR Code to Download" width="140" height="140" loading="lazy">
+                            <img src="images/QR.png" alt="Scan QR Code to Download" width="140" height="140" loading="lazy" decoding="async">
                             <span>Scan to Download</span>
                         </div>
                     </div>
@@ -1701,7 +1712,7 @@
             <div class="footer-grid">
                 <div>
                     <div style="display:flex;gap:14px;align-items:center">
-                        <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco.png" alt="Accesco Logo" width="110" height="110" loading="lazy"></div>
+                        <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco.png" alt="Accesco Logo" width="110" height="110" loading="lazy" decoding="async"></div>
                         <div>
                             <div style="font-weight:800;color: white; font-size: 24px;">ACCESCO</div>
                             <div style="color:var(--muted);margin-top:6px; max-width: 250px;">Empowering digital excellence through innovative solutions.</div>
@@ -1721,7 +1732,7 @@
 
                 <div>
                     <h4 style="color: white; letter-spacing: 1px;">RESOURCES</h4>
-                     <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
+                    <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
                         <li><a href="#">Metrics & Certificates</a></li>
                         <li><a href="#">QTC Videos</a></li>
                         <li><a href="#">Blogs</a></li>
@@ -1732,15 +1743,15 @@
                 <div>
                     <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
                     <div class="social-links">
-                        <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/accesco_living?s=21" class="social-icon" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="https://www.youtube.com/@accescoliving" class="social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon" aria-label="Instagram" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://x.com/accesco_living?s=21" class="social-icon" aria-label="Twitter" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/@accescoliving" class="social-icon" aria-label="YouTube" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon" aria-label="LinkedIn" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
                     </div>
 
                     <div class="app-buttons">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-btn-img" alt="App Store" width="135" height="40" loading="lazy">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-btn-img" alt="Google Play" width="135" height="40" loading="lazy">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-btn-img" alt="App Store" width="135" height="40" loading="lazy" decoding="async">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-btn-img" alt="Google Play" width="135" height="40" loading="lazy" decoding="async">
                     </div>
                 </div>
             </div>
@@ -1752,14 +1763,15 @@
     <div id="loginOverlay" class="login-overlay">
     <div class="login-modal">
         <button class="close-login" onclick="closeLoginModal()">&times;</button>
-         <img
+        <img
             id="profileAvatar"
-            src="images/accesco_white_2.png"
+            src="images/accesco.png"
             alt="User Profile"
             style="width:80px;height:80px;cursor:pointer;"
             width="80"
             height="80"
             loading="lazy"
+            decoding="async"
             />
 
         
