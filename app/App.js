@@ -23,8 +23,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 // ---------- CONFIGURATION ----------
 const THEME = {
-  primary: '#B33791', // Brand magenta
-  secondary: '#FF8FB7', // Brand pink
+  primary: '#661354', // Brand magenta
+  secondary: '#9A2363', // Brand pink
   accent: '#CC00CC', // Darker magenta
   bg: '#FCF5EE',
   white: '#FFFFFF',
@@ -34,6 +34,7 @@ const THEME = {
   border: '#E0E0E0',
   badgeBg: '#fff3e0',
   badgeText: '#e65100',
+  green: '#4CAF50',
 };
 
 // ---------- HELPERS ----------
@@ -314,7 +315,7 @@ const CalculatorScreen = ({ onBack }) => {
 const HomeScreen = ({ onNavigate, onService }) => {
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
-  const numColumns = isDesktop ? 3 : 2; // 3 columns for desktop, 2 for mobile
+  const numColumns = 3; // 3 columns for both mobile and desktop to fit all services without scrolling
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: THEME.bg }} showsVerticalScrollIndicator={false}>
@@ -330,12 +331,7 @@ const HomeScreen = ({ onNavigate, onService }) => {
           <Ionicons name="calculator" size={isDesktop ? 100 : 60} color="rgba(255,255,255,0.2)" style={{position:'absolute', right: 20}} />
        </TouchableOpacity>
 
-       <View style={styles.sectionHeader}>
-         <Text style={[styles.sectionTitle, isDesktop && styles.sectionTitleDesktop]}>Our Services</Text>
-         <Text style={[styles.sectionSub, isDesktop && styles.sectionSubDesktop]}>Life Set Hai, Accesco Hai.</Text>
-       </View>
-
-       {/* Responsive grid for services */}
+       {/* Static grid for services without scrolling */}
        <View style={{
          flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',
          paddingHorizontal: 16, paddingBottom: 20
