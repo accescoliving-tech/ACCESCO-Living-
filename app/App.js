@@ -1,4 +1,9 @@
-// App.js
+
+// =============================
+// ACCESCO APP MAIN ENTRY (App.js)
+// =============================
+
+// ----------- IMPORTS -----------
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -8,31 +13,27 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ImageBackground,
   TextInput,
   Alert,
   Modal,
+  Animated,
   useWindowDimensions,
   Platform,
   ToastAndroid,
-  Keyboard
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { Ionicons, FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// ---------- CONFIGURATION ----------
-const THEME = {
-  primary: '#8b0a14',
-  secondary: '#700457',
-  bg: '#f1f2f4',
-  white: '#ffffff',
-  black: '#000000',
-  text: '#212121',
-  subText: '#878787',
-  badgeBg: '#fff3e0',
-  badgeText: '#e65100',
-};
+// If you have the font file, uncomment the import below:
+// import { useFonts } from 'expo-font'; 
 
-// ---------- HELPERS ----------
+// ---------- CONFIGURATION ----------
+const CUSTOM_FONT = Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif'; 
+
+// ---------- Helpers ----------
 const showToast = (msg) => {
   if (Platform.OS === 'android') {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
@@ -41,6 +42,9 @@ const showToast = (msg) => {
   }
 };
 
+/**
+ * Format a number with commas for thousands
+ */
 const formatNumber = (val) => {
   if (val == null) return '';
   const digits = String(val).replace(/[^0-9.]/g, ''); 
@@ -50,28 +54,89 @@ const formatNumber = (val) => {
   return parts.join('.');
 };
 
+/**
+ * Parse a formatted number string to a number
+ */
 const parseNumber = (val) => {
   if (!val) return 0;
   return Number(String(val).replace(/,/g, '')) || 0;
 };
 
-// ---------- COMPONENTS ----------
+// =============================
+// COMPONENTS
+// =============================
 
-const VentureCard = ({ image, title, desc, badge, tags, btnText, onPress }) => (
-  <View style={styles.ventureCard}>
-    {/* Handle both local require() (number) and remote URI (object) */}
-    <Image 
-      source={typeof image === 'number' ? image : { uri: image }} 
-      style={styles.ventureImg} 
-      resizeMode="cover" 
-    />
+// ---------- LOGIN MODAL COMPONENT ----------
+const LoginModal = ({ isOpen, onClose }) => {
+  const insets = useSafeAreaInsets();
+  const [email, setEmail] = useState('');
+  const [agreed, setAgreed] = useState(false);
 
-    <View style={styles.ventureContent}>
-      <View style={styles.ventureHeaderRow}>
-        <Text style={styles.ventureTitle}>{title}</Text>
-        {badge && (
-          <View style={styles.ventureBadge}>
-            <Text style={styles.ventureBadgeText}>{badge}</Text>
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(60)).current;
+
+  useEffect(() => {
+    if (isOpen) {
+      Animated.parallel([
+        Animated.timing(opacity, { toValue: 1, duration: 260, useNativeDriver: true }),
+        Animated.timing(translateY, { toValue: 0, duration: 260, useNativeDriver: true })
+      ]).start();
+    } else {
+      Animated.parallel([
+        Animated.timing(opacity, { toValue: 0, duration: 180, useNativeDriver: true }),
+        Animated.timing(translateY, { toValue: 60, duration: 180, useNativeDriver: true })
+      ]).start();
+    }
+  }, [isOpen]);
+
+  const handleSignIn = () => {
+    if (!email) {
+      showToast('Please enter an email.');
+      return;
+    }
+    showToast('Signed in successfully');
+    onClose();
+  };
+
+  const handleSignUp = () => {
+    if (!email) {
+      showToast('Please enter an email.');
+      return;
+    }
+    showToast('Signed up successfully');
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <Modal
+      animationType="none"
+      transparent={true}
+      visible={isOpen}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={onClose} />
+        <Animated.View
+          style={[
+            styles.loginContainer,
+            {
+              paddingTop: insets.top + 18,
+              opacity,
+              transform: [{ translateY }]
+            }
+          ]}
+        >
+          <View style={styles.loginHeader}>
+            <Image
+              source={require('./assets/icon.png')}
+              style={styles.loginLogo}
+              resizeMode="contain"
+            />
+            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
+              <Ionicons name="close" size={28} color="#1a1a1a" />
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -94,7 +159,9 @@ const VentureCard = ({ image, title, desc, badge, tags, btnText, onPress }) => (
   </View>
 );
 
-const BannerCarousel = () => {
+// ---------- SIDEBAR COMPONENT ----------
+const Sidebar = ({ isOpen, onClose, onNavigate }) => {
+  const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const [active, setActive] = useState(0);
   const scrollRef = useRef(null);
@@ -105,6 +172,7 @@ const BannerCarousel = () => {
     require('./assets/ban2.jpg'), 
   ];
 
+  // Animate sidebar in/out
   useEffect(() => {
     if (banners.length <= 1) return;
     const timer = setInterval(() => {
@@ -117,34 +185,55 @@ const BannerCarousel = () => {
     return () => clearInterval(timer);
   }, [width]);
 
-  const onScroll = ({ nativeEvent }) => {
-    const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
-    if (slide !== active) setActive(slide);
-  };
+  const menuItems = [
+    { title: 'HOME', key: 'home' },
+    { title: 'ABOUT', key: 'about' },
+    { title: 'SERVICES', key: 'services' },
+    { title: 'RESOURCES', key: 'resources' },
+    { title: 'CONTACT', key: 'contact' },
+  ];
 
   return (
-    <View style={styles.bannerWrapper}>
-      <ScrollView
-        ref={scrollRef}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={onScroll}
-        style={{ width, height: 180 }}
-      >
-        {banners.map((imgSource, i) => (
-          <Image 
-            key={i} 
-            source={imgSource}
-            style={{ width, height: 180 }} 
-            resizeMode="cover"
-          />
-        ))}
-      </ScrollView>
-      {banners.length > 1 && (
-        <View style={styles.pagination}>
-            {banners.map((_, i) => (
-            <View key={i} style={[styles.dot, active === i && styles.activeDot]} />
+    <Modal animationType="none" transparent={true} visible={isOpen} onRequestClose={onClose}>
+      <View style={styles.sidebarOverlay}>
+        <TouchableOpacity style={styles.sidebarBackdrop} onPress={onClose} activeOpacity={1} />
+        <Animated.View
+          style={[
+            styles.sidebarContainer,
+            {
+              paddingTop: insets.top,
+              width: panelWidth,
+              transform: [{ translateX: slideAnim }]
+            }
+          ]}
+        >
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <Ionicons name="close" size={32} color="#1a1a1a" />
+          </TouchableOpacity>
+
+          <View style={styles.sidebarLogoContainer}>
+            <Image
+              source={require('./assets/icon.png')}
+              style={styles.sidebarLogo}
+              resizeMode="contain"
+            />
+          </View>
+
+          <Text style={styles.menuLabel}>MENU</Text>
+
+          <View style={styles.menuList}>
+            {menuItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={() => {
+                  if (onNavigate) onNavigate(item.key);
+                  onClose();
+                }}
+              >
+                <Text style={styles.menuItemText}>{item.title}</Text>
+                <Ionicons name="chevron-forward" size={20} color="#333" />
+              </TouchableOpacity>
             ))}
         </View>
       )}
@@ -152,14 +241,21 @@ const BannerCarousel = () => {
   );
 };
 
-// ---------- CALCULATOR SCREEN ----------
+
+// ---------- CALCULATOR COMPONENT (SMART BUDGET PLANNER) ----------
 const CalculatorScreen = ({ onBack }) => {
+  const insets = useSafeAreaInsets();
+  
+  // Inputs
   const [income, setIncome] = useState('');
   const [fixedRent, setFixedRent] = useState('');
   const [members, setMembers] = useState('1');
-  const [lifestyle, setLifestyle] = useState('middle');
+  const [lifestyle, setLifestyle] = useState('middle'); // frugal, middle, luxury
+
+  // Computed Budget
   const [budget, setBudget] = useState(null);
 
+  // Logic
   const calculatePlan = () => {
     Keyboard.dismiss();
     const inc = parseNumber(income);
@@ -171,7 +267,7 @@ const CalculatorScreen = ({ onBack }) => {
       return;
     }
     
-    // Logic
+    // Logic Translation
     let baseFoodCost = 3000;
     if(lifestyle === 'frugal') baseFoodCost = 2500;
     if(lifestyle === 'luxury') baseFoodCost = 5000;
@@ -187,17 +283,19 @@ const CalculatorScreen = ({ onBack }) => {
     let baseTrans = 1500;
     let idealTransport = Math.floor(baseTrans * mem);
 
+    // Rent/EMI logic
     const calcRent = rentVal > 0 ? rentVal : Math.floor(inc * 0.30);
     const disposable = Math.max(0, inc - calcRent);
-    
+
+    // Distribute remaining budget
     let remaining = disposable - (idealGrocery + idealUtility + idealTransport);
     let shopping = 0, dining = 0, entertainment = 0;
-
     if (remaining > 0) {
       shopping = Math.floor(remaining * 0.2);
       dining = Math.floor(remaining * 0.2);
       entertainment = Math.floor(remaining * 0.1);
     } else {
+      // Deficit logic
       let totalNeeds = idealGrocery + idealUtility + idealTransport;
       let scaleDown = disposable / totalNeeds;
       idealGrocery = Math.floor(idealGrocery * scaleDown);
@@ -205,6 +303,7 @@ const CalculatorScreen = ({ onBack }) => {
       idealTransport = Math.floor(idealTransport * scaleDown);
     }
 
+    // Final budget object
     const expenses = calcRent + idealGrocery + idealUtility + idealTransport + shopping + dining + entertainment;
     const savings = inc - expenses;
 
@@ -218,6 +317,26 @@ const CalculatorScreen = ({ onBack }) => {
       totalNeeds: calcRent + idealGrocery + idealUtility + idealTransport,
       totalWants: shopping + dining + entertainment,
       totalSave: savings
+    });
+  };
+
+  // Auto-rebalance when editing specific fields
+  const updateField = (field, value) => {
+    if(!budget) return;
+    const val = parseNumber(value);
+    const newBudget = { ...budget, [field]: val };
+    
+    // Recalculate totals
+    const tNeeds = newBudget.rent + newBudget.grocery + newBudget.transport + newBudget.utility;
+    const tWants = newBudget.shopping + newBudget.dining + newBudget.entertainment;
+    const inc = parseNumber(income);
+    const tSave = inc - (tNeeds + tWants);
+
+    setBudget({
+      ...newBudget,
+      totalNeeds: tNeeds,
+      totalWants: tWants,
+      totalSave: tSave
     });
   };
 
@@ -289,124 +408,264 @@ const CalculatorScreen = ({ onBack }) => {
   );
 };
 
-// ---------- HOME SCREEN ----------
-const HomeScreen = ({ onNavigate, onService }) => {
+// ---------- COMING SOON SCREEN ----------
+const ComingSoonScreen = ({ onBack, serviceName }) => {
+  const insets = useSafeAreaInsets();
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: THEME.bg }} showsVerticalScrollIndicator={false}>
-       
-       <BannerCarousel />
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#1a1a1a" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{serviceName || 'Service'}</Text>
+      </View>
+      <View style={styles.comingSoonBody}>
+        <View style={styles.iconCircleBig}>
+          <Ionicons name="construct" size={48} color="#700457" />
+        </View>
+        <Text style={styles.comingSoonTitle}>Coming Soon</Text>
+        <Text style={styles.comingSoonSubtitle}>
+          We are working hard to bring you this service. Stay tuned for updates!
+        </Text>
+      </View>
+    </View>
+  );
+};
 
-       <TouchableOpacity style={styles.promoBanner} onPress={() => onNavigate('calculator')}>
-          <View>
-             <Text style={styles.promoTitle}>ACCESCO <Text style={{color: '#fff', fontWeight:'300'}}>CALC</Text></Text>
-             <Text style={styles.promoSub}>Plan your wealth intelligently.</Text>
-             <View style={styles.promoBtn}><Text style={styles.promoBtnText}>TRY NOW</Text></View>
+// ---------- HELPERS ----------
+const StatItem = ({ label, value }) => (
+  <View style={styles.statItem}>
+    <Text style={styles.statValue}>{value}</Text>
+    <Text style={styles.statLabel}>{label}</Text>
+  </View>
+);
+
+// ---------- SERVICE CARD ----------
+const ServiceCard = React.memo(({ title, subTitle, badge, img, onPress, isFullWidth }) => {
+  const scale = useRef(new Animated.Value(1)).current;
+  const pressIn = () => Animated.spring(scale, { toValue: 0.975, speed: 20, useNativeDriver: true }).start();
+  const pressOut = () => Animated.spring(scale, { toValue: 1, speed: 20, useNativeDriver: true }).start();
+
+  return (
+    <Animated.View style={[styles.cardItemWrapper, isFullWidth && { width: '100%' }, { transform: [{ scale }] }]}>
+      <TouchableOpacity
+        activeOpacity={0.95}
+        onPressIn={pressIn}
+        onPressOut={pressOut}
+        style={styles.cardItemTouchable}
+        onPress={onPress}
+      >
+        <Image source={{ uri: img }} style={styles.cardImage} />
+        <View style={styles.cardOverlay} />
+        <View style={styles.cardContent}>
+          {badge && <View style={styles.badge}><Text style={styles.badgeText}>{badge}</Text></View>}
+          <View style={{ marginTop: 'auto' }}>
+            <Text style={styles.cardTitle}>{title}</Text>
+            {subTitle && <Text style={styles.cardSubtitle}>{subTitle}</Text>}
           </View>
-          <Ionicons name="calculator" size={60} color="rgba(255,255,255,0.2)" style={{position:'absolute', right: 20}} />
-       </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+});
 
-       <View style={styles.sectionHeader}>
-         <Text style={styles.sectionTitle}>Our Ventures</Text>
-         <Text style={styles.sectionSub}>Life Set Hai, Accesco Hai.</Text>
-       </View>
+// ---------- LANDING SCREEN ----------
+const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSectionLayout }) => {
+  const { width } = useWindowDimensions();
+  const bannerWidth = width > 768 ? 800 : width - 40; 
+  const bannerHeight = width > 768 ? 400 : 200; 
 
-       <ScrollView 
-         horizontal 
-         showsHorizontalScrollIndicator={false} 
-         contentContainerStyle={{paddingLeft: 16, paddingRight: 6, paddingBottom: 20}}
-       >
-          <VentureCard 
-            image={require('./assets/mart.jpg')}
-            title="Grokly" 
-            badge="60% OFF"
-            desc="Eat Right. Live Better."
-            tags={[{icon:'clock', text:'14 min'}, {icon:'dollar-sign', text:'Cashback'}]}
-            btnText="ORDER NOW"
-            onPress={() => onService('Grokly')}
-          />
+  const resources = [
+    { title: 'Metrics & Certificates', desc: 'View achievements and milestones' },
+    { title: 'QTC Videos', desc: 'High-quality tutorials' },
+    { title: 'Blogs', desc: 'Industry insights & updates' },
+    { title: 'Tutorials', desc: 'Step-by-step guides' },
+  ];
 
-          {/* Using Web URL for Swadisht as a failsafe against the .JPG crash */}
-          <VentureCard 
-            image="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=500"
-            title="Swadisht" 
-            badge="50% OFF"
-            desc="Food Delivered with precision."
-            tags={[{icon:'clock', text:'30 min'}, {icon:'star', text:'Chef picks'}]}
-            btnText="ORDER NOW"
-            onPress={() => onService('Swadisht')}
-          />
+  const banners = [
+    require('./assets/ban1.jpg'),
+    require('./assets/ban2.jpg')
+  ];
 
-          <VentureCard 
-            image={require('./assets/fashion.jpg')}
-            title="InstaStyle" 
-            badge="NEW"
-            desc="Instant Style, Zero Guesswork."
-            tags={[{icon:'camera', text:'Try in AR'}, {icon:'zap', text:'Fresh drops'}]}
-            btnText="EXPLORE"
-            onPress={() => onService('InstaStyle')}
-          />
+  const bannerScrollRef = useRef(null);
+  const [bannerIndex, setBannerIndex] = useState(0);
 
-           <VentureCard 
-            image={require('./assets/dine.jpg')}
-            title="Dineout" 
-            badge="Cashback"
-            desc="Table ready before you are."
-            tags={[{icon:'calendar', text:'Reserve'}, {icon:'tag', text:'Offers'}]}
-            btnText="RESERVE"
-            onPress={() => onService('Dineout')}
-          />
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBannerIndex((prevIndex) => {
+        let nextIndex = prevIndex + 1;
+        if (nextIndex >= banners.length) nextIndex = 0;
+        if (bannerScrollRef.current) {
+           bannerScrollRef.current.scrollTo({ x: nextIndex * width, animated: true });
+        }
+        return nextIndex;
+      });
+    }, 5000); 
+    return () => clearInterval(interval);
+  }, [width]);
 
-          {/* FIX: Changed to hub.jpeg (Matches your file) */}
-          <VentureCard 
-            image={require('./assets/hub.jpeg')}
-            title="AccesGO" 
-            badge="14 mins"
-            desc="City hops without surge or haggling."
-            tags={[{icon:'battery-charging', text:'EV Pods'}, {icon:'clock', text:'24/7'}]}
-            btnText="BOOK NOW"
-            onPress={() => onService('AccesGO')}
-          />
-       </ScrollView>
-       <View style={{height: 100}} />
+  const onMomentumScrollEnd = (event) => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    setBannerIndex(Math.round(contentOffsetX / width));
+  };
+
+  return (
+    <ScrollView 
+      ref={scrollRef}
+      style={styles.scrollContainer} 
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={[styles.bannerContainer, { height: bannerHeight }]}>
+        <ScrollView 
+          ref={bannerScrollRef}
+          horizontal 
+          pagingEnabled 
+          showsHorizontalScrollIndicator={false}
+          style={{ flex: 1 }}
+          scrollEventThrottle={16}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+        >
+          {banners.map((banner, index) => (
+            <View key={index} style={{ width: width, height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                <Image 
+                  source={banner} 
+                  style={{ width: bannerWidth, height: '100%', borderRadius: 16 }} 
+                  resizeMode="cover" 
+                />
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+
+      <View style={styles.section} onLayout={(event) => onSectionLayout && onSectionLayout('services', event.nativeEvent.layout.y)}>
+        <Text style={styles.sectionTitle}>Explore Services</Text>
+        <View style={styles.grid}>
+          <ServiceCard onPress={() => onLaunchService('Grokly')} title="Grokly" subTitle="Fresh Groceries" badge="FAST DELIVERY" img="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={() => onLaunchService('Swadisht')} title="Swadisht" subTitle="Food Delivery" badge="Collect coupons" img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={() => onLaunchService('Dineout')} title="Dineout" subTitle="Book Tables" badge="FLAT 20% OFF" img="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={() => onLaunchService('InstaStyle')} title="InstaStyle" subTitle="Fashion Store" badge="NEW ARRIVALS" img="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1000&auto=format&fit=crop" />
+          <ServiceCard onPress={onLaunchCalculator} title="CalcIQ" subTitle="Smart Budget Planner" badge="PREMIUM" img="https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1000&auto=format&fit=crop" isFullWidth={true} />
+        </View>
+      </View>
+
+      <View style={styles.heroContainer} onLayout={(event) => onSectionLayout && onSectionLayout('home', event.nativeEvent.layout.y)}>
+        <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop' }} style={styles.heroImage} resizeMode="cover">
+          <View style={styles.heroOverlay} />
+          <View style={styles.heroContent}>
+            <View style={styles.pill}><Text style={styles.pillText}>Digital Services</Text></View>
+            <Text style={styles.heroTitle}>Upgrade your lifestyle with</Text>
+            <Text style={styles.heroBrand}>ACCESCO</Text>
+            <View style={styles.heroButtons}>
+              <TouchableOpacity style={styles.btnPrimary}><Text style={styles.btnText}>Explore</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.btnOutline}><Text style={styles.btnText}>Learn More</Text></TouchableOpacity>
+            </View>
+          </View>
+        </ImageBackground>
+      </View>
+
+      <View style={styles.statsBar}>
+        <StatItem label="Active Users" value="10K+" />
+        <View style={styles.divider} />
+        <StatItem label="Top Rating" value="5/5" />
+        <View style={styles.divider} />
+        <StatItem label="Support" value="24/7" />
+      </View>
+
+      <View style={styles.resourcesSection} onLayout={(event) => onSectionLayout && onSectionLayout('resources', event.nativeEvent.layout.y)}>
+        <View style={styles.resourcesHeader}>
+          <Text style={styles.resTagline}>RESOURCES</Text>
+          <Text style={styles.resTitle}>Learn, Grow, and Succeed</Text>
+          <Text style={styles.resSubtitle}>Access valuable resources to enhance your ACCESCO experience.</Text>
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.resScrollContent}>
+          {resources.map((item, index) => (
+            <TouchableOpacity key={index} style={styles.resCard} activeOpacity={0.9} onPress={() => onLaunchService(item.title)}>
+              <View>
+                <Text style={styles.resCardTitle}>{item.title}</Text>
+                <Text style={styles.resCardDesc}>{item.desc}</Text>
+              </View>
+              <Ionicons name="arrow-forward" size={20} color="#b91c1c" style={styles.resArrow} />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      <View style={styles.footerContainer} onLayout={(event) => { if(onSectionLayout) { onSectionLayout('contact', event.nativeEvent.layout.y); onSectionLayout('about', event.nativeEvent.layout.y); } }}>
+        <View style={styles.footerContent}>
+          <View style={styles.footerBrandSection}>
+            <View style={styles.footerLogoRow}>
+              <Image source={require('./assets/icon.png')} style={styles.footerLogo} resizeMode="contain" />
+              <Text style={styles.footerBrandName}>ACCESCO</Text>
+            </View>
+            <Text style={styles.footerTagline}>Empowering digital excellence through innovative solutions.</Text>
+          </View>
+          <View style={styles.footerLinksContainer}>
+            <View style={styles.footerColumn}>
+              <Text style={styles.footerColTitle}>Company</Text>
+              <TouchableOpacity onPress={() => onLaunchService('About Us')}><Text style={styles.footerLink}>About Us</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => onLaunchService('Contact Us')}><Text style={styles.footerLink}>Contact Us</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => onLaunchService('Help & Support')}><Text style={styles.footerLink}>Help & Support</Text></TouchableOpacity>
+            </View>
+            <View style={styles.footerColumn}>
+              <Text style={styles.footerColTitle}>Resources</Text>
+              <TouchableOpacity onPress={() => onLaunchService('Metrics')}><Text style={styles.footerLink}>Metrics & Certificates</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => onLaunchService('Videos')}><Text style={styles.footerLink}>QTC Videos</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => onLaunchService('Blogs')}><Text style={styles.footerLink}>Blogs</Text></TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <View style={styles.footerBottom}>
+          <Text style={styles.footerCopyright}>© 2025 ACCESCO — All rights reserved.</Text>
+        </View>
+      </View>
     </ScrollView>
   );
 };
 
-// ---------- MAIN LAYOUT ----------
-function MainLayout() {
+// ---------- MAIN APP CONTENT ----------
+function AppContent() {
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = useState('Home');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [serviceName, setServiceName] = useState('');
+  const [currentScreen, setCurrentScreen] = useState('landing');
+  const [selectedService, setSelectedService] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  const handleService = (name) => {
-    setServiceName(name);
-    setModalVisible(true);
+  const scrollViewRef = useRef(null);
+  const sectionPositions = useRef({});
+
+  const handleSectionLayout = (key, y) => { sectionPositions.current[key] = y; };
+
+  const handleNavigate = (key) => {
+    if (currentScreen !== 'landing') {
+      setCurrentScreen('landing');
+      return;
+    }
+    const y = sectionPositions.current[key] || 0;
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y, animated: true });
+    }
+  };
+
+  const handleLaunchService = (name) => {
+    setSelectedService(name);
+    setCurrentScreen('comingSoon');
   };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <StatusBar style="light" backgroundColor={THEME.primary} />
-      {activeTab === 'Home' && (
-          <View style={styles.header}>
-            <View style={styles.headerTop}>
-                <View style={styles.brandContainer}>
-                    <Image 
-                      source={require('./assets/logo.png')} 
-                      style={{width: 30, height: 30, marginRight: 8}} 
-                      resizeMode="contain" 
-                    />
-                    <Text style={styles.headerTitle}>ACCESCO</Text>
-                </View>
-                <View style={styles.headerIcons}>
-                    <TouchableOpacity style={styles.iconBtn}><Ionicons name="notifications-outline" size={24} color="#fff" /></TouchableOpacity>
-                    <TouchableOpacity style={styles.iconBtn}><Ionicons name="cart-outline" size={24} color="#fff" /></TouchableOpacity>
-                </View>
-            </View>
-            <TouchableOpacity style={styles.searchBar}>
-                <Ionicons name="search" size={20} color="#666" />
-                <Text style={styles.searchText}>Search services...</Text>
-            </TouchableOpacity>
+      <StatusBar style="dark" />
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} onNavigate={handleNavigate} />
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+
+      {/* Hide standard header on Calc Screen for custom look */}
+      {currentScreen !== 'calculator' && (
+        <View style={styles.mainHeader}>
+          <TouchableOpacity onPress={() => setIsSidebarOpen(true)} style={styles.headerButton}>
+            <Ionicons name="menu" size={32} color="#1a1a1a" />
+          </TouchableOpacity>
+          <View style={styles.brandRow}>
+            <Image source={require('./assets/icon.png')} style={{ width: 32, height: 32, marginRight: 8 }} resizeMode="contain" />
+            <Text style={styles.brandName}>ACCESCO</Text>
           </View>
       )}
 
@@ -450,25 +709,29 @@ function MainLayout() {
           </View>
       )}
 
-      <Modal visible={modalVisible} transparent animationType="fade">
-          <View style={styles.modalBackdrop}>
-              <View style={styles.modalContent}>
-                  <View style={styles.modalIcon}>
-                      <Ionicons name="construct" size={32} color={THEME.primary} />
-                  </View>
-                  <Text style={styles.modalTitle}>{serviceName}</Text>
-                  <Text style={styles.modalSub}>This feature is coming soon!</Text>
-                  <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.mainBtn}>
-                      <Text style={styles.mainBtnText}>OKAY</Text>
-                  </TouchableOpacity>
-              </View>
-          </View>
-      </Modal>
+      {currentScreen === 'landing' && (
+        <LandingScreen 
+          onLaunchCalculator={() => setCurrentScreen('calculator')} 
+          onLaunchService={handleLaunchService}
+          scrollRef={scrollViewRef}
+          onSectionLayout={handleSectionLayout}
+        />
+      )}
+      
+      {currentScreen === 'calculator' && (
+        <CalculatorScreen onBack={() => setCurrentScreen('landing')} />
+      )}
+
+      {currentScreen === 'comingSoon' && (
+        <ComingSoonScreen 
+          serviceName={selectedService} 
+          onBack={() => setCurrentScreen('landing')} 
+        />
+      )}
     </View>
   );
 }
 
-// ---------- EXPORT ----------
 export default function App() {
   return (
     <SafeAreaProvider>
