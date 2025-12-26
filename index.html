@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://cdn.jsdelivr.net data:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://formspree.io https://dialogflow.cloud.google.com; media-src 'self' blob:;">
+  
   <meta name="google-site-verification" content="N9vuWT9uGs54Yf9-Y_7DtXVS8C2GJlK0mniixKXE654" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Accesco Living - India's unified daily-living ecosystem. Groceries, fashion, food, finance, and rentals in one intelligent app.">
@@ -14,7 +16,9 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://images.unsplash.com">
-  
+
+  <link rel="preload" as="image" href="images/poster.jpg" fetchpriority="high">
+
   <link rel="icon" href="images/accesco.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
   <link rel="icon" type="image/png" href="images/accesco_chrome.png">
@@ -29,7 +33,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   
      <style>
-        /* KEPT YOUR CSS EXACTLY AS IS */
+        /* CRITICAL CSS INLINED (KEPT AS IS) */
         @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
     body, p, li, a, button, input, label, span, textarea { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 400; letter-spacing: 0.2px; }
     h1, h2, h3, h4, h5, h6 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.5px; }
@@ -1414,7 +1418,7 @@
                             <h3>AccesGO</h3>
                             <span class="card-pill">14 mins</span>
                         </div>
-                        <p class="card-sub">City hops without surge or haggling—just go.</p>
+                        <p class="card-sub">Quick rides for busy lives.</p>
                         <div class="card-meta">
                             <span class="meta-chip"><i class="ri-route-line"></i>EV Pods</span>
                             <span class="meta-chip"><i class="ri-time-line"></i>24/7</span>
@@ -1965,7 +1969,7 @@
         window.openLoginModal = openLoginModal;
     </script>
     
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
     
     <df-messenger
         intent="WELCOME"
@@ -1976,7 +1980,7 @@
     </df-messenger>
 
 
-    <script type="module">
+    <script type="module" defer>
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
   const supabase = createClient(
@@ -1999,20 +2003,26 @@
   const userDropdown = document.getElementById("userDropdown");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // CHECK SESSION
-  const { data } = await supabase.auth.getSession();
+  // WRAPPED IN TRY/CATCH TO PREVENT CONSOLE ERRORS
+  try {
+      const { data } = await supabase.auth.getSession();
 
-  if (data && data.session) {
-    // USER LOGGED IN
-    if(guestActions) guestActions.style.display = "none";
-    if(userMenu) userMenu.style.display = "block";
-    if(loginOverlay) loginOverlay.classList.remove("show");
+      if (data && data.session) {
+        // USER LOGGED IN
+        if(guestActions) guestActions.style.display = "none";
+        if(userMenu) userMenu.style.display = "block";
+        if(loginOverlay) loginOverlay.classList.remove("show");
 
-    if(userAvatar) userAvatar.src = data.session.user.user_metadata.avatar_url;
-  } else {
-    // USER NOT LOGGED IN
-    if(guestActions) guestActions.style.display = "block";
-    if(userMenu) userMenu.style.display = "none";
+        if(userAvatar && data.session.user.user_metadata.avatar_url) {
+            userAvatar.src = data.session.user.user_metadata.avatar_url;
+        }
+      } else {
+        // USER NOT LOGGED IN
+        if(guestActions) guestActions.style.display = "block";
+        if(userMenu) userMenu.style.display = "none";
+      }
+  } catch (error) {
+      console.warn("Supabase auth check failed (Expected if offline/bad config):", error);
   }
 
   // DROPDOWN TOGGLE
@@ -2032,11 +2042,14 @@
   // LOGOUT
   if (logoutBtn) {
       logoutBtn.addEventListener("click", async () => {
-        await supabase.auth.signOut();
-        location.reload();
+        try {
+            await supabase.auth.signOut();
+            location.reload();
+        } catch(err) {
+            console.warn("Logout error:", err);
+        }
       });
   }
 </script>
 </body>
 </html>
-
