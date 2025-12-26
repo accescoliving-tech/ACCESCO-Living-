@@ -1,6 +1,7 @@
 # app/routers/webhook.py
 from fastapi import APIRouter, Request, Depends
 from sqlalchemy.orm import Session
+import time
 
 from Accesco_chatbot.app.database import get_db
 from Accesco_chatbot.app.services.order_service import (
@@ -10,7 +11,7 @@ from Accesco_chatbot.app.services.order_service import (
     handle_track_order
 )
 from Accesco_chatbot.app.services.cancel_service import (
-    handle_cancel_order,    
+    handle_cancel_order,
     handle_cancel_confirm,
     handle_cancel_feedback
 )
@@ -20,11 +21,13 @@ router = APIRouter()
 print(">>> WEBHOOK LOADED <<<")
 
 
-# -------------------------------------------------------
-# MAIN WEBHOOK ENDPOINT
-# -------------------------------------------------------
 @router.post("/webhook")
-async def webhook(request: Request, db: Session = Depends(get_db)):
+async def webhook(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    start_time = time.time()
+
     try:
         body = await request.json()
     except Exception:
@@ -41,93 +44,94 @@ async def webhook(request: Request, db: Session = Depends(get_db)):
     print("Parameters:", params)
     print("---------------------------\n")
 
-    # -------------------------------------------------------
-    # 💥 ADD ITEM — SWADISHT
-    # -------------------------------------------------------
+    # ============================================================
+    # 🧺 ADD ITEM — SWADISHT (SYNC, RICH RESPONSE)
+    # ============================================================
     if intent_lower.startswith("order swadisht - custom") and "- no" not in intent_lower:
-        print(f"Adding item to Swadisht order...{params}")
-        order_id, response = handle_add_item(
+        print("Adding item to Swadisht cart...")
+
+        response = handle_add_item(
             body=body,
             db=db,
             platform="Swadisht",
             item_param="eatfeast-food-items"
         )
+
+        print("⏱️ Webhook time:",
+              round((time.time() - start_time) * 1000, 2), "ms")
+
         return response
 
-    # CONFIRM ORDER — Swadisht
+    # ============================================================
+    # ✅ CONFIRM ORDER — SWADISHT
+    # ============================================================
     if intent_lower.startswith("order swadisht - custom - no"):
         reply = handle_confirm_order(body=body, db=db, platform="Swadisht")
-        print (f"reply: {reply}")
         return {"fulfillmentText": reply}
 
     if intent_lower.startswith("create-custom-food - confirm"):
-        print("Confirming custom food creation for Swadisht...")
-        reply = handle_confirm_order(
-            body=body,
-            db=db,
-            platform="Swadisht"
-        )
-        print(f"reply: {reply}")
+        reply = handle_confirm_order(body=body, db=db, platform="Swadisht")
         return {"fulfillmentText": reply}
 
-    # -------------------------------------------------------
-    # 🛒 ADD ITEM — GROMART
-    # -------------------------------------------------------
+    # ============================================================
+    # 🧺 ADD ITEM — GROKLY (SYNC, RICH RESPONSE)
+    # ============================================================
     if intent_lower.startswith("order grokly - custom") and "- no" not in intent_lower:
-        print(f"Adding item to Grokly order...{params}")
-        order_id, response = handle_add_item(
+        print("Adding item to Grokly cart...")
+
+        response = handle_add_item(
             body=body,
             db=db,
             platform="Grokly",
             item_param="GroMArt-grocery"
         )
-        print(f"response: {response}")
+
+        print("⏱️ Webhook time:",
+              round((time.time() - start_time) * 1000, 2), "ms")
+
         return response
 
-    # CONFIRM ORDER — GroMart
+    # ============================================================
+    # ✅ CONFIRM ORDER — GROKLY
+    # ============================================================
     if intent_lower.startswith("order grokly - custom - no"):
         reply = handle_confirm_order(body=body, db=db, platform="Grokly")
         return {"fulfillmentText": reply}
-    
-    #custom order for swadisht
+
+    # ============================================================
+    # 🍳 CREATE CUSTOM FOOD
+    # ============================================================
     if intent_lower == "create-custom-food":
-        return handle_create_custom_food(
+        response = handle_create_custom_food(
             body=body,
             db=db,
-            platform="Swadisht"  # or detect dynamically
+            platform="Swadisht"
         )
+        return response
 
-
-    # -------------------------------------------------------
-    # ❌ CANCEL ORDER (Ask)
-    # -------------------------------------------------------
+    # ============================================================
+    # ❌ CANCEL ORDER
+    # ============================================================
     if intent_lower == "cancel order":
         reply = handle_cancel_order(body=body, db=db)
         return {"fulfillmentText": reply}
 
-    # CANCEL ORDER (Confirmed)
     if intent_lower == "cancel order - yes":
         reply = handle_cancel_confirm(body=body, db=db)
         return {"fulfillmentText": reply}
-    
-    # -------------------------------------------------------
-    # 📝 CANCEL FEEDBACK
-    #---------------------------------------------------------
+
     if intent_lower == "cancel order - yes - confirm":
         reply = handle_cancel_feedback(body=body, db=db)
         return {"fulfillmentText": reply}
-    
+
     # ============================================================
-    # TRACK ORDER (Works for both EatFeast + GroMart)
+    # 🚚 TRACK ORDER
     # ============================================================
-    # TRACK ORDER
     if "track order" in intent_lower:
         reply = handle_track_order(body=body, db=db)
         return {"fulfillmentText": reply}
 
-
-    # -------------------------------------------------------
+    # ============================================================
     # FALLBACK
-    # -------------------------------------------------------
+    # ============================================================
     return {"fulfillmentText": "Sorry, I didn't understand that."}
-

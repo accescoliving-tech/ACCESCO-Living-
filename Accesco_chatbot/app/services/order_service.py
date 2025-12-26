@@ -1,19 +1,19 @@
-# app/services/order_service.py
-from Accesco_chatbot.app.models import ingredients
 from sqlalchemy.orm import Session
-from Accesco_chatbot.app.models.orders import Orders
-from Accesco_chatbot.app.models.ingredients import Ingredient
-from Accesco_chatbot.app.models.products import Products
 from datetime import datetime
 from decimal import Decimal
 import uuid
-from typing import Union, List, Tuple, Dict, Any
+from typing import Union, List, Dict, Any
+
+from Accesco_chatbot.app.models.orders import Orders
+from Accesco_chatbot.app.models.ingredients import Ingredient
+from Accesco_chatbot.app.models.products import Products
+from Accesco_chatbot.app.models.temp_cart import TempCart
+
 
 # -------------------------------------------------------------
 # Helpers
 # -------------------------------------------------------------
 def generate_order_id() -> str:
-    """Short readable order id"""
     return str(uuid.uuid4())[:10].upper()
 
 
@@ -25,291 +25,287 @@ def _find_order_context_name(platform: str) -> str:
     return "default-order"
 
 
+DEFAULT_INGREDIENT_IMAGE = "https://accesco.co.in/images/default-ingredient.png"
+
 
 # -------------------------------------------------------------
-# ADD ITEM
+# Rich Content Builders (df-messenger compatible)
 # -------------------------------------------------------------
+def build_product_rich_cards(items: list, db: Session) -> list:
+    """
+    Builds richContent cards for products
+    """
+    rich_cards = []
 
+    for item in items:
+        product = db.query(Products).filter(Products.name == item["item"]).first()
+        if not product or not product.image_url:
+            continue
+
+        rich_cards.append([
+            {
+                "type": "image",
+                "rawUrl": product.image_url,
+                "accessibilityText": item["item"]
+            },
+            {
+                "type": "info",
+                "title": item["item"].title(),
+                "subtitle": f"Qty: {item['quantity']} | ₹{item['total_price']}"
+            }
+        ])
+
+    return rich_cards
+
+
+def build_ingredient_rich_cards(ingredient_rows: list) -> list:
+    cards = []
+    for ing in ingredient_rows:
+        cards.append([
+            {
+                "type": "image",
+                "rawUrl": ing.image_url or DEFAULT_INGREDIENT_IMAGE,
+                "accessibilityText": ing.name
+            },
+            {
+                "type": "info",
+                "title": ing.name.title(),
+                "subtitle": f"₹{ing.price}"
+            }
+        ])
+    return cards
+
+
+# -------------------------------------------------------------
+# ADD ITEM (TEMP CART + RICH CONTENT)
+# -------------------------------------------------------------
 def handle_add_item(
     body: dict,
     db: Session,
     platform: str,
     item_param: Union[str, List[str]]
-) -> Tuple[str, Dict[str, Any]]:
+) -> Dict[str, Any]:
 
-    query = body.get("queryResult", {}) or {}
-    params = query.get("parameters", {}) or {}
-    output_contexts = query.get("outputContexts", []) or []
+    params = body.get("queryResult", {}).get("parameters", {}) or {}
 
-    print(f"handle_add_item called with platform={platform}, item_param={item_param}")
-    print(f"Parameters: {params}")
-    # ---------------------------------------------------
-    # 1) Extract NEW items
-    # ---------------------------------------------------
-    new_items: List[str] = []
-
+    # 1) Extract items
+    items = []
     if isinstance(item_param, list):
         for key in item_param:
             v = params.get(key)
             if v:
-                if isinstance(v, list):
-                    new_items.extend([str(x).lower() for x in v])
-                else:
-                    new_items.append(str(v).lower())
+                items.extend(v if isinstance(v, list) else [v])
     else:
         v = params.get(item_param)
-        if isinstance(v, list):
-            new_items = [str(x).lower() for x in v]
-        elif v:
-            new_items = [str(v).lower()]
-    print(f"Extracted new_items: {new_items}")
-    
-    # ---------------------------------------------------
-    # 2) Extract NEW quantities
-    # ---------------------------------------------------
-    new_qtys = params.get("number", [])
-    if not isinstance(new_qtys, list):
-        new_qtys = [new_qtys]
+        items = v if isinstance(v, list) else [v] if v else []
 
-    while len(new_qtys) < len(new_items):
-        new_qtys.append(1)
+    items = [str(i).lower() for i in items]
+    if not items:
+        return {"fulfillmentText": "Please tell me what you want to order."}
 
-    print(f"Extracted new_qtys: {new_qtys}")
-    
-    # ---------------------------------------------------
-    # 3) Extract NEW customizations
-    # ---------------------------------------------------
-    new_customizations = params.get("food_customization", [])
-    if not isinstance(new_customizations, list):
-        new_customizations = [new_customizations]
+    # 2) Quantities
+    qtys = params.get("number", [])
+    qtys = qtys if isinstance(qtys, list) else [qtys]
+    while len(qtys) < len(items):
+        qtys.append(1)
 
-    while len(new_customizations) < len(new_items):
-        new_customizations.append(None)
+    # 3) Customizations
+    customizations = params.get("food_customization", [])
+    customizations = customizations if isinstance(customizations, list) else [customizations]
+    while len(customizations) < len(items):
+        customizations.append(None)
 
-    print(f"Extracted new_customizations: {new_customizations}")
-    
-    # ---------------------------------------------------
-    # 4) Extract OLD context data
-    # ---------------------------------------------------
-    ctx_items, ctx_qtys, ctx_customizations = [], [], []
-
-    order_context_name = _find_order_context_name(platform).lower()
-
-    for ctx in output_contexts:
-        if ctx.get("name", "").split("/")[-1].lower() == order_context_name:
-            ctx_params = ctx.get("parameters", {}) or {}
-            ctx_items = ctx_params.get("items_list", [])
-            ctx_qtys = ctx_params.get("qty_list", [])
-            ctx_customizations = ctx_params.get("customization_list", [])
-            break
-
-    ctx_items = ctx_items if isinstance(ctx_items, list) else [ctx_items]
-    ctx_qtys = ctx_qtys if isinstance(ctx_qtys, list) else [ctx_qtys]
-    ctx_customizations = (
-        ctx_customizations if isinstance(ctx_customizations, list)
-        else [ctx_customizations]
-    )
-
-    while len(ctx_qtys) < len(ctx_items):
-        ctx_qtys.append(1)
-
-    while len(ctx_customizations) < len(ctx_items):
-        ctx_customizations.append(None)
-
-    # ---------------------------------------------------
-    # 5) Merge OLD + NEW
-    # ---------------------------------------------------
-    all_items = ctx_items + new_items
-    all_qtys = ctx_qtys + new_qtys
-    all_customizations = ctx_customizations + new_customizations
-
-    if not all_items:
-        return None, {"fulfillmentText": "I couldn't understand the items."}
-
-    # ---------------------------------------------------
-    # 6) Fetch / Create Order
-    # ---------------------------------------------------
+    # 4) Session & cart
     session_id = body.get("session", "").split("/")[-1]
-    print(f"Session ID: {session_id}")
-    order = (
-        db.query(Orders)
+
+    cart = (
+        db.query(TempCart)
         .filter(
-            Orders.session_id == session_id,
-            Orders.status == "pending"
+            TempCart.session_id == session_id,
+            TempCart.status == "ACTIVE"
         )
-        .order_by(Orders.id.desc())
         .first()
     )
 
-    if not order:
-        order = Orders(
-            order_id=generate_order_id(),
-            platform=platform,
-            session_id=session_id,
-            items=[],
-            price=0,
-            status="pending",
-            created_at=datetime.utcnow(),
-        )
-        db.add(order)
-        db.flush()
+    cart_items = list(cart.cart_items) if cart else []
 
-    # ---------------------------------------------------
-    # 7) Build order items + calculate price
-    # ---------------------------------------------------
-    order_items = []
-    order_total = Decimal("0.00")
-
-    for item, qty, cust in zip(all_items, all_qtys, all_customizations):
+    # 5) Merge items
+    for item_name, qty, cust in zip(items, qtys, customizations):
         product = (
             db.query(Products)
             .filter(
-                Products.name == item,
+                Products.name == item_name,
                 Products.available == True
             )
             .first()
         )
-
         if not product:
             continue
 
-        quantity = int(qty)
         unit_price = Decimal(product.price)
-        item_total = unit_price * quantity
+        quantity = int(qty)
 
-        order_items.append({
-            "item": item,
-            "quantity": quantity,
-            "customization": cust,
-            "unit_price": float(unit_price),
-            "total_price": float(item_total)
-        })
+        merged = False
+        for item in cart_items:
+            if item["item"] == item_name and item.get("customization") == cust:
+                item["quantity"] = quantity
+                item["total_price"] = float(unit_price * quantity)
+                merged = True
+                break
 
-        order_total += item_total
+        if not merged:
+            cart_items.append({
+                "item": item_name,
+                "quantity": quantity,
+                "customization": cust,
+                "unit_price": float(unit_price),
+                "total_price": float(unit_price * quantity)
+            })
 
-    order.items = order_items
-    order.price = float(order_total)
+    # 6) Recalculate total
+    total_price = sum(Decimal(str(i["total_price"])) for i in cart_items)
+
+    # 7) Persist cart
+    if not cart:
+        cart = TempCart(
+            session_id=session_id,
+            cart_items=cart_items,
+            total_price=float(total_price),
+            status="ACTIVE",
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        db.add(cart)
+    else:
+        cart.cart_items = cart_items
+        cart.total_price = float(total_price)
+        cart.updated_at = datetime.utcnow()
 
     db.commit()
 
-    print("✅ ORDER COMMITTED. ID:", order.id)
+    # 8) Build rich content
+    rich_cards = build_product_rich_cards(cart_items, db)
 
-    # ---------------------------------------------------
-    # 8) Write back Dialogflow context
-    # ---------------------------------------------------
-    out_ctx = {
-        "name": f"{body['session']}/contexts/{order_context_name}",
-        "lifespanCount": 10,
-        "parameters": {
-            "items_list": all_items,
-            "qty_list": all_qtys,
-            "customization_list": all_customizations
-        },
+    return {
+        "fulfillmentText": "Item added to your cart.",
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": rich_cards
+                }
+            },
+            {
+                "text": {
+                    "text": [
+                        "✅ Item added to your cart.\nWould you like to add more items or confirm your order?"
+                    ]
+                }
+            }
+        ]
     }
 
-    # ---------------------------------------------------
-    # 9) Response text
-    # ---------------------------------------------------
-    added_text = ", ".join([
-        f"{i['quantity']} {i['item']}"
-        + (f" ({i['customization']})" if i.get("customization") else "")
-        + f" (₹{i['total_price']})"
-        for i in order_items
-    ])
 
-    return order.order_id, {
-        "fulfillmentText": (
-            f"Added {added_text} to your {platform} order.\n"
-            f"🧾 Current total: ₹{order.price}\n"
-            f"Anything else?"
-        ),
-        "outputContexts": [out_ctx],
-    }
-    
 # -------------------------------------------------------------
 # CONFIRM ORDER
 # -------------------------------------------------------------
-def handle_confirm_order(body: dict, db: Session, platform: str) -> str:
+def handle_confirm_order(body: dict, db: Session, platform: str) -> Dict[str, Any]:
+
     session_id = body.get("session", "").split("/")[-1]
-    print(f"Confirming order for session_id={session_id}, platform={platform}")
-    order = (
-        db.query(Orders)
+
+    cart = (
+        db.query(TempCart)
         .filter(
-            Orders.session_id == session_id,
-            Orders.platform == platform,
-            Orders.status == "pending"
+            TempCart.session_id == session_id,
+            TempCart.status == "ACTIVE"
         )
-        .order_by(Orders.id.desc())
         .first()
     )
 
-    print(f"Fetched order: {order}")
-    
-    if not order:
-        return "I couldn't find your order. Please try ordering again."
+    if not cart or not cart.cart_items:
+        return {"fulfillmentText": "Your cart is empty. Please add items before confirming."}
 
-    order.status = "confirmed"
+    order = Orders(
+        order_id=generate_order_id(),
+        platform=platform,
+        session_id=session_id,
+        items=cart.cart_items,
+        price=cart.total_price,
+        status="confirmed",
+        created_at=datetime.utcnow(),
+    )
+
+    db.add(order)
+    db.delete(cart)
     db.commit()
 
-    return f"Your {platform} order {order.order_id} has been confirmed! 🎉"
+    rich_cards = build_product_rich_cards(order.items, db)
+
+    return {
+        "fulfillmentText": (
+            f"🎉 Your {platform} order has been confirmed!\n"
+            f"💰 Total Amount: ₹{order.price}\n"
+            f"📦 Order ID: {order.order_id}"
+        ),
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": rich_cards
+                }
+            },
+            {
+                "text": {
+                    "text": [
+                        (
+                            f"🎉 Your {platform} order has been confirmed!\n"
+                            f"💰 Total Amount: ₹{order.price}\n"
+                            f"📦 Order ID: {order.order_id}"
+                        )
+                    ]
+                }
+            }
+        ]
+    }
 
 
-def handle_create_custom_food(
-    body: dict,
-    db: Session,
-    platform: str
-):
-    query = body.get("queryResult", {}) or {}
-    params = query.get("parameters", {}) or {}
+# -------------------------------------------------------------
+# CREATE / MERGE CUSTOM FOOD (RICH CONTENT)
+# -------------------------------------------------------------
+def handle_create_custom_food(body: dict, db: Session, platform: str) -> Dict[str, Any]:
 
-    # --------------------------------------------------
-    # 1) Extract ingredients
-    # --------------------------------------------------
+    params = body.get("queryResult", {}).get("parameters", {}) or {}
     ingredients = params.get("ingredients", [])
+
     if not ingredients:
-        return {
-            "fulfillmentText": "Please tell me which ingredients you want."
-        }
+        return {"fulfillmentText": "Please tell me which ingredients you want."}
 
-    if not isinstance(ingredients, list):
-        ingredients = [ingredients]
-
+    ingredients = ingredients if isinstance(ingredients, list) else [ingredients]
     ingredients = [i.lower() for i in ingredients]
-    print("Extracted ingredients:", ingredients)
 
-    # --------------------------------------------------
-    # 2) Fetch / Create Order (DO NOT rely on session_id alone)
-    # --------------------------------------------------
     session_id = body.get("session", "").split("/")[-1]
 
-    from sqlalchemy import func
-
-    order = (
-        db.query(Orders)
+    cart = (
+        db.query(TempCart)
         .filter(
-            Orders.status == "pending",
-            func.lower(Orders.platform) == platform.lower()
+            TempCart.session_id == session_id,
+            TempCart.status == "ACTIVE"
         )
-        .order_by(Orders.created_at.desc())
         .first()
     )
 
-    if not order:
-        order = Orders(
-            order_id=generate_order_id(),
-            platform=platform,
+    if not cart:
+        cart = TempCart(
             session_id=session_id,
-            items=[],
-            price=0,
-            status="pending",
+            cart_items=[],
+            total_price=0,
+            status="ACTIVE",
             created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
         )
-        db.add(order)
+        db.add(cart)
         db.flush()
 
-    # --------------------------------------------------
-    # 3) Fetch ingredient prices
-    # --------------------------------------------------
+    cart_items = list(cart.cart_items)
+
     ingredient_rows = (
         db.query(Ingredient)
         .filter(Ingredient.name.in_(ingredients))
@@ -317,154 +313,87 @@ def handle_create_custom_food(
     )
 
     if not ingredient_rows:
-        return {
-            "fulfillmentText": "Sorry, none of those ingredients are available."
-        }
+        return {"fulfillmentText": "Sorry, none of those ingredients are available."}
 
-    added_price = Decimal("0.00")
-    ingredient_names = []
+    added_price = sum(Decimal(i.price) for i in ingredient_rows)
 
-    for ing in ingredient_rows:
-        added_price += Decimal(ing.price)
-        ingredient_names.append(ing.name)
+    idx = next((i for i, x in enumerate(cart_items) if x.get("item") == "custom dish"), None)
 
-    # --------------------------------------------------
-# MERGE / CREATE CUSTOM DISH (FINAL VERSION)
-# --------------------------------------------------
+    if idx is not None:
+        old = cart_items[idx]
+        merged_ingredients = list(set(old.get("ingredients", [])) | set(ingredients))
+        new_price = Decimal(str(old["unit_price"])) + added_price
 
-    existing_items = list(order.items) if order.items else []
-
-    custom_dish_index = None
-    for idx, item in enumerate(existing_items):
-        if item.get("item") == "custom dish":
-            custom_dish_index = idx
-            break
-
-    if custom_dish_index is not None:
-        old_item = existing_items[custom_dish_index]
-
-        # Merge ingredients (no duplicates)
-        existing_ingredients = set(old_item.get("ingredients", []))
-        incoming_ingredients = set(ingredient_names)
-        merged_ingredients = list(existing_ingredients.union(incoming_ingredients))
-
-        # Recalculate price
-        existing_price = Decimal(str(old_item.get("unit_price", 0)))
-        updated_price = existing_price + added_price
-
-        updated_item = {
-            **old_item,
+        cart_items[idx] = {
+            **old,
             "ingredients": merged_ingredients,
-            "unit_price": float(updated_price),
-            "total_price": float(updated_price),
+            "unit_price": float(new_price),
+            "total_price": float(new_price)
         }
-
-        existing_items[custom_dish_index] = updated_item
-        custom_dish = updated_item
-        action_text = "updated"
-
+        action = "updated"
     else:
-        # First custom dish
-        updated_item = {
+        cart_items.append({
             "item": "custom dish",
             "quantity": 1,
-            "ingredients": ingredient_names,
-            "customizations": [],
+            "ingredients": ingredients,
+            "customization": None,
             "unit_price": float(added_price),
-            "total_price": float(added_price),
-        }
+            "total_price": float(added_price)
+        })
+        action = "created"
 
-        existing_items.append(updated_item)
-        custom_dish = updated_item
-        action_text = "created"
-
-    # --------------------------------------------------
-    # PERSIST ORDER (JSON reassignment is REQUIRED)
-    # --------------------------------------------------
-
-    order.items = existing_items
-    order.price = float(order.price or 0) + float(added_price)
-
+    cart.cart_items = cart_items
+    cart.total_price = sum(Decimal(str(i["total_price"])) for i in cart_items)
+    cart.updated_at = datetime.utcnow()
     db.commit()
 
-    # --------------------------------------------------
-    # DEBUG LOGS (optional but recommended)
-    # --------------------------------------------------
-    print(
-        f"Custom dish {action_text}: "
-        f"ingredients={custom_dish['ingredients']}, "
-        f"price={custom_dish['total_price']}"
-    )
-
-    # --------------------------------------------------
-    # 5) Write Dialogflow context
-    # --------------------------------------------------
-    order_context_name = _find_order_context_name(platform)
-
-    out_ctx = {
-        "name": f"{body['session']}/contexts/{order_context_name}",
-        "lifespanCount": 10,
-        "parameters": {
-            "has_custom_dish": True,
-            "custom_dish_ingredients": custom_dish["ingredients"],
-            "items_list": [i["item"] for i in order.items]
-        },
-    }
-
-    # --------------------------------------------------
-    # 6) Response
-    # --------------------------------------------------
-    ingredients_text = ", ".join(custom_dish["ingredients"])
-
-    print(
-        f"Custom dish {action_text}: ingredients={ingredients_text}, "
-        f"price={custom_dish['total_price']}"
-    )
+    ingredient_cards = build_ingredient_rich_cards(ingredient_rows)
 
     return {
-        "fulfillmentText": (
-            f"🍽️ Custom dish {action_text}!\n"
-            f"Ingredients: {ingredients_text}\n"
-            f"💰 Price: ₹{custom_dish['total_price']}\n\n"
-            "Would you like to add more items or confirm your order?"
-        ),
-        "outputContexts": [out_ctx],
+        "fulfillmentText": "Custom dish updated.",
+        "fulfillmentMessages": [
+            {
+                "payload": {
+                    "richContent": ingredient_cards
+                }
+            },
+            {
+                "text": {
+                    "text": [
+                        (
+                            f"🍽️ Custom dish {action}!\n"
+                            f"Ingredients: {', '.join(ingredients)}\n"
+                            f"💰 Price: ₹{cart.cart_items[-1]['total_price']}\n\n"
+                            "Would you like to add more items or confirm your order?"
+                        )
+                    ]
+                }
+            }
+        ]
     }
-    
-# ------------------------------------------------------
-# TRACK ORDER (by order_id OR by user session)
-# ------------------------------------------------------
+
+
+# -------------------------------------------------------------
+# TRACK ORDER
+# -------------------------------------------------------------
 def handle_track_order(body: dict, db: Session) -> str:
-    """
-    Track order based ONLY on order_id.
-    Platform is fetched directly from DB (not contexts).
-    """
 
     params = body.get("queryResult", {}).get("parameters", {}) or {}
     order_id = params.get("order_id")
 
     if not order_id:
-        return "I couldn't find an order ID. Please provide a valid order ID."
+        return "Please provide a valid order ID."
 
-    # Fetch the order from DB
     order = db.query(Orders).filter(Orders.order_id == order_id).first()
-
     if not order:
-        return f"No order found with ID {order_id}. Please check the ID and try again."
+        return f"No order found with ID {order_id}."
 
-    # Build readable items list
-    items_str = ", ".join(
-        [f"{item['quantity']} {item['item']}" for item in order.items]
-    )
+    items = ", ".join(f"{i['quantity']} {i['item']}" for i in order.items)
+    created = order.created_at.strftime("%Y-%m-%d %H:%M")
 
-    # Format timestamp
-    created_time = order.created_at.strftime("%Y-%m-%d %H:%M")
-
-    # Response
     return (
-        f"Here is the status for your {order.platform} order {order.order_id}:\n"
-        f"📌 status: {order.status}\n"
-        f"🛒 Items: {items_str}\n"
-        f"⏱️ Created at: {created_time}"
+        f"📦 Order {order.order_id}\n"
+        f"Status: {order.status}\n"
+        f"Items: {items}\n"
+        f"Created at: {created}"
     )
-

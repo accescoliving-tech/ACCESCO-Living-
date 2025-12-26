@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean
+from sqlalchemy import Column, Integer, String, Float, Boolean, Text
 from Accesco_chatbot.app.database import Base
 
 class Products(Base):
@@ -8,3 +8,4 @@ class Products(Base):
     name = Column(String, nullable=False)
     price = Column(Float, nullable=False)
     available = Column(Boolean, default=True)
+    image_url = Column(Text, nullable=True)
