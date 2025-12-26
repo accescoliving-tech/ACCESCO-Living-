@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="utf-8" />
-  
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://cdn.jsdelivr.net data:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://formspree.io https://dialogflow.cloud.google.com; media-src 'self' blob:;">
   
   <meta name="google-site-verification" content="N9vuWT9uGs54Yf9-Y_7DtXVS8C2GJlK0mniixKXE654" />
@@ -125,17 +124,22 @@
         align-items: center;
         gap: 10px;
         padding: 10px 18px;
+        border-radius: 999px;
+        background: rgb(112, 4, 87);
         color: #ffffff;
         font-weight: 900;
         letter-spacing: 1.2px;
         text-transform: uppercase;
-        font-size: 18px;
+        font-size: 13px;
+        box-shadow: 0 14px 40px rgba(112, 4, 87, 0.18), 0 6px 18px rgba(0,0,0,0.22);
     }
     .hero-kicker::before {
-    content: "";
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+        content: "";
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ffffff, #d649ae);
+        box-shadow: 0 0 18px rgba(255,184,70,0.9);
     }
 
     .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
