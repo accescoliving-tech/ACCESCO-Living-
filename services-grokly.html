@@ -12,8 +12,8 @@
 :root{
   --bg:#f8fafc;
   --surface:#ffffff;
-  --primary:#7c3aed;
-  --primary-soft:#ede9fe;
+  --primary:rgb(112,4,87);
+  --primary-soft:rgba(112,4,87,.12);
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
@@ -30,7 +30,7 @@ body{
 }
 
 main{
-  max-width:1440px;
+  max-width:1400px;
   margin:auto;
   padding:24px 16px 96px;
 }
@@ -60,17 +60,15 @@ header{
   margin-bottom:12px;
 }
 
-/* LOCATION */
 .location{
   display:flex;
   align-items:center;
   gap:6px;
-  font-size:14px;
-  background:white;
-  border:1px solid var(--border);
   padding:8px 12px;
   border-radius:12px;
-  cursor:pointer;
+  background:white;
+  border:1px solid var(--border);
+  font-size:14px;
 }
 
 /* SEARCH ROW */
@@ -128,33 +126,34 @@ header{
   place-items:center;
 }
 
-/* HEADER DIVIDER */
+/* DIVIDER */
 .header-divider{
   height:1px;
   background:linear-gradient(to right, transparent, var(--border), transparent);
-  margin:32px 0 48px;
+  margin:28px 0 40px;
 }
 
 /* ================= GRID ================= */
+/* 4 items desktop */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:24px;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
 }
 
-/* ================= CARD ================= */
+/* ================= CARD (SMALLER) ================= */
 .card{
   background:white;
-  border-radius:16px;
-  padding:14px;
+  border-radius:14px;
+  padding:12px;
   border:1px solid var(--border);
 }
 
 .card-img{
-  height:130px;
+  height:110px;
   background:#f9fafb;
-  border-radius:12px;
-  margin-bottom:8px;
+  border-radius:10px;
+  margin-bottom:6px;
 }
 
 .card-img img{
@@ -163,21 +162,30 @@ header{
   object-fit:contain;
 }
 
-.card-title{font-weight:600}
-.card-desc{font-size:13px;color:var(--muted)}
+.card-title{
+  font-weight:600;
+  font-size:14px;
+}
+
+.card-desc{
+  font-size:12px;
+  color:var(--muted);
+}
 
 .card-footer{
   display:flex;
   justify-content:space-between;
-  margin-top:10px;
+  align-items:center;
+  margin-top:6px;
 }
 
 .add-btn{
   background:var(--primary);
   color:white;
   border:none;
-  padding:6px 14px;
-  border-radius:10px;
+  padding:6px 12px;
+  border-radius:8px;
+  font-size:12px;
 }
 
 /* ================= CART ================= */
@@ -193,7 +201,6 @@ header{
   transform:translateY(-10px);
   pointer-events:none;
   transition:.25s;
-  z-index:200;
 }
 
 .cart-dropdown.show{
@@ -204,9 +211,9 @@ header{
 
 .cart-item{
   display:flex;
-  align-items:center;
   gap:10px;
   padding:10px;
+  align-items:center;
 }
 
 .cart-item img{
@@ -218,7 +225,6 @@ header{
 .qty{
   display:flex;
   gap:6px;
-  align-items:center;
   margin-left:auto;
 }
 
@@ -236,11 +242,11 @@ header{
   font-weight:700;
 }
 
-/* ================= FILTER MODAL ================= */
+/* ================= FILTER PANEL (IMPROVED) ================= */
 .filter-modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.4);
+  background:rgba(0,0,0,.45);
   display:none;
   z-index:999;
 }
@@ -248,11 +254,14 @@ header{
 .filter-modal.show{display:block}
 
 .filter-panel{
-  background:white;
-  max-width:420px;
-  margin-left:auto;
+  position:absolute;
+  right:0;
+  top:0;
+  width:340px;
   height:100%;
-  padding:24px;
+  background:white;
+  padding:20px;
+  border-radius:16px 0 0 16px;
 }
 
 .filter-group{
@@ -261,14 +270,15 @@ header{
 
 .filter-group label{
   font-weight:600;
-  display:block;
+  font-size:14px;
   margin-bottom:6px;
+  display:block;
 }
 
-.filter-group select,
-.filter-group input{
+.filter-group input,
+.filter-group select{
   width:100%;
-  padding:12px;
+  padding:10px;
   border-radius:10px;
   border:1px solid var(--border);
 }
@@ -279,45 +289,101 @@ header{
   margin-top:20px;
 }
 
-.filter-actions button{
+.apply-btn{
   flex:1;
-  padding:12px;
+  background:var(--primary);
+  color:white;
   border:none;
+  padding:12px;
   border-radius:12px;
-  cursor:pointer;
 }
 
-.apply-btn{background:var(--primary);color:white}
-.reset-btn{background:#f1f5f9}
+.reset-btn{
+  flex:1;
+  background:#f1f5f9;
+  border:none;
+  padding:12px;
+  border-radius:12px;
+}
 
 /* ================= MOBILE ================= */
-@media(max-width:768px){
-  .grid{grid-template-columns:repeat(2,1fr)}
+@media(max-width:640px){
 
-  .cart-dropdown{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:-100%;
-    top:auto;
-    width:100%;
-    border-radius:16px 16px 0 0;
+  /* Grid tighter */
+  .grid{
+  padding:12px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr); /* ALWAYS 3 */
+  gap:10px;
+}
+  /* ================= CARD ================= */
+  .card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:8px;
+    display:flex;
+    flex-direction:column;
+    height:100%;
   }
 
-  .cart-dropdown.show{bottom:0}
+  .card-img{
+    height:72px;
+    background:#f9fafb;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-  .filter-panel{
+  .card-img img{
     max-width:100%;
-    border-radius:16px 16px 0 0;
-    margin-top:auto;
-    height:auto;
+    max-height:100%;
+    object-fit:contain;
+  }
+
+  .card-title{
+    font-size:12px;
+    font-weight:600;
+    margin-top:6px;
+    line-height:1.2;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  .card-desc{
+    font-size:10px;
+    color:var(--muted);
+    line-height:1.2;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  /* Footer tighter */
+  .card-footer{
+    margin-top:4px;
+  }
+
+  .price{
+    font-size:6px;
+  }
+
+  /* Smaller ADD button */
+  .add-btn{
+    padding:3px 7px;
+    font-size:11px;
+    border-radius:6px;
   }
 }
+
 </style>
 </head>
 
 <body>
-
 <main>
 
 <header>
@@ -326,11 +392,7 @@ header{
       <div class="brand">Grokly</div>
       <div class="subtitle">Fresh groceries, fast</div>
     </div>
-
-    <div class="location">
-      <i class="ri-map-pin-line"></i>
-      Bengaluru
-    </div>
+    <div class="location"><i class="ri-map-pin-line"></i>Bengaluru</div>
   </div>
 
   <div class="header-row">
@@ -352,9 +414,7 @@ header{
 </header>
 
 <div class="header-divider"></div>
-
 <div class="grid" id="grid"></div>
-
 </main>
 
 <!-- FILTER -->
@@ -369,12 +429,11 @@ header{
         <option>Fruits & Vegetables</option>
         <option>Dairy</option>
         <option>Snacks</option>
-        <option>Household</option>
       </select>
     </div>
 
     <div class="filter-group">
-      <label>Max Price (₹)</label>
+      <label>Max Price</label>
       <input type="number" id="fPrice">
     </div>
 
@@ -388,14 +447,12 @@ header{
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabase = createClient(
+const supabase=createClient(
   'https://jgliqmqielkvncjpiowx.supabase.co',
   'sb_publishable_XXKvo7uRkmGIKmYK-xIxhg_an2IvBTO'
 )
 
-let products=[]
-let filtered=[]
-let cart=JSON.parse(localStorage.getItem('grokly_cart'))||[]
+let products=[],filtered=[],cart=JSON.parse(localStorage.getItem('grokly_cart'))||[]
 
 const grid=document.getElementById('grid')
 const cartBox=document.getElementById('cart')
@@ -417,20 +474,18 @@ function renderProducts(list){
       <div class="card-title">${p.title}</div>
       <div class="card-desc">${p.description||''}</div>
       <div class="card-footer">
-        <strong>₹${Number(p.price)}</strong>
+        <strong>₹${p.price}</strong>
         <button class="add-btn" onclick="addToCart(${p.id})">ADD</button>
       </div>
-    </div>
-  `).join('')
+    </div>`).join('')
 }
 
-/* CART */
 window.addToCart=id=>{
-  const item=cart.find(i=>i.id===id)
-  if(item) item.qty++
+  const i=cart.find(x=>x.id===id)
+  if(i)i.qty++
   else{
     const p=products.find(p=>p.id===id)
-    cart.push({id:p.id,title:p.title,image_url:p.image_url,price:Number(p.price),qty:1})
+    cart.push({id:p.id,title:p.title,image_url:p.image_url,price:p.price,qty:1})
   }
   localStorage.setItem('grokly_cart',JSON.stringify(cart))
   updateCart()
@@ -446,22 +501,20 @@ function updateCart(){
   let total=0
   cartBox.innerHTML=cart.map((i,idx)=>{
     total+=i.price*i.qty
-    return `
+    return`
       <div class="cart-item">
         <img src="${i.image_url}">
         <div>${i.title}</div>
         <div class="qty">
-          <button onclick="changeQty(${idx},-1)">−</button>
-          ${i.qty}
+          <button onclick="changeQty(${idx},-1)">−</button>${i.qty}
           <button onclick="changeQty(${idx},1)">+</button>
         </div>
-      </div>`
-  }).join('')+`<div class="cart-total">Total ₹${total}</div>`
+      </div>`}).join('')+`<div class="cart-total">Total ₹${total}</div>`
 }
 
 window.changeQty=(i,d)=>{
   cart[i].qty+=d
-  if(cart[i].qty<=0) cart.splice(i,1)
+  if(cart[i].qty<=0)cart.splice(i,1)
   localStorage.setItem('grokly_cart',JSON.stringify(cart))
   updateCart()
 }
@@ -473,35 +526,28 @@ window.toggleCart=e=>{
 
 document.addEventListener('click',()=>cartBox.classList.remove('show'))
 
-/* SEARCH */
 document.getElementById('search').addEventListener('input',e=>{
   const t=e.target.value.toLowerCase()
   renderProducts(filtered.filter(p=>p.title.toLowerCase().includes(t)))
 })
 
-/* FILTERS */
-window.openFilters=()=>document.getElementById('filterModal').classList.add('show')
-window.closeFilters=()=>document.getElementById('filterModal').classList.remove('show')
+window.openFilters=()=>filterModal.classList.add('show')
+window.closeFilters=()=>filterModal.classList.remove('show')
 
 window.applyFilters=()=>{
-  const cat=document.getElementById('fCategory').value
-  const max=Number(document.getElementById('fPrice').value)||Infinity
-
-  filtered=products.filter(p=>
-    (!cat||p.category===cat)&&p.price<=max
-  )
-
+  const cat=fCategory.value
+  const max=Number(fPrice.value)||Infinity
+  filtered=products.filter(p=>(!cat||p.category===cat)&&p.price<=max)
   renderProducts(filtered)
   closeFilters()
 }
 
 window.resetFilters=()=>{
-  document.getElementById('fCategory').value=''
-  document.getElementById('fPrice').value=''
+  fCategory.value=''
+  fPrice.value=''
   filtered=[...products]
   renderProducts(filtered)
 }
 </script>
-
 </body>
 </html>
