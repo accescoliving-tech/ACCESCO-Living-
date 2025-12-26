@@ -1,34 +1,25 @@
-// App.js
+
+// =============================
+// ACCESCO APP MAIN ENTRY (App.js)
+// =============================
+
+// ----------- IMPORTS -----------
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  ImageBackground,
-  TextInput,
-  Alert,
-  Modal,
-  Animated,
-  useWindowDimensions,
-  Platform,
-  ToastAndroid,
-  Keyboard,
-  TouchableWithoutFeedback
+  StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, ImageBackground, TextInput, Alert, Modal, Animated, useWindowDimensions, Platform, ToastAndroid, Keyboard, TouchableWithoutFeedback
 } from 'react-native';
 import { Ionicons, FontAwesome5, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+// import { useFonts } from 'expo-font'; // Uncomment if using custom fonts
 
-// If you have the font file, uncomment the import below:
-// import { useFonts } from 'expo-font'; 
+// ----------- CONFIGURATION -----------
+const CUSTOM_FONT = Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif'; // Default font
 
-// ---------- CONFIGURATION ----------
-const CUSTOM_FONT = Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif'; 
-
-// ---------- Helpers ----------
+// ----------- HELPER FUNCTIONS -----------
+/**
+ * Show a toast or alert message depending on platform
+ */
 const showToast = (msg) => {
   if (Platform.OS === 'android') {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
@@ -37,6 +28,9 @@ const showToast = (msg) => {
   }
 };
 
+/**
+ * Format a number with commas for thousands
+ */
 const formatNumber = (val) => {
   if (val == null) return '';
   const digits = String(val).replace(/[^0-9.]/g, ''); 
@@ -46,20 +40,32 @@ const formatNumber = (val) => {
   return parts.join('.');
 };
 
+/**
+ * Parse a formatted number string to a number
+ */
 const parseNumber = (val) => {
   if (!val) return 0;
   return Number(String(val).replace(/,/g, '')) || 0;
 };
 
+// =============================
+// COMPONENTS
+// =============================
+
 // ---------- LOGIN MODAL COMPONENT ----------
+/**
+ * Login/Signup Modal for user authentication
+ */
 const LoginModal = ({ isOpen, onClose }) => {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
 
+  // Animation values
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(60)).current;
 
+  // Animate modal in/out
   useEffect(() => {
     if (isOpen) {
       Animated.parallel([
@@ -74,6 +80,7 @@ const LoginModal = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  // Handle sign in
   const handleSignIn = () => {
     if (!email) {
       showToast('Please enter an email.');
@@ -183,12 +190,16 @@ const LoginModal = ({ isOpen, onClose }) => {
 };
 
 // ---------- SIDEBAR COMPONENT ----------
+/**
+ * Sidebar navigation drawer
+ */
 const Sidebar = ({ isOpen, onClose, onNavigate }) => {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const panelWidth = Math.min(Math.round(width * 0.85), 420);
   const slideAnim = useRef(new Animated.Value(-panelWidth)).current;
 
+  // Animate sidebar in/out
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: isOpen ? 0 : -panelWidth,
@@ -199,6 +210,7 @@ const Sidebar = ({ isOpen, onClose, onNavigate }) => {
 
   if (!isOpen) return null;
 
+  // Sidebar menu items
   const menuItems = [
     { title: 'HOME', key: 'home' },
     { title: 'ABOUT', key: 'about' },
@@ -221,10 +233,12 @@ const Sidebar = ({ isOpen, onClose, onNavigate }) => {
             }
           ]}
         >
+          {/* Close button */}
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Ionicons name="close" size={32} color="#1a1a1a" />
           </TouchableOpacity>
 
+          {/* Logo */}
           <View style={styles.sidebarLogoContainer}>
             <Image
               source={require('./assets/icon.png')}
@@ -235,6 +249,7 @@ const Sidebar = ({ isOpen, onClose, onNavigate }) => {
 
           <Text style={styles.menuLabel}>MENU</Text>
 
+          {/* Menu list */}
           <View style={styles.menuList}>
             {menuItems.map((item, index) => (
               <TouchableOpacity
@@ -256,22 +271,26 @@ const Sidebar = ({ isOpen, onClose, onNavigate }) => {
   );
 };
 
+
 // ---------- CALCULATOR COMPONENT (SMART BUDGET PLANNER) ----------
+/**
+ * Smart Budget Planner (CalcIQ) - calculates and visualizes a monthly budget
+ */
 const CalculatorScreen = ({ onBack }) => {
   const insets = useSafeAreaInsets();
-  
-  // Inputs
+  // User input states
   const [income, setIncome] = useState('');
   const [fixedRent, setFixedRent] = useState('');
   const [city, setCity] = useState('');
   const [members, setMembers] = useState('1');
   const [lifestyle, setLifestyle] = useState('middle'); // frugal, middle, luxury
 
-  // Computed Budget
+  // Computed budget state
   const [budget, setBudget] = useState(null);
-  // { rent, groc, trans, util, shop, dine, hob, totalNeeds, totalWants, totalSave }
 
-  // Logic
+  /**
+   * Calculate the budget plan based on user input
+   */
   const calculatePlan = () => {
     Keyboard.dismiss();
     const inc = parseNumber(income);
@@ -282,8 +301,7 @@ const CalculatorScreen = ({ onBack }) => {
       Alert.alert('Input Error', 'Minimum income ₹500 required.');
       return;
     }
-    
-    // Logic Translation
+    // Estimate base costs by lifestyle
     let baseFoodCost = 3000;
     if(lifestyle === 'frugal') baseFoodCost = 2500;
     if(lifestyle === 'luxury') baseFoodCost = 5000;
@@ -304,18 +322,19 @@ const CalculatorScreen = ({ onBack }) => {
     if(mem > 2) transScale = mem * 0.8;
     let idealTransport = Math.floor(baseTrans * transScale);
 
+    // Rent/EMI logic
     const calcRent = rentVal > 0 ? rentVal : Math.floor(inc * 0.30);
     const disposable = Math.max(0, inc - calcRent);
-    
+
+    // Distribute remaining budget
     let remaining = disposable - (idealGrocery + idealUtility + idealTransport);
     let shopping = 0, dining = 0, entertainment = 0;
-
     if (remaining > 0) {
       shopping = Math.floor(remaining * 0.2);
       dining = Math.floor(remaining * 0.2);
       entertainment = Math.floor(remaining * 0.1);
     } else {
-      // Deficit logic
+      // Deficit: scale down needs
       let totalNeeds = idealGrocery + idealUtility + idealTransport;
       let scaleDown = disposable / totalNeeds;
       idealGrocery = Math.floor(idealGrocery * scaleDown);
@@ -323,6 +342,7 @@ const CalculatorScreen = ({ onBack }) => {
       idealTransport = Math.floor(idealTransport * scaleDown);
     }
 
+    // Final budget object
     const expenses = calcRent + idealGrocery + idealUtility + idealTransport + shopping + dining + entertainment;
     const savings = inc - expenses;
 
@@ -341,18 +361,18 @@ const CalculatorScreen = ({ onBack }) => {
     });
   };
 
-  // Auto-rebalance when editing specific fields
+  /**
+   * Update a budget field and recalculate totals
+   */
   const updateField = (field, value) => {
     if(!budget) return;
     const val = parseNumber(value);
     const newBudget = { ...budget, [field]: val };
-    
     // Recalculate totals
     const tNeeds = newBudget.rent + newBudget.grocery + newBudget.transport + newBudget.utility;
     const tWants = newBudget.shopping + newBudget.dining + newBudget.entertainment;
     const inc = parseNumber(income);
     const tSave = inc - (tNeeds + tWants);
-
     setBudget({
       ...newBudget,
       totalNeeds: tNeeds,
@@ -576,6 +596,9 @@ const CalculatorScreen = ({ onBack }) => {
 };
 
 // ---------- COMING SOON SCREEN ----------
+/**
+ * Placeholder for services that are not yet available
+ */
 const ComingSoonScreen = ({ onBack, serviceName }) => {
   const insets = useSafeAreaInsets();
   return (
@@ -600,6 +623,9 @@ const ComingSoonScreen = ({ onBack, serviceName }) => {
 };
 
 // ---------- HELPERS ----------
+/**
+ * Small stat display for landing page
+ */
 const StatItem = ({ label, value }) => (
   <View style={styles.statItem}>
     <Text style={styles.statValue}>{value}</Text>
@@ -608,6 +634,9 @@ const StatItem = ({ label, value }) => (
 );
 
 // ---------- SERVICE CARD ----------
+/**
+ * Card for each service on the landing page
+ */
 const ServiceCard = React.memo(({ title, subTitle, badge, img, onPress, isFullWidth }) => {
   const scale = useRef(new Animated.Value(1)).current;
   const pressIn = () => Animated.spring(scale, { toValue: 0.975, speed: 20, useNativeDriver: true }).start();
@@ -637,11 +666,15 @@ const ServiceCard = React.memo(({ title, subTitle, badge, img, onPress, isFullWi
 });
 
 // ---------- LANDING SCREEN ----------
+/**
+ * Main landing page with banners, services, resources, and footer
+ */
 const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSectionLayout }) => {
   const { width } = useWindowDimensions();
   const bannerWidth = width > 768 ? 800 : width - 40; 
   const bannerHeight = width > 768 ? 400 : 200; 
 
+  // Resource cards
   const resources = [
     { title: 'Metrics & Certificates', desc: 'View achievements and milestones' },
     { title: 'QTC Videos', desc: 'High-quality tutorials' },
@@ -649,14 +682,17 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
     { title: 'Tutorials', desc: 'Step-by-step guides' },
   ];
 
+  // Banner images
   const banners = [
     require('./assets/ban1.jpg'),
     require('./assets/ban2.jpg')
   ];
 
+  // Banner carousel state
   const bannerScrollRef = useRef(null);
   const [bannerIndex, setBannerIndex] = useState(0);
 
+  // Auto-scroll banners
   useEffect(() => {
     const interval = setInterval(() => {
       setBannerIndex((prevIndex) => {
@@ -671,6 +707,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
     return () => clearInterval(interval);
   }, [width]);
 
+  // Update banner index on scroll
   const onMomentumScrollEnd = (event) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     setBannerIndex(Math.round(contentOffsetX / width));
@@ -682,6 +719,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
       style={styles.scrollContainer} 
       showsVerticalScrollIndicator={false}
     >
+      {/* Banner carousel */}
       <View style={[styles.bannerContainer, { height: bannerHeight }]}>
         <ScrollView 
           ref={bannerScrollRef}
@@ -704,6 +742,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
         </ScrollView>
       </View>
 
+      {/* Services grid */}
       <View style={styles.section} onLayout={(event) => onSectionLayout && onSectionLayout('services', event.nativeEvent.layout.y)}>
         <Text style={styles.sectionTitle}>Explore Services</Text>
         <View style={styles.grid}>
@@ -715,6 +754,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
         </View>
       </View>
 
+      {/* Hero section */}
       <View style={styles.heroContainer} onLayout={(event) => onSectionLayout && onSectionLayout('home', event.nativeEvent.layout.y)}>
         <ImageBackground source={{ uri: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop' }} style={styles.heroImage} resizeMode="cover">
           <View style={styles.heroOverlay} />
@@ -730,6 +770,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
         </ImageBackground>
       </View>
 
+      {/* Stats bar */}
       <View style={styles.statsBar}>
         <StatItem label="Active Users" value="10K+" />
         <View style={styles.divider} />
@@ -738,6 +779,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
         <StatItem label="Support" value="24/7" />
       </View>
 
+      {/* Resources section */}
       <View style={styles.resourcesSection} onLayout={(event) => onSectionLayout && onSectionLayout('resources', event.nativeEvent.layout.y)}>
         <View style={styles.resourcesHeader}>
           <Text style={styles.resTagline}>RESOURCES</Text>
@@ -757,6 +799,7 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
         </ScrollView>
       </View>
 
+      {/* Footer */}
       <View style={styles.footerContainer} onLayout={(event) => { if(onSectionLayout) { onSectionLayout('contact', event.nativeEvent.layout.y); onSectionLayout('about', event.nativeEvent.layout.y); } }}>
         <View style={styles.footerContent}>
           <View style={styles.footerBrandSection}>
@@ -790,18 +833,25 @@ const LandingScreen = ({ onLaunchCalculator, onLaunchService, scrollRef, onSecti
 };
 
 // ---------- MAIN APP CONTENT ----------
+/**
+ * Main app content and navigation logic
+ */
 function AppContent() {
   const insets = useSafeAreaInsets();
+  // Navigation state
   const [currentScreen, setCurrentScreen] = useState('landing');
   const [selectedService, setSelectedService] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
+  // Scroll/section refs for navigation
   const scrollViewRef = useRef(null);
   const sectionPositions = useRef({});
 
+  // Track section Y positions for scroll navigation
   const handleSectionLayout = (key, y) => { sectionPositions.current[key] = y; };
 
+  // Sidebar navigation handler
   const handleNavigate = (key) => {
     if (currentScreen !== 'landing') {
       setCurrentScreen('landing');
@@ -813,6 +863,7 @@ function AppContent() {
     }
   };
 
+  // Launch a service (coming soon)
   const handleLaunchService = (name) => {
     setSelectedService(name);
     setCurrentScreen('comingSoon');
@@ -824,7 +875,7 @@ function AppContent() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} onNavigate={handleNavigate} />
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
 
-      {/* Hide standard header on Calc Screen for custom look */}
+      {/* Header (hidden on calculator) */}
       {currentScreen !== 'calculator' && (
         <View style={styles.mainHeader}>
           <TouchableOpacity onPress={() => setIsSidebarOpen(true)} style={styles.headerButton}>
@@ -840,6 +891,7 @@ function AppContent() {
         </View>
       )}
 
+      {/* Main navigation */}
       {currentScreen === 'landing' && (
         <LandingScreen 
           onLaunchCalculator={() => setCurrentScreen('calculator')} 
@@ -863,6 +915,10 @@ function AppContent() {
   );
 }
 
+// ---------- APP ROOT ----------
+/**
+ * App root with SafeAreaProvider
+ */
 export default function App() {
   return (
     <SafeAreaProvider>
