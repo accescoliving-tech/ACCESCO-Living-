@@ -197,7 +197,7 @@ def handle_add_item(
             {
                 "text": {
                     "text": [
-                        "✅ Item added to your cart.\nWould you like to add more items or confirm your order?"
+                        "✅ Item added to your cart.\nWould you like to add more items?"
                     ]
                 }
             }
@@ -364,7 +364,7 @@ def handle_create_custom_food(body: dict, db: Session, platform: str) -> Dict[st
                             f"🍽️ Custom dish {action}!\n"
                             f"Ingredients: {', '.join(ingredients)}\n"
                             f"💰 Price: ₹{cart.cart_items[-1]['total_price']}\n\n"
-                            "Would you like to add more items or confirm your order?"
+                            "Would you like to add more items?"
                         )
                     ]
                 }

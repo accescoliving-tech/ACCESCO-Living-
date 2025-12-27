@@ -66,12 +66,12 @@ async def webhook(
     # ✅ CONFIRM ORDER — SWADISHT
     # ============================================================
     if intent_lower.startswith("order swadisht - custom - no"):
-        reply = handle_confirm_order(body=body, db=db, platform="Swadisht")
-        return {"fulfillmentText": reply}
+        response = handle_confirm_order(body=body, db=db, platform="Swadisht")
+        return response
 
     if intent_lower.startswith("create-custom-food - confirm"):
-        reply = handle_confirm_order(body=body, db=db, platform="Swadisht")
-        return {"fulfillmentText": reply}
+        response = handle_confirm_order(body=body, db=db, platform="Swadisht")
+        return response
 
     # ============================================================
     # 🧺 ADD ITEM — GROKLY (SYNC, RICH RESPONSE)
@@ -95,8 +95,8 @@ async def webhook(
     # ✅ CONFIRM ORDER — GROKLY
     # ============================================================
     if intent_lower.startswith("order grokly - custom - no"):
-        reply = handle_confirm_order(body=body, db=db, platform="Grokly")
-        return {"fulfillmentText": reply}
+        response = handle_confirm_order(body=body, db=db, platform="Grokly")
+        return response
 
     # ============================================================
     # 🍳 CREATE CUSTOM FOOD
