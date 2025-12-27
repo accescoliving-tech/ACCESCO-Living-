@@ -1,4 +1,12 @@
-// App.js
+// ==========================================
+// ACCESCO LIVING APP - MAIN APPLICATION FILE
+// ==========================================
+// This file contains the main React Native application for Accesco Living,
+// featuring home services, calculator, and user interface components.
+
+
+// ---------- IMPORTS ----------
+// Core React and React Native imports for state, UI, and utilities
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -17,11 +25,14 @@ import {
   Keyboard,
   Animated
 } from 'react-native';
+
+// Third-party libraries for icons, safe areas, and gradients
 import { Ionicons, FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // ---------- CONFIGURATION ----------
+// Theme colors and constants used throughout the app for consistency
 const THEME = {
   primary: '#661354', // Brand magenta
   secondary: '#9A2363', // Brand pink
@@ -37,7 +48,8 @@ const THEME = {
   green: '#4CAF50',
 };
 
-// ---------- HELPERS ----------
+// ---------- HELPER FUNCTIONS ----------
+// Utility functions for formatting numbers, parsing inputs, and displaying messages
 const showToast = (msg) => {
   if (Platform.OS === 'android') {
     ToastAndroid.show(msg, ToastAndroid.SHORT);
@@ -60,8 +72,10 @@ const parseNumber = (val) => {
   return Number(String(val).replace(/,/g, '')) || 0;
 };
 
-// ---------- COMPONENTS ----------
+// ---------- COMPONENT DEFINITIONS ----------
+// Reusable and screen-specific UI components
 
+// VentureCard: Displays individual service cards with image, title, description, tags, and action button
 const VentureCard = ({ image, title, desc, badge, tags, btnText, onPress }) => {
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
@@ -107,7 +121,7 @@ const VentureCard = ({ image, title, desc, badge, tags, btnText, onPress }) => {
 
         <TouchableOpacity onPress={onPress}>
           <LinearGradient colors={[THEME.primary, THEME.secondary]} style={[styles.ventureBtn, isDesktop && styles.ventureBtnDesktop]}>
-            <Text style={[styles.ventureBtnText, isDesktop && styles.ventureBtnTextDesktop]}>{btnText}  ›</Text>
+            <Text style={[styles.ventureBtnText, isDesktop && styles.ventureBtnTextDesktop]}>{btnText} ›</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -115,16 +129,18 @@ const VentureCard = ({ image, title, desc, badge, tags, btnText, onPress }) => {
   );
 };
 
+// BannerCarousel: Auto-scrolling image carousel for promotional banners
 const BannerCarousel = () => {
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
   const [active, setActive] = useState(0);
   const scrollRef = useRef(null);
   
-  // Using ban1.jpg and ban2.jpg (Verified in your folder)
+  // Updated with three banners including ban1.jpg
   const banners = [
     require('./assets/ban1.jpg'),
-    require('./assets/ban2.jpg'), 
+    require('./assets/ban2.jpg'),
+    require('./assets/ban3.jpg'), // Added third banner as requested
   ];
 
   useEffect(() => {
@@ -174,7 +190,10 @@ const BannerCarousel = () => {
   );
 };
 
-// ---------- CALCULATOR SCREEN ----------
+// ---------- SCREEN COMPONENTS ----------
+// Full-screen components for different app sections
+
+// CalculatorScreen: Budget planning calculator with input form and results display
 const CalculatorScreen = ({ onBack }) => {
   const [income, setIncome] = useState('');
   const [fixedRent, setFixedRent] = useState('');
@@ -252,6 +271,7 @@ const CalculatorScreen = ({ onBack }) => {
       </View>
 
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 100 }}>
+        {/* Input Form Section */}
         <View style={styles.card}>
             <Text style={styles.sectionTitle}>Your Details</Text>
             <View style={styles.inputRow}>
@@ -283,35 +303,36 @@ const CalculatorScreen = ({ onBack }) => {
             </TouchableOpacity>
         </View>
 
+        {/* Results Section - Only shown after calculation */}
         {budget && (
-             <View style={{marginTop: 16}}>
-                <View style={styles.card}>
-                    <Text style={styles.sectionTitle}>Suggested Plan</Text>
-                    <View style={styles.summaryRow}>
-                        <View style={{alignItems:'center'}}>
-                            <Text style={styles.summaryLabel}>NEEDS</Text>
-                            <Text style={styles.summaryVal}>₹{formatNumber(budget.totalNeeds)}</Text>
-                        </View>
-                        <View style={{width:1, height: 30, backgroundColor:'#eee'}}/>
-                        <View style={{alignItems:'center'}}>
-                            <Text style={[styles.summaryLabel, {color: THEME.green}]}>SAVINGS</Text>
-                            <Text style={[styles.summaryVal, {color: THEME.green}]}>₹{formatNumber(budget.totalSave)}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.barContainer}>
-                         <View style={{flex: budget.totalNeeds, backgroundColor: THEME.primary}} />
-                         <View style={{flex: budget.totalWants, backgroundColor: '#fbbf24'}} />
-                         <View style={{flex: Math.max(0, budget.totalSave), backgroundColor: THEME.green}} />
-                    </View>
-                </View>
-             </View>
+           <View style={{marginTop: 16}}>
+              <View style={styles.card}>
+                  <Text style={styles.sectionTitle}>Suggested Plan</Text>
+                  <View style={styles.summaryRow}>
+                      <View style={{alignItems:'center'}}>
+                          <Text style={styles.summaryLabel}>NEEDS</Text>
+                          <Text style={styles.summaryVal}>₹{formatNumber(budget.totalNeeds)}</Text>
+                      </View>
+                      <View style={{width:1, height: 30, backgroundColor:'#eee'}}/>
+                      <View style={{alignItems:'center'}}>
+                          <Text style={[styles.summaryLabel, {color: THEME.green}]}>SAVINGS</Text>
+                          <Text style={[styles.summaryVal, {color: THEME.green}]}>₹{formatNumber(budget.totalSave)}</Text>
+                      </View>
+                  </View>
+                  <View style={styles.barContainer}>
+                       <View style={{flex: budget.totalNeeds, backgroundColor: THEME.primary}} />
+                       <View style={{flex: budget.totalWants, backgroundColor: '#fbbf24'}} />
+                       <View style={{flex: Math.max(0, budget.totalSave), backgroundColor: THEME.green}} />
+                  </View>
+              </View>
+           </View>
         )}
       </ScrollView>
     </View>
   );
 };
 
-// ---------- HOME SCREEN ----------
+// HomeScreen: Main home screen with banner carousel, promo banner, and services grid
 const HomeScreen = ({ onNavigate, onService }) => {
   const { width } = useWindowDimensions();
   const isDesktop = width > 768;
@@ -320,18 +341,20 @@ const HomeScreen = ({ onNavigate, onService }) => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: THEME.bg }} showsVerticalScrollIndicator={false}>
        
+       {/* Banner Carousel */}
        <BannerCarousel />
 
+       {/* Promo Banner for Calculator */}
        <TouchableOpacity style={[styles.promoBanner, isDesktop && styles.promoBannerDesktop]} onPress={() => onNavigate('calculator')}>
-          <View>
-             <Text style={[styles.promoTitle, isDesktop && styles.promoTitleDesktop]}>ACCESCO <Text style={{color: '#fff', fontWeight:'300'}}>CALC</Text></Text>
-             <Text style={[styles.promoSub, isDesktop && styles.promoSubDesktop]}>Plan your wealth intelligently.</Text>
-             <View style={styles.promoBtn}><Text style={styles.promoBtnText}>TRY NOW</Text></View>
-          </View>
-          <Ionicons name="calculator" size={isDesktop ? 100 : 60} color="rgba(255,255,255,0.2)" style={{position:'absolute', right: 20}} />
+        <View>
+           <Text style={[styles.promoTitle, isDesktop && styles.promoTitleDesktop]}>ACCESCO <Text style={{color: '#fff', fontWeight:'300'}}>CALCIQ</Text></Text>
+           <Text style={[styles.promoSub, isDesktop && styles.promoSubDesktop]}>Plan your wealth intelligently.</Text>
+           <View style={styles.promoBtn}><Text style={styles.promoBtnText}>TRY NOW</Text></View>
+        </View>
+        <Ionicons name="calculator" size={isDesktop ? 100 : 60} color="rgba(255,255,255,0.2)" style={{position:'absolute', right: 20}} />
        </TouchableOpacity>
 
-       {/* Static grid for services without scrolling */}
+       {/* Services Grid - Displays available services in a 3-column grid */}
        <View style={{
          flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',
          paddingHorizontal: 16, paddingBottom: 20
@@ -393,7 +416,10 @@ const HomeScreen = ({ onNavigate, onService }) => {
   );
 };
 
-// ---------- MAIN LAYOUT ----------
+// ---------- MAIN LAYOUT AND NAVIGATION ----------
+// Root component handling app navigation, headers, tabs, and modals
+
+// MainLayout: Manages overall app structure, tab navigation, and modal overlays
 function MainLayout() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState('Home');
@@ -408,6 +434,8 @@ function MainLayout() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar style="light" backgroundColor={THEME.primary} />
+       
+      {/* Header - Only shown on Home screen */}
       {activeTab === 'Home' && (
           <LinearGradient colors={[THEME.primary, THEME.secondary]} style={styles.header}>
             <View style={styles.headerTop}>
@@ -417,7 +445,7 @@ function MainLayout() {
                       style={{width: 30, height: 30, marginRight: 8}} 
                       resizeMode="contain" 
                     />
-                    <Text style={styles.headerTitle}>ACCESCO</Text>
+                    <Text style={styles.headerTitle}>accesco living</Text>
                 </View>
                 <View style={styles.headerIcons}>
                     <TouchableOpacity style={styles.iconBtn}><Ionicons name="notifications-outline" size={24} color="#fff" /></TouchableOpacity>
@@ -431,6 +459,7 @@ function MainLayout() {
           </LinearGradient>
       )}
 
+      {/* Main Content Area - Renders different screens based on activeTab */}
       <View style={{ flex: 1 }}>
         {activeTab === 'Home' && <HomeScreen onNavigate={setActiveTab} onService={handleService} />}
         {activeTab === 'Calculator' && <CalculatorScreen onBack={() => setActiveTab('Home')} />}
@@ -441,6 +470,7 @@ function MainLayout() {
         )}
       </View>
 
+      {/* Bottom Navigation Tabs - Hidden on Calculator screen */}
       {activeTab !== 'Calculator' && (
           <View style={styles.bottomTab}>
             <TouchableOpacity style={styles.tabItem} onPress={() => setActiveTab('Home')}>
@@ -471,6 +501,7 @@ function MainLayout() {
           </View>
       )}
 
+      {/* Service Modal - Shows "coming soon" message for unavailable services */}
       <Modal visible={modalVisible} transparent animationType="fade">
           <View style={styles.modalBackdrop}>
               <View style={styles.modalContent}>
@@ -489,7 +520,8 @@ function MainLayout() {
   );
 }
 
-// ---------- EXPORT ----------
+// ---------- APP EXPORT ----------
+// Default export wrapping the app with SafeAreaProvider for device compatibility
 export default function App() {
   return (
     <SafeAreaProvider>
@@ -499,9 +531,13 @@ export default function App() {
 }
 
 // ---------- STYLES ----------
+// StyleSheet definitions for all components, layouts, and responsive designs
 const styles = StyleSheet.create({
+  // Layout and Container Styles
   container: { flex: 1, backgroundColor: THEME.bg },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+
+  // Header Styles
   header: { paddingHorizontal: 16, paddingBottom: 16, paddingTop: 10 },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   brandContainer: { flexDirection: 'row', alignItems: 'center' },
@@ -510,13 +546,18 @@ const styles = StyleSheet.create({
   iconBtn: {},
   searchBar: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 8, height: 44, paddingHorizontal: 12 },
   searchText: { flex: 1, color: '#888', marginLeft: 8, fontSize: 14 },
+
+  // Banner and Carousel Styles
   bannerWrapper: { marginBottom: 16 },
   pagination: { flexDirection: 'row', position: 'absolute', bottom: 10, alignSelf: 'center' },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.5)', marginHorizontal: 3 },
   activeDot: { backgroundColor: '#fff', width: 12 },
+  dotDesktop: { width: 8, height: 8, marginHorizontal: 4 },
   sectionHeader: { paddingHorizontal: 16, marginBottom: 12 },
   sectionTitle: { fontSize: 20, fontWeight: '900', color: THEME.black },
   sectionSub: { fontSize: 12, color: '#666', marginTop: 2 },
+
+  // Venture Card Styles (Service Cards)
   ventureCard: {
     width: '100%',
     backgroundColor: '#fff',
@@ -538,7 +579,7 @@ const styles = StyleSheet.create({
   },
   ventureImg: {
     width: '100%',
-    height: 70, // Even smaller image for compact
+    height: 70, // Compact image height
     backgroundColor: '#eee',
   },
   ventureImgDesktop: {
@@ -627,6 +668,8 @@ const styles = StyleSheet.create({
   ventureBtnTextDesktop: {
     fontSize: 14,
   },
+
+  // Promo Banner Styles
   promoBanner: { marginHorizontal: 16, marginBottom: 24, backgroundColor: THEME.secondary, borderRadius: 12, padding: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', overflow: 'hidden' },
   promoBannerDesktop: {
     marginHorizontal: 32,
@@ -643,6 +686,8 @@ const styles = StyleSheet.create({
   },
   promoBtn: { backgroundColor: '#fff', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 4, alignSelf: 'flex-start' },
   promoBtnText: { color: THEME.secondary, fontWeight: 'bold', fontSize: 12 },
+
+  // Calculator and Form Styles
   navHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: THEME.primary, padding: 16 },
   navHeaderTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
   card: { backgroundColor: '#fff', borderRadius: 8, padding: 16, marginBottom: 10, elevation: 1 },
@@ -660,6 +705,8 @@ const styles = StyleSheet.create({
   summaryLabel: { fontSize: 10, fontWeight: 'bold', color: '#888', marginBottom: 4 },
   summaryVal: { fontSize: 18, fontWeight: 'bold', color: '#333' },
   barContainer: { flexDirection: 'row', height: 10, borderRadius: 5, overflow: 'hidden', backgroundColor: '#eee', marginBottom: 10 },
+
+  // Bottom Navigation and Modal Styles
   bottomTab: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', borderTopWidth: 1, borderTopColor: '#eee', elevation: 8 },
   tabItem: { alignItems: 'center', flex: 1 },
   tabText: { fontSize: 10, marginTop: 4, color: '#666', fontWeight: '600' },
