@@ -1968,44 +1968,37 @@
     
     <style>
     df-messenger {
-        /* Font */
         --df-messenger-font-family: system-ui, -apple-system, BlinkMacSystemFont;
 
         /* Title bar */
-        --df-messenger-button-titlebar-color: linear-gradient(135deg, #8a2be2, #ff2fa0);
-        --df-messenger-titlebar-background: linear-gradient(135deg, #8a2be2, #ff2fa0);
-        --df-messenger-titlebar-font-color: #000000;
+        --df-messenger-titlebar-background: #8a2be2;
+        --df-messenger-titlebar-font-color: #ffffff;
 
-        /* ===== LAUNCHER BUTTON ===== */
-        --df-messenger-button-titlebar-color: linear-gradient(135deg, #8a2be2, #ff2fa0);
-        --df-messenger-button-titlebar-font-color: #000000;
+        /* Launcher */
+        --df-messenger-button-titlebar-color: rgba(0, 0, 0, 0.08);
+        --df-messenger-button-titlebar-font-color: #ffffff;
 
-        /* Chat background */
-        --df-messenger-chat-background-color: rgba(0, 0, 0, 0.95);
+        /* ✅ Chat background (VISIBLE but glassy) */
+        --df-messenger-chat-background-color: rgba(255, 255, 255, 0.85);
 
-        /* Bot messages */
-        --df-messenger-message-bot-background: #070707;
+        /* ✅ Bot messages */
+        --df-messenger-message-bot-background: #ffffff;
         --df-messenger-message-bot-font-color: #111827;
 
         /* User messages */
-        --df-messenger-message-user-background: #2563eb;
+        --df-messenger-message-user-background: linear-gradient(135deg, #8a2be2, #ff2fa0);
         --df-messenger-message-user-font-color: #ffffff;
 
         /* Input */
         --df-messenger-input-box-background: #ffffff;
         --df-messenger-input-font-color: #111827;
-        --df-messenger-input-placeholder-font-color: #6b7280;
 
         /* Send icon */
-        --df-messenger-send-icon-color: #2563eb;
+        --df-messenger-send-icon-color: #8a2be2;
 
-        /* Card styling */
-        width: 360px;
-        max-width: 95%;
-        height: 540px;
-        border-radius: 16px;
-        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+        border-radius: 18px;
     }
+
 
     /* Mobile full screen */
     @media (max-width: 480px) {
@@ -2021,7 +2014,7 @@
         chat-title="ACCESCO AI"
         agent-id="8beafa4a-339b-44ff-a386-62d386a2481b"
         language-code="en"
-        chat-icon="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+        chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
     </df-messenger>
 
 
