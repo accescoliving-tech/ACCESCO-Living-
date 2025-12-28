@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -123,18 +123,45 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 18px;
+        padding: 12px 24px;
         color: #ffffff;
         font-weight: 900;
-        letter-spacing: 1.2px;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
-        font-size: 18px;
+        font-size: 16px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 50px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        position: relative;
+        overflow: hidden;
     }
     .hero-kicker::before {
+        content: "✨";
+        font-size: 14px;
+        animation: sparkle 2s ease-in-out infinite;
+    }
+    .hero-kicker::after {
         content: "";
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes sparkle {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
     }
 
     .hero-ctas { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; justify-content: center;}
@@ -403,10 +430,14 @@
         height: 100%;
         object-fit: contain; 
         display: block;
-        background-color: #980000; 
     }
     
     .card-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.25) 100%); }
+    
+    /* Individual venture backgrounds */
+    .grokly-bg { background-color: #c1ff72; } /* Light green for Grokly */
+    .swadisht-bg { background-color: #980000; } /* Red background for Swadisht */
+    
     .card-body { padding: 14px 16px 16px; display: grid; gap: 8px; }
     .card-title-row { display: flex; align-items: center; gap: 8px; }
     .card-title-row h3 { margin: 0; font-size: 18px; letter-spacing: -0.1px; color: #111; }
@@ -1299,7 +1330,7 @@
                 
                 <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo" width="120" height="120">
                 <h2 class="hero-title">ACCESCO LIVING</h2>
-                <div class="hero-kicker">Simplifying smarter living</div>
+                <div class="hero-kicker">India's first Intelligent commerce Brand</div>
                 <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.</p>
 
                 <div class="hero-ctas">
@@ -1333,7 +1364,9 @@
 
             <div class="cards">
                 <a href="services-grokly.html" class="card">
-                    <div class="card-img" style="background-image:url('images/mart.jpg')"></div>
+                    <div class="card-img grokly-bg">
+                        <img src="images/grokerly_logo.png" alt="Grokly Logo" width="300" height="200" loading="lazy" decoding="async">
+                    </div>
                     <div class="card-body">
                         <div class="card-title-row">
                             <h3>Grokly</h3>
@@ -1351,7 +1384,7 @@
                 </a>
 
                 <a href="services-swadisht.html" class="card">
-                    <div class="card-img">
+                    <div class="card-img swadisht-bg">
                         <img src="images/swadisht_logo.JPG" alt="Swadisht Logo" width="300" height="200" loading="lazy" decoding="async">
                     </div>
                     <div class="card-body">
@@ -1359,7 +1392,7 @@
                             <h3>Swadisht</h3>
                             <span class="card-pill">UP TO 50% OFF</span>
                         </div>
-                        <p class="card-sub">Food Delivered with precision.</p>
+                        <p class="card-sub">Food delivered with ♡</p>
                         <div class="card-meta">
                             <span class="meta-chip"><i class="ri-timer-2-line"></i>30 min</span>
                             <span class="meta-chip"><i class="ri-restaurant-2-line"></i>Chef picks</span>
