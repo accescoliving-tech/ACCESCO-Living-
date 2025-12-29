@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <!-- Head: meta tags, preconnects, icons, fonts, and critical inline CSS -->
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://cdn.jsdelivr.net data:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://formspree.io https://dialogflow.cloud.google.com; media-src 'self' blob:;">
   
@@ -1315,11 +1316,12 @@
             border-radius: 0;
             }
         }
-  </style>
+    </style>
 
-    </div>
+        <!-- MAIN CONTENT START -->
 
-    <main id="home">
+        <main id="home">
+        <!-- ===== HERO / HEADER SECTION ===== -->
         <section class="hero">
             <div class="top-nav">
                 <button class="nav-login-btn" onclick="window.location.href='login.html'">
@@ -1360,6 +1362,7 @@
             </div>
         </section>
 
+        <!-- ===== SERVICES CARDS ===== -->
         <section id="services">
             <div class="section-title">
                 <div class="small-upper">OUR SERVICES</div>
@@ -1464,6 +1467,7 @@
             </div>
         </section>
 
+        <!-- ===== CALCIQ (FINANCE / WIDGET) ===== -->
         <section class="calciq-section">
             <div class="calciq-container">
                 <div class="calciq-info">
@@ -1492,6 +1496,7 @@
             </div>
         </section>
 
+        <!-- ===== GAMING / REWARD ARENA ===== -->
         <section class="gaming-arena">
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
@@ -1551,6 +1556,7 @@
             </div>
         </section>
 
+        <!-- ===== ABOUT / MISSION ===== -->
         <section id="about">
             <div class="section-title">
                 <div class="small-upper">ABOUT ACCESCO</div>
@@ -1591,6 +1597,7 @@
             </div>
         </section>
 
+        <!-- ===== APP SHOWCASE / FEATURES ===== -->
         <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
@@ -1673,6 +1680,7 @@
             </div>
         </section>
 
+        <!-- ===== DOWNLOAD CTA ===== -->
         <section class="download-section">
             <div class="download-card">
                 <div class="download-text">
@@ -1696,6 +1704,7 @@
             </div>
         </section>
 
+        <!-- ===== CONTACT FORM / SUPPORT ===== -->
         <section id="contact-form" class="contact-section">
             <div class="contact-card">
                 <div class="contact-glow"></div>
@@ -1745,6 +1754,7 @@
             </div>
         </section>
 
+        <!-- ===== FOOTER / CONTACT INFO ===== -->
         <footer id="contact">
             <div class="footer-grid">
                 <div>
@@ -1797,6 +1807,7 @@
         </footer>
     </main>
     
+    <!-- ===== LOGIN MODAL OVERLAY ===== -->
     <div id="loginOverlay" class="login-overlay">
     <div class="login-modal">
         <button class="close-login" onclick="closeLoginModal()">&times;</button>
@@ -1824,6 +1835,7 @@
     </div>
 </div>
 
+    <!-- ===== PROFILE / USER OVERLAY ===== -->
     <div id="profileOverlay" class="login-overlay">
         <div class="login-modal">
             <button class="close-login" onclick="closeProfileModal()">&times;</button>
@@ -1852,6 +1864,7 @@
         </div>
     </div>
 
+    <!-- ===== SCRIPTS: UI INTERACTIONS (stack swipe, button effects, modals) ===== -->
     <script>
         const stack = document.getElementById('stack');
         const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -2003,7 +2016,7 @@
     </script>
     
 
-    <!-- Dialogflow Messenger -->
+    <!-- ===== EXTERNAL CHAT INTEGRATION: Dialogflow Messenger ===== -->
     <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
     
     <style>
@@ -2058,6 +2071,7 @@
     </df-messenger>
 
 
+    <!-- ===== EXTERNAL INTEGRATIONS: Supabase auth & session checks ===== -->
     <script type="module" defer>
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
