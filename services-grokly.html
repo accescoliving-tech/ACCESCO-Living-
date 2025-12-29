@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Grokly Market</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
@@ -45,15 +45,23 @@ header{
   align-items:center;
 }
 
-.brand{
-  font-size:26px;
-  font-weight:800;
-  color:var(--primary);
+/* ================= LOGO STYLING ================= */
+/* Update your .brand and .logo styles */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between logo and text */
 }
 
-.subtitle{
-  font-size:13px;
-  color:var(--muted);
+.logo {
+  height: 32px; /* Fixed height for consistency */
+  border-radius: 8px; /* Softer look for the green icon box */
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b; /* Slate-500: softer than pure black/muted */
+  margin-top: -2px; /* Pulls subtitle closer to the brand name */
 }
 
 .location{
@@ -196,26 +204,43 @@ header{
   align-items: center;   
 }
 
+/* ================= IMPROVED CATEGORY ROW ================= */
+.topic-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto; /* 🔑 Allows horizontal swiping */
+  padding: 10px 4px;
+  scrollbar-width: none; /* Hides scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hides scrollbar for Edge */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Hide scrollbar for Chrome/Safari */
 .topic-row::-webkit-scrollbar {
   display: none;
 }
 
-
-.topic-pill{
-  padding:10px 16px;
-  border-radius:999px;
-  background:#2b2b2b;
-  color:#e5e7eb;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
+.topic-pill {
+  flex: 0 0 auto; /* 🔑 Prevents pills from shrinking to fit */
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap; /* 🔑 Forces text to stay on one line */
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.topic-pill.active{
-  background:white;
-  color:#111827;
+.topic-pill.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(112, 4, 87, 0.15);
 }
-
 /* ================= PRODUCTS ================= */
 .grid{
   display:grid;
@@ -636,6 +661,99 @@ header{
   .side-cart{right:-100%}
   .side-cart.show{right:0}
 }
+
+/* ================= LARGE MARKETPLACE FOOTER ================= */
+.marketplace-footer {
+  background: #fcfcfc;
+  padding: 60px 24px 20px;
+  border-top: 1px solid #eee;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.about-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.about-section h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary); /* Using your brand purple */
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+
+/* Bottom Bar with Socials */
+.footer-bottom {
+  border-top: 1px solid #eee;
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* ================= CENTERED FOOTER ALIGNMENT ================= */
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center; /* 🔑 Centers all text headings and list items */
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-bottom: 50px;
+  justify-items: center; /* 🔑 Centers the columns themselves */
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 🔑 Centers the actual links */
+}
+
+.footer-bottom {
+  border-top: 1px solid #eee;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column; /* 🔑 Stack elements vertically for center alignment */
+  align-items: center;
+  gap: 25px;
+}
+
+.copyright-info {
+  text-align: center; /* 🔑 Centers the multi-line legal text */
+  font-size: 13px;
+  color: #94a3b8;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+.app-download-btns, 
+.social-links {
+  display: flex;
+  justify-content: center; /* 🔑 Centers buttons and icons horizontally */
+  gap: 15px;
+}
+.app-download-btns img {
+  height: 35px;
+  cursor: pointer;
+}
+
+.social-links i {
+  font-size: 20px;
+  color: #1f2937;
+  cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -645,7 +763,10 @@ header{
 <header>
   <div class="header-top">
     <div>
-      <div class="brand">Grokly</div>
+      <div class="brand">
+        <img src="./images/grokerly_logo.png" alt="Grokly Logo" class="logo"> 
+        <span>Grokly</span>
+      </div>
       <div class="subtitle">Fresh groceries, fast</div>
     </div>
   </div>
@@ -751,6 +872,7 @@ header{
         <option value="">All</option>
         <option value="Fruits and Vegetables">Fruits and Vegetables</option>
         <option value="Beverages">Beverages</option>
+        <option value="Diary and Bakery">Diary and Bakery</option>
         <option value="All">All</option>
       </select>
     </label>
@@ -858,7 +980,8 @@ header{
     const categories = [
       { label: 'All', value: '' },
       { label: 'Fruits and Vegetables', value: 'Fruits and Vegetables' },
-      { label: 'Beverages', value: 'Beverages' }
+      { label: 'Beverages', value: 'Beverages' },
+      { label:'Diary & Bakery', value:'Diary & Bakery'}
     ]
 
     categoryNav.innerHTML = categories.map((c, i) => `
@@ -1115,5 +1238,58 @@ header{
   }
 </script>
 </main>
+<footer class="marketplace-footer">
+    <section class="about-section">
+      <h2>About Grokly</h2>
+      <p>
+        Grokly is Accesco Living's flagship grocery platform designed to bring 
+        freshness and convenience to your doorstep. We bridge the gap between 
+        local farms and your kitchen, ensuring that every product meets the 
+        highest standards of quality and hygiene.
+      </p>
+      <p>
+        By leveraging smart technology and a robust supply chain, Grokly delivers 
+        daily essentials that are thoughtfully sourced and carefully handled. 
+        Our mission is to simplify smarter living through authenticity, 
+        speed, and a deep respect for fresh produce.
+      </p>
+      <p><strong>Grokly by Accesco Living — Freshness in every click.</strong></p>
+    </section>
+
+    <div class="footer-bottom">
+      <div class="copyright-info">
+        © Grokly Market Private Limited, 2025. <br>
+        “Grokly” is owned & managed by “Accesco Living” and is not related, linked or interconnected in whatsoever manner or nature to other domains.
+      </div>
+
+      <div class="app-download-btns">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
+      </div>
+
+      <div class="social-links">
+      <a href="https://www.facebook.com/p/Accesco-Living-61585132566972/" class="social-icon" target="_blank" aria-label="Facebook">
+        <i class="ri-facebook-fill"></i>
+      </a>
+      
+      <a href="https://x.com/accesco_living?s=21" class="social-icon" target="_blank" aria-label="Twitter">
+        <i class="ri-twitter-x-line"></i>
+      </a>
+      
+      <a href="https://www.instagram.com/accescoliving?igsh=MWVxOHpyeW96NGltZQ==" class="social-icon" target="_blank" aria-label="Instagram">
+        <i class="ri-instagram-line"></i>
+      </a>
+      
+      <a href="https://www.linkedin.com/company/acceso-living/" class="social-icon" target="_blank" aria-label="LinkedIn">
+        <i class="ri-linkedin-box-fill"></i>
+      </a>
+
+      <a href="https://youtube.com/@accescoliving?si=YqfNRXvc0SRm4s8g" class="social-icon" target="_blank" aria-label="LinkedIn">
+        <i class="ri-youtube-fill"></i>
+      </a>
+  </div>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
