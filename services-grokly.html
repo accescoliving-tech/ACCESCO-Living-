@@ -12,11 +12,9 @@
 :root{
   --bg:#f8fafc;
   --primary:#700457;
-  --soft:#f3e6ef;
   --text:#111827;
   --muted:#6b7280;
   --border:#e5e7eb;
-  --success:#22c55e;
 }
 
 *{box-sizing:border-box}
@@ -65,7 +63,7 @@ header{
   border:1px solid var(--border);
 }
 
-/* Search Row */
+/* Search */
 .header-row{
   display:flex;
   gap:10px;
@@ -118,32 +116,122 @@ header{
   place-items:center;
 }
 
-/* ================= GRID ================= */
+.filter-modal {
+  display: none;               /* 🔑 REQUIRED */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 50;
+}
+
+.filter-modal.show {
+  display: flex;
+}
+
+
+/* ================= BANNER ================= */
+/* ================= FIXED BANNER CONTENT ================= */
+.banner-card {
+  position: relative;
+  width: 100%;
+  height: 180px; 
+  border-radius: 24px; /* Matches your rounded image style */
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end; /* 🔑 Pulls content to the bottom */
+  color: white;
+}
+
+.banner-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1; /* Lowest layer */
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  /* 🔑 Darkens the bottom more to make white text pop */
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+  z-index: 2; 
+}
+
+.banner-content {
+  position: relative;
+  z-index: 10; /* 🔑 Highest layer so it's always visible */
+  padding: 20px 24px; /* More top padding moves text "little below" */
+  width: 100%;
+}
+
+.banner-content h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.banner-content p {
+  margin: 5px 0 0;
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+/* ================= CATEGORY ================= */
+.section-title{
+  font-size:15px;
+  font-weight:700;
+  margin:14px 0 8px;
+}
+
+.topic-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px 4px;      
+  min-height: 44px;      
+  align-items: center;   
+}
+
+.topic-row::-webkit-scrollbar {
+  display: none;
+}
+
+
+.topic-pill{
+  padding:10px 16px;
+  border-radius:999px;
+  background:#2b2b2b;
+  color:#e5e7eb;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.topic-pill.active{
+  background:white;
+  color:#111827;
+}
+
+/* ================= PRODUCTS ================= */
 .grid{
-  margin-top:20px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:16px;
 }
 
-/* ================= PRODUCT CARD ================= */
 .card{
   background:white;
   border-radius:16px;
   border:1px solid var(--border);
   padding:10px;
-  transition:.2s ease;
-}
-
-.card:hover{
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
-  transform:translateY(-2px);
 }
 
 .card-img{
   height:100px;
-  background:#f9fafb;
-  border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -155,22 +243,13 @@ header{
   object-fit:contain;
 }
 
-.card-title{
-  font-size:13px;
-  font-weight:600;
-  margin-top:8px;
-}
-
-.card-desc{
-  font-size:11px;
-  color:var(--muted);
-}
+.card-title{font-size:13px;font-weight:600}
+.card-desc{font-size:11px;color:var(--muted)}
 
 .card-footer{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-top:6px;
 }
 
 .add-btn{
@@ -180,322 +259,382 @@ header{
   padding:5px 14px;
   border-radius:999px;
   font-size:11px;
-  font-weight:600;
   cursor:pointer;
 }
 
-/* ================= FILTER MODAL ================= */
-.filter-modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  display:none;
-  z-index:50;
+/* ================= CART ================= */
+.side-cart {
+  position: fixed;
+  top: 10px;        /* Added gap from top */
+  right: -360px;    /* Hidden position */
+  width: 340px;     /* Made it slimmer */
+  height: calc(100vh - 20px); /* Leave gap at top and bottom */
+  
+  display: flex;
+  flex-direction: column;
+  background: white;
+  z-index: 100;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth slide */
+  border-radius: 20px 0 0 20px; /* Rounded corners on the left */
+  box-shadow: -10px 0 30px rgba(0,0,0,0.1);
 }
 
-.filter-modal.show{display:flex}
-
-.filter-panel{
-  margin:auto;
-  background:white;
-  width:320px;
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
+.side-cart.show {
+  right: 0;
 }
 
-.filter-panel h3{margin-bottom:16px}
-
-.filter-panel select,
-.filter-panel input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  margin-bottom:12px;
+/* Make the cart header look cleaner */
+.cart-header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: 700;
+  font-size: 18px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.filter-actions{
-  display:flex;
-  gap:10px;
+.cart-header i {
+  cursor: pointer;
+  font-size: 20px;
+}
+.cart-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.filter-actions button{
-  flex:1;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
-}
 
-.apply{background:var(--primary);color:white}
-.reset{background:#f1f5f9}
-
-/* ================= CART CENTER LAYOUT ================= */
-
-.cart-container{
-  max-width: 760px;
-  margin: 0 auto;
+/* ===== CART BODY ===== */
+.cart-body {
   padding: 12px;
+  overflow-y: auto;
+  flex: 1;
 }
 
-/* Header */
-.cart-header{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:16px;
-  font-size:18px;
-  font-weight:700;
-  border-bottom:1px solid #eee;
+/* ===== CART ITEM ===== */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 16px; /* Match the rounded look */
+  margin-bottom: 12px;
+  border: 1px solid #f1f5f9; /* Subtle border instead of heavy shadow */
 }
 
-/* Savings banner */
-.savings{
-  max-width:760px;
-  margin:12px auto;
-  background:#e8f9ef;
-  color:#15803d;
-  padding:10px;
-  border-radius:10px;
-  font-size:14px;
-  text-align:center;
+.cart-item img {
+  width: 50px; /* Slightly smaller image */
+  height: 50px;
+  border-radius: 10px;
 }
 
-/* Cart card */
-.cart-card{
-  background:white;
-  border-radius:16px;
-  padding:14px;
-  border:1px solid #eee;
-  margin-bottom:14px;
+.item-info {
+  flex: 1;
 }
 
-/* Item row */
-.cart-item{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:12px 0;
+.item-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.cart-item:not(:last-child){
-  border-bottom:1px dashed #e5e7eb;
+.item-info span {
+  font-size: 13px;
+  color: #6b7280;
 }
 
-.cart-item img{
-  width:48px;
-  height:48px;
-  border-radius:10px;
+/* ===== QTY CONTROL ===== */
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.item-info{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  font-size:14px;
+.qty button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: #f3f4f6;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.item-info span{
-  color:#6b7280;
-  font-size:13px;
+.qty span {
+  min-width: 18px;
+  text-align: center;
+  font-weight: 600;
 }
 
-/* Quantity */
-.qty{
-  display:flex;
-  align-items:center;
-  gap:8px;
+/* ===== CART FOOTER ===== */
+.cart-footer {
+  border-top: 1px solid #eee;
+  padding: 14px;
+  background: white;
 }
 
-.qty button{
-  width:28px;
-  height:28px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:#f9fafb;
-  font-size:16px;
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 15px;
 }
 
-/* Bill */
-.bill-card{
-  background:white;
-  border-radius:16px;
-  padding:14px;
-  border:1px solid #eee;
-}
-
-.bill-card div{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-  font-size:14px;
-}
-
-.bill-card .free{
-  color:#16a34a;
-  font-weight:600;
-}
-
-.bill-card .pay{
-  font-weight:700;
-  font-size:16px;
-  border-top:1px solid #eee;
-  padding-top:10px;
-}
-
-/* Checkout */
-.checkout{
-  position:sticky;
-  bottom:0;
-  background:white;
-  padding:12px;
-  border-top:1px solid #eee;
-}
-
-.checkout button{
-  width:100%;
-  padding:14px;
-  background:#ec407a;
-  color:white;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-}
-
-/* ================= SIDE CART ================= */
-.cart-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-  z-index:90;
-}
-
-.cart-backdrop.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.side-cart{
-  position:fixed;
-  top:0;
-  right:-420px;
-  width:400px;
-  height:100vh;
-  background:white;
-  box-shadow:-10px 0 30px rgba(0,0,0,.15);
-  transition:.35s ease;
-  z-index:100;
-  display:flex;
-  flex-direction:column;
-}
-
-.side-cart.show{
-  right:0;
-}
-
-@media(max-width:768px){
-  .side-cart{
-    width:100%;
+@media(max-width: 480px) {
+  .side-cart {
+    width: 100%;    /* Full width on very small phones */
+    height: 100vh;
+    top: 0;
+    border-radius: 0;
   }
 }
-
-/* ================= ADDRESS MODAL ================= */
-.address-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-  z-index:120;
+.checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ec407a;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.address-backdrop.show{
-  opacity:1;
-  pointer-events:auto;
+
+.address-backdrop {
+  display: none;               /* 🔑 REQUIRED */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 120;
 }
 
-.address-modal{
-  position:fixed;
-  left:50%;
-  bottom:-100%;
-  transform:translateX(-50%);
-  width:420px;
-  max-width:95%;
-  background:white;
-  border-radius:20px 20px 0 0;
-  z-index:130;
-  transition:.35s;
-  display:flex;
-  flex-direction:column;
+.address-backdrop.show {
+  display: block;
 }
 
-.address-modal.show{
-  bottom:0;
+.address-modal {
+  position: fixed;
+  left: 50%;
+  bottom: -100%;
+  transform: translateX(-50%);
+  width: 420px;
+  max-width: 95%;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  z-index: 130;
+  transition: 0.35s ease;
+}
+
+.address-modal.show {
+  bottom: 0;
+}
+
+.best-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.best-card {
+  min-width: 140px;
+  background: white;
+  border-radius: 14px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.best-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+.filter-content {
+  margin: auto;
+  background: white;
+  padding: 20px;
+  width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+}
+
+/* ================= ADDRESS MODAL (FIXED UI) ================= */
+
+.address-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 120;
+}
+
+.address-backdrop.show {
+  display: block;
+}
+
+.address-modal {
+  position: fixed;
+  left: 50%;
+  bottom: -100%;
+  transform: translateX(-50%);
+  width: 420px;
+  max-width: 92%;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  z-index: 130;
+  transition: bottom 0.35s ease;
+  box-shadow: 0 -10px 30px rgba(0,0,0,.15);
+}
+
+.address-modal.show {
+  bottom: 0;
 }
 
 /* Header */
-.address-header{
-  padding:16px;
-  font-size:18px;
-  font-weight:700;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid var(--border);
+.address-header {
+  padding: 16px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.address-header i{
-  font-size:22px;
-  cursor:pointer;
+.address-header i {
+  font-size: 22px;
+  cursor: pointer;
+  color: #6b7280;
 }
 
 /* Body */
-.address-body{
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+.address-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.address-body label{
-  font-size:13px;
-  color:var(--muted);
+.address-body input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
 }
 
-.address-body input{
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  font-size:14px;
+.address-body input:focus {
+  border-color: #700457;
 }
 
 /* Footer */
-.address-footer{
-  padding:16px;
-  border-top:1px solid var(--border);
+.address-footer {
+  padding: 16px 18px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.address-footer button{
-  width:100%;
-  padding:14px;
-  background:#22c55e;
-  color:white;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:600;
+.address-footer button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: #22c55e;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
+/* ================= FILTER MODAL (FIXED UI) ================= */
 
+.filter-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 110;
+}
 
-/* ================= MOBILE ================= */
+.filter-modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Panel */
+.filter-content {
+  background: white;
+  width: 360px;
+  max-width: 92%;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+}
+
+/* Title */
+.filter-content h3 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Fields */
+.filter-content label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.filter-content input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+}
+
+.filter-content input:focus {
+  border-color: #700457;
+}
+
+/* Actions */
+.filter-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.filter-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#resetBtn {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+#applyBtn {
+  background: #700457;
+  color: white;
+}
+
 @media(max-width:768px){
-  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .side-cart{right:-100%}
+  .side-cart.show{right:0}
 }
 </style>
 </head>
@@ -509,19 +648,17 @@ header{
       <div class="brand">Grokly</div>
       <div class="subtitle">Fresh groceries, fast</div>
     </div>
-    <div class="location" id="openAddress">
-      <i class="ri-map-pin-line"></i>
-    <span id="currentCity">Bengaluru</span>
-</div>
-
   </div>
 
   <div class="header-row">
     <div class="search-bar">
       <i class="ri-search-line"></i>
-      <input id="search" placeholder="Search groceries">
+      <input placeholder="Search groceries">
     </div>
-    <div class="icon-btn" id="filterBtn"><i class="ri-equalizer-line"></i></div>
+    <div class="icon-btn" id="filterBtn">
+      <i class="ri-equalizer-line"></i>
+    </div>
+
     <div class="icon-btn" id="cartBtn">
       <i class="ri-shopping-cart-line"></i>
       <span class="cart-badge" id="cart-count">0</span>
@@ -529,52 +666,60 @@ header{
   </div>
 </header>
 
-<div class="grid" id="grid"></div>
-</main>
+<section class="banner">
+  <div class="banner-card">
+    <img src="./images/IMG_5097.JPG" alt="Special Offer" class="banner-img">
+    
+    <div class="banner-overlay"></div>
+    
+    <div class="banner-content">
+      <h2>Fresh groceries delivered</h2>
+      <p>Fruits, vegetables, dairy & more</p>
+    </div>
+  </div>
+</section>
 
-<!-- CART BACKDROP -->
+<!-- BEST SELLERS -->
+<section class="best-sellers">
+  <h4 class="section-title">Best Sellers 🔥</h4>
+  <div class="best-row" id="bestRow"></div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <h4 class="section-title">Categories</h4>
+  <div class="topic-row" id="categoryNav"></div>
+</section>
+
+<!-- ALL PRODUCTS -->
+<h4 class="section-title">All Products</h4>
+<div class="grid" id="grid"></div>
+
+
+<!-- CART -->
 <div class="cart-backdrop" id="cartBackdrop"></div>
 
-<!-- SIDE CART -->
 <aside class="side-cart" id="cartView">
 
   <div class="cart-header">
     <i class="ri-arrow-left-line" id="closeCart"></i>
-    Your Cart
+    <span>Your Cart</span>
   </div>
 
-  <div class="savings">Yay! You saved ₹281 on this order 😊</div>
+  <div class="cart-body" id="cartItems"></div>
 
-  <div class="cart-card" id="cartItems"></div>
-
-  <div class="bill-card" id="bill"></div>
-
-  <div class="checkout">
-    <button>Add Address to proceed</button>
+  <div class="cart-footer">
+    <div class="total-row">
+      <span>Total</span>
+      <strong id="cartTotal">₹40</strong>
+    </div>
+    <button class="checkout-btn">Checkout</button>
   </div>
 
 </aside>
 
-<!-- FILTER -->
-<div class="filter-modal" id="filterModal">
-  <div class="filter-panel">
-    <h3>Filters</h3>
-    <select id="fCategory">
-      <option value="">All categories</option>
-      <option>Fruits & Vegetables</option>
-      <option>Dairy</option>
-      <option>Snacks</option>
-    </select>
-    <input id="fPrice" type="number" placeholder="Max price">
-    <div class="filter-actions">
-      <button class="reset" id="resetBtn">Reset</button>
-      <button class="apply" id="applyBtn">Apply</button>
-    </div>
-  </div>
-</div>
 
-<!-- ADDRESS MODAL -->
-<div class="address-backdrop" id="addressBackdrop" display="none"></div>
+<div class="address-backdrop" id="addressBackdrop"></div>
 
 <div class="address-modal" id="addressModal">
   <div class="address-header">
@@ -583,23 +728,12 @@ header{
   </div>
 
   <div class="address-body">
-    <label>Full Name</label>
-    <input id="addrName" placeholder="Eg. Aditya Prasad">
-
-    <label>Phone Number</label>
-    <input id="addrPhone" placeholder="10-digit mobile number">
-
-    <label>House / Flat No.</label>
-    <input id="addrHouse" placeholder="Flat 302, Block B">
-
-    <label>Area / Street</label>
-    <input id="addrStreet" placeholder="MG Road">
-
-    <label>City</label>
+    <input id="addrName" placeholder="Full Name">
+    <input id="addrPhone" placeholder="Phone Number">
+    <input id="addrHouse" placeholder="House / Flat No.">
+    <input id="addrStreet" placeholder="Area / Street">
     <input id="addrCity" value="Bengaluru">
-
-    <label>Pincode</label>
-    <input id="addrPin" placeholder="560001">
+    <input id="addrPin" placeholder="Pincode">
   </div>
 
   <div class="address-footer">
@@ -607,198 +741,379 @@ header{
   </div>
 </div>
 
+<!-- FILTER MODAL -->
+<div class="filter-modal" id="filterModal">
+  <div class="filter-content">
+    <h3>Filter Products</h3>
+    <label>
+      Category
+      <select id="fCategory">
+        <option value="">All</option>
+        <option value="Fruits and Vegetables">Fruits and Vegetables</option>
+        <option value="Beverages">Beverages</option>
+        <option value="All">All</option>
+      </select>
+    </label>
+
+    <label>
+      Max Price
+      <input id="fPrice" type="number" placeholder="e.g. 500">
+    </label>
+    <div class="filter-actions">
+      <button id="resetBtn">Reset</button>
+      <button id="applyBtn">Apply</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const supabase = createClient(
-  'https://jgliqmqielkvncjpiowx.supabase.co',
-  'sb_publishable_XXKvo7uRkmGIKmYK-xIxhg_an2IvBTO'
-)
+  /* ================= SUPABASE ================= */
+  const supabase = createClient(
+    'https://jgliqmqielkvncjpiowx.supabase.co',
+    'sb_publishable_XXKvo7uRkmGIKmYK-xIxhg_an2IvBTO'
+  )
 
-let products = []
-let filtered = []
-let cart = JSON.parse(localStorage.getItem('cart')) || []
+  /* ================= STATE ================= */
+  let products = []
+  let filtered = []
+  let cart = JSON.parse(localStorage.getItem('cart')) || []
 
-const grid = document.getElementById('grid')
-const cartBtn = document.getElementById('cartBtn')
-const cartView = document.getElementById('cartView')
-const closeCart = document.getElementById('closeCart')
-const cartItems = document.getElementById('cartItems')
-const bill = document.getElementById('bill')
-const cartCount = document.getElementById('cart-count')
+  /* ================= ELEMENTS ================= */
+  const grid = document.getElementById('grid')
+  const categoryNav = document.getElementById('categoryNav')
+  const bestRow = document.getElementById('bestRow')
 
-const filterBtn = document.getElementById('filterBtn')
-const filterModal = document.getElementById('filterModal')
-const applyBtn = document.getElementById('applyBtn')
-const resetBtn = document.getElementById('resetBtn')
-const fCategory = document.getElementById('fCategory')
-const fPrice = document.getElementById('fPrice')
+  const cartBtn = document.getElementById('cartBtn')
+  const cartView = document.getElementById('cartView')
+  const cartBackdrop = document.getElementById('cartBackdrop')
+  const closeCart = document.getElementById('closeCart')
+  const cartItems = document.getElementById('cartItems')
+  const cartCount = document.getElementById('cart-count')
 
-// ================= ADDRESS LOGIC =================
-const addressBackdrop = document.getElementById('addressBackdrop')
-const addressModal = document.getElementById('addressModal')
-const closeAddress = document.getElementById('closeAddress')
-const saveAddressBtn = document.getElementById('saveAddressBtn')
+  const filterBtn = document.getElementById('filterBtn')
+  const filterModal = document.getElementById('filterModal')
+  const applyBtn = document.getElementById('applyBtn')
+  const resetBtn = document.getElementById('resetBtn')
+  const fCategory = document.getElementById('fCategory')
+  const fPrice = document.getElementById('fPrice')
 
-// Button already exists in your cart
-const checkoutBtn = document.querySelector('.checkout button')
+  const addressBackdrop = document.getElementById('addressBackdrop')
+  const addressModal = document.getElementById('addressModal')
+  const closeAddress = document.getElementById('closeAddress')
+  const saveAddressBtn = document.getElementById('saveAddressBtn')
 
-checkoutBtn.onclick = () => {
-  addressBackdrop.classList.add('show')
-  addressModal.classList.add('show')
-}
-
-closeAddress.onclick = closeAddressModal
-addressBackdrop.onclick = closeAddressModal
-
-function closeAddressModal(){
+  /* ================= SAFE UI RESET ================= */
+  filterModal.classList.remove('show')
   addressBackdrop.classList.remove('show')
   addressModal.classList.remove('show')
-}
-
-saveAddressBtn.onclick = () => {
-  const address = {
-    name: addrName.value.trim(),
-    phone: addrPhone.value.trim(),
-    house: addrHouse.value.trim(),
-    street: addrStreet.value.trim(),
-    city: addrCity.value.trim(),
-    pin: addrPin.value.trim()
-  }
-
-  // Simple validation
-  if(!address.name || !address.phone || !address.house || !address.pin){
-    alert("Please fill all required fields")
-    return
-  }
-
-  localStorage.setItem('delivery_address', JSON.stringify(address))
-  closeAddressModal()
-
-  alert("Address saved! Ready to place order 🚀")
-}
-
-
-/* ================= LOAD PRODUCTS ================= */
-const { data } = await supabase.from('products').select('*')
-products = data || []
-filtered = [...products]
-renderProducts()
-updateBadge()
-
-/* ================= RENDER PRODUCTS ================= */
-function renderProducts(){
-  grid.innerHTML = filtered.map(p => `
-    <div class="card">
-      <div class="card-img"><img src="${p.image_url}"></div>
-      <div class="card-title">${p.title}</div>
-      <div class="card-desc">${p.description || ''}</div>
-      <div class="card-footer">
-        ₹${p.price}
-        <button class="add-btn" onclick="addToCart(${p.id})">ADD</button>
-      </div>
-    </div>
-  `).join('')
-}
-
-/* ================= CART ================= */
-window.addToCart = id => {
-  const item = cart.find(i => i.id === id)
-  item ? item.qty++ : cart.push({ ...products.find(p=>p.id===id), qty:1 })
-  saveCart()
-}
-
-function saveCart(){
-  localStorage.setItem('cart', JSON.stringify(cart))
-  updateBadge()
-}
-
-function updateBadge(){
-  cartCount.innerText = cart.reduce((s,i)=>s+i.qty,0)
-}
-
-/* ================= OPEN CART ================= */
-const cartBackdrop = document.getElementById('cartBackdrop')
-
-cartBtn.onclick = () => {
-  renderCart()
-  cartView.classList.add('show')
-  cartBackdrop.classList.add('show')
-}
-
-closeCart.onclick = closeCartView
-cartBackdrop.onclick = closeCartView
-
-function closeCartView(){
   cartView.classList.remove('show')
   cartBackdrop.classList.remove('show')
-}
 
 
-function renderCart(){
-  if(!cart.length){
-    cartItems.innerHTML = `<p style="text-align:center;color:#777">Cart is empty</p>`
-    bill.innerHTML = ''
-    return
+  /* ================= INIT ================= */
+  closeCartView()
+  updateBadge()
+  loadProducts()
+
+  /* ================= HELPERS ================= */
+  const normalize = s =>
+    s?.toLowerCase().replace(/(^|\s)\S/g, l => l.toUpperCase())
+
+  /* ================= LOAD PRODUCTS ================= */
+  async function loadProducts() {
+    const { data, error } = await supabase.from('products').select('*')
+    if (error) {
+      console.error(error)
+      return
+    }
+
+    products = data
+    filtered = [...products]
+
+    renderBestSellers()
+    renderCategories()
+    renderProducts()
   }
 
-  let total = 0
-  cartItems.innerHTML = cart.map((i,idx)=>{
-    total += i.price * i.qty
-    return `
-      <div class="cart-item">
-        <img src="${i.image_url}">
-        <div class="item-info">
-          ${i.title}
-          <span>₹${i.price}</span>
+  /* ================= BEST SELLERS ================= */
+  function renderBestSellers() {
+    const best = products
+      .filter(p => p.best_seller === true || p.rating >= 4.5)
+      .slice(0, 10)
+
+    bestRow.innerHTML = best.map(p => `
+      <div class="best-card">
+        <img src="${p.image_url}">
+        <div>${p.title}</div>
+        <strong>₹${p.price}</strong>
+        <button class="add-btn" data-id="${p.id}">ADD</button>
+      </div>
+    `).join('')
+  }
+
+  /* ================= CATEGORIES ================= */
+  function renderCategories() {
+    const categories = [
+      { label: 'All', value: '' },
+      { label: 'Fruits and Vegetables', value: 'Fruits and Vegetables' },
+      { label: 'Beverages', value: 'Beverages' }
+    ]
+
+    categoryNav.innerHTML = categories.map((c, i) => `
+      <div class="topic-pill ${i === 0 ? 'active' : ''}" data-cat="${c.value}">
+        ${c.label}
+      </div>
+    `).join('')
+  }
+
+
+  categoryNav.addEventListener('click', e => {
+    const pill = e.target.closest('.topic-pill')
+    if (!pill) return
+
+    document.querySelectorAll('.topic-pill')
+      .forEach(p => p.classList.remove('active'))
+
+    pill.classList.add('active')
+
+    const cat = pill.dataset.cat
+
+    filtered = cat
+      ? products.filter(p => p.category === cat)
+      : [...products]
+
+    renderProducts()
+  })
+
+  /* ================= PRODUCTS GRID ================= */
+  function renderProducts() {
+    grid.innerHTML = filtered.map(p => `
+      <div class="card">
+        <div class="card-img">
+          <img src="${p.image_url}">
         </div>
-        <div class="qty">
-          <button onclick="changeQty(${idx},-1)">−</button>
-          ${i.qty}
-          <button onclick="changeQty(${idx},1)">+</button>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.description || ''}</div>
+        <div class="card-footer">
+          ₹${p.price}
+          <button class="add-btn" data-id="${p.id}">ADD</button>
         </div>
       </div>
-    `
-  }).join('')
+    `).join('')
+  }
 
-  bill.innerHTML = `
-    <div><span>Item Total</span><span>₹${total}</span></div>
-    <div><span>Delivery Fee</span><span class="free">FREE</span></div>
-    <div class="pay"><span>To Pay</span><span>₹${total}</span></div>
-  `
-}
+  /* ================= ADD TO CART (EVENT DELEGATION) ================= */
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('add-btn')) {
+      const id = Number(e.target.dataset.id)
+      addToCart(id)
+    }
+  })
 
-window.changeQty = (i,d)=>{
-  cart[i].qty += d
-  if(cart[i].qty <= 0) cart.splice(i,1)
-  saveCart()
-  renderCart()
-}
+  function addToCart(id) {
+    const product = products.find(p => p.id === id)
+    if (!product) return
 
-/* ================= FILTER ================= */
-filterBtn.onclick = () => filterModal.classList.add('show')
+    const item = cart.find(i => i.id === id)
+    item ? item.qty++ : cart.push({ ...product, qty: 1 })
 
-filterModal.onclick = e => {
-  if(e.target === filterModal) filterModal.classList.remove('show')
-}
+    saveCart()
+  }
 
-applyBtn.onclick = () => {
-  const cat = fCategory.value
-  const max = Number(fPrice.value) || Infinity
-  filtered = products.filter(p =>
-    (!cat || p.category === cat) && p.price <= max
-  )
-  renderProducts()
-  filterModal.classList.remove('show')
-}
+  /* ================= CART ================= */
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart))
+    updateBadge()
+    renderCart()
+  }
 
-resetBtn.onclick = () => {
-  fCategory.value = ''
-  fPrice.value = ''
-  filtered = [...products]
-  renderProducts()
-}
+  function updateBadge() {
+    cartCount.innerText = cart.reduce((s, i) => s + i.qty, 0)
+  }
+
+  /* ================= CART UI ================= */
+  cartBtn.onclick = () => {
+    renderCart()
+    cartView.classList.add('show')
+    cartBackdrop.classList.add('show')
+  }
+
+  function closeCartView() {
+    cartView.classList.remove('show')
+    cartBackdrop.classList.remove('show')
+  }
+
+  closeCart.onclick = closeCartView
+  cartBackdrop.onclick = closeCartView
+
+  function renderCart() {
+    if (!cart.length) {
+      cartItems.innerHTML = `
+        <p style="text-align:center;color:#6b7280;margin-top:40px">
+          Your cart is empty 🛒
+        </p>
+      `
+      document.getElementById('cartTotal').innerText = '₹0'
+      return
+    }
+
+    let total = 0
+
+    cartItems.innerHTML = cart.map((i, idx) => {
+      total += i.price * i.qty
+      return `
+        <div class="cart-item">
+          <img src="${i.image_url}">
+          <div class="item-info">
+            <h4>${i.title}</h4>
+            <span>₹${i.price}</span>
+          </div>
+          <div class="qty">
+            <button data-i="${idx}" data-d="-1">−</button>
+            <span>${i.qty}</span>
+            <button data-i="${idx}" data-d="1">+</button>
+          </div>
+        </div>
+      `
+    }).join('')
+
+    document.getElementById('cartTotal').innerText = `₹${total}`
+  }
+
+
+  /* Quantity buttons */
+  document.addEventListener('click', e => {
+    if (e.target.dataset.i) {
+      const i = Number(e.target.dataset.i)
+      const d = Number(e.target.dataset.d)
+      cart[i].qty += d
+      if (cart[i].qty <= 0) cart.splice(i, 1)
+      saveCart()
+    }
+  })
+
+  /* ================= ADDRESS MODAL ================= */
+  const checkoutBtn = document.querySelector('.checkout-btn'); // FIXED SELECTOR
+
+  // Define inputs for address
+  const addrName = document.getElementById('addrName');
+  const addrPhone = document.getElementById('addrPhone');
+  const addrHouse = document.getElementById('addrHouse');
+  const addrStreet = document.getElementById('addrStreet');
+  const addrCity = document.getElementById('addrCity');
+  const addrPin = document.getElementById('addrPin');
+
+  // open address modal
+  checkoutBtn.addEventListener('click', () => {
+    if (!cart.length) {
+      alert('Your cart is empty');
+      return;
+    }
+    addressBackdrop.classList.add('show');
+    addressModal.classList.add('show');
+  });
+
+  // close modal
+  function closeAddressModal() {
+    addressBackdrop.classList.remove('show');
+    addressModal.classList.remove('show');
+  }
+
+  closeAddress.addEventListener('click', closeAddressModal);
+  addressBackdrop.addEventListener('click', closeAddressModal);
+
+  // save address
+  saveAddressBtn.addEventListener('click', () => {
+    const address = {
+      name: addrName.value.trim(),
+      phone: addrPhone.value.trim(),
+      house: addrHouse.value.trim(),
+      street: addrStreet.value.trim(),
+      city: addrCity.value.trim(),
+      pin: addrPin.value.trim()
+    };
+
+    if (!address.name || !address.phone || !address.house || !address.pin) {
+      alert('Please fill all required fields');
+      return;
+    }
+
+    localStorage.setItem('delivery_address', JSON.stringify(address));
+    closeAddressModal();
+    alert('Address saved! Ready to place order 🚀');
+  });
+
+  /* ================= FILTER ================= */
+  filterBtn.onclick = () => filterModal.classList.add('show');
+
+  filterModal.addEventListener('click', e => {
+    if (e.target.classList.contains('filter-modal')) {
+      filterModal.classList.remove('show');
+    }
+  });
+
+  applyBtn.onclick = () => {
+    const selected = fCategory.value;
+    const max = Number(fPrice.value) || Infinity;
+
+    filtered = products.filter(p => {
+      const matchCategory =
+        !selected ||
+        selected === 'All' ||
+        p.category === selected;
+
+      const matchPrice = p.price <= max;
+      return matchCategory && matchPrice;
+    });
+
+    renderProducts();
+    filterModal.classList.remove('show');
+  };
+
+  resetBtn.onclick = () => {
+    fCategory.value = '';
+    fPrice.value = '';
+    filtered = [...products];
+    renderProducts();
+  };
+  /* ================= FILTER ================= */
+  filterBtn.onclick = () => filterModal.classList.add('show')
+
+  filterModal.addEventListener('click', e => {
+    if (e.target.classList.contains('filter-modal')) {
+      filterModal.classList.remove('show')
+    }
+  })
+
+  applyBtn.onclick = () => {
+    const selected = fCategory.value
+    const max = Number(fPrice.value) || Infinity
+
+    filtered = products.filter(p => {
+      const matchCategory =
+        !selected ||
+        selected === 'All' ||
+        p.category === selected
+
+      const matchPrice = p.price <= max
+
+      return matchCategory && matchPrice
+    })
+
+    renderProducts()
+    filterModal.classList.remove('show')
+  }
+
+
+  resetBtn.onclick = () => {
+    fCategory.value = ''
+    fPrice.value = ''
+    filtered = [...products]
+    renderProducts()
+  }
 </script>
-
+</main>
 </body>
 </html>
