@@ -331,16 +331,18 @@
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-/* ================= SUPABASE INIT ================= */
 const supabase = createClient(
   "https://nfdrnbikwzfmijrqmoqt.supabase.co",
   "YOUR_PUBLIC_ANON_KEY"
 );
 
-/* ================= GOOGLE LOGIN ================= */
 const googleBtn = document.getElementById("googleBtn");
 
+/* ================= GOOGLE LOGIN ================= */
 googleBtn.addEventListener("click", async () => {
+  // Clear stale auth state
+  await supabase.auth.signOut();
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -353,17 +355,12 @@ googleBtn.addEventListener("click", async () => {
   }
 });
 
-/* ================= SESSION CHECK ================= */
-const { data, error } = await supabase.auth.getSession();
-
-if (error) {
-  console.error("Session error:", error.message);
-}
-
-/* ================= REDIRECT IF LOGGED IN ================= */
-if (data?.session?.user) {
-  window.location.replace("https://accesco.co.in/index.html");
-}
+/* ================= AUTH STATE LISTENER ================= */
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN" && session?.user) {
+    window.location.replace("https://accesco.co.in/index.html");
+  }
+});
 </script>
 
 
