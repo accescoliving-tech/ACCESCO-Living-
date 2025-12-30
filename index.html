@@ -1328,10 +1328,19 @@
                 <div id="authContainer">
 
                     <!-- LOGIN BUTTON -->
-                    <button id="loginBtn" class="nav-login-btn" onclick="window.location.href='login.html'">
+                    <button id="navLoginBtn" class="nav-login-btn" onclick="openLoginModal()">
                         <i class="ri-user-line" aria-hidden="true"></i>
                         <span>Login</span>
                     </button>
+
+                    <img
+                        id="navProfileImg"
+                        src=""
+                        alt="User"
+                        class="nav-profile-img hidden"
+                        onclick="toggleProfileMenu()"
+                        />
+
 
                     <!-- PROFILE (HIDDEN INITIALLY) -->
                     <div id="profileWrapper" class="profile-wrapper hidden">
@@ -1345,6 +1354,23 @@
                     </div>
 
                 </div>
+
+                <style>
+
+                    .nav-profile-img {
+                        width: 38px;
+                        height: 38px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        cursor: pointer;
+                        }
+
+                        .hidden {
+                        display: none;
+                        }
+
+
+                </style>
 
             </div>
             
@@ -1431,55 +1457,7 @@
 
         </style>
 
-       <script>
-        /* ===== CHECK ACTIVE SESSION ===== */
-        document.addEventListener("DOMContentLoaded", () => {
-        const user = JSON.parse(localStorage.getItem("googleUser"));
-        if (user) activateSession(user);
-        });
-
-        /* ===== ACTIVATE SESSION ===== */
-        function activateSession(user) {
-        document.getElementById("loginBtn").classList.add("hidden");
-
-        const wrapper = document.getElementById("profileWrapper");
-        const img = document.getElementById("profileImg");
-
-        img.src = user.photoURL;
-        wrapper.classList.remove("hidden");
-        }
-
-        /* ===== CALLED AFTER GOOGLE LOGIN ===== */
-        function onGoogleLoginSuccess(user) {
-        localStorage.setItem("googleUser", JSON.stringify(user));
-        activateSession(user);
-        }
-
-        /* ===== PROFILE DROPDOWN ===== */
-        document.addEventListener("click", () => {
-        document.getElementById("profileDropdown").style.display = "none";
-        });
-
-        document.getElementById("profileImg").addEventListener("click", (e) => {
-        e.stopPropagation();
-        const dropdown = document.getElementById("profileDropdown");
-        dropdown.style.display =
-            dropdown.style.display === "block" ? "none" : "block";
-        });
-
-        /* ===== LOGOUT ===== */
-        function logout() {
-        localStorage.removeItem("googleUser");
-
-        document.getElementById("profileWrapper").classList.add("hidden");
-        document.getElementById("loginBtn").classList.remove("hidden");
-
-        document.getElementById("profileDropdown").style.display = "none";
-
-        // optional redirect
-        window.location.href = "index.html";
-        }
-        </script>
+       
 
 
         <!-- ===== SERVICES CARDS ===== -->
@@ -2251,15 +2229,49 @@
     }
   });
 
-  // LOGOUT
-  if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        try {
-            await supabase.auth.signOut();
-            location.reload();
-        } catch(err) {
-            console.warn("Logout error:", err);
-        }
-      });
-  }
+    // LOGOUT HANDLER
+/* ========= MODAL CONTROL ========= */
+function openLoginModal() {
+  document.getElementById("loginOverlay").style.display = "flex";
+}
+
+function closeLoginModal() {
+  document.getElementById("loginOverlay").style.display = "none";
+}
+
+/* ========= SESSION CHECK ========= */
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("accescoUser"));
+  if (user) activateSession(user);
+});
+
+/* ========= ACTIVATE SESSION ========= */
+function activateSession(user) {
+  // hide login button
+  document.getElementById("navLoginBtn").classList.add("hidden");
+
+  // show profile photo
+  const img = document.getElementById("navProfileImg");
+  img.src = user.photoURL;
+  img.classList.remove("hidden");
+
+  closeLoginModal();
+}
+
+/* ========= CALLED AFTER LOGIN SUCCESS ========= */
+/* CALL THIS FROM YOUR EXISTING LOGIN CODE */
+function onLoginSuccess(user) {
+  localStorage.setItem("accescoUser", JSON.stringify(user));
+  activateSession(user);
+}
+
+/* ========= LOGOUT ========= */
+function logoutUser() {
+  localStorage.removeItem("accescoUser");
+
+  document.getElementById("navProfileImg").classList.add("hidden");
+  document.getElementById("navLoginBtn").classList.remove("hidden");
+}
+
+
 </script>
