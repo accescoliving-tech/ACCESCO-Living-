@@ -1333,25 +1333,39 @@
                         <span>Login</span>
                     </button>
 
+                                        <!-- USER PROFILE (HIDDEN INITIALLY) -->
+                    <div id="navProfileWrapper" style="display:none; position:relative;">
                     <img
                         id="navProfileImg"
                         src=""
                         alt="User"
-                        class="nav-profile-img hidden"
-                        onclick="toggleProfileMenu()"
-                        />
+                        style="width:38px;height:38px;border-radius:50%;cursor:pointer;"
+                        onclick="toggleProfilePopup()"
+                    />
 
-
-                    <!-- PROFILE (HIDDEN INITIALLY) -->
-                    <div id="profileWrapper" class="profile-wrapper hidden">
-                        <img id="profileImg" class="profile-img" alt="User Profile">
-
-                        <div id="profileDropdown" class="profile-dropdown">
-                            <a href="dashboard.html">Dashboard</a>
-                            <a href="settings.html">Account Settings</a>
-                            <button onclick="logout()">Logout</button>
-                        </div>
+                    <div
+                        id="profilePopup"
+                        style="
+                        display:none;
+                        position:absolute;
+                        right:0;
+                        top:48px;
+                        background:#fff;
+                        border-radius:12px;
+                        min-width:180px;
+                        box-shadow:0 12px 30px rgba(0,0,0,0.18);
+                        overflow:hidden;
+                        z-index:9999;
+                        "
+                    >
+                        <a href="dashboard.html" style="display:block;padding:12px 16px;font-weight:700;">Dashboard</a>
+                        <a href="settings.html" style="display:block;padding:12px 16px;font-weight:700;">Account Settings</a>
+                        <button onclick="logoutUser()" style="width:100%;padding:12px 16px;border:none;background:none;font-weight:700;text-align:left;">
+                        Logout
+                        </button>
                     </div>
+                    </div>
+
 
                 </div>
 
@@ -2229,49 +2243,62 @@
     }
   });
 
-    // LOGOUT HANDLER
-/* ========= MODAL CONTROL ========= */
+/* ================= OVERLAY CONTROL ================= */
 function openLoginModal() {
   document.getElementById("loginOverlay").style.display = "flex";
 }
-
 function closeLoginModal() {
   document.getElementById("loginOverlay").style.display = "none";
 }
 
-/* ========= SESSION CHECK ========= */
+/* ================= SESSION RESTORE ================= */
 document.addEventListener("DOMContentLoaded", () => {
   const user = JSON.parse(localStorage.getItem("accescoUser"));
-  if (user) activateSession(user);
+  if (user) activateUserUI(user);
 });
 
-/* ========= ACTIVATE SESSION ========= */
-function activateSession(user) {
-  // hide login button
-  document.getElementById("navLoginBtn").classList.add("hidden");
+/* ================= ACTIVATE USER UI ================= */
+function activateUserUI(user) {
+  // Hide Login button
+  document.getElementById("navLoginBtn").style.display = "none";
 
-  // show profile photo
+  // Show profile
+  const wrapper = document.getElementById("navProfileWrapper");
   const img = document.getElementById("navProfileImg");
+
   img.src = user.photoURL;
-  img.classList.remove("hidden");
+  wrapper.style.display = "block";
 
   closeLoginModal();
 }
 
-/* ========= CALLED AFTER LOGIN SUCCESS ========= */
-/* CALL THIS FROM YOUR EXISTING LOGIN CODE */
+/* ================= CALL THIS AFTER LOGIN SUCCESS ================= */
 function onLoginSuccess(user) {
   localStorage.setItem("accescoUser", JSON.stringify(user));
-  activateSession(user);
+  activateUserUI(user);
 }
 
-/* ========= LOGOUT ========= */
+/* ================= PROFILE POPUP ================= */
+function toggleProfilePopup() {
+  const popup = document.getElementById("profilePopup");
+  popup.style.display = popup.style.display === "block" ? "none" : "block";
+}
+
+document.addEventListener("click", (e) => {
+  const popup = document.getElementById("profilePopup");
+  if (!e.target.closest("#navProfileWrapper")) {
+    popup.style.display = "none";
+  }
+});
+
+/* ================= LOGOUT ================= */
 function logoutUser() {
   localStorage.removeItem("accescoUser");
 
-  document.getElementById("navProfileImg").classList.add("hidden");
-  document.getElementById("navLoginBtn").classList.remove("hidden");
-}
+  document.getElementById("navProfileWrapper").style.display = "none";
+  document.getElementById("navLoginBtn").style.display = "inline-flex";
 
+  document.getElementById("profilePopup").style.display = "none";
+}
 
 </script>
