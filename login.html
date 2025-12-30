@@ -329,53 +329,38 @@
 </div>
 
 <script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-/* ================= SUPABASE INIT ================= */
-const supabase = createClient(
-  "https://nfdrnbikwzfmijrqmoqt.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
-);
+  // Initialize Supabase client
+  const supabase = createClient(
+    "https://nfdrnbikwzfmijrqmoqt.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
+  );
 
-const googleBtn = document.getElementById("googleBtn");
+  const googleBtn = document.getElementById("googleBtn");
 
-/* ================= HANDLE OAUTH REDIRECT ================= */
-const url = new URL(window.location.href);
-const code = url.searchParams.get("code");
-
-if (code) {
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-  if (error) {
-    console.error("OAuth session exchange failed:", error.message);
-  } else {
-    // Clean URL (remove ?code=)
-    window.history.replaceState({}, document.title, "/login.html");
-  }
-}
-
-/* ================= GOOGLE LOGIN ================= */
-googleBtn.addEventListener("click", async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: "https://accesco.co.in/login.html"
-    }
+  // 1️⃣ Start Google OAuth flow (PRODUCTION DOMAIN)
+  googleBtn.addEventListener("click", async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "https://accesco.co.in/login.html"
+      }
+    });
   });
 
-  if (error) {
-    console.error("Google login failed:", error.message);
-  }
-});
+  // 2️⃣ Consume OAuth hash & establish session
+  const { data, error } = await supabase.auth.getSession();
 
-/* ================= REDIRECT WHEN LOGGED IN ================= */
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === "SIGNED_IN" && session?.user) {
+  if (error) {
+    console.error("Auth error:", error.message);
+  }
+
+  // 3️⃣ If session exists, redirect to production home
+  if (data?.session) {
     window.location.replace("https://accesco.co.in/index.html");
   }
-});
 </script>
-
 
 
 
