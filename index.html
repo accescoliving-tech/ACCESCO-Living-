@@ -1324,10 +1324,28 @@
         <!-- ===== HERO / HEADER SECTION ===== -->
         <section class="hero">
             <div class="top-nav">
-                <button class="nav-login-btn" onclick="window.location.href='login.html'">
-                    <i class="ri-user-line" aria-hidden="true"></i>
-                    <span>Login</span>
-                </button>
+                <!-- AUTH AREA -->
+                <div id="authContainer">
+
+                    <!-- LOGIN BUTTON -->
+                    <button id="loginBtn" class="nav-login-btn" onclick="window.location.href='login.html'">
+                        <i class="ri-user-line" aria-hidden="true"></i>
+                        <span>Login</span>
+                    </button>
+
+                    <!-- PROFILE (HIDDEN INITIALLY) -->
+                    <div id="profileWrapper" class="profile-wrapper hidden">
+                        <img id="profileImg" class="profile-img" alt="User Profile">
+
+                        <div id="profileDropdown" class="profile-dropdown">
+                            <a href="dashboard.html">Dashboard</a>
+                            <a href="settings.html">Account Settings</a>
+                            <button onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
             
             <video class="hero-bg-video" autoplay muted loop playsinline poster="images/poster.jpg" fetchpriority="high">
@@ -1361,6 +1379,108 @@
                 </a>
             </div>
         </section>
+
+
+        <style>
+            /* ===== AUTH PROFILE ===== */
+            .hidden {
+            display: none;
+            }
+
+            .profile-wrapper {
+            position: relative;
+            }
+
+            .profile-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            }
+
+            .profile-dropdown {
+            position: absolute;
+            right: 0;
+            top: 48px;
+            background: #fff;
+            min-width: 180px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            display: none;
+            z-index: 9999;
+            }
+
+            .profile-dropdown a,
+            .profile-dropdown button {
+            display: block;
+            padding: 12px 16px;
+            font-weight: 600;
+            width: 100%;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            }
+
+            .profile-dropdown a:hover,
+            .profile-dropdown button:hover {
+            background: #f5f5f5;
+            }
+
+
+        </style>
+
+       <script>
+        /* ===== CHECK ACTIVE SESSION ===== */
+        document.addEventListener("DOMContentLoaded", () => {
+        const user = JSON.parse(localStorage.getItem("googleUser"));
+        if (user) activateSession(user);
+        });
+
+        /* ===== ACTIVATE SESSION ===== */
+        function activateSession(user) {
+        document.getElementById("loginBtn").classList.add("hidden");
+
+        const wrapper = document.getElementById("profileWrapper");
+        const img = document.getElementById("profileImg");
+
+        img.src = user.photoURL;
+        wrapper.classList.remove("hidden");
+        }
+
+        /* ===== CALLED AFTER GOOGLE LOGIN ===== */
+        function onGoogleLoginSuccess(user) {
+        localStorage.setItem("googleUser", JSON.stringify(user));
+        activateSession(user);
+        }
+
+        /* ===== PROFILE DROPDOWN ===== */
+        document.addEventListener("click", () => {
+        document.getElementById("profileDropdown").style.display = "none";
+        });
+
+        document.getElementById("profileImg").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const dropdown = document.getElementById("profileDropdown");
+        dropdown.style.display =
+            dropdown.style.display === "block" ? "none" : "block";
+        });
+
+        /* ===== LOGOUT ===== */
+        function logout() {
+        localStorage.removeItem("googleUser");
+
+        document.getElementById("profileWrapper").classList.add("hidden");
+        document.getElementById("loginBtn").classList.remove("hidden");
+
+        document.getElementById("profileDropdown").style.display = "none";
+
+        // optional redirect
+        window.location.href = "index.html";
+        }
+        </script>
+
 
         <!-- ===== SERVICES CARDS ===== -->
         <section id="services">
