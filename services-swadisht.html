@@ -212,7 +212,7 @@
 
                 <!-- Menu Item 1 - Butter Chicken -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400" alt="Butter Chicken" class="w-full h-48 object-cover">
+                    <img src="https://images.immediate.co.uk/production/volatile/sites/30/2021/02/butter-chicken-ac2ff98.jpg?quality=90&resize=440,400" alt="Butter Chicken" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Butter Chicken</h3>
                         <p class="text-gray-600 mb-4">Creamy, rich curry with tender chicken pieces</p>
@@ -227,7 +227,7 @@
 
                 <!-- Menu Item 2 - Paneer Tikka -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400" alt="Paneer Tikka" class="w-full h-48 object-cover">
+                    <img src="https://orders.popskitchen.in/storage/2024/09/image-358.png" alt="Paneer Tikka" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Paneer Tikka</h3>
                         <p class="text-gray-600 mb-4">Spicy grilled paneer with aromatic spices</p>
@@ -242,7 +242,7 @@
 
                 <!-- Menu Item 3 - Chicken Biryani -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400" alt="Biryani" class="w-full h-48 object-cover">
+                    <img src="https://img.freepik.com/premium-photo/dum-handi-chicken-biryani-is-prepared-earthen-clay-pot-called-haandi-popular-indian-non-vegetarian-food_466689-52344.jpg?semt=ais_hybrid&w=740&q=80" alt="Biryani" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Chicken Biryani</h3>
                         <p class="text-gray-600 mb-4">Fragrant basmati rice with tender chicken</p>
@@ -257,7 +257,7 @@
 
                 <!-- Menu Item 4 - Masala Dosa -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=400" alt="Masala Dosa" class="w-full h-48 object-cover">
+                    <img src="https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?cs=srgb&dl=pexels-saveurssecretes-5560763.jpg&fm=jpg" alt="Masala Dosa" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Masala Dosa</h3>
                         <p class="text-gray-600 mb-4">Crispy crepe filled with spiced potato</p>
@@ -272,7 +272,7 @@
 
                 <!-- Menu Item 5 - Rajma Chawal -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1589647363585-f4a7d3877b10?w=400" alt="Rajma Chawal" class="w-full h-48 object-cover">
+                    <img src="https://t4.ftcdn.net/jpg/09/57/46/33/360_F_957463328_KDyf8xUhy9zTKVrJ7kWvrupGTdBZyEWK.jpg" alt="Rajma Chawal" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Rajma Chawal</h3>
                         <p class="text-gray-600 mb-4">Kidney beans curry with steamed rice</p>
@@ -287,7 +287,7 @@
 
                 <!-- Menu Item 6 - Gulab Jamun -->
                 <div class="menu-item bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1551782450-17144efb5723?w=400" alt="Gulab Jamun" class="w-full h-48 object-cover">
+                    <img src="https://pipingpotcurry.com/wp-content/uploads/2023/12/Gulab-Jamun-Recipe-Piping-Pot-Curry.jpg" alt="Gulab Jamun" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Gulab Jamun</h3>
                         <p class="text-gray-600 mb-4">Sweet dumplings in rose syrup</p>
@@ -420,12 +420,32 @@
         document.addEventListener('DOMContentLoaded', function() {
             const menuCards = document.querySelectorAll('.menu-item');
             menuCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
+                const titleNode = card.querySelector('h3');
+                const descNode = card.querySelector('p');
+                const imgNode = card.querySelector('img');
+                const title = titleNode ? titleNode.textContent.toLowerCase().trim() : '';
+                const description = descNode ? descNode.textContent.toLowerCase().trim() : '';
+                const imgSrc = imgNode ? imgNode.getAttribute('src') : '';
+                const imgAlt = imgNode ? imgNode.getAttribute('alt') : '';
+
+                // Ensure the image alt matches the item title for accessibility and clarity
+                if (imgNode && titleNode) {
+                    const normalizedTitle = titleNode.textContent.trim();
+                    if (!imgAlt || imgAlt.toLowerCase() !== normalizedTitle.toLowerCase()) {
+                        imgNode.setAttribute('alt', normalizedTitle);
+                    }
+                }
+
+                // Store a stable mapping on the DOM element so images remain tied to their items
+                if (card && imgSrc) {
+                    card.dataset.image = imgSrc;
+                }
+
                 menuItems.push({
                     element: card,
                     title: title,
-                    description: description
+                    description: description,
+                    image: imgSrc
                 });
             });
         });
@@ -511,9 +531,58 @@
             const menuContainer = document.getElementById('menu').querySelector('.grid');
             let visibleCount = 0;
 
+            // simple normalizations for common misspellings
+            const normalize = (word) => {
+                const map = {
+                    'biriyani': 'biryani',
+                    'biriani': 'biryani',
+                    'biryani': 'biryani'
+                };
+                return map[word] || word;
+            };
+
+            // small Levenshtein distance implementation for fuzzy matching
+            const levenshtein = (a, b) => {
+                if (a === b) return 0;
+                const al = a.length, bl = b.length;
+                if (al === 0) return bl;
+                if (bl === 0) return al;
+                const v0 = new Array(bl + 1).fill(0);
+                const v1 = new Array(bl + 1).fill(0);
+                for (let j = 0; j <= bl; j++) v0[j] = j;
+                for (let i = 0; i < al; i++) {
+                    v1[0] = i + 1;
+                    for (let j = 0; j < bl; j++) {
+                        const cost = a[i] === b[j] ? 0 : 1;
+                        v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+                    }
+                    for (let j = 0; j <= bl; j++) v0[j] = v1[j];
+                }
+                return v1[bl];
+            };
+
+            const tokens = searchTerm === '' ? [] : searchTerm.split(/\s+/).map(normalize).filter(Boolean);
+
             menuItems.forEach(item => {
-                const matches = item.title.includes(searchTerm) || item.description.includes(searchTerm);
-                if (matches || searchTerm === '') {
+                // If empty query, show everything
+                if (tokens.length === 0) {
+                    item.element.classList.remove('hidden');
+                    visibleCount++;
+                    return;
+                }
+
+                // require that every token matches either title or description (allow small typos)
+                const allMatch = tokens.every(token => {
+                    if (item.title.includes(token) || item.description.includes(token)) return true;
+                    // check fuzzy match against each word in title/description
+                    const words = (item.title + ' ' + item.description).split(/\s+/);
+                    return words.some(w => {
+                        const d = levenshtein(w, token);
+                        return d <= 1 && Math.min(w.length, token.length) > 2;
+                    });
+                });
+
+                if (allMatch) {
                     item.element.classList.remove('hidden');
                     visibleCount++;
                 } else {
