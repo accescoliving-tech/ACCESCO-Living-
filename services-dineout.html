@@ -1,33 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Dineout | ACCESCO</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --accent: rgba(112, 4, 87, 1); }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: 'Inter', sans-serif; background: radial-gradient(120% 120% at 20% 20%, #ffffff 0%, #eef2ff 35%, #dfe4ff 70%); overflow: hidden; }
-    .back { position: fixed; top: 18px; left: 18px; text-decoration: none; color: var(--accent); font-weight: 700; padding: 10px 16px; border-radius: 12px; background: rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.08); backdrop-filter: blur(8px); }
-    .card { position: relative; padding: 48px 56px; width: min(560px, 92vw); background: rgba(255,255,255,0.9); border-radius: 28px; box-shadow: 0 25px 70px rgba(62, 37, 74, 0.18); backdrop-filter: blur(12px); text-align: center; color: #1f1f2e; overflow: hidden; }
-    .card::before, .card::after { content: ""; position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0)); opacity: 0.9; animation: float 10s ease-in-out infinite; }
-    .card::before { width: 240px; height: 240px; top: -120px; left: -80px; }
-    .card::after  { width: 280px; height: 280px; bottom: -140px; right: -110px; animation-delay: -4s; }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-    h1 { margin: 0 0 12px; font-size: 34px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
-    p  { margin: 0; font-size: 18px; color: #3d3d52; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 10px 16px; border-radius: 999px; font-weight: 700; color: var(--accent); background: linear-gradient(120deg, rgba(112,4,87,0.12), rgba(112,4,87,0.06)); border: 1px solid rgba(112,4,87,0.12); box-shadow: inset 0 1px 0 rgba(255,255,255,0.7); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dineout | Opening Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Outfit',sans-serif;
+  color:white;
+  background:#000;
+  overflow:hidden;
+}
+
+/* --------- background hero --------- */
+.hero{
+  height:100vh;
+  width:100%;
+  background-image:url('https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg');
+  background-size:cover;
+  background-position:center;
+  filter:brightness(.45);
+  position:absolute;
+  top:0; left:0;
+  z-index:-1;
+}
+
+/* --------- content container --------- */
+.container{
+  height:100vh;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:0 20px;
+  text-align:center;
+}
+
+/* --------- big brand title --------- */
+.brand{
+  font-size:120px;
+  font-weight:900;
+  letter-spacing:-2px;
+  background:linear-gradient(to bottom,#ffffff,#ffe3e3,#ffb1b1);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:18px;
+}
+
+/* --------- golden divider --------- */
+.divider{
+  width:200px;
+  height:3px;
+  background:linear-gradient(90deg,transparent,#ffcba6,transparent);
+  margin-bottom:40px;
+}
+
+/* --------- subtitle tagline --------- */
+.subtitle{
+  font-size:28px;
+  max-width:600px;
+  opacity:.95;
+  margin-bottom:55px;
+  line-height:1.4;
+}
+
+/* --------- badge tagline --------- */
+.coming{
+  font-size:20px;
+  padding:10px 28px;
+  border:1px solid rgba(255,200,150,.7);
+  border-radius:50px;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(6px);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  font-weight:600;
+}
+
+/* --------- footer --------- */
+.footer{
+  position:absolute;
+  bottom:25px;
+  width:100%;
+  text-align:center;
+  font-size:14px;
+  opacity:.7;
+  letter-spacing:1px;
+}
+
+/* --------- responsiveness --------- */
+@media (max-width:900px){
+  .brand{font-size:68px;}
+  .subtitle{font-size:22px;}
+  .divider{width:150px;}
+}
+</style>
 </head>
 <body>
-  <a class="back" href="index.html">← Back</a>
-  <div class="card">
-    <div class="pill">Dineout</div>
-    <h1>Stay Tuned</h1>
-    <p>We will be Launching Soon</p>
-  </div>
+
+<!-- background hero -->
+<div class="hero"></div>
+
+<div class="container">
+  <div class="brand">Dineout</div>
+  <div class="divider"></div>
+  <div class="subtitle">A new gourmet dining journey — crafted to delight your senses.</div>
+  <div class="coming">Coming Soon</div>
+</div>
+
+<div class="footer">© 2025 Dineout — Crafted with passion</div>
+
 </body>
 </html>
