@@ -2115,61 +2115,6 @@
     </script>
     
 
-    <!-- ===== EXTERNAL CHAT INTEGRATION: Dialogflow Messenger ===== -->
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
-    
-    <style>
-    df-messenger {
-        --df-messenger-font-family: system-ui, -apple-system, BlinkMacSystemFont;
-
-        /* Title bar */
-        --df-messenger-titlebar-background: #8a2be2;
-        --df-messenger-titlebar-font-color: #000000;
-
-        /* Launcher */
-        --df-messenger-button-titlebar-color: rgba(0, 0, 0, 0.08);
-        --df-messenger-button-titlebar-font-color: #000000;
-
-        /* ✅ Chat background (VISIBLE but glassy) */
-        --df-messenger-chat-background-color:black;
-
-        /* ✅ Bot messages */
-        --df-messenger-message-bot-background: #000000;
-        --df-messenger-message-bot-font-color: #ffffff;
-
-        /* User messages */
-        --df-messenger-message-user-background: rgb(0, 0, 0);
-        --df-messenger-message-user-font-color: rgb(255, 255, 255);
-
-        /* Input */
-        --df-messenger-input-box-background: #ffffff;
-        --df-messenger-input-font-color: #111827;
-
-        /* Send icon */
-        --df-messenger-send-icon-color: #8a2be2;
-
-        border-radius: 58px;
-    }
-
-
-    /* Mobile full screen */
-    @media (max-width: 480px) {
-        df-messenger {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        }
-    }
-  </style>
-    <df-messenger
-        intent="WELCOME"
-        chat-title="ACCESCO AI"
-        agent-id="8beafa4a-339b-44ff-a386-62d386a2481b"
-        language-code="en"
-        chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
-    </df-messenger>
-
-
     <!-- ===== EXTERNAL INTEGRATIONS: Supabase auth & session checks ===== -->
     <script type="module">
 /* ======================================================
@@ -2277,3 +2222,73 @@ document.addEventListener("click", (e) => {
   }
 });
 </script>
+
+<!-- ===== EXTERNAL CHAT INTEGRATION: Dialogflow Messenger ===== -->
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
+    
+<style>
+  df-messenger {
+    /* --- Main Branding --- */
+    --df-messenger-font-family: 'Outfit', sans-serif;
+    --df-messenger-titlebar-background: #700457;
+    --df-messenger-titlebar-font-color: #ffffff;
+    
+    /* --- Launcher Settings --- */
+    --df-messenger-button-titlebar-color: transparent !important; /* Force transparency */
+    --df-messenger-chat-background-color: #0f172a;
+  }
+
+  /* --- 🔑 FORCE TRANSPARENCY & INCREASE SIZE --- */
+  /* This targets the button container inside the Shadow DOM */
+  df-messenger >>> .df-messenger-wrapper .launcher {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 110px !important; /* Larger container for the large icon */
+    height: 110px !important;
+  }
+
+  /* This targets the icon image itself */
+  df-messenger >>> .df-messenger-wrapper .launcher img {
+    width: 90px !important; /* Increased size */
+    height: 90px !important;
+    max-width: none !important; /* Removes default size limits */
+    max-height: none !important;
+    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3)); /* Adds depth without a solid box */
+  }
+
+  /* --- Optional: Adjust position to prevent clipping --- */
+  df-messenger >>> .df-messenger-wrapper {
+    bottom: 20px !important;
+    right: 20px !important;
+  }
+    @media (max-width: 480px) {
+        /* Scale down the login button seen in image_745036.png */
+        .login-btn {
+            transform: scale(0.8);
+            margin-right: 10px;
+            z-index: 5 !important;
+        }
+
+        /* scale down and reposition large chatbot launcher from image_73dbf6.png */
+        df-messenger >>> .df-messenger-wrapper .launcher {
+            width: 60px !important;
+            height: 60px !important;
+            bottom: 15px !important;
+            right: 15px !important;
+        }
+
+        df-messenger >>> .df-messenger-wrapper .launcher img {
+            width: 45px !important;
+            height: 45px !important;
+        }
+    }
+</style>
+<df-messenger
+    intent="WELCOME"
+    chat-title="ACCESCO AI"
+    agent-id="8beafa4a-339b-44ff-a386-62d386a2481b"
+    language-code="en"
+    chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
+</df-messenger>
