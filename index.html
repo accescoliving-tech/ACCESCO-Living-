@@ -1322,45 +1322,144 @@
 
         <main id="home">
         <!-- ===== HERO / HEADER SECTION ===== -->
-        <section class="hero">
-            <div class="top-nav">
-                <button class="nav-login-btn" onclick="window.location.href='login.html'">
-                    <i class="ri-user-line" aria-hidden="true"></i>
-                    <span>Login</span>
-                </button>
-            </div>
-            
-            <video class="hero-bg-video" autoplay muted loop playsinline poster="images/poster.jpg" fetchpriority="high">
-                <source src="images/start.mp4" type="video/mp4">
-            </video>
-            <div class="hero-grid">
-                
-                <img src="images/accesco_white_2.png" class="hero-logo-img" alt="Accesco Logo" width="120" height="120">
-                <h2 class="hero-title">ACCESCO LIVING</h2>
-                <div class="hero-kicker">India's first Intelligent commerce Brand</div>
-                <p class="hero-sub">Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.</p>
+<section class="hero">
+  <div class="top-nav">
 
-                <div class="hero-ctas">
-                    <a href="#services" style="text-decoration:none;">
-                        <button class="cta-pill">Explore Services</button>
-                    </a>
-                </div>
+    <!-- AUTH AREA -->
+    <div id="authContainer">
 
-                <div class="hero-app-buttons">
-                    <a href="#" class="app-btn-link">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" width="200" height="60">
-                    </a>
-                    <a href="#" class="app-btn-link">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store" width="200" height="60">
-                    </a>
-                </div>
+      <!-- LOGIN BUTTON (VISIBLE BY DEFAULT) -->
+      <button
+        id="navLoginBtn"
+        class="nav-login-btn"
+        onclick="window.location.href='login.html'"
+        >
+        <i class="ri-user-line" aria-hidden="true"></i>
+        <span>Login</span>
+        </button>
 
-                <a href="#services" class="scroll-down-btn">
-                    Scroll down
-                    <i class="ri-arrow-down-s-line"></i>
-                </a>
-            </div>
-        </section>
+
+      <!-- USER PROFILE (HIDDEN UNTIL LOGIN) -->
+      <div id="navProfileWrapper" style="display:none; position:relative;">
+
+        <img
+          id="navProfileImg"
+          src=""
+          alt="User Profile"
+          class="nav-profile-img"
+          onclick="toggleProfilePopup()"
+        />
+
+        <!-- PROFILE POPUP -->
+        <div id="profilePopup" class="profile-popup">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="settings.html">Account Settings</a>
+          <button onclick="logoutUser()" style="color: red;">Logout</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- HERO BACKGROUND -->
+  <video
+    class="hero-bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="images/poster.jpg"
+    fetchpriority="high"
+  >
+    <source src="images/start.mp4" type="video/mp4">
+  </video>
+
+  <div class="hero-grid">
+    <img
+      src="images/accesco_white.png"
+      class="hero-logo-img"
+      alt="Accesco Logo"
+      width="120"
+      height="120"
+    />
+
+    <h2 class="hero-title">ACCESCO LIVING</h2>
+    <div class="hero-kicker">India's first Intelligent commerce Brand</div>
+    <p class="hero-sub">
+      Groceries, fashion, food, finance, rentals & more — all in one intelligent ecosystem.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#services">
+        <button class="cta-pill">Explore Services</button>
+      </a>
+    </div>
+
+    <div class="hero-app-buttons">
+      <a href="#" class="app-btn-link">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+          alt="Get it on Google Play"
+        >
+      </a>
+      <a href="#" class="app-btn-link">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+          alt="Download on the App Store"
+        >
+      </a>
+    </div>
+
+    <a href="#services" class="scroll-down-btn">
+      Scroll down
+      <i class="ri-arrow-down-s-line"></i>
+    </a>
+  </div>
+</section>
+
+<style>
+/* ===== NAV PROFILE ===== */
+.nav-profile-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* ===== PROFILE POPUP ===== */
+.profile-popup {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 48px;
+  background: #fff;
+  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.profile-popup a,
+.profile-popup button {
+  display: block;
+  padding: 12px 16px;
+  font-weight: 700;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-popup a:hover,
+.profile-popup button:hover {
+  background: #f5f5f5;
+}
+</style>
 
         <!-- ===== SERVICES CARDS ===== -->
         <section id="services">
@@ -1727,7 +1826,7 @@
                         <div class="ribbon-pill"><i class="ri-shield-keyhole-line"></i>Private, compliant handoff</div>
                     </div>
 
-                    <form action="https://formspree.io/f/xnneelwy" method="POST" class="form-grid">
+                    <form action="https://formspree.io/f/mdaojdag" method="POST" class="form-grid">
                         <div class="form-group">
                             <label for="name">Your Name</label>
                             <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" required>
@@ -1759,7 +1858,7 @@
             <div class="footer-grid">
                 <div>
                     <div style="display:flex;gap:14px;align-items:center">
-                        <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco.png" alt="Accesco Logo" width="110" height="110" loading="lazy" decoding="async"></div>
+                        <div class="logo" style="width:110px;height:110px;font-size:18px"><img src="images/accesco_original.png" alt="Accesco Logo" width="110" height="110" loading="lazy" decoding="async"></div>
                         <div>
                             <div style="font-weight:800;color: white; font-size: 24px;">ACCESCO</div>
                             <div style="color:var(--muted);margin-top:6px; max-width: 250px;">Empowering digital excellence through innovative solutions.</div>
@@ -1791,8 +1890,8 @@
                     <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
                     <div class="social-links">
                         <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon" aria-label="Instagram" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/accesco_living?s=21" class="social-icon" aria-label="Twitter" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="https://www.youtube.com/@accescoliving" class="social-icon" aria-label="YouTube" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://x.com/accesco_living?s=21" target="_blank" class="social-icon" aria-label="Twitter" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://www.youtube.com/@accescoliving" target="_blank" class="social-icon" aria-label="YouTube" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
                         <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon" aria-label="LinkedIn" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
                     </div>
 
@@ -2072,74 +2171,110 @@
 
 
     <!-- ===== EXTERNAL INTEGRATIONS: Supabase auth & session checks ===== -->
-    <script type="module" defer>
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    <script type="module">
+/* ======================================================
+   SUPABASE SETUP
+====================================================== */
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  const supabase = createClient(
-    "https://nfdrnbikwzfmijrqmoqt.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
-  );
+const supabase = createClient(
+  "https://nfdrnbikwzfmijrqmoqt.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
+);
 
-  const loginOverlay = document.querySelector(".login-overlay");
-  const openLogin = document.getElementById("openLogin");
-  
-  if (openLogin) {
-      openLogin.addEventListener("click", () => {
-        loginOverlay.classList.add("show");
-      });
+/* ======================================================
+   DOM ELEMENTS
+====================================================== */
+const loginOverlay = document.getElementById("loginOverlay");
+const navLoginBtn = document.getElementById("navLoginBtn");
+const navProfileWrapper = document.getElementById("navProfileWrapper");
+const navProfileImg = document.getElementById("navProfileImg");
+const profilePopup = document.getElementById("profilePopup");
+
+/* ======================================================
+   UI HELPERS
+====================================================== */
+function showLoggedInUI(user) {
+  if (navLoginBtn) navLoginBtn.style.display = "none";
+
+  if (navProfileWrapper && navProfileImg) {
+    navProfileImg.src =
+      user.user_metadata?.avatar_url || "images/accesco.png";
+    navProfileWrapper.style.display = "block";
   }
 
-  const guestActions = document.getElementById("guestActions");
-  const userMenu = document.getElementById("userMenu");
-  const userAvatar = document.getElementById("userAvatar");
-  const userDropdown = document.getElementById("userDropdown");
-  const logoutBtn = document.getElementById("logoutBtn");
+  if (loginOverlay) loginOverlay.style.display = "none";
+}
 
-  // WRAPPED IN TRY/CATCH TO PREVENT CONSOLE ERRORS
-  try {
-      const { data } = await supabase.auth.getSession();
+function showLoggedOutUI() {
+  if (navProfileWrapper) navProfileWrapper.style.display = "none";
+  if (navLoginBtn) navLoginBtn.style.display = "inline-flex";
+  if (profilePopup) profilePopup.style.display = "none";
+}
 
-      if (data && data.session) {
-        // USER LOGGED IN
-        if(guestActions) guestActions.style.display = "none";
-        if(userMenu) userMenu.style.display = "block";
-        if(loginOverlay) loginOverlay.classList.remove("show");
+/* ======================================================
+   SESSION CHECK (ON PAGE LOAD)
+====================================================== */
+try {
+  const { data } = await supabase.auth.getSession();
 
-        if(userAvatar && data.session.user.user_metadata.avatar_url) {
-            userAvatar.src = data.session.user.user_metadata.avatar_url;
-        }
-      } else {
-        // USER NOT LOGGED IN
-        if(guestActions) guestActions.style.display = "block";
-        if(userMenu) userMenu.style.display = "none";
-      }
-  } catch (error) {
-      console.warn("Supabase auth check failed (Expected if offline/bad config):", error);
+  if (data?.session?.user) {
+    showLoggedInUI(data.session.user);
+  } else {
+    showLoggedOutUI();
+  }
+} catch (err) {
+  console.warn("Auth check failed:", err);
+  showLoggedOutUI();
+}
+
+/* ======================================================
+   AUTH STATE CHANGE LISTENER
+====================================================== */
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN" && session?.user) {
+    showLoggedInUI(session.user);
   }
 
-  // DROPDOWN TOGGLE
-  if (userAvatar) {
-      userAvatar.addEventListener("click", () => {
-        userDropdown.style.display =
-          userDropdown.style.display === "flex" ? "none" : "flex";
-      });
+  if (event === "SIGNED_OUT") {
+    showLoggedOutUI();
   }
+});
 
-  document.addEventListener("click", (e) => {
-    if (userMenu && !userMenu.contains(e.target)) {
-      if(userDropdown) userDropdown.style.display = "none";
-    }
-  });
+/* ======================================================
+   EXPOSE FUNCTIONS TO HTML (MODULE SAFE)
+====================================================== */
+window.openLoginModal = function () {
+  if (loginOverlay) loginOverlay.style.display = "flex";
+};
 
-  // LOGOUT
-  if (logoutBtn) {
-      logoutBtn.addEventListener("click", async () => {
-        try {
-            await supabase.auth.signOut();
-            location.reload();
-        } catch(err) {
-            console.warn("Logout error:", err);
-        }
-      });
+window.closeLoginModal = function () {
+  if (loginOverlay) loginOverlay.style.display = "none";
+};
+
+window.toggleProfilePopup = function () {
+  if (!profilePopup) return;
+
+  profilePopup.style.display =
+    profilePopup.style.display === "block" ? "none" : "block";
+};
+
+window.logoutUser = async function () {
+  await supabase.auth.signOut();
+  showLoggedOutUI();
+};
+
+/* ======================================================
+   CLOSE PROFILE POPUP ON OUTSIDE CLICK
+====================================================== */
+document.addEventListener("click", (e) => {
+  if (
+    navProfileWrapper &&
+    profilePopup &&
+    !navProfileWrapper.contains(e.target)
+  ) {
+    profilePopup.style.display = "none";
   }
+});
 </script>
+

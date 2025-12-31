@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Monthly Budget AI | Accesco</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --primary: rgb(112, 4, 87);
+    --primary-soft: rgba(112, 4, 87, 0.08);
+    --bg: #fdfcff;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+}
+
+* { box-sizing: border-box; font-family: Inter, system-ui, sans-serif; }
+body { margin: 0; background: linear-gradient(180deg, #ffffff, var(--primary-soft)); color: var(--text); }
+.wrapper { max-width: 1150px; margin: 40px auto; padding: 20px; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.brand { display: flex; gap: 14px; align-items: center; }
+.logo { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.logo img { width: 100%; height: 100%; object-fit: contain; }
+.subtitle { font-size: 14px; color: var(--muted); }
+
+/* GRID & CARD STYLES */
+.grid { display: grid; grid-template-columns: 380px 1fr; gap: 32px; }
+.card { background: var(--card); border-radius: 22px; padding: 26px; box-shadow: 0 14px 40px rgba(112,4,87,0.12); }
+.step { font-size: 13px; color: var(--primary); font-weight: 700; margin-bottom: 6px; }
+h2 { margin: 0 0 16px; font-size: 20px; }
+label { display: block; margin-top: 18px; font-size: 14px; font-weight: 600; }
+input { width: 100%; margin-top: 6px; padding: 13px 14px; border-radius: 14px; border: 1px solid #e5e7eb; }
+.cta { margin-top: 28px; width: 100%; padding: 15px; background: var(--primary); color: white; font-weight: 700; border-radius: 16px; border: none; cursor: pointer; }
+.hidden { display: none; }
+
+/* RESULTS STYLES */
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.metric { padding: 18px; border-radius: 18px; background: var(--primary-soft); }
+.metric strong { display: block; font-size: 22px; color: var(--primary); }
+.flex { display: flex; gap: 34px; margin-top: 30px; align-items: center; }
+table { width: 100%; border-collapse: collapse; }
+td { padding: 11px 0; border-bottom: 1px dashed rgba(112,4,87,0.25); font-size: 14px; }
+td:last-child { text-align: right; font-weight: 600; color: var(--primary); }
+
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .flex { flex-direction: column; } }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header">
+        <div class="brand">
+            <div class="logo">
+                <img src="accesco.png" alt="">            
+            </div>
+            <div>
+                <strong>Monthly Budget AI</strong>
+                <div class="subtitle">Smart financial planning</div>
+            </div>
+        </div>
+        <div class="subtitle">India · AI Powered</div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="step">STEP 1</div>
+            <h2>Enter your details</h2>
+            <label>Monthly Income</label>
+            <input id="income" type="number" value="50000">
+            <label>Rent / EMI</label>
+            <input id="rent" type="number" value="15000">
+            <label>City Cost Index</label>
+            <input id="cost_index" type="number" step="0.01" value="1.0">
+            <label>Family Members</label>
+            <input id="family_members" type="number" value="1">
+            <button class="cta" onclick="generate()">Generate Budget</button>
+        </div>
+
+        <div class="card hidden" id="result">
+            <div class="step">STEP 2</div>
+            <h2>Your monthly budget</h2>
+            <div class="summary">
+                <div class="metric"><span>Needs</span><strong id="needs">₹0</strong></div>
+                <div class="metric"><span>Wants</span><strong id="wants">₹0</strong></div>
+                <div class="metric"><span>Savings</span><strong id="savings">₹0</strong></div>
+            </div>
+            <div class="flex">
+                <div style="width: 260px;"><canvas id="chart"></canvas></div>
+                <table id="table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let chart;
+function inr(v) { return "₹" + Math.round(v).toLocaleString("en-IN"); }
+
+async function generate() {
+    const payload = {
+        income: +document.getElementById('income').value,
+        rent: +document.getElementById('rent').value,
+        cost_index: +document.getElementById('cost_index').value,
+        family_members: +document.getElementById('family_members').value
+    };
+
+    try {
+        const res = await fetch("/predict", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        });
+        const d = await res.json();
+        
+        // Save transport value for Emergency Fund first
+        const transportVal = d.transport || 0;
+        const travelVal = d.travel || 0;
+
+        // 1. Set Emergency Fund (using the original logic)
+        d.emergency_fund = transportVal;
+
+        // 2. Create the combined "Travel + Transport" label
+        d['travel_and_transport'] = travelVal + transportVal;
+
+        // 3. Clean up the individual transport/travel keys for the table display
+        delete d.transport;
+        delete d.travel;
+
+        // Needs calculation
+        const needsVal = payload.rent + (d.grocery_and_essentials || 0) + (d.education || 0) + (d.healthcare || 0) + (d.emergency_fund || 0);
+        
+        // Wants calculation (using the combined field)
+        const wantsVal = (d.travel_and_transport || 0) + (d.entertainment || 0);
+
+        document.getElementById('needs').textContent = inr(needsVal);
+        document.getElementById('wants').textContent = inr(wantsVal);
+        document.getElementById('savings').textContent = inr(d.savings || 0);
+
+        const table = document.getElementById('table');
+        table.innerHTML = "";
+        Object.entries(d).forEach(([k, v]) => {
+            table.innerHTML += `<tr><td>${k.replace(/_/g, " ")}</td><td>${inr(v)}</td></tr>`;
+        });
+
+        const ctx = document.getElementById('chart').getContext('2d');
+        if (chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["Needs", "Wants", "Savings"],
+                datasets: [{
+                    data: [needsVal, wantsVal, d.savings || 0],
+                    backgroundColor: ["rgb(112,4,87)", "rgba(112,4,87,0.6)", "rgba(112,4,87,0.35)"]
+                }]
+            },
+            options: { cutout: "70%", plugins: { legend: { position: "bottom" } } }
+        });
+        document.getElementById("result").classList.remove("hidden");
+    } catch (e) { console.error(e); }
+}
+</script>
+</body>
+</html>
