@@ -1,123 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>InstaStyle | Coming Soon</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;900&display=swap" rel="stylesheet">
+<!-- FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&display=swap" rel="stylesheet" />
 
 <style>
+/* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
+html, body {height:100%;}
 
+/* BODY SETTINGS + SAFE AREA */
 body{
-  height:100vh;
   font-family:'Outfit',sans-serif;
   color:#fff;
   overflow:hidden;
   background:#000;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  display:flex;
+  flex-direction:column;
 }
 
-/* --- Fullscreen clothing fashion background --- */
+/* BACKGROUND IMAGE (fashion clothing) */
 .bg{
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
   background:
-    linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.8)),
-    url('https://images.unsplash.com/photo-1610375461246-ef494ab7403d?q=80&w=2070&auto=format&fit=crop');
-    /* This image: models wearing fashion clothing on runway */
+   linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.82)),
+   url('https://www.cotstyle.com/cdn/shop/articles/what-is-fast-fashion_350x.jpg?v=1697801812');
   background-size:cover;
   background-position:center;
-  filter:saturate(1.12) brightness(.9);
+  background-repeat:no-repeat;
   z-index:-3;
 }
 
-/* --- Subtle grain overlay for fashion texture --- */
+/* GRAIN OVERLAY */
 .grain{
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
+  background:url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  opacity:.18;
   pointer-events:none;
   z-index:-2;
-  background:url("./images/instastyle_bg.jpg");
-  opacity:.18;
 }
 
-/* --- Soft vignette for luxury depth --- */
+/* VIGNETTE RIM */
 .vignette{
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
+  background:radial-gradient(circle, transparent 55%, rgba(0,0,0,0.85));
   pointer-events:none;
   z-index:-1;
-  background:radial-gradient(circle, transparent 55%, rgba(0,0,0,0.9));
 }
 
-/* --- Center content --- */
+/* MAIN CONTENT AREA */
 .container{
-  height:100vh;
+  flex:1;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:0 22px;
+  padding:0 clamp(12px,5vw,40px);
 }
 
-/* --- Brand wordmark --- */
+/* BRAND LOGO TEXT */
 .brand{
   font-family:'Playfair Display', serif;
   font-weight:900;
-  font-size:95px;
-  letter-spacing:2px;
+  letter-spacing:1.5px;
   text-transform:uppercase;
-  margin-bottom:14px;
-  background:linear-gradient(to bottom,#ffffff,#ffecec);
+  background:linear-gradient(to bottom,#fff,#ffecec);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0px 10px 32px rgba(0,0,0,.6);
+  text-shadow:0px 6px 24px rgba(0,0,0,.65);
+
+  /* responsive size */
+  font-size: clamp(44px, 10vw, 100px);
+  margin-bottom: clamp(8px, 2vh, 16px);
 }
 
-/* --- Tagline --- */
+/* SUBTITLE */
 .subtitle{
-  font-size:28px;
-  font-weight:300;
-  max-width:620px;
+  font-size: clamp(16px, 3vw, 28px);
+  opacity:.94;
+  max-width:min(680px,90vw);
   line-height:1.45;
-  margin-bottom:50px;
-  opacity:.92;
+  margin-bottom: clamp(30px, 6vh, 60px);
 }
 
-/* --- Opening badge --- */
+/* BADGE */
 .badge{
   display:inline-block;
-  padding:10px 38px;
+  padding: clamp(6px, 1.4vh, 14px) clamp(18px, 4vw, 45px);
   border-radius:40px;
-  border:1px solid rgba(255,255,255,.6);
+  border:1px solid rgba(255,255,255,.65);
   backdrop-filter:blur(8px);
-  background:rgba(0,0,0,.35);
-  font-size:18px;
-  letter-spacing:4px;
-  text-transform:uppercase;
+  background:rgba(0,0,0,.38);
+  font-size: clamp(14px, 2.5vw, 20px);
+  letter-spacing: clamp(1px, 0.7vw, 4px);
   font-weight:600;
+  text-transform:uppercase;
   opacity:.95;
 }
 
-/* --- Footer --- */
+/* FOOTER */
 .footer{
-  position:absolute;
-  bottom:20px;
   width:100%;
   text-align:center;
-  font-size:14px;
+  font-size: clamp(11px, 2vw, 14px);
   opacity:.6;
+  padding-bottom: clamp(10px,2vh,20px);
 }
 
-/* --- Responsive --- */
-@media(max-width:900px){
-  .brand{font-size:62px;}
-  .subtitle{font-size:20px;}
-  .badge{font-size:16px;padding:8px 28px;}
+/* LANDSCAPE MOBILE FIX */
+@media (orientation: landscape) and (max-height:500px){
+  .container {justify-content:flex-start; padding-top:8vh;}
+  .subtitle {margin-bottom:24px;}
+  .footer {bottom:10px;}
 }
 </style>
 </head>
@@ -129,7 +131,9 @@ body{
 
 <div class="container">
   <h1 class="brand">InstaStyle</h1>
-  <p class="subtitle">A new wave of clothing and self-expression — designed to elevate your style.</p>
+  <p class="subtitle">
+    A new wave of clothing and self-expression — designed to elevate your style.
+  </p>
   <div class="badge">Coming Soon</div>
 </div>
 
