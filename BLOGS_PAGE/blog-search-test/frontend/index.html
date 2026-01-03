@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog Search Test</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <header class="app-header">
+      <h1>Blog Search</h1>
+      <p class="muted">Add blogs, then search by text or tags.</p>
+    </header>
+
+    <main class="grid">
+      <!-- Add Blog -->
+      <section class="card" aria-label="Add blog">
+        <h2>Add Blog</h2>
+
+        <label class="field">
+          <span>Title</span>
+          <input id="title" placeholder="e.g. My first blog" />
+        </label>
+
+        <label class="field">
+          <span>Content</span>
+          <textarea id="content" placeholder="Write something..."></textarea>
+        </label>
+
+        <label class="field">
+          <span>Tags</span>
+          <input id="tags" placeholder="comma separated, e.g. travel, food" />
+        </label>
+
+        <div class="actions">
+          <button type="button" onclick="addBlog()">Add Blog</button>
+        </div>
+      </section>
+
+      <!-- Search -->
+      <section class="card" aria-label="Search blogs">
+        <h2>Search Blogs</h2>
+
+        <label class="field">
+          <span>Query</span>
+          <input id="search" placeholder="Search text..." />
+        </label>
+
+        <div class="actions">
+          <button type="button" onclick="searchBlogs()">Search</button>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section class="card results" aria-label="Search results">
+        <h2>Results</h2>
+        <div id="results" class="results-grid"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer muted">
+      Backend: <span id="apiBase">localhost</span>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
