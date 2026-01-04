@@ -1,30 +1,50 @@
 import express from "express";
-import Blog from "../models/Blog.js";
+import { supabase } from "../SupabaseClient.js";
 
 const router = express.Router();
 
-/* GET all blogs */
+/* =========================
+   GET all blogs
+========================= */
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.json(blogs);
+    const { data, error } = await supabase
+      .from("blogs")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-/* POST a new blog */
+/* =========================
+   POST a new blog
+========================= */
 router.post("/", async (req, res) => {
   try {
-    const newBlog = new Blog(req.body);
-    const savedBlog = await newBlog.save();
-    res.status(201).json(savedBlog);
+    const { title, content, author } = req.body;
+
+    const { data, error } = await supabase
+      .from("blogs")
+      .insert([{ title, content, author }])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.status(201).json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-/* SEARCH blogs */
+/* =========================
+   SEARCH blogs
+========================= */
 router.get("/search", async (req, res) => {
   try {
     const q =
@@ -32,16 +52,21 @@ router.get("/search", async (req, res) => {
 
     if (!q) {
       return res.status(400).json({
-        error: "Query param 'q' is required"
+        error: "Query param 'q' is required",
       });
     }
 
-    const blogs = await Blog.find(
-      { $text: { $search: q } },
-      { score: { $meta: "textScore" } }
-    ).sort({ score: { $meta: "textScore" } });
+    const { data, error } = await supabase
+      .from("blogs")
+      .select("*")
+      .or(
+        `title.ilike.%${q}%,content.ilike.%${q}%`
+      )
+      .order("created_at", { ascending: false });
 
-    res.json(blogs);
+    if (error) throw error;
+
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
