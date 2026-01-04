@@ -141,8 +141,7 @@
         white-space: nowrap;
     }
     .hero-kicker::before {
-        font-size: 14px;
-        animation: sparkle 2s ease-in-out infinite;
+    content: none;
     }
     .hero-kicker::after {
         content: "";
@@ -153,11 +152,6 @@
         height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         animation: shimmer 3s ease-in-out infinite;
-    }
-
-    @keyframes sparkle {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.2); opacity: 0.8; }
     }
 
     @keyframes shimmer {
@@ -2291,4 +2285,5 @@ document.addEventListener("click", (e) => {
     language-code="en"
     chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
 </df-messenger>
+
 
