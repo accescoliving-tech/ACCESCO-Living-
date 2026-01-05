@@ -4,16 +4,48 @@ const API_URL = `${API_BASE}/api/blogs`;
 const apiBaseEl = document.getElementById("apiBase");
 if (apiBaseEl) apiBaseEl.textContent = API_BASE;
 
+function getToastStack() {
+  const el = document.getElementById("toastStack");
+  return el;
+}
+
+function showToast(message, type = "info") {
+  const stack = getToastStack();
+  if (!stack) {
+    alert(message);
+    return;
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <span class="dot"></span>
+    <span>${message}</span>
+    <button aria-label="Dismiss" onclick="this.parentElement.remove()">✕</button>
+  `;
+
+  stack.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 4200);
+}
+
 // Add blog
 async function addBlog() {
-  const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
+  const title = document.getElementById("title").value.trim();
+  const content = document.getElementById("content").value.trim();
   const tags = document
     .getElementById("tags")
     .value
     .split(",")
     .map(t => t.trim())
     .filter(Boolean);
+
+  if (!title || !content) {
+    showToast("Title and content are required to add a blog.", "error");
+    return;
+  }
 
   try {
     const res = await fetch(API_URL, {
@@ -28,16 +60,19 @@ async function addBlog() {
     }
 
     const data = await res.json();
-    alert("Blog added!");
+    showToast("Blog added successfully!", "success");
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+    document.getElementById("tags").value = "";
     console.log(data);
   } catch (err) {
-    alert(`Failed to add blog: ${err.message || err}`);
+    showToast(`Failed to add blog: ${err.message || err}`, "error");
   }
 }
 
 // Search blogs
 async function searchBlogs() {
-  const query = document.getElementById("search").value;
+  const query = document.getElementById("search").value.trim();
   const resultsDiv = document.getElementById("results");
   resultsDiv.innerHTML = "";
 
@@ -50,17 +85,30 @@ async function searchBlogs() {
 
     const blogs = await res.json();
 
+    if (!blogs.length) {
+      resultsDiv.innerHTML = '<div class="empty-state">No posts found. Try another keyword or tag.</div>';
+      return;
+    }
+
     blogs.forEach(blog => {
       const div = document.createElement("div");
-      div.className = "blog";
+      div.className = "blog fade-in";
+      const tags = (blog.tags || []).map(tag => `<span class="pill">${tag}</span>`).join("");
       div.innerHTML = `
+        <div class="blog-meta">Found match · ${(blog.tags || []).length || 0} tag${(blog.tags || []).length === 1 ? "" : "s"}</div>
         <h3>${blog.title}</h3>
         <p>${blog.content}</p>
-        <small>${(blog.tags || []).join(", ")}</small>
+        <div class="blog-tags">${tags}</div>
       `;
       resultsDiv.appendChild(div);
     });
+
+    if (!query) {
+      showToast("Showing latest blogs.", "success");
+    } else {
+      showToast(`Showing results for "${query}"`, "success");
+    }
   } catch (err) {
-    alert(`Search failed: ${err.message || err}`);
+    showToast(`Search failed: ${err.message || err}`, "error");
   }
 }
