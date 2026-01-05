@@ -609,7 +609,9 @@
     .gaming-arena {
         display: flex; justify-content: space-between; align-items: center;
         padding: 90px 40px; gap: 60px; max-width: 1200px; margin: auto;
-        background: linear-gradient(135deg, #1a0510 0%, #000000 100%);
+        background: radial-gradient(circle at 14% 20%, rgba(255, 191, 71, 0.18), rgba(0, 0, 0, 0)),
+                    radial-gradient(circle at 80% 16%, rgba(122, 56, 255, 0.18), rgba(0, 0, 0, 0)),
+                    linear-gradient(135deg, #100411 0%, #040207 100%);
         border-radius: 28px;
         position: relative;
         overflow: hidden;
@@ -620,10 +622,36 @@
         transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .gaming-arena.is-visible { opacity: 1; transform: translateY(0); }
-    .gaming-arena::before,
-    .gaming-arena::after { content: none; }
+    .gaming-arena::before {
+        content: "";
+        position: absolute;
+        inset: -30px;
+        background:
+            repeating-linear-gradient(90deg, rgba(255, 191, 71, 0.08), rgba(255, 191, 71, 0.08) 1px, transparent 1px, transparent 80px),
+            repeating-linear-gradient(0deg, rgba(111, 229, 255, 0.08), rgba(111, 229, 255, 0.08) 1px, transparent 1px, transparent 80px);
+        opacity: 0.45;
+        mix-blend-mode: screen;
+        animation: gridShift 22s linear infinite;
+        z-index: 0;
+    }
+    .gaming-arena::after {
+        content: "";
+        position: absolute;
+        inset: -15%;
+        background: radial-gradient(circle at 50% 30%, rgba(255, 191, 71, 0.12), transparent 45%),
+                    radial-gradient(circle at 12% 70%, rgba(84, 255, 192, 0.14), transparent 50%),
+                    radial-gradient(circle at 92% 60%, rgba(164, 112, 255, 0.14), transparent 46%);
+        filter: blur(6px);
+        opacity: 0.8;
+        z-index: 0;
+    }
+    @keyframes gridShift {
+        0% { transform: translate3d(0, 0, 0); }
+        50% { transform: translate3d(-16px, -10px, 0); }
+        100% { transform: translate3d(0, 0, 0); }
+    }
     
-    .arena-left { flex: 1; max-width: 450px; position: relative; z-index: 1; }
+    .arena-left { flex: 1; max-width: 480px; position: relative; z-index: 1; }
     .badge-pill { 
         background: rgba(255, 255, 255, 0.16); color: #ffffff; 
         padding: 8px 16px; border-radius: 30px; 
@@ -663,11 +691,32 @@
     .play-btn-main::after { content: none; }
     .play-btn-main:hover { transform: translateY(-1px) scale(1.005); box-shadow: 0 16px 34px rgba(255, 184, 70, 0.26); }
 
-    .arena-right { flex: 1.2; width: 100%; position: relative; z-index: 1; }
+    .arena-right { flex: 1.2; width: 100%; position: relative; z-index: 1; display: grid; gap: 16px; align-content: start; }
     .games-grid-clean { 
         display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; 
     }
-    
+
+
+    .floating-bits { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+    .bit { position: absolute; width: 6px; height: 6px; border-radius: 2px; background: #ffe18a; filter: drop-shadow(0 0 8px rgba(255, 225, 138, 0.9)); opacity: 0.8; animation: floatBit 12s linear infinite; }
+    .bit.b1 { top: 18%; left: 6%; animation-duration: 12s; }
+    .bit.b2 { top: 68%; left: 18%; animation-duration: 10s; }
+    .bit.b3 { top: 22%; right: 10%; animation-duration: 14s; }
+    .bit.b4 { bottom: 12%; right: 4%; animation-duration: 9s; }
+
+    @keyframes pulseFrame { 0% { opacity: 0.7; } 50% { opacity: 0.95; } 100% { opacity: 0.7; } }
+    @keyframes blink { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+    @keyframes scan { 0% { transform: translateY(0); } 100% { transform: translateY(16px); } }
+    @keyframes sweep { 0% { transform: translateY(-10%); opacity: 0; } 35% { opacity: 1; } 70% { opacity: 0.6; } 100% { transform: translateY(170%); opacity: 0; } }
+    @keyframes runner { 0% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(115%, -14px, 0); } 100% { transform: translate3d(230%, 0, 0); } }
+    @keyframes tilt { 0% { transform: translate(0, 0); } 30% { transform: translate(3px, -2px); } 60% { transform: translate(-3px, 3px); } 100% { transform: translate(0, 0); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 6px 14px rgba(255, 177, 59, 0.35); } 50% { transform: scale(1.08); box-shadow: 0 10px 18px rgba(255, 177, 59, 0.55); } }
+    @keyframes floatBit {
+        0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0.65; }
+        50% { transform: translate3d(10px, -18px, 0) rotate(14deg); opacity: 1; }
+        100% { transform: translate3d(-6px, -32px, 0) rotate(-10deg); opacity: 0.4; }
+    }
+
     .game-card-new { 
         background: linear-gradient(160deg, rgba(30, 12, 36, 0.9), rgba(14, 8, 18, 0.95)); padding: 24px; border-radius: 20px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
@@ -740,12 +789,17 @@
         .arena-features { align-items: center; }
         .games-grid-clean { grid-template-columns: repeat(2, 1fr); gap: 16px; }
         .arena-title { font-size: 36px; }
+        .console-body { grid-template-columns: 1fr; }
+        .console-screen { height: 120px; }
+        .arena-right { gap: 14px; }
     }
     @media(max-width: 500px) {
         .games-grid-clean { 
             grid-template-columns: repeat(2, 1fr) !important; 
             gap: 12px;
         }
+        .console-doodle { padding: 14px 14px 12px; }
+        .console-screen { height: 110px; }
         .game-card-new {
             padding: 16px 10px;
         }
@@ -1593,10 +1647,16 @@
 
         <!-- ===== GAMING / REWARD ARENA ===== -->
         <section class="gaming-arena">
+            <div class="floating-bits" aria-hidden="true">
+                <span class="bit b1"></span>
+                <span class="bit b2"></span>
+                <span class="bit b3"></span>
+                <span class="bit b4"></span>
+            </div>
             <div class="arena-left">
                 <div class="badge-pill"><i class="ri-trophy-line"></i> PLAY & EARN</div>
                 <h2 class="arena-title"><span>Reward Play Arena</span></h2>
-                <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts.</p>
+                <p class="arena-desc">Don't just shop, play. Compete in daily challenges to unlock exclusive rewards and discounts with a neon arcade vibe.</p>
 
                 <ul class="arena-features">
                     <li><i class="ri-gamepad-line"></i> Daily Mini-Games</li>
