@@ -3,7 +3,7 @@ import cors from "cors";
 import bigRoutes from "./routes/bigRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import "dotenv/config"; // 👈 load env variables
+
 
 const app = express();
 

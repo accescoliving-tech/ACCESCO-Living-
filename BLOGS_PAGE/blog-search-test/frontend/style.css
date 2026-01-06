@@ -1,159 +1,196 @@
 :root {
-  color-scheme: dark;
-  --bg: #0b0f1a;
-  --panel: rgba(255, 255, 255, 0.06);
-  --panel-2: rgba(255, 255, 255, 0.08);
-  --text: rgba(255, 255, 255, 0.92);
-  --muted: rgba(255, 255, 255, 0.66);
-  --border: rgba(255, 255, 255, 0.14);
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --accent: #700457; /* ACCESCO Brand Purple */
+    --text-primary: #ffffff;
+    --text-secondary: #949494;
+    --border: rgba(255, 255, 255, 0.08);
 }
+/* ... rest of the previous CSS remains the same ... */
 
-* { box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(900px circle at 20% 10%, rgba(90, 115, 255, 0.16), transparent 60%),
-              radial-gradient(900px circle at 80% 20%, rgba(255, 90, 208, 0.14), transparent 60%),
-              var(--bg);
-  color: var(--text);
+    background-color: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-.app {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 28px 18px 40px;
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* --- Floating Navbar --- */
+.navbar {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1100px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.app-header {
-  margin-bottom: 18px;
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
 }
 
-.app-header h1 {
-  margin: 0 0 6px;
-  font-size: 30px;
-  letter-spacing: 0.2px;
+.logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; }
+.logo span { color: var(--accent); }
+
+.nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 16px;
+    transition: color 0.3s;
 }
 
-.muted {
-  color: var(--muted);
+.nav-links a:hover { color: white; }
+
+/* --- Editorial Hero --- */
+.hero {
+    padding: 180px 24px 100px;
+    text-align: center;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
+.hero-display {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 10vw, 96px);
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 24px;
 }
 
-@media (min-width: 860px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .results {
-    grid-column: 1 / -1;
-  }
+.hero-lead {
+    color: var(--text-secondary);
+    font-size: 18px;
+    max-width: 500px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
 }
 
-.card {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 14px;
-  padding: 16px;
+/* --- Bento Feed --- */
+.feed-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 120px;
 }
 
-.card h2 {
-  margin: 0 0 12px;
-  font-size: 16px;
-  font-weight: 650;
-  letter-spacing: 0.2px;
+.blog-card {
+    position: relative;
+    height: 500px;
+    border-radius: 40px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
 }
 
-.field {
-  display: grid;
-  gap: 6px;
-  margin-bottom: 12px;
+.blog-card.large { grid-column: span 1; }
+
+.card-media {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.field span {
-  font-size: 12px;
-  color: var(--muted);
+.blog-card:hover .card-media { transform: scale(1.05); }
+
+.card-content {
+    position: absolute;
+    inset: 0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
 }
 
-input, textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--panel-2);
-  color: var(--text);
-  outline: none;
+.pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 12px;
 }
 
-textarea {
-  min-height: 120px;
-  resize: vertical;
+.pill-blue { background: #3577ff; }
+.pill-green { background: #00c274; }
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-top: 16px;
+    line-height: 1.2;
 }
 
-input:focus, textarea:focus {
-  border-color: rgba(120, 170, 255, 0.55);
+.read-more-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 48px;
+    height: 48px;
+    background: white;
+    color: black;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
+/* --- Newsletter Form --- */
+.newsletter-form {
+    display: flex;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    padding: 6px;
+    border-radius: 100px;
+    max-width: 450px;
+    margin: 0 auto;
 }
 
-button {
-  border: 1px solid rgba(120, 170, 255, 0.55);
-  background: rgba(120, 170, 255, 0.15);
-  color: var(--text);
-  padding: 10px 12px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
+.newsletter-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0 24px;
+    color: white;
+    outline: none;
 }
 
-button:hover {
-  background: rgba(120, 170, 255, 0.22);
+.btn-solid {
+    background: white;
+    color: black;
+    padding: 12px 28px;
+    border-radius: 100px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
 }
 
-.results-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
+/* --- Footer --- */
+.editorial-footer {
+    background: var(--surface);
+    padding: 100px 24px;
+    text-align: center;
+    border-radius: 60px 60px 0 0;
 }
 
-@media (min-width: 640px) {
-  .results-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.blog {
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.18);
-  padding: 12px;
-  border-radius: 14px;
-}
-
-.blog h3 {
-  margin: 0 0 6px;
-  font-size: 15px;
-}
-
-.blog p {
-  margin: 0 0 10px;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.35;
-}
-
-.blog small {
-  color: var(--muted);
-}
-
-.app-footer {
-  margin-top: 14px;
-  font-size: 12px;
+.footer-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    margin-bottom: 32px;
 }
