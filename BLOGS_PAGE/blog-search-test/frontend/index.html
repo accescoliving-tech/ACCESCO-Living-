@@ -1,77 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACCESCO Blogs | Insights</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ACCESCO Blogs</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="app">
-    <header class="app-header">
-      <h1>Blog Search</h1>
-      <p class="muted">Add blogs, then search by text or tags.</p>
-    </header>
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">ACCESCO</div>
+    <input id="search" placeholder="Search blogs..." onkeyup="searchBlogs()" />
+    <div class="avatar">👤</div>
+  </div>
+</header>
 
-    <main class="grid">
-      <!-- Add Blog -->
-      <section class="card" aria-label="Add blog">
-        <h2>Add Blog</h2>
+<!-- MAIN FEED -->
+<main class="feed">
 
-        <label class="field">
-          <span>Title</span>
-          <input id="title" placeholder="e.g. My first blog" />
-        </label>
+  <!-- CREATE POST -->
+  <section class="composer">
+    <input id="title" placeholder="Blog title" />
+    <textarea id="content" placeholder="What's on your mind?"></textarea>
+    <input id="tags" placeholder="Tags (comma separated)" />
+    <button onclick="addBlog()">Post</button>
+  </section>
 
-        <label class="field">
-          <span>Content</span>
-          <textarea id="content" placeholder="Write something..."></textarea>
-        </label>
+  <!-- RECENT -->
+  <section class="section">
+    <h2>Recent Blogs</h2>
+    <div id="recent" class="mini-feed"></div>
+  </section>
 
-        <label class="field">
-          <span>Tags</span>
-          <input id="tags" placeholder="comma separated, e.g. travel, food" />
-        </label>
+  <!-- ALL BLOGS -->
+  <section class="section">
+    <h2>All Blogs</h2>
+    <div id="results"></div>
+  </section>
 
-        <div class="actions">
-          <button type="button" onclick="addBlog()">Add Blog</button>
-        </div>
-    </nav>
+  <!-- MOST LIKED -->
+  <section class="section">
+    <h2>Most Liked</h2>
+    <div id="popular" class="mini-feed"></div>
+  </section>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-display">ACCESCO <i>Blogs.</i></h1>
-                <p class="hero-lead">Explore curated insights from the ACCESCO Living ecosystem, delivered directly to your inbox.</p>
-                <div class="newsletter-form">
-                    <input type="email" placeholder="Enter your email address">
-                    <button class="btn-solid">Subscribe</button>
-                </div>
-            </div>
-        </section>
+</main>
 
-        <section class="feed-grid container" id="results">
-            </section>
-    </main>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <h3>ACCESCO</h3>
+      <p>Insights, stories, and ideas from the ACCESCO ecosystem.</p>
+    </div>
 
-    <footer class="editorial-footer">
-        <div class="footer-wrap">
-            <h2 class="footer-heading">Welcome to ACCESCO Blogs</h2>
-            <p class="footer-sub">A premium domain by Accesco Living.</p>
-            <button class="btn-outline">Join the Community</button>
-            <div class="social-grid">
-                <a href="#"><i data-lucide="instagram"></i></a>
-                <a href="#"><i data-lucide="twitter"></i></a>
-                <a href="#"><i data-lucide="linkedin"></i></a>
-            </div>
-            <p class="copyright">© 2026 ACCESCO Blogs. All rights reserved.</p>
-        </div>
-    </footer>
+    <div class="footer-links">
+      <div>
+        <h4>Product</h4>
+        <a href="#">Blogs</a>
+        <a href="#">Discover</a>
+        <a href="#">Popular</a>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
   </div>
 
-    <script src="script.js"></script>
+  <div class="footer-bottom">
+    © 2026 ACCESCO Living. All rights reserved.
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
