@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Delete Blogs | ACCESCO</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><div class="brand-mark">a</div><div class="brand-name">ACCESCO</div></div>
+    <div style="flex:1"></div>
+    <div class="topbar-actions"><a href="index.html" class="icon-btn" title="Home">🏠</a></div>
+  </div>
+</header>
+
+<main class="feed" style="max-width:600px;margin:auto;">
+  <h2>Delete Blogs</h2>
+  <div id="delete-list"></div>
+</main>
+
+<script>
+const API_URL = "http://localhost:5000/api/blogs";
+async function loadDeleteList() {
+  const res = await fetch(API_URL);
+  const blogs = await res.json();
+  const container = document.getElementById("delete-list");
+  if (!blogs.length) {
+    container.innerHTML = '<p class="muted">No blogs found.</p>';
+    return;
+  }
+  container.innerHTML = blogs.map(b => `
+    <div class="blog-card" style="margin-bottom:18px;">
+      <h3>${b.title}</h3>
+      <p>${b.content}</p>
+      <button class="danger" style="margin-top:8px;" onclick="deleteBlog('${b.id}')">🗑️ Delete</button>
+    </div>
+  `).join("");
+}
+async function deleteBlog(blogId) {
+  if (!confirm("Delete this blog? This cannot be undone.")) return;
+  const res = await fetch(`${API_URL}/${blogId}`, { method: "DELETE" });
+  if (!res.ok) {
+    let msg = "Delete failed";
+    try { const data = await res.json(); if (data?.error) msg = data.error; } catch {}
+    alert(msg); return;
+  }
+  loadDeleteList();
+}
+loadDeleteList();
+</script>
+</body>
+</html>

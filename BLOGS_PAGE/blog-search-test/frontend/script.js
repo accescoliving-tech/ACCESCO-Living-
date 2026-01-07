@@ -53,6 +53,10 @@ function renderFeed(blogs) {
         <button onclick="shareBlog('${b.id}')">
           🔗 Share
         </button>
+
+        <button class="danger" onclick="deleteBlog('${b.id}')">
+          🗑️ Delete
+        </button>
       </div>
 
       <div class="comments">
@@ -94,6 +98,27 @@ async function likeBlog(blogId) {
 
   if (!res.ok) {
     alert("Like failed");
+    return;
+  }
+
+  loadFeed();
+}
+
+async function deleteBlog(blogId) {
+  const ok = confirm("Delete this blog? This cannot be undone.");
+  if (!ok) return;
+
+  const res = await fetch(`${API_URL}/${blogId}`, { method: "DELETE" });
+
+  if (!res.ok) {
+    let msg = "Delete failed";
+    try {
+      const data = await res.json();
+      if (data?.error) msg = data.error;
+    } catch {
+      // ignore
+    }
+    alert(msg);
     return;
   }
 

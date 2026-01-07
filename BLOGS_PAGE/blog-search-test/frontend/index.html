@@ -13,17 +13,50 @@
 <!-- TOP NAV -->
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="logo">ACCESCO</div>
-    <input id="search" placeholder="Search blogs..." onkeyup="searchBlogs()" />
-    <div class="avatar">👤</div>
+    <div class="brand" aria-label="ACCESCO">
+      <div class="brand-mark">a</div>
+      <div class="brand-name">ACCESCO</div>
+    </div>
+
+    <div class="topbar-search" role="search">
+      <input id="search" placeholder="Search blogs..." onkeyup="searchBlogs()" />
+    </div>
+
+    <div class="topbar-actions" aria-label="Actions">
+      <button class="icon-btn" type="button" aria-label="Home">🏠</button>
+      <button class="icon-btn" type="button" aria-label="Messages">💬</button>
+      <button class="icon-btn" type="button" aria-label="Notifications">🔔</button>
+      <a class="icon-btn" href="delete.html" title="Delete Blogs">🗑️</a>
+      <div class="avatar" aria-label="Profile">👤</div>
+    </div>
   </div>
 </header>
 
-<!-- MAIN FEED -->
-<main class="feed">
+<!-- APP LAYOUT -->
+<div class="app-shell">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar sidebar-left">
+    <div class="panel">
+      <div class="panel-title">Recent</div>
+      <div id="recent" class="mini-feed"></div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <div class="panel-title">Manage</div>
+      <a href="delete.html" class="manage-link">Delete Blogs</a>
+    </div>
+  </aside>
+
+  <!-- MAIN FEED -->
+  <main class="feed" aria-label="Feed">
 
   <!-- CREATE POST -->
   <div class="composer">
+
+  <div class="composer-head">
+    <div class="composer-title">Create a blog</div>
+    <div class="composer-subtitle">Share updates with the ACCESCO community</div>
+  </div>
 
   <input id="title" type="text" placeholder="Blog title" />
 
@@ -36,7 +69,7 @@
   <input
     id="tags"
     type="text"
-    placeholder="tags (comma separated)"
+    placeholder="Tags (comma separated)"
   />
 
   <!-- IMAGE UPLOAD -->
@@ -59,25 +92,23 @@
 
 
 
-  <!-- RECENT -->
-  <section class="section">
-    <h2>Recent Blogs</h2>
-    <div id="recent" class="mini-feed"></div>
-  </section>
+    <!-- ALL BLOGS -->
+    <section class="section">
+      <h2>All Blogs</h2>
+      <div id="results"></div>
+    </section>
 
-  <!-- ALL BLOGS -->
-  <section class="section">
-    <h2>All Blogs</h2>
-    <div id="results"></div>
-  </section>
+  </main>
 
-  <!-- MOST LIKED -->
-  <section class="section">
-    <h2>Most Liked</h2>
-    <div id="popular" class="mini-feed"></div>
-  </section>
+  <!-- RIGHT SIDEBAR -->
+  <aside class="sidebar sidebar-right">
+    <div class="panel">
+      <div class="panel-title">Most Liked</div>
+      <div id="popular" class="mini-feed"></div>
+    </div>
+  </aside>
 
-</main>
+</div>
 
 <!-- FOOTER -->
 <footer class="footer">
