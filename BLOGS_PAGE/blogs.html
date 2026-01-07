@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACCESCO BLOGS - The Intelligent Edit</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+  <style>
+  /* THEME SYSTEM */
+  :root {
+    --primary: #050505;
+    --secondary: #555;
+    --accent: #700457;
+    --bg: #fff2eb;
+    --card-bg: #fff2eb;
+    --border: #e8ded8;
+    --overlay-bg: rgba(255, 242, 235, 0.98);
+    --container: 1100px;
+    --reader-font: 'Libre Baskerville', serif;
+  }
+
+  [data-theme="dark"] {
+    --primary: #f8fafc;
+    --secondary: #94a3b8;
+    --bg: #1a1a1a;
+    --card-bg: #1a1a1a;
+    --border: #2d2d2d;
+    --overlay-bg: rgba(26, 26, 26, 0.98);
+  }
+
+  * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease, border 0.3s ease; }
+  body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg); color: var(--primary); -webkit-font-smoothing: antialiased; }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 1000;
+  }
+
+  .top-bar {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .logo-area img { height: 50px; width: auto; }
+  .logo-area span { 
+    font-family: 'Poppins', sans-serif; 
+    font-weight: 900; 
+    font-size: 20px; 
+    letter-spacing: -0.5px; 
+    color: var(--primary);
+  }
+
+  .nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  .nav-links li { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; cursor: pointer; color: var(--secondary); }
+  .nav-links li.active { color: var(--accent); position: relative; }
+  .nav-links li.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+
+  .header-icons { display: flex; gap: 12px; align-items: center; }
+  .btn-icon { font-size: 18px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; background: var(--card-bg); color: var(--primary); }
+  .btn-icon:hover { background: var(--border); }
+
+  /* MAIN FEED */
+  .main-container { max-width: var(--container); margin: 50px auto; padding: 0 20px; }
+  .section-title { font-size: 24px; font-weight: 900; margin-bottom: 40px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; width: fit-content; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* GRID - RESPONSIVE FIX */
+  .blog-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+    gap: 40px; 
+    margin-bottom: 80px; 
+  }
+
+  /* CARD DESIGN */
+  .card { display: flex; flex-direction: column; gap: 18px; background: var(--card-bg); border-radius: 12px; padding-bottom: 20px; }
+  .card-img-wrapper { width: 100%; height: 240px; overflow: hidden; border-radius: 10px; background: var(--border); cursor: pointer; position: relative; }
+  .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .card:hover .card-img-wrapper img { transform: scale(1.05); }
+
+  .card-meta { display: flex; gap: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); }
+  .card-meta .category { color: var(--accent); }
+
+  .card-title { font-size: 21px; font-weight: 800; line-height: 1.3; margin: 0; cursor: pointer; color: var(--primary); }
+  .card-excerpt { font-size: 14px; color: var(--secondary); line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .card-actions-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--secondary); padding-top: 15px; border-top: 1px solid var(--border); }
+  .stats-group { display: flex; gap: 15px; }
+  .stats-group i { font-size: 14px; margin-right: 4px; }
+  .share-icon-btn { cursor: pointer; font-size: 18px; color: var(--secondary); }
+  .share-icon-btn:hover { color: var(--accent); }
+
+  .btn-read { font-size: 11px; font-weight: 800; padding: 10px 20px; border: 1.5px solid var(--primary); background: none; color: var(--primary); cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-top: 10px; width: fit-content; }
+  .btn-read:hover { background: var(--primary); color: var(--bg); }
+
+  /* FOOTER */
+  footer {
+      background: #050505;
+      color: #fff;
+      padding: 80px 20px 40px;
+      margin-top: 100px;
+  }
+  .footer-grid {
+      max-width: var(--container);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 60px;
+  }
+  .footer-brand { display: flex; flex-direction: column; gap: 20px; }
+  .footer-logo-row { display: flex; align-items: center; gap: 14px; }
+  .footer-logo-row img { height: 45px; width: auto; }
+  .footer-logo-row span { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 24px; letter-spacing: -0.5px; color: #fff; }
+  .footer-tagline { font-size: 14px; color: #888; line-height: 1.6; max-width: 280px; }
+  
+  .footer-col h4 { font-size: 13px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; color: #fff; }
+  .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col li { font-size: 14px; color: #888; cursor: pointer; transition: color 0.2s; }
+  .footer-col li:hover { color: var(--accent); }
+  
+  .footer-socials { display: flex; gap: 15px; margin-bottom: 30px; }
+  .social-link { width: 40px; height: 40px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; transition: background 0.2s; }
+  .social-link:hover { background: var(--accent); }
+  
+  .footer-app-badges { display: flex; flex-direction: column; gap: 12px; }
+  .app-badge { height: 40px; cursor: pointer; transition: transform 0.2s; }
+  .app-badge:hover { transform: translateY(-2px); }
+
+  .footer-bottom { 
+      max-width: var(--container); 
+      margin: 60px auto 0; 
+      padding-top: 30px; 
+      border-top: 1px solid #222; 
+      text-align: center; 
+      font-size: 12px; 
+      color: #555; 
+      letter-spacing: 1px;
+  }
+
+  /* OVERLAYS */
+  .overlay { position: fixed; inset: 0; background: var(--overlay-bg); z-index: 2000; display: none; overflow-y: auto; color: var(--primary); }
+  
+  /* IMERSIVE READER TEMPLATE */
+  .reader-view { max-width: 800px; margin: 0 auto; padding: 80px 20px; animation: slideUp 0.4s ease-out; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+  .reader-header { text-align: center; margin-bottom: 60px; }
+  .reader-category { font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; font-size: 13px; margin-bottom: 20px; display: block; }
+  .reader-title { font-family: 'Poppins', sans-serif; font-size: clamp(32px, 6vw, 56px); font-weight: 900; line-height: 1.05; margin: 0 0 25px; letter-spacing: -2px; }
+  .reader-meta { font-size: 14px; color: var(--secondary); font-weight: 600; display: flex; justify-content: center; gap: 30px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; margin-bottom: 50px; }
+
+  /* MOBILE IMAGE FIX */
+  .reader-hero-img { width: 100%; height: 550px; max-height: 60vh; object-fit: cover; border-radius: 12px; margin-bottom: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
+  .reader-content { font-family: var(--reader-font); font-size: 20px; line-height: 1.9; color: var(--primary); white-space: pre-wrap; margin-bottom: 80px; }
+
+  /* INTERACTIONS */
+  .interaction-bar { display: flex; align-items: center; justify-content: space-between; padding: 40px 0; border-top: 2px solid var(--primary); border-bottom: 1px solid var(--border); margin-bottom: 50px; }
+  .interaction-left { display: flex; gap: 40px; align-items: center; }
+  .like-btn { border: none; background: none; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--secondary); }
+  .like-btn.active { color: #f43f5e; }
+
+  .comment-list { list-style: none; padding: 0; margin-bottom: 50px; }
+  .comment-item { padding: 25px 0; border-bottom: 1px solid var(--border); }
+  .comment-item .user { font-weight: 800; font-size: 14px; color: var(--accent); margin-bottom: 8px; display: block; }
+  .comment-item .text { font-family: var(--reader-font); font-size: 17px; color: var(--primary); }
+
+  .comment-input-box { background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border); }
+  .comment-input-box textarea { width: 100%; padding: 15px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 16px; background: var(--bg); color: var(--primary); resize: none; }
+
+  .close-reader { position: fixed; top: 30px; right: 30px; background: var(--primary); color: var(--bg); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; border: none; z-index: 2100; }
+
+  /* WRITE MODAL */
+  .write-modal { background: var(--bg); width: 95%; max-width: 650px; margin: 4vh auto; padding: 45px; border-radius: 24px; border: 1px solid var(--border); }
+  .form-group { margin-bottom: 25px; }
+  .form-group label { display: block; font-weight: 800; font-size: 11px; margin-bottom: 10px; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; }
+  .form-control { width: 100%; padding: 15px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; background: var(--card-bg); color: var(--primary); }
+
+  .img-upload-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+  .img-tab { flex: 1; padding: 10px; font-size: 11px; font-weight: 800; text-transform: uppercase; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary); cursor: pointer; border-radius: 6px; text-align: center; }
+  .img-tab.active { background: var(--primary); color: var(--bg); border-color: var(--primary); }
+
+  #writePreview { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; display: none; background: #ddd; }
+
+  .btn-publish { width: 100%; padding: 20px; background: var(--accent); color: #fff; border: none; font-weight: 800; text-transform: uppercase; border-radius: 10px; cursor: pointer; font-size: 14px; letter-spacing: 1.5px; }
+
+  /* MOBILE SPECIFIC ADJUSTMENTS */
+  @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-brand { grid-column: span 2; }
+  }
+
+  @media (max-width: 768px) {
+      .nav-links { display: none; } /* Standard behavior for mobile without a burger menu */
+      .top-bar { padding: 10px 15px; }
+      .logo-area span { font-size: 16px; }
+      .logo-area img { height: 28px; }
+      
+      .main-container { margin: 30px auto; }
+      .blog-grid { grid-template-columns: 1fr; gap: 25px; }
+      
+      .reader-view { padding: 60px 15px; }
+      .reader-hero-img { height: 300px; margin-bottom: 30px; }
+      .reader-meta { flex-direction: column; gap: 10px; padding: 15px 0; }
+      .interaction-bar { flex-direction: column; gap: 20px; align-items: flex-start; padding: 25px 0; }
+      .interaction-left { gap: 20px; }
+      
+      .write-modal { padding: 25px 20px; }
+      .close-reader { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 20px; }
+      
+      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+      .footer-brand { grid-column: span 1; }
+      .footer-logo-row img { height: 35px; }
+  }
+</style>
+</head>
+
+<body>
+
+  <header>
+    <div class="top-bar">
+      <div class="logo-area" onclick="filterBlogs('All')">
+        <img src="accesco_original.png" alt="Logo" onerror="this.src='https://nfdrnbikwzfmijrqmoqt.supabase.co/storage/v1/object/public/blog-images/accesco_logo_fallback.png'">
+        <span>ACCESCO BLOGS</span>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
+        <li data-cat="All" onclick="filterBlogs('All')" class="active">All stories</li>
+        <li data-cat="Business" onclick="filterBlogs('Business')">Business</li>
+        <li data-cat="Technology" onclick="filterBlogs('Technology')">Technology</li>
+        <li data-cat="Lifestyle" onclick="filterBlogs('Lifestyle')">Lifestyle</li>
+      </ul>
+
+      <div class="header-icons">
+        <button class="btn-icon" id="themeToggle" onclick="toggleTheme()"><i class="ri-moon-line"></i></button>
+        <button class="btn-icon" onclick="openWriteModal()"><i class="ri-quill-pen-line"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <h2 class="section-title" id="currentCategory">Explore</h2>
+
+    <div id="blogContainer" class="blog-grid">
+      <div style="text-align:center; grid-column: 1/-1; padding: 120px;">
+          <i class="ri-loader-4-line ri-3x" style="animation: spin 1.5s linear infinite; display: inline-block; color: var(--accent);"></i>
+          <p style="margin-top: 20px; font-weight: 700; color: var(--secondary);">Synchronizing stories...</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-row">
+          <img src="accesco_original.png" style="height: 6.5rem;" alt="ACCESCO" onerror="this.src='https://nfdrnbikwzfmijrqmoqt.supabase.co/storage/v1/object/public/blog-images/accesco_logo_fallback.png'">
+          <span>ACCESCO BLOGS</span>
+        </div>
+        <p class="footer-tagline">Empowering digital excellence through innovative daily-living solutions. Explore our community insights.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li>About Us</li>
+          <li>Careers</li>
+          <li>Partner With Us</li>
+          <li>Terms & Conditions</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul>
+          <li>Metrics & Certificates</li>
+          <li>QTC Videos</li>
+          <li>Help & Support</li>
+          <li>Legal Information</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Social Links</h4>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" class="social-link" style="text-decoration: none;"><i class="ri-instagram-line"></i></a>
+          <a href="https://x.com/accesco_living?s=21" class="social-link" style="text-decoration: none;"><i class="ri-twitter-fill"></i></a>
+          <a href="https://www.youtube.com/@accescoliving" class="social-link" style="text-decoration: none;"><i class="ri-youtube-fill"></i></a>
+          <a href="https://www.linkedin.com/company/acceso-living/" class="social-link" style="text-decoration: none;"><i class="ri-linkedin-box-fill"></i></a>
+        </div>
+        <div class="footer-app-badges">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-badge" alt="App Store">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-badge" alt="Google Play">
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 ACCESCO BLOGS — ALL RIGHTS RESERVED.
+    </div>
+  </footer>
+
+  <!-- READER OVERLAY -->
+  <div class="overlay" id="readerOverlay">
+    <button class="close-reader" onclick="closeReader()">&times;</button>
+    <div class="reader-view">
+        <header class="reader-header">
+            <span id="readCat" class="reader-category">Category</span>
+            <h1 id="readTitle" class="reader-title">Title</h1>
+            <div class="reader-meta">
+                <span><i class="ri-user-smile-line"></i> <span id="readAuthor">Editor</span></span>
+                <span><i class="ri-calendar-event-line"></i> <span id="readDate">Date</span></span>
+            </div>
+        </header>
+        <img id="readHero" class="reader-hero-img" src="" alt="Hero">
+        <div id="readContent" class="reader-content"></div>
+
+        <div class="interaction-bar">
+            <div class="interaction-left">
+                <button class="like-btn" id="readerLikeBtn" onclick="handleReaderLike()">
+                    <i class="ri-heart-line"></i> <span id="readLikeCount">0</span> Likes
+                </button>
+                <div style="display:flex; align-items:center; gap:10px; font-weight:800; color:var(--secondary);">
+                    <i class="ri-chat-3-line"></i> <span id="readCommCount">0</span> Discussions
+                </div>
+            </div>
+            <button class="btn-icon" onclick="handleShareActive()" title="Share Story">
+                <i class="ri-share-line"></i>
+            </button>
+        </div>
+
+        <section class="comment-section">
+            <h3 style="font-family: Poppins; font-size: 24px;">Community Discussion</h3>
+            <div id="commentList" class="comment-list"></div>
+            <div class="comment-input-box">
+                <textarea id="commText" rows="4" placeholder="Share your perspective..."></textarea>
+                <button class="btn-publish" style="padding: 14px; margin-top: 15px;" onclick="submitComment()">Post Contribution</button>
+            </div>
+        </section>
+    </div>
+  </div>
+
+  <!-- WRITE MODAL -->
+  <div class="overlay" id="writeOverlay" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);">
+    <div class="write-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:35px;">
+        <h2 style="margin:0; font-family:Poppins; font-weight: 800;">Draft Your Story</h2>
+        <i class="ri-close-circle-fill ri-2x" style="cursor:pointer; color: var(--secondary);" onclick="closeWriteModal()"></i>
+      </div>
+      
+      <div class="form-group">
+        <label>Title Headline</label>
+        <input type="text" id="postTitle" class="form-control" placeholder="A compelling headline...">
+      </div>
+      
+      <div class="form-group">
+        <label>Vertical</label>
+        <select id="postCategory" class="form-control">
+          <option value="Business">Business</option>
+          <option value="Technology">Technology</option>
+          <option value="Lifestyle">Lifestyle</option>
+          <option value="Fashion">Fashion</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Cover Visual</label>
+        <div class="img-upload-tabs">
+            <div class="img-tab active" id="tabLocal" onclick="switchImgTab('local')">Upload File</div>
+            <div class="img-tab" id="tabLink" onclick="switchImgTab('link')">Paste Link</div>
+        </div>
+
+        <div id="uiLocal">
+            <label for="imageUpload" style="border: 2px dashed var(--border); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; display: block;">
+                <i class="ri-image-add-line ri-2x"></i>
+                <p style="margin: 5px 0 0; font-size: 12px; font-weight: 700;">Select from device</p>
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="previewFile(this)">
+        </div>
+
+        <div id="uiLink" style="display: none;">
+            <input type="text" id="imageUrlInput" class="form-control" placeholder="https://images.unsplash.com/..." oninput="previewUrl(this.value)">
+        </div>
+
+        <img id="writePreview" src="" alt="Preview">
+      </div>
+
+      <div class="form-group">
+        <label>Story Body</label>
+        <textarea id="postContent" class="form-control" rows="8" placeholder="Tell the community everything..."></textarea>
+      </div>
+
+      <button class="btn-publish" onclick="publishPost()" id="publishBtn">Publish to ACCESCO</button>
+    </div>
+  </div>
+
+  <style> @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} } </style>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
+    const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let selectedFile = null;
+    let currentFilter = 'All';
+    let cachedBlogs = [];
+    let activePostId = null;
+
+    // --- THEME ENGINE ---
+    window.toggleTheme = () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        const icon = document.getElementById('themeToggle').querySelector('i');
+        icon.className = next === 'light' ? 'ri-moon-line' : 'ri-sun-line';
+    };
+
+    // --- IMAGE LOGIC ---
+    let imgSourceMode = 'local';
+    window.switchImgTab = (mode) => {
+        imgSourceMode = mode;
+        document.getElementById('tabLocal').classList.toggle('active', mode === 'local');
+        document.getElementById('tabLink').classList.toggle('active', mode === 'link');
+        document.getElementById('uiLocal').style.display = mode === 'local' ? 'block' : 'none';
+        document.getElementById('uiLink').style.display = mode === 'link' ? 'block' : 'none';
+        document.getElementById('writePreview').style.display = 'none';
+        selectedFile = null;
+        document.getElementById('imageUrlInput').value = '';
+    };
+
+    window.previewFile = (input) => {
+        selectedFile = input.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('writePreview').src = e.target.result;
+                document.getElementById('writePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
+
+    window.previewUrl = (url) => {
+        if(url.startsWith('http')) {
+            document.getElementById('writePreview').src = url;
+            document.getElementById('writePreview').style.display = 'block';
+        }
+    };
+
+    // --- DATA ---
+    window.onload = async () => loadBlogs(true);
+
+    async function loadBlogs(forceFetch = false) {
+        if (forceFetch || cachedBlogs.length === 0) {
+            const { data, error } = await supabase.from('blogs').select('*, blog_likes(count), blog_comments(count)').order('created_at', { ascending: false });
+            if (!error) cachedBlogs = data;
+        }
+        const displayed = currentFilter === 'All' ? cachedBlogs : cachedBlogs.filter(b => b.category === currentFilter);
+        renderBlogs(displayed);
+    }
+
+    function renderBlogs(blogs) {
+        const container = document.getElementById('blogContainer');
+        container.innerHTML = blogs.map(post => {
+            const dateStr = new Date(post.created_at).toLocaleDateString('en-IN', { day:'numeric', month: 'long', year: 'numeric' });
+            const snippet = post.content.length > 140 ? post.content.substring(0, 140) + "..." : post.content;
+            const fallback = `https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800`;
+            return `
+            <div class="card">
+                <div class="card-img-wrapper" onclick="openStory('${post.id}')">
+                    <img src="${post.image_url || fallback}" alt="Cover" onerror="this.src='${fallback}'">
+                </div>
+                <div class="card-meta">
+                    <span class="category">${post.category}</span>
+                    <span class="date">— ${dateStr}</span>
+                </div>
+                <h3 class="card-title" onclick="openStory('${post.id}')">${post.title}</h3>
+                <p class="card-excerpt">${snippet}</p>
+                <div class="card-actions-row">
+                    <div class="stats-group">
+                        <span><i class="ri-heart-line"></i> ${post.blog_likes[0]?.count || 0}</span>
+                        <span><i class="ri-chat-3-line"></i> ${post.blog_comments[0]?.count || 0}</span>
+                    </div>
+                    <i class="ri-share-line share-icon-btn" onclick="handleCardShare('${post.id}', '${post.title}')"></i>
+                </div>
+                <button class="btn-read" onclick="openStory('${post.id}')">Read Full Story</button>
+            </div>
+            `;
+        }).join('');
+    }
+
+    window.filterBlogs = (cat) => {
+        currentFilter = cat;
+        document.getElementById('currentCategory').innerText = cat === 'All' ? "Explore" : cat;
+        document.querySelectorAll('#navLinks li').forEach(li => li.classList.toggle('active', li.getAttribute('data-cat') === cat));
+        loadBlogs(false);
+    };
+
+    window.openStory = async (id) => {
+        activePostId = id;
+        const story = cachedBlogs.find(b => b.id == id);
+        if (!story) return;
+        const { data: comments } = await supabase.from('blog_comments').select('*').eq('blog_id', id).order('created_at', { ascending: false });
+        const dateStr = new Date(story.created_at).toLocaleDateString('en-IN', { day:'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('readCat').innerText = story.category;
+        document.getElementById('readTitle').innerText = story.title;
+        document.getElementById('readHero').src = story.image_url || `https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800`;
+        document.getElementById('readContent').innerText = story.content;
+        document.getElementById('readDate').innerText = dateStr;
+        document.getElementById('readLikeCount').innerText = story.blog_likes[0]?.count || 0;
+        document.getElementById('readCommCount').innerText = comments?.length || 0;
+        const liked = JSON.parse(localStorage.getItem('accesco_liked') || '[]');
+        const btn = document.getElementById('readerLikeBtn');
+        btn.classList.toggle('active', liked.includes(id));
+        btn.querySelector('i').className = liked.includes(id) ? 'ri-heart-fill' : 'ri-heart-line';
+        document.getElementById('commentList').innerHTML = (comments || []).map(c => `
+            <div class="comment-item"><span class="user">Explorer</span><div class="text">${c.content}</div></div>
+        `).join('') || '<p style="color:var(--secondary); font-size:14px; text-align:center;">No perspectives shared yet.</p>';
+        document.getElementById('readerOverlay').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    };
+
+    // --- SHARE LOGIC ---
+    const shareStory = async (title) => {
+        const url = window.location.href;
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: `ACCESCO Blogs: ${title}`, url: url });
+            } catch (err) { console.log("Share failed"); }
+        } else {
+            const el = document.createElement('textarea');
+            el.value = url;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("Story link copied to clipboard!");
+        }
+    };
+
+    window.handleCardShare = (id, title) => {
+        event.stopPropagation();
+        shareStory(title);
+    };
+
+    window.handleShareActive = () => {
+        const title = document.getElementById('readTitle').innerText;
+        shareStory(title);
+    };
+
+    window.handleReaderLike = async () => {
+        let liked = JSON.parse(localStorage.getItem('accesco_liked') || '[]');
+        if (liked.includes(activePostId)) return;
+        liked.push(activePostId); localStorage.setItem('accesco_liked', JSON.stringify(liked));
+        const { error } = await supabase.from('blog_likes').insert({ blog_id: activePostId });
+        if (!error) {
+            document.getElementById('readLikeCount').innerText = parseInt(document.getElementById('readLikeCount').innerText) + 1;
+            document.getElementById('readerLikeBtn').classList.add('active');
+            document.getElementById('readerLikeBtn').querySelector('i').className = 'ri-heart-fill';
+            loadBlogs(true);
+        }
+    };
+
+    window.submitComment = async () => {
+        const text = document.getElementById('commText').value.trim();
+        if (!text) return;
+        const { error } = await supabase.from('blog_comments').insert({ blog_id: activePostId, content: text });
+        if (!error) { document.getElementById('commText').value = ""; await loadBlogs(true); openStory(activePostId); }
+    };
+
+    window.publishPost = async () => {
+        const btn = document.getElementById('publishBtn');
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        const category = document.getElementById('postCategory').value;
+        const linkUrl = document.getElementById('imageUrlInput').value;
+        if (!title || !content) return alert("Headline and story are required.");
+        btn.disabled = true; btn.innerText = "Synchronizing...";
+        let image_url = linkUrl || "";
+        try {
+            if (imgSourceMode === 'local' && selectedFile) {
+                const name = `${Date.now()}-${selectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+                const { data } = await supabase.storage.from('blog-images').upload(name, selectedFile);
+                if (data) image_url = supabase.storage.from('blog-images').getPublicUrl(name).data.publicUrl;
+            }
+            await supabase.from('blogs').insert({ title, content, category, image_url, author_name: 'Explorer' });
+            closeWriteModal(); await loadBlogs(true);
+        } catch (e) { alert("Connection error."); }
+        btn.disabled = false; btn.innerText = "Publish to ACCESCO";
+    };
+
+    window.openWriteModal = () => document.getElementById('writeOverlay').style.display = 'block';
+    window.closeWriteModal = () => document.getElementById('writeOverlay').style.display = 'none';
+    window.closeReader = () => { document.getElementById('readerOverlay').style.display = 'none'; document.body.style.overflow = 'auto'; };
+  </script>
+</body>
+</html>
