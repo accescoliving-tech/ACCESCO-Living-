@@ -23,12 +23,41 @@
 <main class="feed">
 
   <!-- CREATE POST -->
-  <section class="composer">
-    <input id="title" placeholder="Blog title" />
-    <textarea id="content" placeholder="What's on your mind?"></textarea>
-    <input id="tags" placeholder="Tags (comma separated)" />
-    <button onclick="addBlog()">Post</button>
-  </section>
+  <div class="composer">
+
+  <input id="title" type="text" placeholder="Blog title" />
+
+  <textarea
+    id="content"
+    placeholder="What's on your mind?"
+    rows="3"
+  ></textarea>
+
+  <input
+    id="tags"
+    type="text"
+    placeholder="tags (comma separated)"
+  />
+
+  <!-- IMAGE UPLOAD -->
+  <div class="image-upload">
+    <label for="image" class="image-upload-btn">
+      📷 Add photo
+    </label>
+    <input type="file" id="image" accept="image/*" hidden />
+  </div>
+
+  <!-- IMAGE PREVIEW -->
+  <div id="imagePreview" class="image-preview hidden">
+    <img id="previewImg" />
+    <button type="button" class="remove-image" onclick="removeImage()">✕</button>
+  </div>
+
+  <button class="post-btn" onclick="addBlog()">Post</button>
+
+</div>
+
+
 
   <!-- RECENT -->
   <section class="section">
