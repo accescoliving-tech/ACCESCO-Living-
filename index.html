@@ -1448,33 +1448,6 @@
         object-fit: cover;
         display: block;
         }
-        
-        df-messenger {
-            --df-messenger-titlebar-background: #000000;
-            --df-messenger-titlebar-font-color: #ffffff;
-            --df-messenger-button-titlebar-color: #000000;
-            --df-messenger-chat-background-color: #000000;
-            --df-messenger-message-bot-background: #1f2933;
-            --df-messenger-message-bot-font-color: #ffffff;
-            --df-messenger-message-user-background: #2563eb;
-            --df-messenger-message-user-font-color: #ffffff;
-            --df-messenger-input-box-background: #000000;
-            --df-messenger-input-font-color: #000000;
-            --df-messenger-input-placeholder-font-color: #606266;
-            --df-messenger-send-icon-color: #ffffff;
-            width: 360px;
-            max-width: 95%;
-            height: 480px;
-            border-radius: 16px;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
-        }
-        @media (max-width: 480px) {
-            df-messenger {
-            width: 100%;
-            height: 100%;
-            border-radius: 0;
-            }
-        }
     </style>
 
         <!-- MAIN CONTENT START -->
@@ -2119,9 +2092,10 @@
                     <h4 style="color: white; letter-spacing: 1px;">SOCIAL LINKS</h4>
                     <div class="social-links">
                         <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" target="_blank" class="social-icon" aria-label="Instagram" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://x.com/accesco_living?s=21" target="_blank" class="social-icon" aria-label="Twitter" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://x.com/accesco_living?s=21" target="_blank" class="social-icon" aria-label="X" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
                         <a href="https://www.youtube.com/@accescoliving" target="_blank" class="social-icon" aria-label="YouTube" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
                         <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon" aria-label="LinkedIn" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://www.threads.net/@accescoliving" target="_blank" class="social-icon" aria-label="Threads" rel="noopener noreferrer"><i class="ri-threads-line"></i></a>
                     </div>
 
                     <div class="app-buttons">
@@ -2459,60 +2433,21 @@ document.addEventListener("click", (e) => {
   df-messenger {
     /* --- Main Branding --- */
     --df-messenger-font-family: 'Outfit', sans-serif;
-    --df-messenger-titlebar-background: #700457;
-    --df-messenger-titlebar-font-color: #ffffff;
+    /* 1. Change title background to a light color (like your image) or keep it dark */
+    --df-messenger-titlebar-background: #efefef; 
+
+    --df-messenger-button-titlebar-font-color: #000000;
+  
+    /* General font color fallback */
+    --df-messenger-font-color: #000000;
+    
+    /* 2. CHANGE THIS TO BLACK */
+    --df-messenger-titlebar-font-color: #000000; 
     
     /* --- Launcher Settings --- */
-    --df-messenger-button-titlebar-color: transparent !important; /* Force transparency */
-    --df-messenger-chat-background-color: #0f172a;
+    --df-messenger-button-titlebar-color: transparent !important;
+    --df-messenger-chat-background-color: #1d2856;
   }
-
-  /* --- 🔑 FORCE TRANSPARENCY & INCREASE SIZE --- */
-  /* This targets the button container inside the Shadow DOM */
-  df-messenger >>> .df-messenger-wrapper .launcher {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 110px !important; /* Larger container for the large icon */
-    height: 110px !important;
-  }
-
-  /* This targets the icon image itself */
-  df-messenger >>> .df-messenger-wrapper .launcher img {
-    width: 90px !important; /* Increased size */
-    height: 90px !important;
-    max-width: none !important; /* Removes default size limits */
-    max-height: none !important;
-    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3)); /* Adds depth without a solid box */
-  }
-
-  /* --- Optional: Adjust position to prevent clipping --- */
-  df-messenger >>> .df-messenger-wrapper {
-    bottom: 20px !important;
-    right: 20px !important;
-  }
-    @media (max-width: 480px) {
-        /* Scale down the login button seen in image_745036.png */
-        .login-btn {
-            transform: scale(0.8);
-            margin-right: 10px;
-            z-index: 5 !important;
-        }
-
-        /* scale down and reposition large chatbot launcher from image_73dbf6.png */
-        df-messenger >>> .df-messenger-wrapper .launcher {
-            width: 60px !important;
-            height: 60px !important;
-            bottom: 15px !important;
-            right: 15px !important;
-        }
-
-        df-messenger >>> .df-messenger-wrapper .launcher img {
-            width: 45px !important;
-            height: 45px !important;
-        }
-    }
 </style>
 <df-messenger
     intent="WELCOME"
@@ -2521,4 +2456,3 @@ document.addEventListener("click", (e) => {
     language-code="en"
     chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
 </df-messenger>
-
