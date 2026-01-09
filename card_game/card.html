@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACCESCO Card Match</title>
+  <link rel="icon" href="../../AI_model/templates/accesco.png" />
+  <link rel="stylesheet" href="styles/game.css" />
+</head>
+
+<body>
+  <div class="card-game-container" id="app">
+
+    <!-- Header -->
+    <div class="game-header">
+      <div class="flex items-center justify-between max-w-7xl mx-auto">
+        <div class="flex items-center gap-4">
+          <img src="../../AI_model/templates/accesco.png" alt="ACCESCO Logo" class="header-logo" />
+          <h1 class="game-title">ACCESCO Card Match</h1>
+        </div>
+
+        <div class="flex items-center gap-6 header-stats">
+          <div class="score-display">
+            <div class="label">Score</div>
+            <div class="value" id="score">0</div>
+          </div>
+
+          <div class="timer-display" id="timer">
+            <div class="label">Time</div>
+            <div class="value timer-value" id="time">2:00</div>
+          </div>
+
+          <div class="score-display">
+            <div class="label">Matches</div>
+            <div class="value" id="matches">0/6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADDITIVE UI -->
+      <div id="combo-indicator"></div>
+      <div id="timer-float-container"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <!-- Game Board -->
+      <div class="game-board-section">
+        <div id="start-screen" class="flex flex-col items-center justify-center">
+          <h2>Welcome to ACCESCO Card Match </h2>
+          <p>Match pairs of Accesco-themed cards before time runs out!</p>
+
+          <div class="how-to-play">
+            <h3>How to Play</h3>
+            <p>• Click cards to flip them</p>
+            <p>• Match identical icons</p>
+            <p>• Match all 6 pairs before time runs out</p>
+            <p>• +5 seconds for correct matches</p>
+            <p>• −5 seconds for wrong guesses</p>
+          </div>
+
+          <button class="btn btn-primary" onclick="initializeGame()">Start Game</button>
+        </div>
+
+        <div id="game-board" style="display:none;">
+          <div class="cards-grid" id="cards-grid"></div>
+
+          <div class="game-controls">
+            <button class="btn btn-secondary" onclick="restartGame()">Restart</button>
+            <button class="btn btn-exit" onclick="exitGame()">Exit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard-section">
+        <h2 class="leaderboard-title">🏆 Leaderboard</h2>
+        <div id="leaderboard-content"></div>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown-overlay" id="countdown-overlay" style="display:none;">
+      <div class="countdown-number" id="countdown-number">3</div>
+    </div>
+
+    <!-- Game Over -->
+    <div class="game-over-modal" id="game-over-modal" style="display:none;">
+      <div class="game-over-content">
+        <h2 class="game-over-title">Game Over</h2>
+        <div class="game-over-score" id="game-over-score"></div>
+
+        <div class="game-controls">
+          <button class="btn btn-primary" onclick="restartGame()">Play Again</button>
+          <button class="btn btn-exit" onclick="exitGame()">Exit</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="score-popups"></div>
+  </div>
+
+  <script src="app/card-game.js"></script>
+</body>
+</html>
