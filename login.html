@@ -300,6 +300,29 @@
         font-size: 28px;
       }
     }
+    .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+    z-index: 10;
+    padding: 5px;
+  }
+
+  .close-btn:hover {
+    color: #fff;
+    transform: scale(1.1);
+  }
+
+  /* Make sure the card stays relative for the close button to position correctly */
+  .card {
+    position: relative;
+    /* ... rest of your existing .card styles ... */
+  }
   </style>
 </head>
 
@@ -307,7 +330,8 @@
 
 <div class="card">
   <div class="logo">
-    <div class="logo-text">ACCESCO</div>
+    <div class="close-btn logo-text" id="backBtn">&times;</div>
+    <div class="logo-text">ACCESCO </div>
   </div>
 
   <h1 id="title">Sign In</h1>
@@ -360,6 +384,15 @@
   if (data?.session) {
     window.location.replace("https://accesco.co.in/index.html");
   }
+  document.getElementById("backBtn").addEventListener("click", () => {
+    // This will take the user back to the previous page in history
+    if (document.referrer.includes(window.location.hostname)) {
+        window.history.back();
+    } else {
+        // Fallback to home if there is no history
+        window.location.href = "index.html";
+    }
+  });
 </script>
 
 
