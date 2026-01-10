@@ -2,8 +2,7 @@
 <html lang="en">
 
 <head>
-    <!-- Head: meta tags, preconnects, icons, fonts, and critical inline CSS -->
-  <meta charset="utf-8" />
+    <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://cdn.jsdelivr.net data:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://formspree.io https://dialogflow.cloud.google.com; media-src 'self' blob:;">
   
   <meta name="google-site-verification" content="N9vuWT9uGs54Yf9-Y_7DtXVS8C2GJlK0mniixKXE654" />
@@ -1450,17 +1449,12 @@
         }
     </style>
 
-        <!-- MAIN CONTENT START -->
-
         <main id="home">
-        <!-- ===== HERO / HEADER SECTION ===== -->
-    <section class="hero">
+        <section class="hero">
   <div class="top-nav">
 
-    <!-- AUTH AREA -->
     <div id="authContainer">
 
-      <!-- LOGIN BUTTON (VISIBLE BY DEFAULT) -->
       <button
         id="navLoginBtn"
         class="nav-login-btn"
@@ -1471,7 +1465,6 @@
         </button>
 
 
-      <!-- USER PROFILE (HIDDEN UNTIL LOGIN) -->
       <div id="navProfileWrapper" style="display:none; position:relative;">
 
         <img
@@ -1482,7 +1475,6 @@
           onclick="toggleProfilePopup()"
         />
 
-        <!-- PROFILE POPUP -->
         <div id="profilePopup" class="profile-popup">
           <a href="dashboard.html">Dashboard</a>
           <a href="settings.html">Account Settings</a>
@@ -1495,7 +1487,6 @@
 
   </div>
 
-  <!-- HERO BACKGROUND -->
   <video
     class="hero-bg-video"
     autoplay
@@ -1550,8 +1541,6 @@
     </a>
   </div>
 </section>
-<!-- ===== END: HERO / HEADER SECTION ===== -->
-
 <style>
 /* ===== NAV PROFILE ===== */
 .nav-profile-img {
@@ -1594,7 +1583,6 @@
 }
 </style>
 
-        <!-- ===== SERVICES CARDS ===== -->
         <section id="services">
             <div class="section-title">
                 <div class="small-upper">OUR SERVICES</div>
@@ -1698,9 +1686,6 @@
                 </a>
             </div>
         </section>
-        <!-- ===== END: SERVICES CARDS ===== -->
-
-        <!-- ===== CALCIQ (FINANCE / WIDGET) ===== -->
         <section class="calciq-section">
             <div class="calciq-container">
                 <div class="calciq-info">
@@ -1728,9 +1713,6 @@
                 </div>
             </div>
         </section>
-        <!-- ===== END: CALCIQ (FINANCE / WIDGET) ===== -->
-
-        <!-- ===== GAMING / REWARD ARENA ===== -->
         <section class="gaming-arena">
             <div class="floating-bits" aria-hidden="true">
                 <span class="bit b1"></span>
@@ -1795,9 +1777,6 @@
                 </div>
             </div>
         </section>
-        <!-- ===== END: GAMING / REWARD ARENA ===== -->
-
-        <!-- ===== ABOUT / MISSION ===== -->
         <section id="about">
             <div class="section-title">
                 <div class="small-upper">ABOUT ACCESCO</div>
@@ -1837,10 +1816,6 @@
                 </div>
             </div>
         </section>
-        <!-- ===== END: ABOUT / MISSION ===== -->
-
-            <!-- ===== Blogs Start  ===== -->
-
         <section id="blogs" class="blog-section">
             <div class="section-title">
                 <div class="small-upper">LIFESTYLE & INSIGHTS</div>
@@ -1848,45 +1823,10 @@
                 <p class="muted-center">Your guide to intelligent living, from financial hacks to the latest in sustainable fashion.</p>
             </div>
 
-            <div class="blog-grid">
-                <article class="blog-card">
-                    <div class="blog-img">
-                        <span class="blog-tag">Finance</span>
-                        <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=800&q=80" alt="Finance Blog">
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-date"><i class="ri-calendar-line"></i> Jan 05, 2026</div>
-                        <h4>Mastering CalcIQ: 5 Hacks to Double Your Monthly Savings</h4>
-                        <p>Learn how our AI-driven calculator identifies hidden leaks in your spending habits.</p>
-                        <a href="blog-savings.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </article>
-
-                <article class="blog-card">
-                    <div class="blog-img">
-                        <span class="blog-tag">Lifestyle</span>
-                        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80" alt="Grokly Blog">
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-date"><i class="ri-calendar-line"></i> Jan 02, 2026</div>
-                        <h4>The 10-Minute Meal Revolution: Eating Well While Working Hard</h4>
-                        <p>Grokly isn't just about speed; it's about quality. Discover recipes you can whip up in minutes.</p>
-                        <a href="blog-meals.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </article>
-
-                <article class="blog-card">
-                    <div class="blog-img">
-                        <span class="blog-tag">Fashion</span>
-                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80" alt="Fashion Blog">
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-date"><i class="ri-calendar-line"></i> Dec 28, 2025</div>
-                        <h4>Rent vs. Buy: Why InstaStyle is Changing the Indian Wardrobe</h4>
-                        <p>Sustainable fashion is here. See how renting premium labels is saving both money and the planet.</p>
-                        <a href="blog-fashion.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
-                    </div>
-                </article>
+            <div id="dynamicBlogGrid" class="blog-grid">
+                <div style="text-align:center; grid-column: 1/-1; padding: 50px;">
+                    <p style="color: var(--muted);">Synchronizing stories...</p>
+                </div>
             </div>
             
             <div style="text-align: center; margin-top: 50px;">
@@ -1894,10 +1834,7 @@
             </div>
         </section>
 
-            <!-- ===== Blogs End ===== -->
-
-        <!-- ===== APP SHOWCASE / FEATURES ===== -->
-        <section class="app-showcase">
+            <section class="app-showcase">
             <div class="app-header">
                 <h2>The Ecosystem. Unlocked.</h2>
                 <p>Powering a Smart Ecosystem That Simplifies Everyday Living.</p>
@@ -1962,7 +1899,7 @@
                         </div>
                     </a>
                     <a href="services.html" class="gen-z-card accesgo">
-                        <div class="icon-container"><i class="ri-route-line"></i></div>
+                        <div class="icon-container"><i class="ri-heart-pulse-line"></i></div>
                         <div>
                             <h4>AccesGO</h4>
                             <p>On-demand mobility & drops</p>
@@ -1978,9 +1915,6 @@
                 </div>
             </div>
         </section>
-        <!-- ===== END: APP SHOWCASE / FEATURES ===== -->
-
-        <!-- ===== DOWNLOAD CTA ===== -->
         <section class="download-section">
             <div class="download-card">
                 <div class="download-text">
@@ -2003,9 +1937,6 @@
                 </div>
             </div>
         </section>
-        <!-- ===== END: DOWNLOAD CTA ===== -->
-
-        <!-- ===== CONTACT FORM / SUPPORT ===== -->
         <section id="contact-form" class="contact-section">
     <div class="contact-card">
         <div class="contact-header">
@@ -2039,7 +1970,6 @@
         </form>
     </div>
 </section>
-        <!-- ===== FOOTER / CONTACT INFO ===== -->
         <footer id="contact">
             <div class="footer-grid">
                 <div>
@@ -2093,7 +2023,6 @@
         </footer>
     </main>
     
-    <!-- ===== LOGIN MODAL OVERLAY ===== -->
     <div id="loginOverlay" class="login-overlay">
     <div class="login-modal">
         <button class="close-login" onclick="closeLoginModal()">&times;</button>
@@ -2121,7 +2050,6 @@
     </div>
 </div>
 
-    <!-- ===== PROFILE / USER OVERLAY ===== -->
     <div id="profileOverlay" class="login-overlay">
         <div class="login-modal">
             <button class="close-login" onclick="closeProfileModal()">&times;</button>
@@ -2150,7 +2078,6 @@
         </div>
     </div>
 
-    <!-- ===== SCRIPTS: UI INTERACTIONS (stack swipe, button effects, modals) ===== -->
     <script>
         const stack = document.getElementById('stack');
         const cards = Array.from(stack.querySelectorAll('.stack-card'));
@@ -2302,20 +2229,65 @@
     </script>
     
 
-    <!-- ===== EXTERNAL INTEGRATIONS: Supabase auth & session checks ===== -->
     <script type="module">
 /* ======================================================
    SUPABASE SETUP
 ====================================================== */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const supabase = createClient(
-  "https://nfdrnbikwzfmijrqmoqt.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5mZHJuYmlrd3pmbWlqcnFtb3F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNzAyNjYsImV4cCI6MjA4MTY0NjI2Nn0.u4ThkmfWiCOJrfcxm0RB-oaVysQ5Y8kha7k66UdUuH0"
-);
+const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
+const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 /* ======================================================
-   DOM ELEMENTS
+   DYNAMIC BLOG FETCH
+====================================================== */
+async function fetchHomeBlogs() {
+    const blogContainer = document.getElementById('dynamicBlogGrid');
+    try {
+        const { data: blogs, error } = await supabase
+            .from('blogs')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(3);
+
+        if (error) throw error;
+
+        if (blogs && blogs.length > 0) {
+            blogContainer.innerHTML = blogs.map(post => {
+                const dateStr = new Date(post.created_at).toLocaleDateString('en-IN', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+                return `
+                <article class="blog-card">
+                    <div class="blog-img">
+                        <span class="blog-tag">${post.category || 'Lifestyle'}</span>
+                        <img src="${post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="${post.title}">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date"><i class="ri-calendar-line"></i> ${dateStr}</div>
+                        <h4>${post.title}</h4>
+                        <p>${post.content.substring(0, 100)}...</p>
+                        <a href="BLOGS_PAGE/blogs.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </article>`;
+            }).join('');
+        } else {
+            blogContainer.innerHTML = '<p style="color: var(--muted);">No current highlights found.</p>';
+        }
+    } catch (err) {
+        console.error("Home blog fetch failed:", err);
+        blogContainer.innerHTML = '<p style="color: var(--muted);">Unable to load latest insights.</p>';
+    }
+}
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', fetchHomeBlogs);
+
+/* ======================================================
+   DOM ELEMENTS (AUTH)
 ====================================================== */
 const loginOverlay = document.getElementById("loginOverlay");
 const navLoginBtn = document.getElementById("navLoginBtn");
@@ -2324,7 +2296,7 @@ const navProfileImg = document.getElementById("navProfileImg");
 const profilePopup = document.getElementById("profilePopup");
 
 /* ======================================================
-   UI HELPERS
+   UI HELPERS (AUTH)
 ====================================================== */
 function showLoggedInUI(user) {
   if (navLoginBtn) navLoginBtn.style.display = "none";
@@ -2410,7 +2382,6 @@ document.addEventListener("click", (e) => {
 });
 </script>
 
-<!-- ===== EXTERNAL CHAT INTEGRATION: Dialogflow Messenger ===== -->
 <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
     
 <style>
@@ -2440,3 +2411,5 @@ document.addEventListener("click", (e) => {
     language-code="en"
     chat-icon="https://github.com/accescoliving-tech/ACCESCO-Living-/blob/main/images/IMG_5111.PNG?raw=true">
 </df-messenger>
+</body>
+</html>
