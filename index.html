@@ -51,6 +51,79 @@
     a { color: inherit; text-decoration: none; }
     img { width: 100%; height: auto; display: block; border-radius: 14px; } 
 
+    /* ===== LOGO FIX ===== */
+    .nav-logo-top {
+        position: fixed;
+        top: 24px;
+        left: 140px; /* Moved right to make space for the menu button */
+        z-index: 10002;
+        width: 40px;
+        height: 40px;
+        filter: drop-shadow(0 2px 10px rgba(0,0,0,0.3)); /* Makes white logo visible on light bg */
+        transition: opacity 0.3s ease;
+    }
+
+    /* ===== SIDEBAR STAGGERED MENU CSS (UPDATED) ===== */
+    .sm-toggle-custom {
+        position: fixed; top: 24px; left: 24px;
+        z-index: 10003; /* Above everything */
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.4);
+        border-radius: 999px;
+        padding: 12px 20px;
+        cursor: pointer;
+        display: flex; align-items: center; gap: 12px; color: #fff; font-weight: 800;
+        text-transform: uppercase;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    .staggered-menu-panel {
+        position: fixed; top: 0; left: 0;
+        width: clamp(280px, 80vw, 450px);
+        height: 100%; background: white; padding: 6em 2em 2em 2em;
+        z-index: 10001; transform: translateX(-100%);
+        display: flex; flex-direction: column;
+    }
+    .sm-prelayer {
+        position: fixed; top: 0; left: 0;
+        height: 100%; width: clamp(280px, 80vw, 450px);
+        z-index: 10000; transform: translateX(-100%);
+    }
+    .sm-icon-custom { position: relative; width: 14px; height: 14px; }
+    .sm-line-v, .sm-line-h {
+        position: absolute; top: 50%; left: 50%; width: 100%; height: 2px;
+        background: currentColor; transform: translate(-50%, -50%); transition: transform 0.4s;
+    }
+    .sm-line-v { transform: translate(-50%, -50%) rotate(90deg); }
+    
+    .sm-panel-inner {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .sm-panel-list { list-style: none; padding: 0; margin: 40px 0; flex-grow: 1; }
+    .sm-panel-item {
+        font-size: 2.2rem; font-weight: 900; text-transform: uppercase;
+        color: #1a0014; display: block; line-height: 1.1; margin-bottom: 25px;
+        transition: color 0.3s, transform 0.3s;
+    }
+    .sm-panel-item:hover { color: var(--accent); transform: translateX(10px); }
+    
+    .sm-socials {
+        margin-top: auto;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 600px) {
+        .staggered-menu-panel { width: 85vw; padding: 4em 1.5em 2em 1.5em; }
+        .sm-panel-item { font-size: 1.8rem; margin-bottom: 20px; }
+        .nav-logo-top { left: 130px; top: 16px; width: 32px; height: 32px; }
+        .sm-toggle-custom { top: 16px; left: 16px; padding: 10px 16px; font-size: 12px; }
+    }
+
     /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
@@ -336,7 +409,7 @@
     }
     
     @media(max-width: 480px) {
-        .hero-title { font-size: 32px; line-height: 1.2; }
+        .hero-title { font-size: 30px; line-height: 1.2; }
         .hero-sub { font-size: 17px; line-height: 1.4; }
         .hero-logo-img { width: 80px; height: 80px; }
         
@@ -554,7 +627,7 @@
     .card-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.2px; background: #fff3e0; color: #d35400; border: 1px solid rgba(211,84,0,0.22); }
     .card-sub { margin: 0; color: #444; font-size: 14px; line-height: 1.45; }
     .card-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: #222; }
-    .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 9px; background: #f5f5f5; border: 1px solid rgba(0,0,0,0.05); }
+    .meta-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 999px; background: #f5f5f5; border: 1px solid rgba(0,0,0,0.05); }
     .meta-chip i { color: #ff7a00; }
     
     .card-footer { 
@@ -900,8 +973,6 @@
         .arena-features { align-items: center; }
         .games-grid-clean { grid-template-columns: repeat(2, 1fr); gap: 16px; }
         .arena-title { font-size: 36px; }
-        .console-body { grid-template-columns: 1fr; }
-        .console-screen { height: 120px; }
         .arena-right { gap: 14px; }
     }
     @media(max-width: 500px) {
@@ -909,8 +980,6 @@
             grid-template-columns: repeat(2, 1fr) !important; 
             gap: 12px;
         }
-        .console-doodle { padding: 14px 14px 12px; }
-        .console-screen { height: 110px; }
         .game-card-new {
             padding: 16px 10px;
         }
@@ -1289,7 +1358,6 @@
             .hero-title { font-size: 30px; }
             .hero-sub { font-size: 17px; }
             .cta-pill { padding: 10px 18px; font-size: 13px; }
-            .badge h3 { font-size: 22px !important; }
             .gaming-arena { gap: 28px; }
             .app-container { gap: 26px; }
             .contact-card { padding: 38px 18px; }
@@ -1448,6 +1516,42 @@
         display: block;
         }
     </style>
+
+    <body>
+
+        <button class="sm-toggle-custom" id="smToggle">
+            <div class="sm-icon-custom">
+                <div class="sm-line-h"></div>
+                <div class="sm-line-v" id="smLineV"></div>
+            </div>
+            <span id="smToggleText">Menu</span>
+        </button>
+
+        <div class="sm-prelayer" id="layer1" style="background: rgba(112, 4, 87, 1);"></div>
+        <div class="sm-prelayer" id="layer2" style="background: rgba(160, 30, 125, 1);"></div>
+
+        <aside class="staggered-menu-panel" id="smPanel">
+    <div class="sm-panel-inner">
+        <ul class="sm-panel-list">
+            <li><a href="#home" class="sm-panel-item">Home</a></li>
+            <li><a href="#services" class="sm-panel-item">Services</a></li>
+            <li><a href="#about" class="sm-panel-item">About</a></li>
+            <li><a href="#blogs" class="sm-panel-item">Blogs</a></li>
+            <li><a href="#contact-form" class="sm-panel-item">Contact</a></li>
+        </ul>
+        <div class="sm-socials">
+            <h3 style="color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase;">Follow Accesco</h3>
+            <div style="display: flex; gap: 15px; font-size: 22px; margin-top: 10px; flex-wrap: wrap;">
+                <a href="https://www.instagram.com/accescoliving" target="_blank"><i class="ri-instagram-line"></i></a>
+                <a href="https://www.linkedin.com/company/acceso-living/" target="_blank"><i class="ri-linkedin-box-line"></i></a>
+                <a href="https://x.com/accesco_living" target="_blank"><i class="ri-twitter-x-line"></i></a>
+                <a href="https://www.facebook.com/accescoliving" target="_blank"><i class="ri-facebook-box-line"></i></a>
+                <a href="https://www.youtube.com/@accescoliving" target="_blank"><i class="ri-youtube-line"></i></a>
+                <a href="https://www.threads.net/@accescoliving" target="_blank"><i class="ri-threads-line"></i></a>
+            </div>
+        </div>
+    </div>
+</aside>
 
         <main id="home">
         <section class="hero">
@@ -2380,6 +2484,61 @@ document.addEventListener("click", (e) => {
   ) {
     profilePopup.style.display = "none";
   }
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const smToggle = document.getElementById('smToggle');
+    const smPanel = document.getElementById('smPanel');
+    const smLineV = document.getElementById('smLineV');
+    const smText = document.getElementById('smToggleText');
+    const navLogo = document.querySelector('.nav-logo-top');
+    
+    let isMenuOpen = false;
+
+    smToggle.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+
+        if (isMenuOpen) {
+            // Opening Animation
+            const tl = gsap.timeline();
+            tl.to("#layer1", { xPercent: 100, duration: 0.5, ease: "power4.out" })
+              .to("#layer2", { xPercent: 100, duration: 0.5, ease: "power4.out" }, "-=0.4")
+              .to(smPanel, { xPercent: 100, duration: 0.6, ease: "power4.out" }, "-=0.4");
+            
+            gsap.to(smLineV, { rotate: 0, duration: 0.4 });
+            smToggle.style.color = "#000";
+            smText.innerText = "Close";
+            
+            // Hide the logo when menu is open for cleaner look
+            if(navLogo) navLogo.style.opacity = "0";
+        } else {
+            // Closing Animation
+            gsap.to([smPanel, "#layer2", "#layer1"], { 
+                xPercent: 0, 
+                duration: 0.4, 
+                stagger: 0.05, 
+                ease: "power2.in" 
+            });
+            
+            gsap.to(smLineV, { rotate: 90, duration: 0.4 });
+            smToggle.style.color = "#fff";
+            smText.innerText = "Menu";
+
+            // Show the logo back
+            if(navLogo) navLogo.style.opacity = "1";
+        }
+    });
+
+    // Close on link click
+    document.querySelectorAll('.sm-panel-item').forEach(link => {
+        link.addEventListener('click', () => {
+            if (isMenuOpen) smToggle.click();
+        });
+    });
 });
 </script>
 
