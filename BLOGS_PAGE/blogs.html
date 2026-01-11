@@ -46,6 +46,19 @@
       line-height: 1.6;
     }
 
+    /* LOADING OVERLAY */
+    #loadingScreen {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loader-video-wrap {
+      width: 550px; height: 310px; border-radius: 24px; overflow: hidden;
+      margin-bottom: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+      background: #000;
+    }
+    .loader-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+
     /* NAVIGATION */
     header {
       background: rgba(255, 242, 235, 0.8);
@@ -193,6 +206,7 @@
       flex-direction: column;
       text-decoration: none;
       color: inherit;
+      cursor: pointer;
     }
 
     .story-visual {
@@ -202,7 +216,6 @@
       overflow: hidden;
       margin-bottom: 1.5rem;
       background: var(--border);
-      cursor: pointer;
     }
 
     .story-visual img {
@@ -297,6 +310,15 @@
 
 <body>
 
+  <div id="loadingScreen">
+    <div class="loader-video-wrap">
+      <video autoplay muted loop playsinline>
+        <source src="../images/plane.mp4" type="video/mp4">
+      </video>
+    </div>
+    <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px; color: var(--accent);">Curating Collection...</span>
+  </div>
+
   <header>
     <div class="top-bar">
       <div class="logo-area" onclick="filterArchive('All')">
@@ -341,7 +363,6 @@
     </div>
     
     <div id="storyContainer" class="story-grid">
-      <!-- Loading Skeletons -->
       <div style="height: 450px; border-radius: 24px; background: var(--border); opacity: 0.5;"></div>
       <div style="height: 450px; border-radius: 24px; background: var(--border); opacity: 0.5;"></div>
       <div style="height: 450px; border-radius: 24px; background: var(--border); opacity: 0.5;"></div>
@@ -382,7 +403,6 @@
     <div class="footer-bottom">© 2026 ACCESCO BLOGS — ALL RIGHTS RESERVED.</div>
   </footer>
 
-  <!-- Reader View -->
   <div class="modal-overlay" id="readerOverlay">
     <button class="modal-close" onclick="closeModals()"><i class="ri-close-line"></i></button>
     <div class="modal-container">
@@ -396,7 +416,6 @@
     </div>
   </div>
 
-  <!-- Write View -->
   <div class="modal-overlay" id="writeOverlay" style="background: rgba(0,0,0,0.5);">
     <div style="max-width: 620px; margin: 0 auto; background: var(--bg); padding: 3.5rem; border-radius: 36px; box-shadow: 0 50px 120px rgba(0,0,0,0.4);">
         <h2 style="font-family: Poppins; font-weight: 900; margin-bottom: 2rem; font-size: 32px; letter-spacing: -1px;">Draft Narrative</h2>
@@ -425,107 +444,153 @@
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-    
-    const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
-    const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
-    const supabase = createClient(supabaseUrl, supabaseKey);
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  
+  const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
+  const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-    let cachedBlogs = [], currentFilter = 'All';
+  let cachedBlogs = [], currentFilter = 'All';
 
-    // Mock Data Fallback
-    const demoArchive = [
-        { id: 'm1', title: 'The Architectures of Digital Solitude', category: 'Technology', content: 'In an era defined by hyper-connectivity, we find ourselves increasingly isolated within the digital silos of our own making. This exploration looks at how algorithm design impacts the human psyche...', image_url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', created_at: new Date().toISOString() },
-        { id: 'm2', title: 'Circular Economics in High Fashion', category: 'Business', content: 'Luxury brands are finally pivoting towards sustainability, but is it a genuine shift or clever marketing? We dissect the supply chain of the modern atelier...', image_url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800', created_at: new Date().toISOString() },
-        { id: 'm3', title: 'The Quiet Luxury of Slow Living', category: 'Lifestyle', content: 'Redefining wealth not through accumulation, but through the ownership of one\'s own time. A guide to the slow-living movement taking over creative hubs...', image_url: 'https://images.unsplash.com/photo-1490122417551-6ee9691429d0?w=800', created_at: new Date().toISOString() }
-    ];
+  const demoArchive = [
+      { id: 'm1', title: 'The Architectures of Digital Solitude', category: 'Technology', content: 'In an era defined by hyper-connectivity, we find ourselves increasingly isolated within the digital silos of our own making...', image_url: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800', created_at: new Date().toISOString() }
+  ];
 
-    const loadArchive = async () => {
-        try {
-            const { data, error } = await supabase.from('blogs').select('*').order('created_at', { ascending: false });
-            if (error || !data || data.length === 0) {
-                console.warn("Using Demo Data (Supabase empty or unreachable)");
-                cachedBlogs = demoArchive;
-            } else {
-                cachedBlogs = data;
-            }
-            renderArchive();
-        } catch (err) {
-            cachedBlogs = demoArchive;
-            renderArchive();
-        }
-    };
+  // Hides loading screen smoothly
+  const hideLoading = () => {
+    const screen = document.getElementById('loadingScreen');
+    if(screen) {
+        screen.style.opacity = '0';
+        setTimeout(() => screen.style.display = 'none', 800);
+    }
+  };
 
-    const renderArchive = () => {
-        const filtered = currentFilter === 'All' ? cachedBlogs : cachedBlogs.filter(b => b.category === currentFilter);
-        const container = document.getElementById('storyContainer');
-        document.getElementById('itemCount').innerText = `${filtered.length} Narratives`;
-        
-        if (filtered.length === 0) {
-            container.innerHTML = "<div style='grid-column:1/-1; text-align:center; padding: 6rem; border: 1px dashed var(--border); border-radius: 30px;'><p style='font-weight:800; opacity:0.4;'>Archive is currently empty.</p></div>";
-            return;
-        }
+  // Checks URL hash and opens blog if match found
+  const handleRouting = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#post-')) {
+          const postId = hash.replace('#post-', '');
+          if (cachedBlogs.length > 0) {
+              openNarrative(postId, false);
+          }
+      } else {
+          closeModals(false);
+      }
+  };
 
-        container.innerHTML = filtered.map(post => `
-            <article class="story-card" onclick="openNarrative('${post.id}')">
-                <div class="story-visual">
-                    <img src="${post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="Cover">
-                </div>
-                <span class="story-tag">${post.category}</span>
-                <h3 class="story-headline">${post.title}</h3>
-                <p class="story-summary">${post.content.substring(0, 150)}...</p>
-                <button class="btn-action-text">Read Archive Entry</button>
-            </article>
-        `).join('');
-    };
+  const loadArchive = async () => {
+      try {
+          // Fetch data and enforce a 2-second visual delay for the loading video
+          const [dbResponse] = await Promise.all([
+              supabase.from('blogs').select('*').order('created_at', { ascending: false }),
+              new Promise(resolve => setTimeout(resolve, 2000)) 
+          ]);
 
-    window.filterArchive = (cat) => {
-        currentFilter = cat;
-        document.getElementById('activeCategory').innerText = cat === 'All' ? 'Latest Collection' : `${cat} Focus`;
-        document.querySelectorAll('#mainNav li').forEach(li => li.classList.toggle('active', li.getAttribute('data-cat') === cat));
-        renderArchive();
-    };
+          if (dbResponse.error || !dbResponse.data || dbResponse.data.length === 0) {
+              cachedBlogs = demoArchive;
+          } else {
+              cachedBlogs = dbResponse.data;
+          }
+          renderArchive();
+          handleRouting(); 
+      } catch (err) {
+          cachedBlogs = demoArchive;
+          renderArchive();
+          handleRouting();
+      } finally {
+          hideLoading();
+      }
+  };
 
-    window.openNarrative = (id) => {
-        const post = cachedBlogs.find(b => b.id == id);
-        if (!post) return;
-        document.getElementById('readTag').innerText = post.category;
-        document.getElementById('readH1').innerText = post.title;
-        document.getElementById('readContent').innerText = post.content;
-        
-        const hero = document.getElementById('readImg');
-        if (post.image_url) { hero.src = post.image_url; hero.style.display = 'block'; } else { hero.style.display = 'none'; }
-        
-        document.getElementById('readerOverlay').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    };
+  const renderArchive = () => {
+      const filtered = currentFilter === 'All' ? cachedBlogs : cachedBlogs.filter(b => b.category === currentFilter);
+      const container = document.getElementById('storyContainer');
+      document.getElementById('itemCount').innerText = `${filtered.length} Narratives`;
+      
+      if (filtered.length === 0) {
+          container.innerHTML = "<div style='grid-column:1/-1; text-align:center; padding: 6rem; border: 1px dashed var(--border); border-radius: 30px;'><p style='font-weight:800; opacity:0.4;'>Archive is currently empty.</p></div>";
+          return;
+      }
 
-    window.publishPost = async () => {
-        const title = document.getElementById('postTitle').value.trim();
-        const content = document.getElementById('postContent').value.trim();
-        const category = document.getElementById('postCategory').value;
-        const image_url = document.getElementById('postImg').value.trim();
+      container.innerHTML = filtered.map(post => `
+          <article class="story-card" onclick="openNarrative('${post.id}')">
+              <div class="story-visual">
+                  <img src="${post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="Cover">
+              </div>
+              <span class="story-tag">${post.category}</span>
+              <h3 class="story-headline">${post.title}</h3>
+              <p class="story-summary">${post.content.substring(0, 150)}...</p>
+              <button class="btn-action-text">Read Archive Entry</button>
+          </article>
+      `).join('');
+  };
 
-        if (!title || !content) return;
+  window.filterArchive = (cat) => {
+      currentFilter = cat;
+      document.getElementById('activeCategory').innerText = cat === 'All' ? 'Latest Collection' : `${cat} Focus`;
+      document.querySelectorAll('#mainNav li').forEach(li => li.classList.toggle('active', li.getAttribute('data-cat') === cat));
+      renderArchive();
+  };
 
-        const { error } = await supabase.from('blogs').insert([{ title, content, category, image_url, author_name: 'Explorer' }]);
-        if (!error) {
-            closeModals();
-            loadArchive();
-            document.getElementById('postTitle').value = "";
-            document.getElementById('postContent').value = "";
-        }
-    };
+  window.openNarrative = (id, updateHash = true) => {
+      const post = cachedBlogs.find(b => b.id == id);
+      if (!post) return;
 
-    window.openWriteModal = () => { document.getElementById('writeOverlay').style.display = 'block'; document.body.style.overflow = 'hidden'; };
-    window.closeModals = () => {
-        document.getElementById('writeOverlay').style.display = 'none';
-        document.getElementById('readerOverlay').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    };
+      if (updateHash) {
+          window.location.hash = `post-${id}`; 
+      }
 
-    window.onload = loadArchive;
-  </script>
+      document.getElementById('readTag').innerText = post.category;
+      document.getElementById('readH1').innerText = post.title;
+      document.getElementById('readContent').innerText = post.content;
+      
+      const hero = document.getElementById('readImg');
+      if (post.image_url) { 
+          hero.src = post.image_url; 
+          hero.style.display = 'block'; 
+      } else { 
+          hero.style.display = 'none'; 
+      }
+      
+      document.getElementById('readerOverlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+  };
+
+  window.publishPost = async () => {
+      const title = document.getElementById('postTitle').value.trim();
+      const content = document.getElementById('postContent').value.trim();
+      const category = document.getElementById('postCategory').value;
+      const image_url = document.getElementById('postImg').value.trim();
+
+      if (!title || !content) return;
+
+      const { error } = await supabase.from('blogs').insert([{ title, content, category, image_url, author_name: 'Explorer' }]);
+      if (!error) {
+          closeModals();
+          loadArchive();
+          document.getElementById('postTitle').value = "";
+          document.getElementById('postContent').value = "";
+      }
+  };
+
+  window.openWriteModal = () => { document.getElementById('writeOverlay').style.display = 'block'; document.body.style.overflow = 'hidden'; };
+  
+  window.closeModals = (clearHash = true) => {
+      document.getElementById('writeOverlay').style.display = 'none';
+      document.getElementById('readerOverlay').style.display = 'none';
+      document.body.style.overflow = 'auto';
+      
+      // Remove post ID from URL when closing the modal
+      if (clearHash && window.location.hash.includes('post-')) {
+          history.pushState("", document.title, window.location.pathname + window.location.search);
+      }
+  };
+
+  // Sync the UI with URL changes (for browser Back/Forward buttons)
+  window.addEventListener('hashchange', handleRouting);
+
+  window.onload = loadArchive;
+</script>
 </body>
 </html>
