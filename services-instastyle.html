@@ -26,17 +26,32 @@ body{
   flex-direction:column;
 }
 
-/* BACKGROUND IMAGE (fashion clothing) */
-.bg{
-  position:absolute; inset:0;
-  background:
-   linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.82)),
-   url('https://www.cotstyle.com/cdn/shop/articles/what-is-fast-fashion_350x.jpg?v=1697801812');
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  z-index:-3;
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
 }
+
+/* Video itself */
+.bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark overlay (same effect as your gradient) */
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0,0,0,.45),
+    rgba(0,0,0,.82)
+  );
+}
+
 
 /* GRAIN OVERLAY */
 .grain{
@@ -126,7 +141,13 @@ body{
 </head>
 <body>
 
-<div class="bg"></div>
+<div class="bg">
+  <video autoplay muted loop playsinline>
+    <source src="./images/Fashion Opener.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 <div class="grain"></div>
 <div class="vignette"></div>
 

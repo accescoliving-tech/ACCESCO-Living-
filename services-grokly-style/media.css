@@ -1,0 +1,140 @@
+/* ================================================================
+   Grokly Market - Responsive Styles
+   ================================================================ */
+
+
+
+/* 1. TABLET & SMALL DESKTOP (Max-width: 1024px) */
+@media only screen and (max-width: 1024px) {
+    /* Product Grid: Fixes to exactly 4 products per row */
+    .carousel-row, .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 15px !important;
+    }
+
+    .header-container {
+        max-width: 100%;
+        width: calc(100% - 20px);
+    }
+}
+
+/* 2. MOBILE LANDSCAPE & LARGE PHONES (Max-width: 768px) */
+@media only screen and (max-width: 768px) {
+    /* HEADER FIX: Stacks branding and actions to prevent overlap */
+    .header-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 10px 15px !important;
+        gap: 12px !important;
+        height: auto !important;
+    }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Second row: Search bar and Filter row */
+    .header-actions {
+        width: 100% !important;
+        margin-left: 0 !important;
+        justify-content: space-between;
+    }
+
+    .search-bar {
+        max-width: none !important;
+        flex-grow: 1 !important;
+    }
+
+    /* STICKY SYNC: Adjust Category Strip top position for taller header */
+    .category-strip {
+        top: 108px !important; /* Offset based on new header height */
+        padding: 8px 0;
+    }
+
+    /* PRODUCT GRID: Force exactly 3 products per row */
+    .carousel-row, .product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        padding: 0 5px;
+    }
+
+    /* CARD FITTING: Shrink internal elements to fit 3-per-row */
+    .product-card {
+        padding: 6px !important;
+        min-width: 0 !important;
+    }
+
+    .product-card .p-img {
+        height: 100px !important;
+    }
+
+    .p-title {
+        font-size: 11px !important;
+        height: 2.4em;
+        overflow: hidden;
+    }
+
+    /* BANNER CONTENT FIX: Center text and resize for mobile */
+    .banner-slide {
+        justify-content: center !important;
+    }
+
+    .banner-content {
+        padding: 0 20px !important;
+        text-align: center !important;
+        width: 100% !important;
+        left: 0 !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
+
+    .banner-title {
+        font-size: 1.4rem !important;
+    }
+
+    .banner-sub {
+        display: none !important; /* Save space on small screens */
+    }
+}
+
+/* 3. SMALL PHONES (Max-width: 480px) */
+@media only screen and (max-width: 480px) {
+    .brand-name { font-size: 18px !important; }
+    .tagline { display: none !important; }
+
+    /* Touch-friendly icon sizing */
+    .icon-btn, .address-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .addr-display { display: none !important; }
+
+    /* If screen is too small, fallback to 2 columns to prevent squashing */
+    @media (max-width: 360px) {
+        .carousel-row, .product-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
+
+    /* MODAL FIX: Side cart becomes a modern bottom sheet */
+    .side-cart {
+        width: 100% !important;
+        right: 0 !important;
+        left: 0 !important;
+        top: auto !important;
+        bottom: 0 !important;
+        height: 70vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .side-cart.show {
+        transform: translateY(0) !important;
+    }
+}
