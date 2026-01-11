@@ -1929,9 +1929,44 @@
             </div>
 
             <div id="dynamicBlogGrid" class="blog-grid">
-                <div style="text-align:center; grid-column: 1/-1; padding: 50px;">
-                    <p style="color: var(--muted);">Synchronizing stories...</p>
-                </div>
+                <article class="blog-card">
+                    <div class="blog-img">
+                        <span class="blog-tag">Innovation</span>
+                        <img src="BLOGS_PAGE/Blogs_assets/download (1).jpg" alt="Grokly Smart Grocery">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date"><i class="ri-calendar-line"></i> 12 Jan 2026</div>
+                        <h4>Grokly: India’s Smart Grocery Delivery System That Runs Your Household Automatically</h4>
+                        <p>Discover how Grokly uses intelligent automation to manage your pantry and ensure you never run out of essentials.</p>
+                        <a href="BLOGS_PAGE/blogs.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img">
+                        <span class="blog-tag">Our Story</span>
+                        <img src="BLOGS_PAGE/Blogs_assets/download (2).png" alt="Accesco Living Story">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date"><i class="ri-calendar-line"></i> 05 Jan 2026</div>
+                        <h4>Accesco Living: A Story That Started Long Before the Company</h4>
+                        <p>Step behind the scenes of the vision that built India's first daily-living ecosystem for the modern consumer.</p>
+                        <a href="BLOGS_PAGE/blogs.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-img">
+                        <span class="blog-tag">Lifestyle</span>
+                        <img src="BLOGS_PAGE/Blogs_assets/download.jpg" alt="Life with Accesco">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-date"><i class="ri-calendar-line"></i> 01 Jan 2026</div>
+                        <h4>A Day With Accesco Living: How Life Changes When Everything Works Together</h4>
+                        <p>Explore how a unified ecosystem of groceries, fashion, and finance streamlines every part of your routine.</p>
+                        <a href="BLOGS_PAGE/blogs.html" class="blog-link">Read Article <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </article>
             </div>
             
             <div style="text-align: center; margin-top: 50px;">
@@ -2345,9 +2380,9 @@ const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 /* ======================================================
-   DYNAMIC BLOG FETCH
+   DYNAMIC BLOG FETCH (DISABLED FOR HARDCODED CONTENT)
 ====================================================== */
-async function fetchHomeBlogs() {
+/* async function fetchHomeBlogs() {
     const blogContainer = document.getElementById('dynamicBlogGrid');
     try {
         const { data: blogs, error } = await supabase
@@ -2387,9 +2422,8 @@ async function fetchHomeBlogs() {
         blogContainer.innerHTML = '<p style="color: var(--muted);">Unable to load latest insights.</p>';
     }
 }
-
-// Initialize on page load
 window.addEventListener('DOMContentLoaded', fetchHomeBlogs);
+*/
 
 /* ======================================================
    DOM ELEMENTS (AUTH)
