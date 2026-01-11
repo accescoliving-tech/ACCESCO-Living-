@@ -3,343 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reward Play Arena</title>
+    <title>ACCESCO - Reward Play Arena</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap');
         
         body, html {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Inter', sans-serif;
-            background-color: #0c0b0e;
-            color: #fff;
+            background-color: #0c0b0e; color: #fff;
             scroll-behavior: smooth;
         }
 
         .heading-font { font-family: 'Orbitron', sans-serif; }
 
-        /* Background Video - More subtle background for app-like feel */
         #video-bg {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            object-fit: cover;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; object-fit: cover;
             filter: brightness(0.2) contrast(1.2);
         }
 
-        /* Swiggy-style horizontal scroll hides scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Banner Carousel Look */
-        .banner-gradient {
-            background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
-        }
+        .banner-gradient { background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%); }
 
-        /* Glassmorphism used sparingly for modern app feel */
         .glass-nav {
             background: rgba(12, 11, 14, 0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .game-card {
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .game-card:active {
-            transform: scale(0.96);
-        }
+        .game-card { transition: transform 0.2s ease-in-out, opacity 0.3s ease; }
+        .game-card:active { transform: scale(0.96); }
+        .game-card.hidden { display: none; }
+        .hidden-section { display: none !important; }
 
         .category-pill {
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
         }
 
         .category-pill.active {
-            background: #fbbf24;
-            color: #000;
-            border-color: #fbbf24;
+            background: #fbbf24; color: #000; border-color: #fbbf24;
         }
 
         .reward-badge {
             background: linear-gradient(45deg, #fbbf24, #f59e0b);
-            color: #000;
-            font-weight: 800;
+            color: #000; font-weight: 800;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
-
-        /* Animation for items */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-item { animation: fadeInUp 0.4s ease forwards; }
     </style>
 </head>
 <body class="min-h-screen pb-24">
 
-    <!-- Background Video -->
     <video autoplay muted loop playsinline id="video-bg">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-fast-motion-light-trails-34533-large.mp4" type="video/mp4">
     </video>
 
-    <!-- Header / Search (Swiggy Style) -->
     <header class="glass-nav sticky top-0 z-50 px-4 py-4">
         <div class="max-w-4xl mx-auto flex flex-col space-y-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <i data-lucide="map-pin" class="text-amber-500 w-5 h-5"></i>
                     <span class="text-sm font-bold border-b-2 border-white">Arena Zone 1</span>
-                    <i data-lucide="chevron-down" class="w-4 h-4 text-amber-500"></i>
                 </div>
-                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center border border-white/10">
+                <div id="user-profile-icon" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center border border-white/10 overflow-hidden">
                     <i data-lucide="user" class="w-5 h-5 text-slate-400"></i>
                 </div>
             </div>
-            <!-- Search Bar -->
             <div class="relative group">
-                <input type="text" placeholder="Search for games or rewards" 
-                       class="w-full bg-slate-900/50 border border-white/5 py-3 px-10 rounded-xl text-sm focus:outline-none focus:border-amber-500/50 transition-all">
+                <input type="text" placeholder="Search for games or rewards" class="w-full bg-slate-900/50 border border-white/5 py-3 px-10 rounded-xl text-sm focus:outline-none">
                 <i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-500"></i>
-                <i data-lucide="mic" class="absolute right-3 top-3.5 w-4 h-4 text-amber-500"></i>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 mt-6">
-        
-        <!-- Banners Section (What's on your mind?) -->
-        <section class="mb-8">
-            <h2 class="text-lg font-bold mb-4 flex justify-between items-center">
-                Top Picks for You
-                <span class="text-xs text-amber-500 uppercase tracking-widest font-bold">See All</span>
-            </h2>
-            <div class="flex overflow-x-auto no-scrollbar space-x-4 pb-2">
-                <!-- Banner 1 -->
-                <div class="min-w-[280px] h-40 rounded-2xl banner-gradient p-6 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
-                    <i data-lucide="sparkles" class="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 rotate-12"></i>
-                    <div>
-                        <div class="text-black font-black text-2xl leading-tight heading-font">50% EXTRA<br>POINTS</div>
-                        <div class="text-black/70 text-xs font-bold mt-1">ON ALL MINI GAMES</div>
-                    </div>
-                    <button class="bg-black text-white text-[10px] font-black py-2 px-4 rounded-lg w-fit uppercase">Play Now</button>
-                </div>
-                <!-- Banner 2 -->
-                <div class="min-w-[280px] h-40 rounded-2xl bg-indigo-600 p-6 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
-                    <i data-lucide="zap" class="absolute -right-4 -bottom-4 w-32 h-32 opacity-20 rotate-12 text-white"></i>
-                    <div>
-                        <div class="text-white font-black text-2xl leading-tight heading-font">DAILY<br>CHALLENGE</div>
-                        <div class="text-white/70 text-xs font-bold mt-1">WIN 500 RP TODAY</div>
-                    </div>
-                    <button class="bg-white text-indigo-600 text-[10px] font-black py-2 px-4 rounded-lg w-fit uppercase">Join Arena</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Category Filters -->
+    <main id="arena-section" class="max-w-4xl mx-auto px-4 mt-6 tab-content">
         <section class="mb-8 sticky top-[138px] z-40 bg-[#0c0b0e]/50 backdrop-blur-md py-2 -mx-4 px-4 overflow-x-auto no-scrollbar flex space-x-3">
-            <button class="category-pill active whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold">All Games</button>
-            <button class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold">Most Popular</button>
-            <button class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold">Action</button>
-            <button class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold">Puzzle</button>
-            <button class="category-pill whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold">High Stakes</button>
+            <button class="filter-btn category-pill active px-4 py-2 rounded-full text-xs font-bold" data-filter="all">All Games</button>
+            <button class="filter-btn category-pill px-4 py-2 rounded-full text-xs font-bold" data-filter="popular">Most Popular</button>
+            <button class="filter-btn category-pill px-4 py-2 rounded-full text-xs font-bold" data-filter="action">Action</button>
+            <button class="filter-btn category-pill px-4 py-2 rounded-full text-xs font-bold" data-filter="puzzle">Puzzle</button>
         </section>
 
-        <!-- Main Game List (Swiggy Item Style) -->
-        <section class="space-y-8">
-            <h2 class="text-lg font-bold mb-4">6 Games to Explore</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Game 1: Flappy Jet -->
-                <a href="flappy_bird.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <div class="absolute top-3 left-3 z-20 reward-badge px-2 py-1 rounded text-[10px]">REWARDING</div>
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Flappy Jet">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">FLAPPY JET</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Skill • Timing • Arcade</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.8</span>
-                                <span class="text-slate-500 text-xs">• 12 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Earn up to 500 RP per session based on flight time.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-
-                <!-- Game 2: Neon Racer -->
-                <a href="game/flappybird/race.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <img src="game/flappybird/image.png" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Neon Racer">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">NEON RACER</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Speed • Dodge • Reflex</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.5</span>
-                                <span class="text-slate-500 text-xs">• 8 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">High speed trials. Unlock turbo boosts with reward points.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-
-                <!-- Game 3: Tech Quiz -->
-                <a href="game/quiz/quiz.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Tech Quiz">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">TECH QUIZ</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Knowledge • Logic</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.9</span>
-                                <span class="text-slate-500 text-xs">• 15 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Multiply your rewards by answering trivia correctly.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-
-                <!-- Game 4: Card Match -->
-                <a href="game/cards/card.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <img src="game/cards/assets/image.png" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Card Match">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">CARD MATCH</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Memory • Focus</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.2</span>
-                                <span class="text-slate-500 text-xs">• 10 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Train your brain and win daily streak bonuses.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-
-                <!-- Game 4: Stick Game -->
-
-                <a href="game/stick/stick.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <img src="game/stick/image.png" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Card Match">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">CARD MATCH</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Memory • Focus</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.2</span>
-                                <span class="text-slate-500 text-xs">• 10 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Train your brain and win daily streak bonuses.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-                
-
-                <!-- Game 4: Snake Game -->
-
-                <a href="game/snake/snake.html" class="game-card flex flex-col group">
-                    <div class="relative w-full aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                        <img src="game/snake/image.png" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Snake Game">
-                        <div class="absolute bottom-3 left-3 z-20 flex flex-col">
-                            <span class="heading-font text-white font-black text-xl">CARD MATCH</span>
-                            <span class="text-white/60 text-[10px] font-bold uppercase tracking-tighter">Memory • Focus</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center space-x-1 text-green-500 mb-1">
-                                <i data-lucide="star" class="w-4 h-4 fill-green-500"></i>
-                                <span class="text-sm font-bold">4.2</span>
-                                <span class="text-slate-500 text-xs">• 10 mins</span>
-                            </div>
-                            <p class="text-xs text-slate-400">Train your brain and win daily streak bonuses.</p>
-                        </div>
-                        <div class="bg-amber-500/10 border border-amber-500/20 text-amber-500 px-3 py-1 rounded text-[10px] font-black">PLAY</div>
-                    </div>
-                </a>
-
-            </div>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <a href="flappy_bird.html" class="game-card flex flex-col group" data-category="action popular">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">FLAPPY JET</div>
+                </div>
+            </a>
+            <a href="game/flappybird/race.html" class="game-card flex flex-col group" data-category="action">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="game/flappybird/image.png" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">NEON RACER</div>
+                </div>
+            </a>
+            <a href="game/quiz/quiz.html" class="game-card flex flex-col group" data-category="puzzle popular">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">TECH QUIZ</div>
+                </div>
+            </a>
+            <a href="game/cards/card.html" class="game-card flex flex-col group" data-category="puzzle">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="game/cards/assets/image.png" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">CARD MATCH</div>
+                </div>
+            </a>
+            <a href="game/stick/stick.html" class="game-card flex flex-col group" data-category="action">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="game/stick/image.png" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">STICK GAME</div>
+                </div>
+            </a>
+            <a href="game/snake/snake.html" class="game-card flex flex-col group" data-category="action">
+                <div class="relative aspect-[16/9] mb-3 overflow-hidden rounded-2xl">
+                    <img src="game/snake/image.png" class="w-full h-full object-cover">
+                    <div class="absolute bottom-3 left-3 z-20 font-black text-xl heading-font">SNAKE MANIA</div>
+                </div>
+            </a>
         </section>
-
     </main>
 
-    <!-- Bottom Navigation (Swiggy Style) -->
-    <nav class="fixed bottom-0 left-0 right-0 glass-nav z-50 px-8 py-3 flex justify-between items-center max-w-4xl mx-auto md:rounded-t-3xl border-t-0 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-        <div class="flex flex-col items-center space-y-1 text-amber-500">
-            <i data-lucide="gamepad-2" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">ARENA</span>
+    <section id="rewards-section" class="max-w-4xl mx-auto px-4 mt-6 tab-content hidden-section">
+        <h2 class="text-2xl font-black heading-font mb-6 text-amber-500">REWARDS</h2>
+        <div class="bg-slate-900/80 p-6 rounded-2xl border border-white/10 flex justify-between items-center">
+            <div><h3 class="font-bold">Amazon Gift Card</h3><p class="text-xs text-slate-400">5,000 RP</p></div>
+            <button class="bg-amber-500 text-black px-4 py-2 rounded-lg font-black text-xs">CLAIM</button>
         </div>
-        <div class="flex flex-col items-center space-y-1 text-slate-500 hover:text-white transition-colors cursor-pointer">
-            <i data-lucide="gift" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">REWARDS</span>
+    </section>
+
+    <section id="battles-section" class="max-w-4xl mx-auto px-4 mt-6 tab-content hidden-section text-center py-20">
+        <i data-lucide="swords" class="w-16 h-16 mx-auto text-amber-500 mb-4"></i>
+        <h2 class="text-2xl font-black heading-font">GLOBAL BATTLES</h2>
+        <p class="text-slate-400">Live Tournaments coming soon.</p>
+    </section>
+
+    <section id="wallet-section" class="max-w-4xl mx-auto px-4 mt-6 tab-content hidden-section">
+        <div class="bg-slate-900/80 p-10 rounded-3xl border border-white/10 text-center">
+            <h2 class="text-slate-400 text-sm font-bold uppercase">Reward Points</h2>
+            <div id="wallet-balance" class="text-6xl font-black heading-font text-amber-500 mt-2">0 <span class="text-xl">RP</span></div>
+            <p id="wallet-status" class="text-[10px] text-slate-500 mt-4 uppercase tracking-widest">Login to sync coins</p>
         </div>
-        <div class="flex flex-col items-center space-y-1 text-slate-500 hover:text-white transition-colors cursor-pointer">
-            <i data-lucide="swords" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">BATTLES</span>
+    </section>
+
+    <nav class="fixed bottom-0 left-0 right-0 glass-nav z-50 px-8 py-3 flex justify-between items-center max-w-4xl mx-auto md:rounded-t-3xl">
+        <div class="nav-btn flex flex-col items-center space-y-1 text-amber-500 cursor-pointer" data-target="arena-section">
+            <i data-lucide="gamepad-2" class="w-6 h-6"></i><span class="text-[10px] font-bold">ARENA</span>
         </div>
-        <div class="flex flex-col items-center space-y-1 text-slate-500 hover:text-white transition-colors cursor-pointer">
-            <i data-lucide="wallet" class="w-6 h-6"></i>
-            <span class="text-[10px] font-bold">WALLET</span>
+        <div class="nav-btn flex flex-col items-center space-y-1 text-slate-500 cursor-pointer" data-target="rewards-section">
+            <i data-lucide="gift" class="w-6 h-6"></i><span class="text-[10px] font-bold">REWARDS</span>
+        </div>
+        <div class="nav-btn flex flex-col items-center space-y-1 text-slate-500 cursor-pointer" data-target="battles-section">
+            <i data-lucide="swords" class="w-6 h-6"></i><span class="text-[10px] font-bold">BATTLES</span>
+        </div>
+        <div class="nav-btn flex flex-col items-center space-y-1 text-slate-500 cursor-pointer" data-target="wallet-section">
+            <i data-lucide="wallet" class="w-6 h-6"></i><span class="text-[10px] font-bold">WALLET</span>
         </div>
     </nav>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Simple click feedback for category pills
-        const pills = document.querySelectorAll('.category-pill');
-        pills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                pills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
+        // 1. SUPABASE CONFIG
+        const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
+        const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 2. WALLET SYNC
+        async function syncCoins() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            const walletBalance = document.getElementById('wallet-balance');
+            const walletStatus = document.getElementById('wallet-status');
+
+            if (!user) return;
+
+            const { data, error } = await supabaseClient
+                .from('user_profiles')
+                .select('total_rp')
+                .eq('id', user.id)
+                .single();
+
+            if (data) {
+                walletBalance.innerHTML = `${data.total_rp.toLocaleString()} <span class="text-xl">RP</span>`;
+                walletStatus.innerText = "Coins Synced Successfully";
+            }
+        }
+
+        // 3. NAVIGATION & CATEGORY LOGIC
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const gameCards = document.querySelectorAll('.game-card');
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.getAttribute('data-target');
+                navBtns.forEach(b => b.classList.replace('text-amber-500', 'text-slate-500'));
+                btn.classList.replace('text-slate-500', 'text-amber-500');
+                tabContents.forEach(c => c.classList.add('hidden-section'));
+                document.getElementById(target).classList.remove('hidden-section');
+                if(target === 'wallet-section') syncCoins();
+                lucide.createIcons();
             });
         });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                gameCards.forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    if (filter === 'all' || cat.includes(filter)) card.classList.remove('hidden');
+                    else card.classList.add('hidden');
+                });
+            });
+        });
+
+        syncCoins();
     </script>
 </body>
 </html>
