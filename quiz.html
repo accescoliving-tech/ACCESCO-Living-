@@ -1,439 +1,542 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="light">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ACCESCO | Quiz Time</title>
-    <link rel="icon" href="images/accesco.png" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACCESCO BLOGS - Explore</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+
+  <style>
+    /* THEME SYSTEM */
+    :root {
+      --primary: #050505;
+      --secondary: #555;
+      --accent: #700457;
+      --bg: #fff2eb; /* Brand Signature Cream */
+      --card-bg: #fff2eb;
+      --border: #e8ded8;
+      --overlay-bg: rgba(255, 242, 235, 0.98);
+      --container: 1100px;
+      --reader-font: 'Libre Baskerville', serif;
+    }
+
+    [data-theme="dark"] {
+      --primary: #f8fafc;
+      --secondary: #94a3b8;
+      --bg: #1a1a1a; /* Softened Grey-Dark */
+      --card-bg: #1a1a1a;
+      --border: #2d2d2d;
+      --overlay-bg: rgba(26, 26, 26, 0.98);
+    }
+
+    /* SMOOTH SCROLLING */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease, border 0.3s ease; }
+    body { margin: 0; font-family: "Inter", sans-serif; background: var(--bg); color: var(--primary); -webkit-font-smoothing: antialiased; }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky; top: 0; z-index: 1000;
+    }
+
+    .top-bar {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .logo-area img { height: 40px; width: auto; }
+    .logo-area span { 
+      font-family: 'Poppins', sans-serif; 
+      font-weight: 900; 
+      font-size: 20px; 
+      letter-spacing: -0.5px; 
+      color: var(--primary);
+    }
+
+    .nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-links li { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; cursor: pointer; color: var(--secondary); }
+    .nav-links li.active { color: var(--accent); position: relative; }
+    .nav-links li.active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+
+    .header-icons { display: flex; gap: 12px; align-items: center; }
     
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    .btn-write-pill {
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .btn-write-pill:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); opacity: 0.9; }
+
+    .btn-icon { font-size: 18px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; background: var(--card-bg); color: var(--primary); }
+
+    /* HERO BANNER */
+    .hero-banner {
+      background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      padding: 80px 20px;
+      border-radius: 24px;
+      margin-bottom: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      min-height: 400px;
+      justify-content: center;
+    }
+
+    .hero-banner h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(32px, 6vw, 72px);
+      margin: 0 0 20px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    .hero-banner p {
+      font-size: clamp(16px, 2vw, 20px);
+      max-width: 700px;
+      opacity: 0.95;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .hero-cta {
+      background: #fff;
+      color: #000;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    /* MAIN FEED */
+    .main-container { max-width: var(--container); margin: 50px auto; padding: 0 20px; }
+    .section-title { font-size: 24px; font-weight: 900; margin-bottom: 40px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; width: fit-content; text-transform: uppercase; letter-spacing: 2px; }
+
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; margin-bottom: 80px; }
+
+    /* CARD DESIGN */
+    .card { display: flex; flex-direction: column; gap: 18px; background: var(--card-bg); border-radius: 12px; padding-bottom: 20px; }
+    .card-img-wrapper { width: 100%; height: 240px; overflow: hidden; border-radius: 10px; background: var(--border); cursor: pointer; position: relative; }
+    .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .card:hover .card-img-wrapper img { transform: scale(1.05); }
+
+    .card-meta { display: flex; gap: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); }
+    .card-meta .category { color: var(--accent); }
+
+    .card-title { font-size: 21px; font-weight: 800; line-height: 1.3; margin: 0; cursor: pointer; color: var(--primary); }
+    .card-excerpt { font-size: 14px; color: var(--secondary); line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+    .card-actions-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--secondary); padding-top: 15px; border-top: 1px solid var(--border); }
+    .stats-group { display: flex; gap: 15px; }
+    .stats-group i { font-size: 14px; margin-right: 4px; }
+    .share-icon-btn { cursor: pointer; font-size: 18px; color: var(--secondary); }
+
+    .btn-read { font-size: 11px; font-weight: 800; padding: 10px 20px; border: 1.5px solid var(--primary); background: none; color: var(--primary); cursor: pointer; text-transform: uppercase; border-radius: 4px; margin-top: 10px; width: fit-content; }
+    .btn-read:hover { background: var(--primary); color: var(--bg); }
+
+    /* FOOTER */
+    footer {
+      background: #050505;
+      color: #fff;
+      padding: 60px 20px 40px;
+      margin-top: 60px;
+    }
+
+    .footer-grid {
+      max-width: var(--container);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .footer-logo-row {
+      display: flex;
+      align-items: center; gap: 12px;
+    }
+
+    .footer-logo-row img { height: 40px; width: auto; }
+    .footer-logo-row span { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: -0.5px; color: #fff; }
+
+    .footer-tagline { font-size: 13px; color: #888; line-height: 1.6; max-width: 280px; }
+
+    .footer-col h4 { font-size: 12px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px; color: #fff; }
+    .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col li { font-size: 13px; color: #888; cursor: pointer; transition: color 0.2s; }
+    .footer-col li:hover { color: var(--accent); }
+
+    .footer-socials { display: flex; gap: 12px; margin-bottom: 25px; }
+    .social-link { width: 36px; height: 36px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; transition: background 0.2s; text-decoration: none; }
+    .social-link:hover { background: var(--accent); }
+
+    .footer-app-badges { display: flex; flex-direction: column; gap: 10px; }
+    .app-badge { height: 35px; cursor: pointer; transition: transform 0.2s; }
+    .app-badge:hover { transform: translateY(-2px); }
+
+    .footer-bottom { max-width: var(--container); margin: 40px auto 0; padding-top: 25px; border-top: 1px solid #222; text-align: center; font-size: 11px; color: #555; letter-spacing: 1px; }
+
+    /* OVERLAYS */
+    .overlay { position: fixed; inset: 0; background: var(--overlay-bg); z-index: 2000; display: none; overflow-y: auto; color: var(--primary); scroll-behavior: smooth; }
     
-    <style>
-        :root {
-            --accent: rgba(112, 4, 87, 1);
-            --accent-light: rgba(112, 4, 87, 0.1);
-            --bg: #f4f7f6;
-            --text: #333;
-            --white: #ffffff;
-            --success: #00c853;
-            --error: #ff3b3b;
-        }
+    /* READER VIEW */
+    .reader-view { max-width: 800px; margin: 0 auto; padding: 80px 20px; animation: slideUp 0.4s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .reader-title { font-family: 'Poppins', sans-serif; font-size: clamp(32px, 6vw, 56px); font-weight: 900; line-height: 1.05; margin: 25px 0; letter-spacing: -2px; }
+    .reader-hero-img { width: 100%; height: auto; max-height: 550px; object-fit: cover; border-radius: 12px; margin-bottom: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
+    .reader-content { font-family: var(--reader-font); font-size: 20px; line-height: 1.9; color: var(--primary); white-space: pre-wrap; margin-bottom: 80px; }
 
-        /* HEADER */
-        nav {
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* INTERACTION BAR */
+    .interaction-bar { display: flex; align-items: center; justify-content: space-between; padding: 40px 0; border-top: 2px solid var(--primary); border-bottom: 1px solid var(--border); margin-bottom: 50px; }
+    .interaction-left { display: flex; gap: 40px; align-items: center; }
+    .like-btn { border: none; background: none; font-size: 18px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--secondary); }
+    .like-btn.active { color: #f43f5e; }
 
-        .brand {
-            font-weight: 800;
-            font-size: 20px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
+    .comment-item { padding: 25px 0; border-bottom: 1px solid var(--border); }
+    .comment-item .user { font-weight: 800; font-size: 14px; color: var(--accent); margin-bottom: 8px; display: block; }
+    .comment-item .text { font-family: var(--reader-font); font-size: 17px; color: var(--primary); }
 
-        .exit-btn {
-            background: transparent;
-            border: 2px solid var(--accent);
-            padding: 8px 18px;
-            border-radius: 30px;
-            text-decoration: none;
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 14px;
-            transition: 0.2s;
-        }
+    .comment-input-box { background: var(--card-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border); }
+    .comment-input-box textarea { width: 100%; padding: 15px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 16px; background: var(--bg); color: var(--primary); resize: none; }
 
-        .exit-btn:hover {
-            background: var(--accent);
-            color: #fff;
-        }
+    .close-reader { position: fixed; top: 30px; right: 30px; background: var(--primary); color: var(--bg); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; border: none; z-index: 2100; }
 
-        /* MAIN CONTAINER */
-        .quiz-wrapper {
-            max-width: 600px;
-            width: 90%;
-            margin: 40px auto;
-            background: var(--white);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+    /* PUBLISH BUTTON */
+    .btn-publish { 
+      width: 100%; padding: 18px; background: var(--accent); color: #fff; border: none; font-weight: 800; text-transform: uppercase; border-radius: 10px; cursor: pointer; font-size: 14px; letter-spacing: 1px; display: block; margin-top: 25px; box-shadow: 0 4px 10px rgba(112, 4, 87, 0.2); 
+    }
+    .btn-publish:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 15px rgba(112, 4, 87, 0.3); }
 
-        /* SCREENS */
-        .screen {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
-        }
-        .screen.active {
-            display: block;
-        }
+    /* WRITE FORM */
+    .write-modal { background: var(--bg); width: 95%; max-width: 650px; margin: 4vh auto; padding: 45px; border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; font-weight: 800; font-size: 11px; margin-bottom: 10px; text-transform: uppercase; color: var(--accent); }
+    .form-control { width: 100%; padding: 15px; border: 1.5px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; background: var(--card-bg); color: var(--primary); outline: none; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .img-upload-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+    .img-tab { flex: 1; padding: 10px; font-size: 11px; font-weight: 800; border: 1px solid var(--border); background: var(--card-bg); color: var(--secondary); cursor: pointer; border-radius: 8px; text-align: center; text-transform: uppercase; }
+    .img-tab.active { background: var(--primary); color: var(--bg); }
+    #writePreview { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-top: 15px; display: none; background: #ddd; }
 
-        /* START SCREEN */
-        .start-icon {
-            font-size: 60px;
-            color: var(--accent);
-            margin-bottom: 20px;
-            display: inline-block;
-            background: var(--accent-light);
-            padding: 20px;
-            border-radius: 50%;
-        }
-
-        h1 {
-            color: var(--accent);
-            font-weight: 800;
-            margin: 0 0 10px 0;
-            line-height: 1.2;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-
-        .cta-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            width: 100%;
-        }
-        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(112, 4, 87, 0.25); }
-
-        /* QUIZ SCREEN */
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #888;
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            height: 8px;
-            background: #eee;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .question {
-            font-size: 20px;
-            font-weight: 700;
-            color: #222;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .options {
-            display: grid;
-            gap: 12px;
-        }
-
-        .option-btn {
-            background: #fff;
-            border: 2px solid #eee;
-            padding: 16px;
-            border-radius: 12px;
-            text-align: left;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-            color: #444;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--accent);
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        .option-btn.correct {
-            border-color: var(--success);
-            background: rgba(0, 200, 83, 0.1);
-            color: var(--success);
-        }
-
-        .option-btn.wrong {
-            border-color: var(--error);
-            background: rgba(255, 59, 59, 0.1);
-            color: var(--error);
-        }
-
-        .next-btn {
-            background: #222;
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 30px;
-            display: none; /* Hidden until answer selected */
-            float: right;
-        }
-
-        /* RESULT SCREEN */
-        .score-box {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 20px 0;
-        }
-        
-        @media(max-width: 500px) {
-            .quiz-wrapper { padding: 30px 20px; width: 95%; margin: 20px auto; }
-            .start-icon { font-size: 50px; }
-            h1 { font-size: 24px; }
-        }
-
-    </style>
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; } }
+    @media (max-width: 768px) { .nav-links { display: none; } .footer-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
+
 <body>
 
-    <nav>
-        <a href="index.html" class="brand">
-            <img src="images/accesco.png" style="width:36px; border-radius:8px;"> ACCESCO
-        </a>
-        <a href="index.html" class="exit-btn">Exit</a>
-    </nav>
+  <header>
+    <div class="top-bar">
+      <div class="logo-area" onclick="filterBlogs('All')">
+        <img src="accesco_original.png" alt="Logo" onerror="this.src='https://nfdrnbikwzfmijrqmoqt.supabase.co/storage/v1/object/public/blog-images/accesco_logo_fallback.png'">
+        <span>ACCESCO BLOGS</span>
+      </div>
 
-    <div class="quiz-wrapper">
-        
-        <div id="startScreen" class="screen active">
-            <div class="start-icon"><i class="ri-lightbulb-flash-line"></i></div>
-            <h1>Test Your Knowledge</h1>
-            <p>5 questions to prove you are a genius. Are you ready?</p>
-            <button class="cta-btn" onclick="startQuiz()">Start Quiz</button>
-        </div>
+      <ul class="nav-links" id="navLinks">
+        <li data-cat="All" onclick="filterBlogs('All')" class="active">All stories</li>
+        <li data-cat="Business" onclick="filterBlogs('Business')">Business</li>
+        <li data-cat="Technology" onclick="filterBlogs('Technology')">Technology</li>
+        <li data-cat="Lifestyle" onclick="filterBlogs('Lifestyle')">Lifestyle</li>
+      </ul>
 
-        <div id="quizScreen" class="screen">
-            <div class="quiz-header">
-                <span id="qCount">Question 1/5</span>
-                <span style="color:var(--accent)">Score: <span id="currentScore">0</span></span>
-            </div>
-            <div class="progress-bar-bg">
-                <div id="progressBar" class="progress-bar-fill"></div>
-            </div>
-            
-            <div class="question" id="questionText">Question goes here?</div>
-            
-            <div class="options" id="optionsContainer">
-                </div>
-
-            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question <i class="ri-arrow-right-line"></i></button>
-        </div>
-
-        <div id="resultScreen" class="screen">
-            <div class="start-icon" style="background: rgba(0, 200, 83, 0.1); color: var(--success);">
-                <i class="ri-trophy-line"></i>
-            </div>
-            <h1>Quiz Completed!</h1>
-            <p>You scored</p>
-            <div class="score-box"><span id="finalScore">0</span> / 5</div>
-            <p id="resultMessage">Good job!</p>
-            
-            <button class="cta-btn" onclick="restartQuiz()">Play Again</button>
-            <br><br>
-            <a href="index.html" style="color:#888; text-decoration:none; font-size:14px; font-weight:600;">Back to Home</a>
-        </div>
-
+      <div class="header-icons">
+        <button class="btn-icon" id="themeToggle" onclick="toggleTheme()"><i class="ri-moon-line"></i></button>
+        <button class="btn-write-pill" onclick="openWriteModal()">
+          <i class="ri-quill-pen-line"></i>
+          <span>Write a Story</span>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <script>
-        // QUIZ DATA
-        const questions = [
-            {
-                q: "What does HTML stand for?",
-                options: ["HyperText Markup Language", "HighText Machine Learning", "HyperText Market Link", "None of these"],
-                a: 0 // Index of correct answer
-            },
-            {
-                q: "Which company created the iPhone?",
-                options: ["Microsoft", "Google", "Apple", "Samsung"],
-                a: 2
-            },
-            {
-                q: "What is the capital of France?",
-                options: ["Berlin", "Madrid", "Rome", "Paris"],
-                a: 3
-            },
-            {
-                q: "Which planet is known as the Red Planet?",
-                options: ["Earth", "Mars", "Jupiter", "Venus"],
-                a: 1
-            },
-            {
-                q: "What is 10 + 20?",
-                options: ["1020", "20", "30", "50"],
-                a: 2
-            }
-        ];
+  <main class="main-container">
+    <section class="hero-banner">
+        <h1>The Intelligent Edit.</h1>
+        <p>Explore thought-provoking narratives and verified community insights on business, technology, and modern living curated by ACCESCO.</p>
+        <a href="#currentCategory" class="hero-cta">Start Exploring</a>
+    </section>
 
-        let currentQIndex = 0;
-        let score = 0;
+    <h2 class="section-title" id="currentCategory">Explore</h2>
+    <div id="blogContainer" class="blog-grid">
+      <div style="text-align:center; grid-column: 1/-1; padding: 120px;">
+          <i class="ri-loader-4-line ri-3x" style="animation: spin 1.5s linear infinite; display: inline-block; color: var(--accent);"></i>
+          <p style="margin-top: 20px; font-weight: 700; color: var(--secondary);">Synchronizing stories...</p>
+      </div>
+    </div>
+  </main>
 
-        // DOM ELEMENTS
-        const startScreen = document.getElementById("startScreen");
-        const quizScreen = document.getElementById("quizScreen");
-        const resultScreen = document.getElementById("resultScreen");
-        
-        const qCount = document.getElementById("qCount");
-        const currentScoreEl = document.getElementById("currentScore");
-        const progressBar = document.getElementById("progressBar");
-        const questionText = document.getElementById("questionText");
-        const optionsContainer = document.getElementById("optionsContainer");
-        const nextBtn = document.getElementById("nextBtn");
-        
-        const finalScore = document.getElementById("finalScore");
-        const resultMessage = document.getElementById("resultMessage");
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-row">
+          <img src="accesco_original.png" alt="ACCESCO" style="height: 6rem;" onerror="this.src='https://nfdrnbikwzfmijrqmoqt.supabase.co/storage/v1/object/public/blog-images/accesco_logo_fallback.png'">
+          <span>ACCESCO BLOGS</span>
+        </div>
+        <p class="footer-tagline">Empowering digital excellence through innovation. Explore our community insights.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul><li>About Us</li><li>Careers</li><li>Partner With Us</li><li>Terms & Conditions</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul><li>Metrics & Certificates</li><li>QTC Videos</li><li>Help & Support</li><li>Legal Information</li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Social Links</h4>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/accescoliving?igsh=MWI5dHBuOTB4Nm1uYQ==" class="social-link"><i class="ri-instagram-line"></i></a>
+          <a href="https://x.com/accesco_living?s=21" class="social-link"><i class="ri-twitter-fill"></i></a>
+          <a href="https://www.youtube.com/@accescoliving" class="social-link"><i class="ri-youtube-fill"></i></a>
+          <a href="https://www.linkedin.com/company/acceso-living/" class="social-link"><i class="ri-linkedin-box-fill"></i></a>
+        </div>
+        <div class="footer-app-badges">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-badge">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-badge">
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 ACCESCO BLOGS — ALL RIGHTS RESERVED.</div>
+  </footer>
 
-        function startQuiz() {
-            startScreen.classList.remove("active");
-            quizScreen.classList.add("active");
-            currentQIndex = 0;
-            score = 0;
-            currentScoreEl.innerText = score;
-            loadQuestion();
+  <div class="overlay" id="readerOverlay">
+    <button class="close-reader" onclick="closeReader()">&times;</button>
+    <div class="reader-view">
+        <header style="text-align:center; margin-bottom:60px;">
+            <span id="readCat" style="font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:3px; font-size:13px; display:block; margin-bottom:20px;">Category</span>
+            <h1 id="readTitle" class="reader-title">Title</h1>
+            <div class="reader-meta">
+                <span><i class="ri-user-smile-line"></i> <span id="readAuthor">Editor</span></span>
+                <span><i class="ri-calendar-event-line"></i> <span id="readDate">Date</span></span>
+            </div>
+        </header>
+        <img id="readHero" class="reader-hero-img" src="" alt="Hero">
+        <div id="readContent" class="reader-content"></div>
+        <div class="interaction-bar">
+            <div class="interaction-left">
+                <button class="like-btn" id="readerLikeBtn" onclick="handleReaderLike()"><i class="ri-heart-line"></i> <span id="readLikeCount">0</span> Likes</button>
+                <div style="font-weight:800; color:var(--secondary);"><i class="ri-chat-3-line"></i> <span id="readCommCount">0</span> Discussions</div>
+            </div>
+            <button class="btn-icon" onclick="handleShareActive()"><i class="ri-share-line"></i></button>
+        </div>
+        <section style="margin-top:50px;">
+            <div id="commentList" style="margin-bottom:30px;"></div>
+            <div class="comment-input-box">
+                <textarea id="commText" rows="4" placeholder="Share your perspective..."></textarea>
+                <button class="btn-publish" style="padding:14px; margin-top:15px; font-size:12px;" onclick="submitComment()">Post Contribution</button>
+            </div>
+        </section>
+    </div>
+  </div>
+
+  <div class="overlay" id="writeOverlay" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);">
+    <div class="write-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:35px;">
+        <h2 style="margin:0; font-family:Poppins; font-weight: 800;">Draft Your Story</h2>
+        <i class="ri-close-circle-fill ri-2x" style="cursor:pointer; color: var(--secondary);" onclick="closeWriteModal()"></i>
+      </div>
+      <div class="form-group"><label>Title Headline</label><input type="text" id="postTitle" class="form-control" placeholder="A compelling headline..."></div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="postCategory" class="form-control">
+          <option value="Business">Business</option>
+          <option value="Technology">Technology</option>
+          <option value="Lifestyle">Lifestyle</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Creative">Creative</option>
+          <option value="News">News</option>
+          <option value="Health">Health</option>
+          <option value="Finance">Finance</option>
+          <option value="Personal">Personal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Cover Visual</label>
+        <div class="img-upload-tabs">
+            <div class="img-tab active" id="tabLocal" onclick="switchImgTab('local')">Upload File</div>
+            <div class="img-tab" id="tabLink" onclick="switchImgTab('link')">Paste Link</div>
+        </div>
+        <div id="uiLocal">
+            <label for="imageUpload" style="border: 2px dashed var(--border); border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; display: block;">
+                <i class="ri-image-add-line ri-2x"></i><p style="margin:5px 0 0; font-size:12px; font-weight:700;">Select from device</p>
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" style="display:none;" onchange="previewFile(this)">
+        </div>
+        <div id="uiLink" style="display:none;"><input type="text" id="imageUrlInput" class="form-control" placeholder="https://..." oninput="previewUrl(this.value)"></div>
+        <img id="writePreview" src="" alt="Preview">
+      </div>
+      <div class="form-group"><label>Story Body</label><textarea id="postContent" class="form-control" rows="8" placeholder="Tell the community everything..."></textarea></div>
+      <button class="btn-publish" onclick="publishPost()" id="publishBtn">Publish to ACCESCO</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    const supabaseUrl = "https://nfdrnbikwzfmijrqmoqt.supabase.co";
+    const supabaseKey = "sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let selectedFile = null, currentFilter = 'All', cachedBlogs = [], activePostId = null, imgSourceMode = 'local';
+
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem('accesco_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.addEventListener('DOMContentLoaded', () => {
+        const icon = document.getElementById('themeToggle').querySelector('i');
+        if (icon) icon.className = savedTheme === 'light' ? 'ri-moon-line' : 'ri-sun-line';
+    });
+
+    window.toggleTheme = () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('accesco_theme', next);
+        document.getElementById('themeToggle').querySelector('i').className = next === 'light' ? 'ri-moon-line' : 'ri-sun-line';
+    };
+
+    window.switchImgTab = (mode) => {
+        imgSourceMode = mode;
+        document.getElementById('tabLocal').classList.toggle('active', mode === 'local');
+        document.getElementById('tabLink').classList.toggle('active', mode === 'link');
+        document.getElementById('uiLocal').style.display = mode === 'local' ? 'block' : 'none';
+        document.getElementById('uiLink').style.display = mode === 'link' ? 'block' : 'none';
+        document.getElementById('writePreview').style.display = 'none';
+        selectedFile = null;
+    };
+
+    window.previewFile = (input) => {
+        selectedFile = input.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('writePreview').src = e.target.result;
+                document.getElementById('writePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(selectedFile);
         }
+    };
 
-        function loadQuestion() {
-            const currentQ = questions[currentQIndex];
-            
-            // Update UI Stats
-            qCount.innerText = `Question ${currentQIndex + 1}/${questions.length}`;
-            const progressPercent = ((currentQIndex) / questions.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
+    window.previewUrl = (url) => { if(url.startsWith('http')) { document.getElementById('writePreview').src = url; document.getElementById('writePreview').style.display = 'block'; } };
 
-            // Set Text
-            questionText.innerText = currentQ.q;
-            
-            // Clear previous options
-            optionsContainer.innerHTML = "";
-            nextBtn.style.display = "none";
+    window.onload = async () => loadBlogs(true);
 
-            // Create buttons
-            currentQ.options.forEach((opt, index) => {
-                const btn = document.createElement("button");
-                btn.className = "option-btn";
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(index, btn);
-                optionsContainer.appendChild(btn);
+    async function loadBlogs(forceFetch = false) {
+        if (forceFetch || cachedBlogs.length === 0) {
+            const { data, error } = await supabase.from('blogs').select('*, blog_likes(count), blog_comments(count)').order('created_at', { ascending: false });
+            if (!error) cachedBlogs = data;
+        }
+        const displayed = currentFilter === 'All' ? cachedBlogs : cachedBlogs.filter(b => b.category === currentFilter);
+        renderBlogs(displayed);
+    }
+
+    function renderBlogs(blogs) {
+        document.getElementById('blogContainer').innerHTML = blogs.map(post => {
+            const dateStr = new Date(post.created_at).toLocaleDateString('en-IN', { day:'numeric', month: 'long', year: 'numeric' });
+            return `
+            <div class="card">
+                <div class="card-img-wrapper" onclick="openStory('${post.id}')"><img src="${post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'}" alt="Cover"></div>
+                <div class="card-meta"><span class="category">${post.category}</span><span class="date">— ${dateStr}</span></div>
+                <h3 class="card-title" onclick="openStory('${post.id}')">${post.title}</h3>
+                <p class="card-excerpt">${post.content.substring(0, 140)}...</p>
+                <div class="card-actions-row">
+                    <div class="stats-group"><span><i class="ri-heart-line"></i> ${post.blog_likes[0]?.count || 0}</span><span><i class="ri-chat-3-line"></i> ${post.blog_comments[0]?.count || 0}</span></div>
+                    <i class="ri-share-line share-icon-btn" onclick="handleCardShare('${post.id}', '${post.title}')"></i>
+                </div>
+                <button class="btn-read" onclick="openStory('${post.id}')">Read Full Story</button>
+            </div>`;
+        }).join('');
+    }
+
+    window.publishPost = async () => {
+        const btn = document.getElementById('publishBtn');
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        if (!title || !content) return alert("Headline and story are required.");
+        btn.disabled = true; btn.innerText = "Synchronizing...";
+        let image_url = document.getElementById('imageUrlInput').value.trim();
+        try {
+            if (imgSourceMode === 'local' && selectedFile) {
+                const name = `${Date.now()}-${selectedFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+                const { data: stData, error: stError } = await supabase.storage.from('blog-images').upload(name, selectedFile);
+                if (stError) {
+                    const reader = new FileReader();
+                    image_url = await new Promise(res => { reader.onload = e => res(e.target.result); reader.readAsDataURL(selectedFile); });
+                } else { image_url = supabase.storage.from('blog-images').getPublicUrl(name).data.publicUrl; }
+            }
+            const { error: dbError } = await supabase.from('blogs').insert({ 
+                title, content, category: document.getElementById('postCategory').value, image_url, author_name: 'Explorer' 
             });
-        }
+            if (dbError) throw dbError;
+            closeWriteModal(); await loadBlogs(true);
+        } catch (e) { alert("Publication failed. Check Supabase connection."); }
+        btn.disabled = false; btn.innerText = "Publish to ACCESCO";
+    };
 
-        function checkAnswer(selectedIndex, btnElement) {
-            const correctIndex = questions[currentQIndex].a;
-            const buttons = optionsContainer.children;
+    window.openStory = async (id) => {
+        activePostId = id; const story = cachedBlogs.find(b => b.id == id); if (!story) return;
+        const { data: comments } = await supabase.from('blog_comments').select('*').eq('blog_id', id).order('created_at', { ascending: false });
+        const dateStr = new Date(story.created_at).toLocaleDateString('en-IN', { day:'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('readCat').innerText = story.category; document.getElementById('readTitle').innerText = story.title;
+        document.getElementById('readHero').src = story.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800';
+        document.getElementById('readContent').innerText = story.content; document.getElementById('readDate').innerText = dateStr;
+        document.getElementById('readLikeCount').innerText = story.blog_likes[0]?.count || 0; document.getElementById('readCommCount').innerText = comments?.length || 0;
+        const liked = JSON.parse(localStorage.getItem('accesco_liked') || '[]');
+        document.getElementById('readerLikeBtn').classList.toggle('active', liked.includes(id));
+        document.getElementById('commentList').innerHTML = (comments || []).map(c => `<div class="comment-item"><span class="user">Explorer</span><div class="text">${c.content}</div></div>`).join('') || '<p style="text-align:center; color:#999;">No discussions yet.</p>';
+        document.getElementById('readerOverlay').style.display = 'block'; document.body.style.overflow = 'hidden';
+    };
 
-            // Disable all buttons
-            for(let btn of buttons) {
-                btn.disabled = true;
-                btn.style.cursor = "default";
-            }
-
-            if(selectedIndex === correctIndex) {
-                // Correct
-                btnElement.classList.add("correct");
-                btnElement.innerHTML += ' <i class="ri-check-line"></i>';
-                score++;
-                currentScoreEl.innerText = score;
-            } else {
-                // Wrong
-                btnElement.classList.add("wrong");
-                btnElement.innerHTML += ' <i class="ri-close-line"></i>';
-                // Highlight correct one
-                buttons[correctIndex].classList.add("correct");
-                buttons[correctIndex].innerHTML += ' <i class="ri-check-line"></i>';
-            }
-
-            // Show Next Button
-            nextBtn.style.display = "block";
-            
-            // Update Progress Bar to full for this question
-            const progressPercent = ((currentQIndex + 1) / questions.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-        }
-
-        function nextQuestion() {
-            currentQIndex++;
-            if(currentQIndex < questions.length) {
-                loadQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function showResults() {
-            quizScreen.classList.remove("active");
-            resultScreen.classList.add("active");
-            finalScore.innerText = score;
-            
-            if(score === 5) {
-                resultMessage.innerText = "Perfect Score! You are amazing! 🌟";
-            } else if(score >= 3) {
-                resultMessage.innerText = "Great job! Almost perfect. 👍";
-            } else {
-                resultMessage.innerText = "Keep practicing! You can do better. 💪";
-            }
-        }
-
-        function restartQuiz() {
-            resultScreen.classList.remove("active");
-            startScreen.classList.add("active");
-        }
-    </script>
+    window.handleCardShare = (id, title) => { event.stopPropagation(); const url = window.location.href; if (navigator.share) navigator.share({ title, url }); else { alert("Link copied!"); } };
+    window.handleShareActive = () => handleCardShare(activePostId, document.getElementById('readTitle').innerText);
+    window.handleReaderLike = async () => { let liked = JSON.parse(localStorage.getItem('accesco_liked') || '[]'); if (liked.includes(activePostId)) return; liked.push(activePostId); localStorage.setItem('accesco_liked', JSON.stringify(liked)); await supabase.from('blog_likes').insert({ blog_id: activePostId }); document.getElementById('readLikeCount').innerText = parseInt(document.getElementById('readLikeCount').innerText) + 1; document.getElementById('readerLikeBtn').classList.add('active'); loadBlogs(true); };
+    window.submitComment = async () => { const text = document.getElementById('commText').value.trim(); if (!text) return; await supabase.from('blog_comments').insert({ blog_id: activePostId, content: text }); document.getElementById('commText').value = ""; await loadBlogs(true); openStory(activePostId); };
+    window.filterBlogs = (cat) => { currentFilter = cat; document.getElementById('currentCategory').innerText = cat === 'All' ? "Explore" : cat; document.querySelectorAll('#navLinks li').forEach(li => li.classList.toggle('active', li.getAttribute('data-cat') === cat)); loadBlogs(false); };
+    window.openWriteModal = () => { document.getElementById('writeOverlay').style.display = 'block'; document.body.style.overflow = 'hidden'; };
+    window.closeWriteModal = () => { document.getElementById('writeOverlay').style.display = 'none'; document.getElementById('writePreview').style.display = 'none'; selectedFile = null; document.body.style.overflow = 'auto'; };
+    window.closeReader = () => { document.getElementById('readerOverlay').style.display = 'none'; document.body.style.overflow = 'auto'; };
+  </script>
 </body>
 </html>
