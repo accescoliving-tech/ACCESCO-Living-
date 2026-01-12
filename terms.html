@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions | Accesso Living</title>
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #4a4a4a;
+            --accent: #0066ff;
+            --border: #e0e0e0;
+            --bg-light: #f9f9f9;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            margin: 0;
+            background-color: #fff;
+        }
+
+        /* Layout Structure */
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            padding: 60px 30px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .sidebar a:hover {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .content {
+            padding: 60px 80px;
+        }
+
+        header {
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .effective-date {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        section {
+            margin-bottom: 50px;
+            scroll-margin-top: 40px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin-top: 30px;
+            color: var(--accent);
+        }
+
+        /* Legal Clause Styling */
+        .clause {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .clause-num {
+            font-weight: bold;
+            min-width: 45px;
+        }
+
+        /* Aggregator Disclosure Box */
+        .disclosure-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .disclosure-card strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #d32f2f;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .page-wrapper { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .content { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <aside class="sidebar">
+        <h4>Navigation</h4>
+        <ul>
+            <li><a href="#section-a">1. Nature of Service</a></li>
+            <li><a href="#section-b">2. Service Modules</a></li>
+            <li><a href="#section-c">3. Payments & Cancellations</a></li>
+            <li><a href="#section-d">4. User Conduct</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <header>
+            <h1>Terms & Conditions</h1>
+            <p class="effective-date">Last Updated: January 12, 2026</p>
+            <p>This is the legal contract between <strong>Accesso Living</strong> and the user.</p>
+        </header>
+
+        <section id="section-a">
+            <h2>1. Nature of Service (Aggregator Disclosure)</h2>
+            <div class="disclosure-card">
+                <strong>IMPORTANT: PLATFORM ROLE & AGENCY LIMITATION</strong>
+                Accesso Living is a technology platform connecting users with third-party vendors (restaurants, stores) and independent delivery partners. 
+                Accesso Living is <u>not</u> the seller of food/groceries or the direct provider of transport, but a facilitator.
+            </div>
+            <div class="clause">
+                <div class="clause-num">1.1</div>
+                <div>We do not control the quality, safety, or legality of the items or services provided by third-party vendors.</div>
+            </div>
+        </section>
+
+        <section id="section-b">
+            <h2>2. Specific Service Modules</h2>
+            
+            <h3>2.1 Ride-Hailing</h3>
+            <div class="clause">
+                <div class="clause-num">2.1.1</div>
+                <div><strong>Conduct:</strong> Passengers must adhere to all safety protocols and local laws. Aggressive or unsafe behavior will result in a permanent ban.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">2.1.2</div>
+                <div><strong>No-Show Fees:</strong> A fee will be charged if the user is not present at the pickup location within the designated grace period.</div>
+            </div>
+
+            <h3>2.2 Food & Grocery Delivery</h3>
+            <div class="clause">
+                <div class="clause-num">2.2.1</div>
+                <div><strong>Pricing:</strong> Product prices are set by Merchants and may differ from the in-store MRP.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">2.2.2</div>
+                <div><strong>Liability:</strong> The Merchant is solely responsible for quality, packaging, and hygiene.</div>
+            </div>
+
+            <h3>2.3 Pick-up & Drop (Logistics)</h3>
+            <div class="clause">
+                <div class="clause-num">2.3.1</div>
+                <div><strong>Prohibited Items:</strong> Users are strictly forbidden from sending illegal substances, cash, jewelry, or hazardous materials.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">2.3.2</div>
+                <div><strong>Limits:</strong> Packages must comply with weight and dimension limits specified in the app interface.</div>
+            </div>
+        </section>
+
+        <section id="section-c">
+            <h2>3. Payments & Cancellations</h2>
+            <div class="clause">
+                <div class="clause-num">3.1</div>
+                <div><strong>Pricing Structure:</strong> Total charges include the base price, service fees, delivery charges, and applicable government taxes.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">3.2</div>
+                <div><strong>Cancellations:</strong> Food orders cannot be canceled once the restaurant begins preparation. Ride cancellations after dispatch may incur a flat fee.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">3.3</div>
+                <div><strong>Refunds:</strong> Refunds for failed transactions or quality disputes are subject to a formal investigation by our support team.</div>
+            </div>
+        </section>
+
+        <section id="section-d">
+            <h2>4. User Conduct & Accounts</h2>
+            <div class="clause">
+                <div class="clause-num">4.1</div>
+                <div><strong>Eligibility:</strong> Users must be 18 years of age or older to book rides or purchase restricted items.</div>
+            </div>
+            <div class="clause">
+                <div class="clause-num">4.2</div>
+                <div><strong>Account Security:</strong> Users are solely responsible for all activities under their account. You must safeguard your OTPs and login credentials. Accesso Living will never ask for your password via phone.</div>
+            </div>
+        </section>
+
+        <footer style="margin-top: 80px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--secondary);">
+            &copy; 2026 Accesso Living. All rights reserved.
+        </footer>
+    </main>
+</div>
+
+</body>
+</html>
