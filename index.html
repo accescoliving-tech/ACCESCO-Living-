@@ -64,9 +64,10 @@
     }
 
     /* ===== SIDEBAR STAGGERED MENU CSS (UPDATED) ===== */
+    /* ===== UPDATED SIDEBAR & 3-LINE ICON ===== */
     .sm-toggle-custom {
         position: fixed; top: 24px; left: 24px;
-        z-index: 10003; /* Above everything */
+        z-index: 10003;
         background: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(8px);
         border: 1px solid rgba(255,255,255,0.4);
@@ -78,52 +79,226 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         transition: all 0.3s ease;
     }
-    .staggered-menu-panel {
-        position: fixed; top: 0; left: 0;
-        width: clamp(280px, 80vw, 450px);
-        height: 100%; background: white; padding: 6em 2em 2em 2em;
-        z-index: 10001; transform: translateX(-100%);
-        display: flex; flex-direction: column;
+
+    /* ===== UPDATED 3-LINE MENU ICON ===== */
+    .sm-icon-custom { 
+        position: relative; 
+        width: 20px; 
+        height: 14px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
-    .sm-prelayer {
-        position: fixed; top: 0; left: 0;
-        height: 100%; width: clamp(280px, 80vw, 450px);
-        z-index: 10000; transform: translateX(-100%);
+    .sm-line {
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: all 0.1s ease; /* Faster icon snap */
+}
+    .sm-panel-list { 
+        list-style: none; 
+        padding: 0; 
+        margin: 0; 
+        flex-grow: 1; 
+        display: flex;
+        flex-direction: column;
+        gap: 35px; /* Significant space between items */
     }
-    .sm-icon-custom { position: relative; width: 14px; height: 14px; }
-    .sm-line-v, .sm-line-h {
-        position: absolute; top: 50%; left: 50%; width: 100%; height: 2px;
-        background: currentColor; transform: translate(-50%, -50%); transition: transform 0.4s;
+    .sm-panel-item {
+        font-size: 2.2rem; /* Larger font size */
+        font-weight: 900; 
+        text-transform: uppercase;
+        color: #1a0014; 
+        display: block; 
+        line-height: 1;
+        transition: all 0.3s ease;
+        letter-spacing: -1px;
     }
-    .sm-line-v { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .sm-panel-item:hover { 
+        color: var(--accent); 
+        transform: translateX(15px); /* More pronounced hover effect */
+    }
     
+    .sm-socials {
+        margin-top: auto; /* Ensures it stays at the bottom */
+        padding-top: 30px;
+        border-top: 2px solid rgba(0,0,0,0.05);
+    }
+
+    .sm-socials h3 {
+        font-size: 14px;
+        letter-spacing: 1.5px;
+        margin-bottom: 20px;
+    }
+
+    .sm-social-icons a {
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .sm-social-icons a:hover {
+        color: var(--accent);
+        transform: translateY(-5px);
+    }
+
+    @media (max-width: 600px) {
+        .staggered-menu-panel { padding: 6em 2em 3em 2em; transition: transform 0.2s ease-in-out; }
+        .sm-panel-item { font-size: 2.2rem; gap: 25px; }
+        .sm-social-icons { font-size: 24px; gap: 18px; }
+    }
+
+     /* Simple rotation for close state */
+    .menu-open .line-1 { transform: translateY(6px) rotate(45deg); }
+    .menu-open .line-2 { opacity: 0; }
+    .menu-open .line-3 { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ===== FINAL SIDEBAR STYLES ===== */
+    
+    
+
+    .sm-panel-list { 
+        list-style: none !important; /* Removes the dots/bullets */
+        padding: 0; 
+        margin: 0; 
+        display: flex;
+        flex-direction: column;
+        gap: clamp(15px, 4vh, 30px); /* Responsive spacing */
+    }
+
+    .sm-panel-item {
+        font-size: clamp(1.8rem, 5vw, 2.5rem); /* Responsive font size */
+        font-weight: 900; 
+        text-transform: uppercase;
+        color: #1a0014; 
+        display: block; 
+        line-height: 1.1;
+        transition: all 0.01s ease;
+        letter-spacing: -1px;
+        text-decoration: none;
+    }
+
+    .sm-panel-item:hover { 
+        color: var(--accent); 
+        transform: translateX(10px);
+    }
+    
+    .sm-socials {
+        margin-top: auto; /* Sticky to bottom */
+        padding-top: 30px;
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .sm-socials h3 {
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        margin-bottom: 15px;
+        font-weight: 800;
+        color: var(--accent);
+        text-transform: uppercase;
+    }
+
+    .sm-social-icons {
+        display: flex; 
+        gap: 18px; 
+        font-size: 24px; 
+        flex-wrap: wrap;
+    }
+
+    .sm-social-icons a {
+        color: #1a0014;
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .sm-social-icons a:hover {
+        color: var(--accent);
+        transform: translateY(-5px);
+    }
+    /* ===== INSTANT & RESPONSIVE SIDEBAR ===== */
+    .staggered-menu-panel {
+        position: fixed; 
+        top: 0; 
+        left: 0;
+        width: clamp(280px, 85vw, 450px); /* Responsive width */
+        height: 100%; 
+        background: white; 
+        padding: 8em 2.5em 3em 2.5em; 
+        z-index: 10001; 
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        box-shadow: 20px 0 60px rgba(0,0,0,0.08);
+        /* TRANSITION REMOVED FOR INSTANT OPENING */
+    }
+    
+    /* Class added via JS to show the panel instantly */
+    .staggered-menu-panel.active {
+        display: flex;
+    }
+
     .sm-panel-inner {
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
-    .sm-panel-list { list-style: none; padding: 0; margin: 40px 0; flex-grow: 1; }
-    .sm-panel-item {
-        font-size: 2.2rem; font-weight: 900; text-transform: uppercase;
-        color: #1a0014; display: block; line-height: 1.1; margin-bottom: 25px;
-        transition: color 0.3s, transform 0.3s;
+
+    .sm-panel-list { 
+        list-style: none !important; /* No bullets */
+        padding: 0; 
+        margin: 0; 
+        display: flex;
+        flex-direction: column;
+        gap: clamp(15px, 4vh, 30px); /* Responsive spacing */
     }
-    .sm-panel-item:hover { color: var(--accent); transform: translateX(10px); }
-    
+
+    .sm-panel-item {
+        font-size: clamp(1.8rem, 5vw, 2.5rem); /* Responsive font size */
+        font-weight: 900; 
+        text-transform: uppercase;
+        color: #1a0014; 
+        text-decoration: none;
+    }
+
+    .sm-line {
+        width: 100%;
+        height: 2px;
+        background: currentColor;
+        /* TRANSITION REMOVED FOR INSTANT ICON SNAP */
+    }
+
     .sm-socials {
         margin-top: auto;
-        padding-top: 20px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    /* Mobile-specific adjustments */
+    @media (max-width: 480px) {
+        .staggered-menu-panel { 
+            padding: 6em 1.5em 2em 1.5em; 
+        }
+        .sm-toggle-custom {
+            top: 16px;
+            left: 16px;
+            padding: 10px 16px;
+        }
+    }
+    /* Only highlight when the user actually hovers */
+    .sm-panel-item:hover { 
+        color: var(--accent); 
+        transform: translateX(10px);
+    }
+    
+    .sm-socials {
+        margin-top: auto; /* Keeps socials at the bottom of the screen */
+        padding-top: 30px;
         border-top: 1px solid rgba(0,0,0,0.05);
     }
 
-    @media (max-width: 600px) {
-        .staggered-menu-panel { width: 85vw; padding: 4em 1.5em 2em 1.5em; }
-        .sm-panel-item { font-size: 1.8rem; margin-bottom: 20px; }
-        .nav-logo-top { left: 130px; top: 16px; width: 32px; height: 32px; }
-        .sm-toggle-custom { top: 16px; left: 16px; padding: 10px 16px; font-size: 12px; }
+    .sm-social-icons {
+        display: flex; 
+        gap: 20px; 
+        font-size: 24px; 
+        flex-wrap: wrap;
     }
-
     /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
@@ -1520,28 +1695,28 @@
     <body>
 
         <button class="sm-toggle-custom" id="smToggle">
-            <div class="sm-icon-custom">
-                <div class="sm-line-h"></div>
-                <div class="sm-line-v" id="smLineV"></div>
+            <div class="sm-icon-custom" id="smIcon">
+                <div class="sm-line line-1"></div>
+                <div class="sm-line line-2"></div>
+                <div class="sm-line line-3"></div>
             </div>
             <span id="smToggleText">Menu</span>
         </button>
 
-        <div class="sm-prelayer" id="layer1" style="background: rgba(112, 4, 87, 1);"></div>
-        <div class="sm-prelayer" id="layer2" style="background: rgba(160, 30, 125, 1);"></div>
-
-        <aside class="staggered-menu-panel" id="smPanel">
+    <aside class="staggered-menu-panel" id="smPanel">
     <div class="sm-panel-inner">
         <ul class="sm-panel-list">
             <li><a href="#home" class="sm-panel-item">Home</a></li>
             <li><a href="#services" class="sm-panel-item">Services</a></li>
-            <li><a href="#about" class="sm-panel-item">About</a></li>
+            <li><a href="#" class="sm-panel-item">Wallet</a></li>
+            <li><a href="#" class="sm-panel-item">Transactions</a></li>
             <li><a href="#blogs" class="sm-panel-item">Blogs</a></li>
             <li><a href="#contact-form" class="sm-panel-item">Contact</a></li>
         </ul>
+
         <div class="sm-socials">
-            <h3 style="color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase;">Follow Accesco</h3>
-            <div style="display: flex; gap: 15px; font-size: 22px; margin-top: 10px; flex-wrap: wrap;">
+            <h3>Follow Accesco</h3>
+            <div class="sm-social-icons">
                 <a href="https://www.instagram.com/accescoliving" target="_blank"><i class="ri-instagram-line"></i></a>
                 <a href="https://www.linkedin.com/company/acceso-living/" target="_blank"><i class="ri-linkedin-box-line"></i></a>
                 <a href="https://x.com/accesco_living" target="_blank"><i class="ri-twitter-x-line"></i></a>
@@ -1552,7 +1727,6 @@
         </div>
     </div>
 </aside>
-
         <main id="home">
         <section class="hero">
   <div class="top-nav">
@@ -2136,7 +2310,7 @@
                     <h4 style="color: white; letter-spacing: 1px;">RESOURCES</h4>
                     <ul style="list-style:none;margin:0;padding:0;color:var(--muted);margin-top:14px;font-size:15px; line-height: 2;">
                         <li><a href="#">Metrics & Certificates</a></li>
-                        <li><a href="#">QTC Videos</a></li>
+                        <li><a href="QTC/QTC.html">QTC Videos</a></li>
                         <li><a href="BLOGS_PAGE/blogs.html" id="blog-link">Blogs</a></li>
                         <li><a href="#">Help & Support</a></li>
                     </ul>
@@ -2527,47 +2701,30 @@ document.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
     const smToggle = document.getElementById('smToggle');
     const smPanel = document.getElementById('smPanel');
-    const smLineV = document.getElementById('smLineV');
+    const smIcon = document.getElementById('smIcon');
     const smText = document.getElementById('smToggleText');
-    const navLogo = document.querySelector('.nav-logo-top');
     
     let isMenuOpen = false;
 
     smToggle.addEventListener('click', () => {
         isMenuOpen = !isMenuOpen;
 
-        if (isMenuOpen) {
-            // Opening Animation
-            const tl = gsap.timeline();
-            tl.to("#layer1", { xPercent: 100, duration: 0.5, ease: "power4.out" })
-              .to("#layer2", { xPercent: 100, duration: 0.5, ease: "power4.out" }, "-=0.4")
-              .to(smPanel, { xPercent: 100, duration: 0.6, ease: "power4.out" }, "-=0.4");
-            
-            gsap.to(smLineV, { rotate: 0, duration: 0.4 });
-            smToggle.style.color = "#000";
-            smText.innerText = "Close";
-            
-            // Hide the logo when menu is open for cleaner look
-            if(navLogo) navLogo.style.opacity = "0";
-        } else {
-            // Closing Animation
-            gsap.to([smPanel, "#layer2", "#layer1"], { 
-                xPercent: 0, 
-                duration: 0.4, 
-                stagger: 0.05, 
-                ease: "power2.in" 
-            });
-            
-            gsap.to(smLineV, { rotate: 90, duration: 0.4 });
-            smToggle.style.color = "#fff";
-            smText.innerText = "Menu";
+        // Toggle visibility instantly
+        smPanel.classList.toggle('active');
+        smIcon.classList.toggle('menu-open');
 
-            // Show the logo back
-            if(navLogo) navLogo.style.opacity = "1";
+        if (isMenuOpen) {
+            smToggle.style.color = "#000";
+            smToggle.style.background = "#fff";
+            smText.innerText = "Close";
+        } else {
+            smToggle.style.color = "#fff";
+            smToggle.style.background = "rgba(255, 255, 255, 0.2)";
+            smText.innerText = "Menu";
         }
     });
 
-    // Close on link click
+    // Close menu on link click
     document.querySelectorAll('.sm-panel-item').forEach(link => {
         link.addEventListener('click', () => {
             if (isMenuOpen) smToggle.click();
