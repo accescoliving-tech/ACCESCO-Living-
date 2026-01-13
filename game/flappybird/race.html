@@ -16,59 +16,54 @@
         /* --- FLEET HUB / MENU SCREEN --- */
         #menu-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            /* More transparent center to see sky and vehicle clearly */
             background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.7) 100%);
             z-index: 20; display: flex; flex-direction: column; justify-content: space-between;
             pointer-events: none;
         }
 
         .garage-header {
-            padding: 30px; text-align: center; pointer-events: auto;
+            padding: 20px; text-align: center; pointer-events: auto;
             background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
             position: relative;
         }
         .garage-title {
-            font-family: 'Russo One', sans-serif; font-size: 42px; color: #fc8019;
+            font-family: 'Russo One', sans-serif; font-size: clamp(24px, 8vw, 42px); color: #fc8019;
             text-transform: uppercase; letter-spacing: 2px;
             text-shadow: 0 4px 15px rgba(252, 128, 25, 0.4); margin: 0;
         }
-        .garage-subtitle { color: #fff; font-size: 14px; letter-spacing: 4px; margin-top: 5px; text-transform: uppercase; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .garage-subtitle { color: #fff; font-size: clamp(10px, 2vw, 14px); letter-spacing: 4px; margin-top: 5px; text-transform: uppercase; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         .bank-display {
-            position: absolute; top: 30px; right: 30px;
-            background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 20px;
-            border: 1px solid #ffd700; color: #ffd700; font-family: 'Russo One'; font-size: 18px;
-            display: flex; align-items: center; gap: 10px;
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 20px;
+            border: 1px solid #ffd700; color: #ffd700; font-family: 'Russo One'; font-size: 14px;
+            display: flex; align-items: center; gap: 8px;
         }
 
         .car-stats-panel {
             position: absolute; top: 140px; left: 30px;
             background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(12px);
-            padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            width: 220px;
+            padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            width: 180px;
             pointer-events: none;
-        }
-        @media (max-width: 600px) {
-            .car-stats-panel { top: 120px; left: 50%; transform: translateX(-50%); width: 80%; }
-            .garage-title { font-size: 28px; }
-            .bank-display { top: 10px; right: 10px; font-size: 14px; }
+            transition: all 0.3s ease;
         }
 
-        .stat-row { margin-bottom: 15px; }
-        .stat-label { color: #ccc; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-track { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; }
+        .stat-row { margin-bottom: 12px; }
+        .stat-label { color: #ccc; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+        .stat-track { width: 100%; height: 6px; background: rgba(0,0,0,0.5); border-radius: 10px; overflow: hidden; }
         .stat-val { height: 100%; background: linear-gradient(90deg, #fc8019, #ff9f43); width: 0%; transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
         .garage-footer {
             background: linear-gradient(to top, rgba(0,0,0,0.8) 20%, transparent);
-            padding: 20px 0 60px 0;
+            padding: 10px 0 40px 0;
             display: flex; flex-direction: column; align-items: center;
             pointer-events: auto;
         }
 
         .car-carousel {
-            display: flex; gap: 20px; overflow-x: auto; padding: 20px 40px;
-            width: 100%; max-width: 900px;
+            display: flex; gap: 15px; overflow-x: auto; padding: 10px 20px;
+            width: 100%; box-sizing: border-box;
             scroll-behavior: smooth;
             justify-content: flex-start;
             scrollbar-width: none;
@@ -77,7 +72,7 @@
 
         .car-card {
             background: rgba(255, 255, 255, 0.05);
-            min-width: 160px; padding: 15px; border-radius: 20px;
+            min-width: 130px; padding: 12px; border-radius: 15px;
             border: 2px solid rgba(255,255,255,0.1);
             transition: all 0.3s ease;
             cursor: pointer; text-align: center;
@@ -87,56 +82,77 @@
         
         .car-card:hover, .car-card.selected {
             background: rgba(252, 128, 25, 0.2);
-            border-color: #fc8019; transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: #fc8019; transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
 
         .car-card.locked { opacity: 0.6; filter: grayscale(1); }
-        .lock-icon { position: absolute; top: 10px; right: 10px; font-size: 16px; }
+        .lock-icon { position: absolute; top: 8px; right: 8px; font-size: 14px; }
 
-        .car-card-name { color: #fff; font-weight: 700; font-size: 14px; margin-bottom: 5px; }
-        .car-card-type { color: #ddd; font-size: 10px; text-transform: uppercase; }
+        .car-card-name { color: #fff; font-weight: 700; font-size: 12px; margin-bottom: 4px; }
+        .car-card-type { color: #ddd; font-size: 9px; text-transform: uppercase; }
 
         .btn-drive {
             background: linear-gradient(to right, #fc8019, #ff9f43);
-            color: white; border: none; padding: 18px 100px;
-            font-family: 'Russo One', sans-serif; font-size: 24px; text-transform: uppercase;
-            border-radius: 50px; cursor: pointer; margin-top: 30px;
+            color: white; border: none; padding: 15px 60px;
+            font-family: 'Russo One', sans-serif; font-size: 20px; text-transform: uppercase;
+            border-radius: 50px; cursor: pointer; margin-top: 20px;
             box-shadow: 0 0 30px rgba(252, 128, 25, 0.4);
             transition: all 0.2s; pointer-events: auto;
+            max-width: 80%;
         }
         .btn-drive:active { transform: scale(0.95); filter: brightness(1.2); }
         .btn-drive.buy-btn { background: linear-gradient(to right, #27ae60, #2ecc71); box-shadow: 0 0 30px rgba(46, 204, 113, 0.4); }
         .btn-drive:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
 
+        /* --- RESPONSIVE OVERRIDES --- */
+        @media (max-width: 600px) {
+            .car-stats-panel { 
+                top: auto; bottom: 320px; left: 50%; 
+                transform: translateX(-50%); width: 85%; max-width: 280px;
+                display: flex; gap: 10px; padding: 12px;
+            }
+            .stat-row { margin-bottom: 0; flex: 1; }
+            .bank-display { top: 10px; right: 10px; font-size: 12px; }
+            .garage-header { padding-top: 40px; }
+        }
+
+        @media (max-height: 600px) {
+            .car-stats-panel { display: none; } /* Hide stats in landscape/short screens to see car */
+            .garage-header { padding: 10px; }
+            .garage-footer { padding-bottom: 10px; }
+            .btn-drive { margin-top: 10px; padding: 10px 40px; font-size: 16px; }
+            .car-carousel { padding: 5px 20px; }
+        }
+
         /* --- IN GAME HUD --- */
         #game-hud { display: none; width: 100%; height: 100%; pointer-events: none; position: relative; }
 
         .hud-top {
-            display: flex; justify-content: space-between; padding: 25px; align-items: flex-start;
+            display: flex; justify-content: space-between; padding: 15px; align-items: flex-start;
             position: relative; z-index: 20; 
         }
         
         .stats-box {
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px);
-            padding: 15px 25px; border-radius: 15px; border-top: 3px solid #fc8019;
+            padding: 12px 18px; border-radius: 15px; border-top: 3px solid #fc8019;
             color: white; font-family: 'Russo One', sans-serif;
-            display: flex; flex-direction: column; gap: 8px;
-            min-width: 150px;
+            display: flex; flex-direction: column; gap: 5px;
+            min-width: 120px;
         }
 
-        .hud-row { display: flex; justify-content: space-between; align-items: center; }
-        .hud-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .hud-val { font-size: 22px; }
+        .hud-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .hud-label { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .hud-val { font-size: 18px; }
 
-        .fuel-bar-track { width: 100%; height: 6px; background: #222; border-radius: 10px; margin-top: 5px; overflow: hidden; }
+        .fuel-bar-track { width: 100%; height: 5px; background: #222; border-radius: 10px; margin-top: 3px; overflow: hidden; }
         .fuel-bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #4cd137, #fc8019); transition: width 0.2s; }
 
-        .hud-controls { display: flex; gap: 15px; pointer-events: auto; }
+        .hud-controls { display: flex; gap: 10px; pointer-events: auto; }
         .hud-btn {
-            background: rgba(0,0,0,0.6); width: 55px; height: 55px; border-radius: 18px;
+            background: rgba(0,0,0,0.6); width: 45px; height: 45px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center; color: white; border: 1px solid rgba(255,255,255,0.1);
-            cursor: pointer; font-size: 22px; transition: all 0.2s;
+            cursor: pointer; font-size: 18px; transition: all 0.2s;
         }
         .hud-btn:active { transform: scale(0.9); background: #fc8019; }
 
@@ -144,12 +160,12 @@
         .touch-half { width: 50%; height: 100%; }
         
         #pause-modal, #game-over-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); align-items: center; justify-content: center; z-index: 30; pointer-events: auto; }
-        .modal-card { background: #1a1a1a; padding: 40px; border-radius: 30px; text-align: center; border: 1px solid #333; box-shadow: 0 20px 60px rgba(0,0,0,0.8); width: 85%; max-width: 380px; }
-        .modal-title { color: #fff; font-family: 'Russo One'; font-size: 34px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        .modal-score { color: #fc8019; font-size: 54px; font-weight: 800; margin: 10px 0 30px 0; }
-        .sub-score-label { color: #666; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
+        .modal-card { background: #1a1a1a; padding: 30px; border-radius: 25px; text-align: center; border: 1px solid #333; box-shadow: 0 20px 60px rgba(0,0,0,0.8); width: 85%; max-width: 340px; }
+        .modal-title { color: #fff; font-family: 'Russo One'; font-size: 28px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .modal-score { color: #fc8019; font-size: 44px; font-weight: 800; margin: 5px 0 20px 0; }
+        .sub-score-label { color: #666; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; }
 
-        .hint-text { position: absolute; bottom: 40px; width: 100%; text-align: center; color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .hint-text { position: absolute; bottom: 20px; width: 100%; text-align: center; color: rgba(255,255,255,0.6); font-size: 9px; letter-spacing: 2px; font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #87CEEB;}
     </style>
 </head>
@@ -219,9 +235,9 @@
                 </div>
 
                 <div class="hud-controls">
-                <div class="hud-btn" onclick="toggleMusic()">🔊</div>
+                <div class="hud-btn" onclick="toggleMusic()">🎵</div>
                 <div class="hud-btn" onclick="togglePause()">II</div>
-                <div class="hud-btn" onclick="switchCamera()">📷</div>
+                <div class="hud-btn" onclick="switchCamera()">🎥</div>
             </div>
         </div>
 
@@ -231,8 +247,8 @@
     <div id="pause-modal">
         <div class="modal-card">
             <div class="modal-title">SHIFT PAUSED</div>
-            <button class="btn-drive" onclick="togglePause()" style="padding: 15px 40px; font-size: 18px;">RESUME</button>
-            <button class="btn-drive" onclick="resetGame()" style="padding: 15px 40px; font-size: 18px; background: #333; margin-top: 10px; box-shadow: none;">ABORT SHIFT</button>
+            <button class="btn-drive" onclick="togglePause()" style="padding: 12px 40px; font-size: 16px;">RESUME</button>
+            <button class="btn-drive" onclick="resetGame()" style="padding: 12px 40px; font-size: 16px; background: #333; margin-top: 10px; box-shadow: none;">ABORT SHIFT</button>
         </div>
     </div>
 
@@ -242,8 +258,8 @@
             <div class="sub-score-label">TOTAL DISTANCE</div>
             <div class="modal-score" id="final-score">0m</div>
             <div class="sub-score-label">EARNED TIPS</div>
-            <div class="modal-score" style="font-size: 32px; color: #ffd700;" id="final-coins">0</div>
-            <button class="btn-drive" onclick="resetGame()" style="padding: 15px 60px; font-size: 20px;">NEW SHIFT</button>
+            <div class="modal-score" style="font-size: 28px; color: #ffd700;" id="final-coins">0</div>
+            <button class="btn-drive" onclick="resetGame()" style="padding: 15px 40px; font-size: 18px;">NEW SHIFT</button>
         </div>
     </div>
 </div>
@@ -336,7 +352,6 @@
         showroomGroup.rotation.y = Math.PI / 4;
         scene.add(showroomGroup);
         
-        // Daylight background for showroom
         if (scene) {
             scene.background = new THREE.Color(0x87CEEB);
             scene.fog.color = new THREE.Color(0x87CEEB);
@@ -380,7 +395,7 @@
         canvas.width = 128; canvas.height = 256;
         const ctx = canvas.getContext('2d');
         const grad = ctx.createLinearGradient(0,0,128,256);
-        grad.addColorStop(0, '#7efff5'); // Light cyan
+        grad.addColorStop(0, '#7efff5'); 
         grad.addColorStop(1, '#4b4b4b');
         ctx.fillStyle = grad; ctx.fillRect(0,0,128,256);
         ctx.fillStyle = '#fff'; 
@@ -401,7 +416,6 @@
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = '#333333'; 
         ctx.fillRect(0,0,512,512);
-        // Add noise/grain
         for(let i=0; i<2000; i++) {
             ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.02})`;
             ctx.fillRect(Math.random()*512, Math.random()*512, 1, 1);
@@ -419,7 +433,6 @@
         scene.fog = new THREE.Fog(0x87CEEB, 20, 150); 
         camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
         
-        // Initial setup for camera position so vehicle is visible at start
         camera.position.set(0, 3, 8); 
         camera.lookAt(0, 1, 0);
 
@@ -650,7 +663,6 @@
         if(showroomGroup) scene.remove(showroomGroup);
         roadGroup.visible = true;
         
-        // Ensure background remains daylight
         scene.background = new THREE.Color(0x87CEEB); 
         scene.fog.color = new THREE.Color(0x87CEEB);
 
@@ -675,7 +687,6 @@
         fuelCans.forEach(f => scene.remove(f)); fuelCans = [];
         coins.forEach(c => scene.remove(c)); coins = [];
         
-        // Reset camera for showroom visibility
         camera.position.set(0, 3, 8); 
         camera.lookAt(0, 1, 0);
         
