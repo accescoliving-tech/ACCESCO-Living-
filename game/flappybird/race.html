@@ -118,7 +118,7 @@
         }
 
         @media (max-height: 600px) {
-            .car-stats-panel { display: none; } /* Hide stats in landscape/short screens to see car */
+            .car-stats-panel { display: none; }
             .garage-header { padding: 10px; }
             .garage-footer { padding-bottom: 10px; }
             .btn-drive { margin-top: 10px; padding: 10px 40px; font-size: 16px; }
@@ -174,7 +174,7 @@
     <div id="canvas-container"></div>
 
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_3a40af212a.mp3?filename=fun-life-112188.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/audio/2022/03/24/audio_3a40af212a.mp3?filename=fun-life-112188.mp3" type="audio/mpeg">
     </audio>
 
     <div id="ui-layer">
@@ -235,7 +235,7 @@
                 </div>
 
                 <div class="hud-controls">
-                <div class="hud-btn" onclick="toggleMusic()">🎵</div>
+                <div class="hud-btn" onclick="toggleMusic()">🔊</div>
                 <div class="hud-btn" onclick="togglePause()">II</div>
                 <div class="hud-btn" onclick="switchCamera()">🎥</div>
             </div>
@@ -311,6 +311,12 @@
         setup3D();
         setupControls();
         selectCar(0); 
+        
+        // Correctly set initial FOV for mobile
+        const aspect = window.innerWidth / window.innerHeight;
+        camera.fov = aspect < 1 ? 75 : 50;
+        camera.updateProjectionMatrix();
+
         animate();
     }
 
@@ -746,10 +752,16 @@
             playerGroup.position.x += state.steering * 0.45 * (1 + state.speed);
             playerGroup.rotation.y = -state.steering * 0.15;
             playerGroup.rotation.z = -state.steering * 0.35; 
-            playerGroup.position.x = Math.max(-14, Math.min(14, playerGroup.position.x));
+            
+            // DYNAMIC BOUNDARIES: Narrower on mobile screens to prevent going off-screen
+            const bounds = window.innerWidth < 600 ? 9.5 : 14;
+            playerGroup.position.x = Math.max(-bounds, Math.min(bounds, playerGroup.position.x));
 
             const cfg = CAM_CONFIGS[state.cameraIdx];
-            const ideal = cfg.offset.clone().add(new THREE.Vector3(playerGroup.position.x * 0.5, 0, 0));
+            
+            // INCREASED FOLLOW INTENSITY: Follow the car horizontally more on mobile
+            const followIntensity = window.innerWidth < 600 ? 0.8 : 0.5;
+            const ideal = cfg.offset.clone().add(new THREE.Vector3(playerGroup.position.x * followIntensity, 0, 0));
             camera.position.lerp(ideal, 0.1);
             camera.lookAt(playerGroup.position.x * 0.5, 1.5, playerGroup.position.z - 8);
         }
@@ -800,7 +812,17 @@
     window.onkeyup = e => { if(e.code in {ArrowLeft:1, ArrowRight:1, KeyA:1, KeyD:1}) keys[e.code.includes('Left')||e.code.includes('A')?'ArrowLeft':'ArrowRight'] = false; };
 
     function animate() { requestAnimationFrame(animate); update(); renderer.render(scene, camera); }
-    window.onresize = () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); };
+    
+    window.onresize = () => { 
+        const aspect = window.innerWidth/window.innerHeight;
+        camera.aspect = aspect; 
+        
+        // RESPONSIVE FOV: Make the camera see more on narrow screens
+        camera.fov = aspect < 1 ? 75 : 50;
+        
+        camera.updateProjectionMatrix(); 
+        renderer.setSize(window.innerWidth, window.innerHeight); 
+    };
 
     init();
 </script>
