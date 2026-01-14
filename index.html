@@ -35,14 +35,10 @@
   <link rel="icon" type="image/png" href="images/accesco_chrome.png">
   <link rel="icon" href="images/accesco_original.png" type="image/x-icon">
 
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"></noscript>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" media="print" onload="this.media='all'">
      <style>
         /* CRITICAL CSS INLINED (KEPT AS IS) */
         @font-face { font-family: 'Davetica'; src: local('Davetica'), local('Davetica-Regular'), sans-serif; }
@@ -1790,6 +1786,7 @@
 
   <div class="hero-grid">
     <img
+      loading="lazy"
       src="images/accesco_white.png"
       class="hero-logo-img"
       alt="Accesco Logo"
@@ -1812,12 +1809,14 @@
     <div class="hero-app-buttons">
       <a href="#" class="app-btn-link">
         <img
+            loading="lazy"
           src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
           alt="Get it on Google Play"
         >
       </a>
       <a href="#" class="app-btn-link">
         <img
+        loading="lazy"
           src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
           alt="Download on the App Store"
         >
@@ -1903,7 +1902,7 @@
 
                 <a href="services-swadisht.html" class="card">
                     <div class="card-img swadisht-bg">
-                        <img src="images/swadisht_logo.JPG" alt="Swadisht Logo" width="300" height="200" loading="lazy" decoding="async">
+                        <img src="images/swadisht_logo.JPG" alt="Swadisht Logo" width="300" height="200" loading="lazy" loading="lazy" decoding="async">
                     </div>
                     <div class="card-body">
                         <div class="card-title-row">
@@ -2027,7 +2026,7 @@
                 <div class="games-grid-clean">
                     <a href="#" class="game-card-new">
                         <div class="game-icon-box">
-                            <img src="img/spin.png" alt="Spin Game" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="img/spin.png" loading="lazy" alt="Spin Game" width="40" height="40" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <i class="ri-loop-right-line" style="display:none; font-size:30px"></i>
                         </div>
                         <h4>Flappy bird</h4>
@@ -2815,9 +2814,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     </script>
 
-<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
     
-<style>
+<style><script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1" defer></script>
+
   df-messenger {
     /* --- Main Branding --- */
     --df-messenger-font-family: 'Outfit', sans-serif;
