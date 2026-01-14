@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 300;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.35));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .top-bar-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            text-align: left;
+            color: rgba(255, 255, 255, 0.95);
+            min-width: 210px;
+        }
+
+        .brand-title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .container {
+            text-align: center;
+            width: 100vw;
+            height: 100vh;
+            padding: 0;
+            animation: slideIn 0.6s ease-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            display: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        #gameCanvas {
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            display: block;
+            margin: 0;
+            cursor: pointer;
+            background: #87CEEB;
+            transition: none;
+            width: 100vw;
+            height: 100vh;
+            object-fit: fill;
+        }
+
+        #gameCanvas:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .controls {
+            display: none;
+        }
+
+        .controls p {
+            margin: 12px 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-weight: 500;
+        }
+
+        .controls p:first-child {
+            margin-top: 0;
+        }
+
+        .controls p:last-child {
+            margin-bottom: 0;
+        }
+
+        .key {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border: 2px solid rgba(255,255,255,0.6);
+            border-radius: 8px;
+            margin: 0 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .key:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+
+        #scoreBoard {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+            padding: 10px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
+        }
+
+        #score, #highScore, #level {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+        }
+
+        #highScore {
+            color: #ffd700;
+            text-shadow: 0 3px 8px rgba(255,215,0,0.4);
+        }
+
+        #level {
+            color: #00ff88;
+            text-shadow: 0 3px 8px rgba(0,255,136,0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .game-over {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Music Player Styles */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            z-index: 200;
+            width: 320px;
+            min-width: 300px;
+            color: #fff;
+        }
+
+        .music-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .music-toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .music-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .music-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .music-search {
+            display: flex;
+            gap: 8px;
+        }
+
+        .music-search input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .music-search input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .music-search input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .music-search button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.8), rgba(102, 126, 234, 0.8));
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 12px;
+        }
+
+        .music-search button:hover {
+            background: linear-gradient(135deg, rgba(240, 147, 251, 1), rgba(102, 126, 234, 1));
+            transform: scale(1.05);
+        }
+
+        .music-results {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .music-results::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .music-results::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .music-results::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .music-result-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s ease;
+        }
+
+        .music-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .music-result-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .music-result-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .music-result-artist {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .music-current {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .music-current-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #ffd700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-current-artist {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .music-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+        }
+
+        .music-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .music-btn.active {
+            background: rgba(240, 147, 251, 0.8);
+            border-color: rgba(240, 147, 251, 1);
+        }
+
+        .music-volume {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .music-volume-label {
+            font-size: 11px;
+            min-width: 35px;
+        }
+
+        .music-volume input {
+            flex: 1;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .music-volume input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 1), rgba(102, 126, 234, 1));
+            cursor: pointer;
+        }
+
+        .music-volume input::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 1), rgba(102, 126, 234, 1));
+            cursor: pointer;
+            border: none;
+        }
+
+        .music-loading {
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding-top: 120px;
+            }
+
+            .top-bar-inner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .brand {
+                text-align: center;
+                min-width: auto;
+            }
+
+            .brand-title {
+                font-size: 24px;
+            }
+
+            #scoreBoard {
+                gap: 15px;
+                padding: 12px 20px;
+                font-size: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            #score, #highScore, #level {
+                font-size: 14px;
+            }
+
+            .controls {
+                font-size: 14px;
+                padding: 15px;
+                margin-top: 20px;
+            }
+
+            .controls p {
+                margin: 10px 0;
+            }
+
+            .music-player {
+                width: 280px;
+                padding: 15px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop crossorigin="anonymous"></audio>
+
+    <!-- Top Header -->
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="brand">
+                <div class="brand-title">Flappy Bird</div>
+                <div class="brand-subtitle">Press ↑ to flap • Press ↓ to drop</div>
+            </div>
+            <div id="scoreBoard">
+                <span id="level">Level: 1</span>
+                <span id="score">Score: 0</span>
+                <span id="highScore">Best: 0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="music-header">
+            <span>🎵 Music Player</span>
+            <button class="music-toggle-btn" id="toggleMusicPanel" title="Minimize/Maximize">−</button>
+        </div>
+        <div class="music-content" id="musicContent">
+            <div class="music-search">
+                <input type="text" id="musicSearchInput" placeholder="Search songs..." />
+                <button id="musicSearchBtn">🔍</button>
+            </div>
+            <div class="music-results" id="musicResults"></div>
+            <div class="music-current" id="musicCurrentInfo" style="display: none;">
+                <div class="music-current-title" id="currentTitle">No song playing</div>
+                <div class="music-current-artist" id="currentArtist">Search and select a song</div>
+                <div class="music-controls">
+                    <button class="music-btn" id="playBtn">▶ Play</button>
+                    <button class="music-btn" id="pauseBtn">⏸ Pause</button>
+                    <button class="music-btn" id="stopBtn">⏹ Stop</button>
+                </div>
+                <div class="music-volume">
+                    <span class="music-volume-label">Vol:</span>
+                    <input type="range" id="volumeControl" min="0" max="100" value="30" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="controls">
+            <p>🎮 Press <span class="key">↑</span> to Flap Up | Press <span class="key">↓</span> to Drop Down</p>
+            <p>🎯 Avoid the Pipes and Stay Alive!</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== MUSIC PLAYER =====
+        const audioElement = document.getElementById('bgMusic');
+        const musicSearchInput = document.getElementById('musicSearchInput');
+        const musicSearchBtn = document.getElementById('musicSearchBtn');
+        const musicResults = document.getElementById('musicResults');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const volumeControl = document.getElementById('volumeControl');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const musicCurrentInfo = document.getElementById('musicCurrentInfo');
+        const toggleMusicPanel = document.getElementById('toggleMusicPanel');
+        const musicContent = document.getElementById('musicContent');
+
+        // Backend base URL (used to proxy audio so CORS doesn't break playback)
+        const BACKEND_BASE = 'http://localhost:5000';
+
+        let currentSongTitle = '';
+        let currentSongArtist = '';
+        let isPlayerMinimized = false;
+
+        // Toggle music panel
+        toggleMusicPanel.addEventListener('click', () => {
+            isPlayerMinimized = !isPlayerMinimized;
+            musicContent.style.display = isPlayerMinimized ? 'none' : 'flex';
+            toggleMusicPanel.textContent = isPlayerMinimized ? '+' : '−';
+        });
+
+        // Volume control
+        volumeControl.addEventListener('input', (e) => {
+            audioElement.volume = e.target.value / 100;
+        });
+
+        // Play, Pause, Stop controls
+        playBtn.addEventListener('click', () => {
+            audioElement.play().catch(e => console.log('Play error:', e));
+        });
+
+        pauseBtn.addEventListener('click', () => {
+            audioElement.pause();
+        });
+
+        stopBtn.addEventListener('click', () => {
+            audioElement.pause();
+            audioElement.currentTime = 0;
+        });
+
+        // Search songs using multiple APIs with CORS support
+        async function searchSongs(query) {
+            if (!query.trim()) {
+                musicResults.innerHTML = '<div class="music-loading">Enter a song name</div>';
+                return;
+            }
+
+            musicResults.innerHTML = '<div class="music-loading"><div class="spinner"></div> Searching...</div>';
+            
+            try {
+                // Try Jingles API first (better CORS support)
+                const response = await fetch(`https://jingles.bg/api/music/search?q=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).catch(() => null);
+
+                if (response && response.ok) {
+                    const data = await response.json();
+                    if (data.results && data.results.length > 0) {
+                        displaySearchResults(data.results.slice(0, 10));
+                        return;
+                    }
+                }
+
+                // Fallback to Deezer with CORS proxy
+                try {
+                    const deezerResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=10`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    if (deezerResponse.ok) {
+                        const deezerData = await deezerResponse.json();
+                        if (deezerData.data && deezerData.data.length > 0) {
+                            const results = deezerData.data.filter(track => track.preview).slice(0, 10);
+                            if (results.length > 0) {
+                                displayDeezerResults(results);
+                                return;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log('Deezer fallback failed');
+                }
+
+                // Show popular songs as fallback
+                showPopularSongs();
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                showPopularSongs();
+            }
+        }
+
+        function displaySearchResults(results) {
+            musicResults.innerHTML = '';
+            results.forEach(track => {
+                if (track.url || track.preview) {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'music-result-item';
+                    resultItem.innerHTML = `
+                        <div class="music-result-title">${track.title || track.name}</div>
+                        <div class="music-result-artist">${track.artist || track.author || 'Unknown'}</div>
+                    `;
+                    resultItem.addEventListener('click', () => {
+                        selectSong(track.url || track.preview, track.title || track.name, track.artist || track.author || 'Unknown');
+                    });
+                    musicResults.appendChild(resultItem);
+                }
+            });
+        }
+
+        function displayDeezerResults(results) {
+            musicResults.innerHTML = '';
+            results.forEach(track => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'music-result-item';
+                resultItem.innerHTML = `
+                    <div class="music-result-title">${track.title}</div>
+                    <div class="music-result-artist">${track.artist.name}</div>
+                `;
+                resultItem.addEventListener('click', () => {
+                    selectSong(track.preview, track.title, track.artist.name);
+                });
+                musicResults.appendChild(resultItem);
+            });
+        }
+
+        function showPopularSongs() {
+            const popularSongs = [
+                { title: 'Lofi Beats', artist: 'Lofi Girl', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+                { title: 'Chill Vibes', artist: 'Relaxing Music', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+                { title: 'Piano Melody', artist: 'Piano Music', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+                { title: 'Electronic Groove', artist: 'Electronic', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+                { title: 'Ambient Sounds', artist: 'Ambient', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+                { title: 'Jazz Cafe', artist: 'Jazz', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
+            ];
+
+            musicResults.innerHTML = '';
+            const filtered = popularSongs.filter(song => 
+                song.title.toLowerCase().includes(musicSearchInput.value.toLowerCase()) ||
+                song.artist.toLowerCase().includes(musicSearchInput.value.toLowerCase())
+            );
+
+            const toShow = filtered.length > 0 ? filtered : popularSongs.slice(0, 6);
+            
+            toShow.forEach(song => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'music-result-item';
+                resultItem.innerHTML = `
+                    <div class="music-result-title">${song.title}</div>
+                    <div class="music-result-artist">${song.artist}</div>
+                `;
+                resultItem.addEventListener('click', () => {
+                    selectSong(song.url, song.title, song.artist);
+                });
+                musicResults.appendChild(resultItem);
+            });
+
+            if (filtered.length === 0 && musicSearchInput.value.trim()) {
+                const note = document.createElement('div');
+                note.className = 'music-loading';
+                note.textContent = 'No exact matches. Showing popular songs...';
+                musicResults.insertBefore(note, musicResults.firstChild);
+            }
+        }
+
+        // Select and play a song
+        function selectSong(url, title, artist) {
+            const finalUrl = String(url || '').startsWith(BACKEND_BASE)
+                ? url
+                : `${BACKEND_BASE}/api/stream?url=${encodeURIComponent(url)}`;
+
+            audioElement.src = finalUrl;
+            currentSongTitle = title;
+            currentSongArtist = artist;
+            
+            currentTitle.textContent = title;
+            currentArtist.textContent = artist;
+            musicCurrentInfo.style.display = 'block';
+            musicResults.innerHTML = '';
+            musicSearchInput.value = '';
+            
+            // Auto-play the selected song
+            audioElement.play().catch(e => console.log('Play error:', e));
+        }
+
+        // Search button event
+        musicSearchBtn.addEventListener('click', () => {
+            searchSongs(musicSearchInput.value);
+        });
+
+        // Enter key to search
+        musicSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchSongs(musicSearchInput.value);
+            }
+        });
+
+        // Set initial volume
+        audioElement.volume = 0.3;
+
+        // ===== FLAPPY BIRD GAME =====
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const highScoreElement = document.getElementById('highScore');
+        const levelElement = document.getElementById('level');
+
+        // Set canvas to full screen dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game variables
+        let frames = 0;
+        let score = 0;
+        let level = 1;
+        let highScore = localStorage.getItem('flappyHighScore') || 0;
+        let highestLevel = localStorage.getItem('flappyHighestLevel') || 1;
+        highScoreElement.textContent = `Best: ${highScore}`;
+
+        // Game state
+        let gameState = 'playing'; // start, playing, gameover
+
+        // Difficulty variables that change with level
+        let pipeGap = 220;
+        let pipeSpeed = 2;
+        let pipeFrequency = 100;
+
+        // Bird object
+        const bird = {
+            x: 80,
+            y: 250,
+            width: 40,
+            height: 30,
+            velocity: 0,
+            gravity: 0.5,
+            jump: -10,
+            drop: 8,
+            
+            draw() {
+                // Bird shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.beginPath();
+                ctx.ellipse(this.x + 20, canvas.height - 60, 22, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Bird body
+                ctx.fillStyle = '#FFD700';
+                ctx.beginPath();
+                ctx.arc(this.x + 20, this.y + 15, 18, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Bird outline
+                ctx.strokeStyle = '#FF6347';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+                
+                // Eye white with shadow
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(this.x + 28, this.y + 12, 5.5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eye pupil
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(this.x + 30, this.y + 12, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eye shine
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(this.x + 31, this.y + 11, 1.2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Beak
+                ctx.fillStyle = '#FF6347';
+                ctx.beginPath();
+                ctx.moveTo(this.x + 35, this.y + 15);
+                ctx.lineTo(this.x + 46, this.y + 15);
+                ctx.lineTo(this.x + 35, this.y + 21);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Wing with gradient
+                const wingGradient = ctx.createLinearGradient(this.x + 4, this.y + 10, this.x + 20, this.y + 30);
+                wingGradient.addColorStop(0, '#FFA500');
+                wingGradient.addColorStop(1, '#FF8C00');
+                ctx.fillStyle = wingGradient;
+                ctx.beginPath();
+                ctx.ellipse(this.x + 12, this.y + 20, 10, 14, Math.PI / 4, 0, Math.PI * 2);
+                ctx.fill();
+            },
+            
+            update() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                
+                // Ground collision
+                if (this.y + this.height >= canvas.height - 50) {
+                    this.y = canvas.height - 50 - this.height;
+                    this.velocity = 0;
+                    if (gameState === 'playing') endGame();
+                }
+                
+                // Ceiling collision
+                if (this.y <= 0) {
+                    this.y = 0;
+                    this.velocity = 0;
+                }
+            },
+            
+            flap() {
+                this.velocity = this.jump;
+            },
+
+            dropDown() {
+                this.velocity = this.drop;
+            },
+            
+            reset() {
+                this.y = 250;
+                this.velocity = 0;
+            }
+        };
+
+        // Pipes array
+        let pipes = [];
+        const pipeWidth = 60;
+
+        function updateDifficulty() {
+            // Increase speed every level (caps at level 100)
+            pipeSpeed = Math.min(2 + (level - 1) * 0.15, 17);
+            
+            // Decrease gap size every level (minimum gap of 100)
+            pipeGap = Math.max(180 - (level - 1) * 1.5, 100);
+            
+            // Increase pipe frequency every level (minimum 40 frames between pipes)
+            pipeFrequency = Math.max(100 - (level - 1) * 1, 40);
+            
+            // Update gravity slightly for higher levels (caps at 0.8)
+            bird.gravity = Math.min(0.5 + (level - 1) * 0.005, 0.8);
+        }
+
+        function createPipe() {
+            const minHeight = 50;
+            const maxHeight = canvas.height - 200 - pipeGap;
+            const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+            
+            pipes.push({
+                x: canvas.width,
+                topHeight: topHeight,
+                bottomY: topHeight + pipeGap,
+                scored: false,
+                levelScored: false
+            });
+        }
+
+        function drawPipe(pipe) {
+            // Pipe gradient
+            const gradient = ctx.createLinearGradient(pipe.x, 0, pipe.x + pipeWidth, 0);
+            gradient.addColorStop(0, '#4CAF50');
+            gradient.addColorStop(0.5, '#5CDB95');
+            gradient.addColorStop(1, '#45a049');
+            
+            // Top pipe with shadow
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = gradient;
+            ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+            
+            // Top pipe cap with 3D effect
+            ctx.fillStyle = '#3d8b40';
+            ctx.fillRect(pipe.x - 8, pipe.topHeight - 20, pipeWidth + 16, 20);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(pipe.x - 5, pipe.topHeight - 30, pipeWidth + 10, 15);
+            
+            // Bottom pipe
+            ctx.fillStyle = gradient;
+            ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY - 50);
+            
+            // Bottom pipe cap with 3D effect
+            ctx.fillStyle = '#3d8b40';
+            ctx.fillRect(pipe.x - 8, pipe.bottomY - 5, pipeWidth + 16, 20);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(pipe.x - 5, pipe.bottomY, pipeWidth + 10, 30);
+            
+            // Pipe outlines for depth
+            ctx.shadowColor = 'transparent';
+            ctx.strokeStyle = '#2C5F2D';
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+            ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY - 50);
+            
+            // Highlight edges
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(pipe.x + 2, 2, pipeWidth - 4, pipe.topHeight - 2);
+        }
+
+        function updatePipes() {
+            if (frames % pipeFrequency === 0) {
+                createPipe();
+            }
+            
+            pipes.forEach((pipe, index) => {
+                pipe.x -= pipeSpeed;
+                
+                // Check for score
+                if (!pipe.scored && pipe.x + pipeWidth < bird.x) {
+                    pipe.scored = true;
+                    score++;
+                    scoreElement.textContent = `Score: ${score}`;
+                }
+                
+                // Check for level up (every 5 points, max level 1000)
+                if (!pipe.levelScored && pipe.x + pipeWidth < bird.x && score > 0 && score % 5 === 0) {
+                    pipe.levelScored = true;
+                    if (level < 1000) {
+                        level++;
+                        levelElement.textContent = `Level: ${level}`;
+                        updateDifficulty();
+                        
+                        // Visual feedback for level up
+                        canvas.style.animation = 'none';
+                        setTimeout(() => {
+                            canvas.style.animation = 'pulse 0.3s ease-in-out';
+                        }, 10);
+                    }
+                }
+                
+                // Remove off-screen pipes
+                if (pipe.x + pipeWidth < 0) {
+                    pipes.splice(index, 1);
+                }
+                
+                // Collision detection
+                if (
+                    bird.x + bird.width > pipe.x &&
+                    bird.x < pipe.x + pipeWidth &&
+                    (bird.y < pipe.topHeight || bird.y + bird.height > pipe.bottomY)
+                ) {
+                    if (gameState === 'playing') endGame();
+                }
+            });
+        }
+
+        function drawBackground() {
+            // Sky gradient - more vibrant
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height - 50);
+            skyGradient.addColorStop(0, '#87CEEB');
+            skyGradient.addColorStop(1, '#E0F8FF');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height - 50);
+            
+            // Sun
+            ctx.fillStyle = 'rgba(255, 200, 50, 0.3)';
+            ctx.beginPath();
+            ctx.arc(350, 80, 60, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.7)';
+            ctx.beginPath();
+            ctx.arc(350, 80, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Clouds - improved
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+            ctx.shadowBlur = 5;
+            
+            // Cloud 1
+            ctx.beginPath();
+            ctx.arc(100 - (frames % 450) + canvas.width, 70, 35, 0, Math.PI * 2);
+            ctx.arc(140 - (frames % 450) + canvas.width, 65, 40, 0, Math.PI * 2);
+            ctx.arc(180 - (frames % 450) + canvas.width, 70, 35, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Cloud 2
+            ctx.beginPath();
+            ctx.arc(300 - (frames % 500) + canvas.width, 110, 30, 0, Math.PI * 2);
+            ctx.arc(335 - (frames % 500) + canvas.width, 105, 35, 0, Math.PI * 2);
+            ctx.arc(370 - (frames % 500) + canvas.width, 110, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.shadowColor = 'transparent';
+            
+            // Ground
+            ctx.fillStyle = '#C1A66B';
+            ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+            
+            // Grass
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, canvas.height - 50, canvas.width, 12);
+            
+            // Ground pattern
+            ctx.fillStyle = 'rgba(139, 115, 85, 0.5)';
+            for (let i = 0; i < canvas.width; i += 25) {
+                ctx.fillRect(i - (frames % 25), canvas.height - 35, 12, 8);
+            }
+            
+            // Grass details
+            ctx.strokeStyle = 'rgba(76, 175, 80, 0.6)';
+            ctx.lineWidth = 1.5;
+            for (let i = 0; i < canvas.width; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(i - (frames % 20), canvas.height - 50);
+                ctx.lineTo(i - (frames % 20) + 3, canvas.height - 46);
+                ctx.stroke();
+            }
+        }
+
+        function drawStartScreen() {
+            // Don't show start screen - game starts immediately
+        }
+
+        function drawGameOver() {
+            // Dark overlay
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Game Over title with glow effect
+            ctx.shadowColor = 'rgba(255, 99, 71, 0.7)';
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = '#FF6347';
+            ctx.font = 'bold 56px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 100);
+            ctx.shadowColor = 'transparent';
+            
+            // Stats container
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(canvas.width / 2 - 140, canvas.height / 2 - 40, 280, 120);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(canvas.width / 2 - 140, canvas.height / 2 - 40, 280, 120);
+            
+            // Stats text
+            ctx.fillStyle = '#fff';
+            ctx.font = '26px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Level: ${level}`, canvas.width / 2, canvas.height / 2 - 10);
+            ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 25);
+            ctx.fillText(`Best: ${highScore}`, canvas.width / 2, canvas.height / 2 + 60);
+            
+            // Play again button
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.8)';
+            ctx.fillRect(canvas.width / 2 - 130, canvas.height / 2 + 100, 260, 50);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(canvas.width / 2 - 130, canvas.height / 2 + 100, 260, 50);
+            
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 22px Segoe UI';
+            ctx.fillText('Press ↑ or Click to Play Again', canvas.width / 2, canvas.height / 2 + 132);
+        }
+
+        function endGame() {
+            gameState = 'gameover';
+            
+            // Update high score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('flappyHighScore', highScore);
+                highScoreElement.textContent = `Best: ${highScore}`;
+            }
+            
+            // Update highest level
+            if (level > highestLevel) {
+                highestLevel = level;
+                localStorage.setItem('flappyHighestLevel', highestLevel);
+            }
+        }
+
+        function resetGame() {
+            score = 0;
+            level = 1;
+            frames = 0;
+            pipes = [];
+            bird.reset();
+            scoreElement.textContent = 'Score: 0';
+            levelElement.textContent = 'Level: 1';
+            updateDifficulty();
+            gameState = 'playing';
+        }
+
+        function gameLoop() {
+            frames++;
+            
+            drawBackground();
+            
+            if (gameState === 'start') {
+                drawStartScreen();
+                bird.draw();
+            } else if (gameState === 'playing') {
+                bird.update();
+                bird.draw();
+                updatePipes();
+                pipes.forEach(pipe => drawPipe(pipe));
+            } else if (gameState === 'gameover') {
+                pipes.forEach(pipe => drawPipe(pipe));
+                bird.draw();
+                drawGameOver();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Event listeners
+        canvas.addEventListener('click', () => {
+            if (gameState === 'gameover') {
+                resetGame();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                if (gameState === 'start') {
+                    gameState = 'playing';
+                } else if (gameState === 'playing') {
+                    bird.flap();
+                } else if (gameState === 'gameover') {
+                    resetGame();
+                }
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                if (gameState === 'playing') {
+                    bird.dropDown();
+                }
+            }
+        });
+
+        // Start the game
+        updateDifficulty();
+        gameLoop();
+    </script>
+</body>
+</html>
