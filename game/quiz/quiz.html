@@ -3,9 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Accesco Ultimate Quiz</title>
+    <style>
+        :root {
+            --bg-color: #fff2eb;
+            --card-bg: #ffffff;
+            --primary-accent: #ff8c42;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --info-bg: #e9f5ff;
+            --info-text: #0056b3;
+            --text-main: #333;
+            --logo-bg: #fff2eb; /* Requested Yellow Background */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- Responsive Logo Styles --- */
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--logo-bg);
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .top-logo {
+            max-width: 120px;
+            height: auto;
+            display: block;
+        }
+
+        /* --- Quiz Container --- */
+        .quiz-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px; /* Space for absolute logo on desktop */
+        }
+
+        #progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            height: 100%;
+            background: var(--primary-accent);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        h2 { margin-bottom: 20px; font-size: 1.3rem; color: #222; line-height: 1.4; }
+
+        .options-container {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #f0f0f0;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            border-color: var(--primary-accent);
+            background-color: #fffaf7;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct { background-color: #d4edda !important; border-color: var(--success-color) !important; color: #155724; }
+        .option-btn.wrong { background-color: #f8d7da !important; border-color: var(--error-color) !important; color: #721c24; }
+        .option-btn.disabled { cursor: default; }
+
+        /* --- Feedback Box --- */
+        .feedback-box {
+            background-color: var(--info-bg);
+            color: var(--text-main);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--info-text);
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .feedback-header { font-weight: bold; margin-bottom: 8px; display: block; color: var(--info-text); }
+
+        /* --- Buttons --- */
+        #next-btn, #restart-btn {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 4px 15px rgba(255, 140, 66, 0.3);
+        }
+
+        /* --- Celebration Animation --- */
+        #celebration-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #celebration-popup.active { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .celebrate-text { font-size: 1.6rem; color: var(--success-color); font-weight: bold; }
+
+        .sparkles { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; display: none; }
+        .sparkles.active { display: block; }
+        .sparkle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: sparkleAnim 1s ease-out forwards; }
+        
+        @keyframes sparkleAnim {
+            0% { transform: translate(0, 0) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5); opacity: 0; }
+        }
+
+        /* --- Responsive Tweak --- */
+        @media (max-width: 600px) {
+            body { justify-content: flex-start; padding-top: 40px; }
+            .logo-container { position: relative; top: 0; left: 0; margin-bottom: 20px; transform: scale(0.9); }
+            .quiz-container { margin-top: 0; padding: 20px; width: 95%; }
+            h2 { font-size: 1.15rem; }
+            .option-btn { padding: 12px; font-size: 0.95rem; }
+        }
+
+        .result-screen { display: none; }
+        .score-text { font-size: 3rem; font-weight: bold; color: var(--primary-accent); margin: 15px 0; }
+    </style>
 </head>
 <body>
-    <h1>quiz</h1>
+
+<div class="logo-container">
+    <img src="../../images/accesco_original.png" alt="Accesco Logo" class="top-logo">
+</div>
+
+<div class="quiz-container" id="quiz-box">
+    <div id="celebration-popup"><div class="celebrate-text">Correct! 🎉</div></div>
+    <div class="sparkles" id="sparkles-box"></div>
+
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    
+    <div id="game-content">
+        <p id="q-count" style="color: #888; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Question 1 / 35</p>
+        <h2 id="question-text">Preparing your quiz...</h2>
+        
+        <div class="options-container" id="options-box"></div>
+
+        <div id="feedback-box" class="feedback-box">
+            <span class="feedback-header" id="correct-answer-display"></span>
+            <p id="feedback-text" style="margin: 0;"></p>
+        </div>
+
+        <button id="next-btn">Next Question</button>
+    </div>
+
+    <div class="result-screen" id="result-box">
+        <h1>Quiz Finished!</h1>
+        <p>You scored:</p>
+        <p class="score-text" id="final-score">0 / 35</p>
+        <p id="result-message" style="margin-bottom: 25px; font-weight: 500;"></p>
+        <button id="restart-btn" onclick="location.reload()" style="display: inline-block;">Play Again</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "What does 'e-commerce' stand for?", a: ["Electronic Commerce", "Easy Commerce", "Everyday Commerce", "Engine Commerce"], correct: 0, details: "E-commerce is the trading of goods and services over the internet." },
+        { q: "Which country has the highest population in the world?", a: ["China", "India", "USA", "Russia"], correct: 1, details: "India is currently the most populous country in the world." },
+        { q: "What is the capital of India?", a: ["Mumbai", "Kolkata", "New Delhi", "Chennai"], correct: 2, details: "New Delhi has been the capital of India since 1911." },
+        { q: "Which app category does Accesco Living belong to?", a: ["Social Media", "Gaming", "E-commerce", "Education"], correct: 2, details: "Accesco Living provides a platform for shopping and lifestyle services." },
+        { q: "What does GPS stand for?", a: ["Global Positioning System", "General Process System", "Global Path Source", "Ground Point System"], correct: 0, details: "GPS uses satellites to provide location and time information anywhere on Earth." },
+        { q: "Which gas do plants absorb from the atmosphere?", a: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], correct: 2, details: "Plants use CO2 for photosynthesis to produce their own food." },
+        { q: "What is the full form of UPI?", a: ["Universal Payment Interface", "Unified Payments Interface", "United Portal India", "User Payment Info"], correct: 1, details: "UPI is a real-time payment system developed by NPCI in India." },
+        { q: "Which planet is known as the Red Planet?", a: ["Venus", "Mars", "Jupiter", "Saturn"], correct: 1, details: "Mars appears red due to the presence of iron oxide (rust) on its surface." },
+        { q: "What does 'startup' usually mean?", a: ["A multi-national bank", "A newly established business", "An old government agency", "A large factory"], correct: 1, details: "Startups are young companies founded to develop unique products or services." },
+        { q: "Which Indian company launched UPI?", a: ["RBI", "NPCI", "SBI", "HDFC"], correct: 1, details: "NPCI (National Payments Corporation of India) manages retail payments in India." },
+        { q: "What is the boiling point of water in Celsius?", a: ["50°C", "100°C", "150°C", "200°C"], correct: 1, details: "At standard sea level, water boils exactly at 100°C." },
+        { q: "Which is the fastest land animal?", a: ["Lion", "Horse", "Cheetah", "Tiger"], correct: 2, details: "The Cheetah can reach speeds of up to 120 km/h in short bursts." },
+        { q: "What does 'AI' stand for?", a: ["Actual Intelligence", "Artificial Intelligence", "Automated Info", "Advanced Internet"], correct: 1, details: "AI is the simulation of human intelligence by machines and computers." },
+        { q: "Which festival is known as the festival of lights in India?", a: ["Holi", "Eid", "Diwali", "Christmas"], correct: 2, details: "Diwali is celebrated with lamps and candles to symbolize light over darkness." },
+        { q: "Which device is mainly used to make online payments?", a: ["Calculator", "Smartphone", "Radio", "Television"], correct: 1, details: "Smartphones are the primary tool for mobile banking and UPI apps." },
+        { q: "What does 'app' stand for in mobile technology?", a: ["Applied", "Application", "Apparatus", "Approval"], correct: 1, details: "Apps are software programs designed for a specific purpose on mobile devices." },
+        { q: "Which operating system is developed by Google?", a: ["Windows", "iOS", "Android", "Linux"], correct: 2, details: "Android is the world's most popular mobile operating system, owned by Google." },
+        { q: "What does 'OTP' mean?", a: ["One-Time Password", "Open Text Page", "Online Time Portal", "Over The Phone"], correct: 0, details: "OTPs add a layer of security by being valid for only one session or transaction." },
+        { q: "Which company owns Instagram?", a: ["Google", "Meta", "Apple", "Microsoft"], correct: 1, details: "Meta (formerly Facebook) acquired Instagram in 2012." },
+        { q: "What is cloud storage used for?", a: ["Fixing weather", "Saving data online", "Printing papers", "Cleaning computers"], correct: 1, details: "Cloud storage lets you store and sync files across the internet instead of local drives." },
+        { q: "What does 'Wi-Fi' allow you to do?", a: ["Cook food", "Connect to internet wirelessly", "Watch TV without power", "Charge your phone"], correct: 1, details: "Wi-Fi uses radio waves to provide high-speed wireless internet connections." },
+        { q: "Which device is required to scan a QR code?", a: ["Microphone", "Camera", "Speaker", "Printer"], correct: 1, details: "Cameras on smartphones are used to read the data embedded in QR codes." },
+        { q: "What does 'cashless transaction' mean?", a: ["Free items", "Payment using digital methods", "Giving gold", "No payment at all"], correct: 1, details: "It refers to any payment made without physical coins or paper money." },
+        { q: "Which technology is used for online food delivery tracking?", a: ["Bluetooth", "NFC", "GPS", "Infrared"], correct: 2, details: "GPS allows apps to show the real-time location of the delivery person." },
+        { q: "What is the main purpose of a super app?", a: ["Only chat", "Offering multiple services in one", "Playing one game", "Editing photos only"], correct: 1, details: "Super apps like WeChat or Grab combine shopping, payments, and messaging in one place." },
+        { q: "Which meal is usually called the most important of the day?", a: ["Lunch", "Dinner", "Breakfast", "Snacks"], correct: 2, details: "Breakfast replenishes your energy and glucose levels after an overnight fast." },
+        { q: "What does 'home delivery' mean?", a: ["Buying a house", "Items delivered to your doorstep", "Building a home", "Visiting a shop"], correct: 1, details: "It is the delivery of items directly to a customer's residence." },
+        { q: "Which food category is most ordered online?", a: ["Raw vegetables", "Fast Food/Biryani", "Frozen Meat", "Salt and Sugar"], correct: 1, details: "Ready-to-eat meals like Biryani are globally the most popular online food orders." },
+        { q: "What does 'healthy lifestyle' include?", a: ["Eating only junk", "Exercise and balanced diet", "Sleeping all day", "No water intake"], correct: 1, details: "A healthy lifestyle balances physical activity, nutrition, and mental health." },
+        { q: "What does 'organic food' mean?", a: ["Food grown without chemicals", "Food made in a factory", "Plastic-based food", "Very spicy food"], correct: 0, details: "Organic food is produced without synthetic fertilizers or pesticides." },
+        { q: "Which transport is best for short city travel?", a: ["Aeroplane", "Bicycle/Scooter", "Ship", "Train"], correct: 1, details: "Bicycles and scooters are efficient for short distances and reduce city traffic." },
+        { q: "What does 'on-demand service' mean?", a: ["Service provided when requested", "Service that takes 1 year", "Free service forever", "Government-only service"], correct: 0, details: "These services, like Uber, are provided immediately upon user request." },
+        { q: "Why is time management important?", a: ["To waste time", "To increase productivity", "To sleep more", "To avoid work"], correct: 1, details: "Managing time helps you achieve goals faster and reduces stress." },
+        { q: "What does 'eco-friendly' mean?", a: ["Harmful to nature", "Not harmful to the environment", "Very expensive", "Electronic only"], correct: 1, details: "Eco-friendly products or practices are designed to minimize environmental damage." },
+        { q: "Which habit helps save money daily?", a: ["Frequent shopping", "Budgeting and tracking", "Eating out every day", "Leaving lights on"], correct: 1, details: "Tracking your expenses helps you identify and cut unnecessary spending." }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let quizLocked = false;
+
+    const questionText = document.getElementById("question-text");
+    const optionsBox = document.getElementById("options-box");
+    const nextBtn = document.getElementById("next-btn");
+    const qCount = document.getElementById("q-count");
+    const progressFill = document.getElementById("progress-fill");
+    const feedbackBox = document.getElementById("feedback-box");
+    const feedbackText = document.getElementById("feedback-text");
+    const correctAnswerDisplay = document.getElementById("correct-answer-display");
+    const sparklesBox = document.getElementById("sparkles-box");
+
+    function loadQuestion() {
+        quizLocked = false;
+        feedbackBox.style.display = "none";
+        nextBtn.style.display = "none";
+        
+        const currentQ = questions[currentQuestionIndex];
+        questionText.innerText = currentQ.q;
+        optionsBox.innerHTML = "";
+        
+        qCount.innerText = `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+        progressFill.style.width = `${((currentQuestionIndex) / questions.length) * 100}%`;
+
+        currentQ.a.forEach((option, index) => {
+            const btn = document.createElement("button");
+            btn.innerText = option;
+            btn.classList.add("option-btn");
+            btn.onclick = () => selectAnswer(index, btn);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    function createSparkles() {
+        sparklesBox.innerHTML = '';
+        const colors = ['#FFD700', '#FF5733', '#33FF57', '#3357FF', '#FF33A8'];
+        for (let i = 0; i < 15; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            s.style.left = '50%';
+            s.style.top = '50%';
+            s.style.setProperty('--tx', `${(Math.random() - 0.5) * 300}px`);
+            s.style.setProperty('--ty', `${(Math.random() - 0.5) * 300}px`);
+            sparklesBox.appendChild(s);
+        }
+    }
+
+    function selectAnswer(index, btn) {
+        if (quizLocked) return;
+        quizLocked = true;
+
+        const currentQ = questions[currentQuestionIndex];
+        const allButtons = document.querySelectorAll(".option-btn");
+        
+        allButtons.forEach(b => b.classList.add("disabled"));
+
+        if (index === currentQ.correct) {
+            score++;
+            btn.classList.add("correct");
+            document.getElementById("celebration-popup").classList.add("active");
+            sparklesBox.classList.add("active");
+            createSparkles();
+            setTimeout(() => {
+                document.getElementById("celebration-popup").classList.remove("active");
+                sparklesBox.classList.remove("active");
+            }, 1200);
+        } else {
+            btn.classList.add("wrong");
+            allButtons[currentQ.correct].classList.add("correct");
+            correctAnswerDisplay.innerText = `Correct Answer: ${currentQ.a[currentQ.correct]}`;
+            feedbackText.innerText = currentQ.details;
+            feedbackBox.style.display = "block";
+        }
+        nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    };
+
+    function showResults() {
+        document.getElementById("game-content").style.display = "none";
+        document.getElementById("result-box").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / ${questions.length}`;
+        progressFill.style.width = "100%";
+        
+        const msg = document.getElementById("result-message");
+        const ratio = score / questions.length;
+        if(ratio === 1) msg.innerText = "Perfect! You're a Genius!";
+        else if(ratio >= 0.7) msg.innerText = "Great job! Very impressive.";
+        else msg.innerText = "Well played! Keep practicing.";
+    }
+
+    loadQuestion();
+</script>
 </body>
 </html>

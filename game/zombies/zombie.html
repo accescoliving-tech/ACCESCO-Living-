@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Escape: Zombie Hallway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;700;900&display=swap');
+
+        :root {
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d50bb;
+            --neon-red: #ff4b2b;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #020205;
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .glass {
+            background: rgba(15, 15, 25, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        #ui-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .math-card {
+            pointer-events: auto;
+            background: linear-gradient(145deg, #ffffff 0%, #e0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            transform: scale(0) translateY(50px);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 90%;
+            max-width: 400px;
+            visibility: hidden;
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.9), 0 0 0 10px rgba(79, 70, 229, 0.2);
+        }
+
+        @media (min-width: 640px) {
+            .math-card {
+                padding: 2.5rem;
+                border-radius: 2.5rem;
+            }
+        }
+        
+        .math-card.active {
+            transform: scale(1) translateY(0);
+            visibility: visible;
+        }
+
+        .btn-answer {
+            background: #4f46e5;
+            color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 900;
+            width: 100%;
+            box-shadow: 0 4px 0 #312e81, 0 5px 10px rgba(0,0,0,0.3);
+            position: relative;
+            top: 0;
+        }
+
+        @media (min-width: 640px) {
+            .btn-answer {
+                padding: 1.25rem;
+                font-size: 2rem;
+                box-shadow: 0 6px 0 #312e81, 0 10px 20px rgba(0,0,0,0.3);
+            }
+        }
+
+        .btn-answer:hover {
+            background: #6366f1;
+            top: -2px;
+        }
+
+        .btn-answer:active {
+            top: 4px;
+            box-shadow: 0 2px 0 #312e81;
+        }
+
+        .comic-font {
+            font-family: 'Permanent Marker', cursive;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+        .shake-ui {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        #vignette {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 150%);
+            z-index: 10;
+            transition: background 0.5s ease;
+        }
+
+        .quip-bubble {
+            position: absolute;
+            background: white;
+            color: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-weight: 900;
+            font-size: 14px;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 40;
+            border: 2px solid #1a1a1a;
+            white-space: nowrap;
+        }
+
+        #overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 5, 10, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="vignette"></div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="quip-bubble" class="quip-bubble"></div>
+    
+    <div id="ui-layer">
+        <div class="mt-8 flex flex-col items-center w-full px-4">
+            <div class="w-full max-w-xs h-3 glass rounded-full overflow-hidden p-0.5 border border-white/5">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-600 to-cyan-400 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.8)] transition-all duration-150"></div>
+            </div>
+            <span class="text-[8px] sm:text-[10px] text-indigo-300 font-black uppercase tracking-[0.3em] mt-2 opacity-60">Security Lockdown Inbound</span>
+        </div>
+
+        <div id="math-card" class="math-card">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-indigo-600 font-black text-[10px] sm:text-xs uppercase tracking-widest">Override Required</span>
+                <span class="bg-indigo-100 text-indigo-700 px-2 sm:px-3 py-1 rounded-full text-[8px] sm:text-[10px] font-black">DOOR LOCK #<span id="door-num">1</span></span>
+            </div>
+            <div id="question-text" class="text-4xl sm:text-7xl font-black text-gray-900 mb-6 sm:mb-10 tracking-tight">5 + 3</div>
+            <div id="answers-grid" class="grid grid-cols-2 gap-3 sm:gap-5"></div>
+        </div>
+
+        <div class="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-start gap-2 sm:gap-4">
+            <div class="glass p-2 sm:p-4 rounded-2xl border border-white/10 flex items-center gap-2 sm:gap-4">
+                <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-indigo-500/20 flex items-center justify-center text-lg sm:text-2xl shadow-inner">🏃</div>
+                <div>
+                    <div class="text-[7px] sm:text-[10px] uppercase font-black tracking-widest text-indigo-400/80 leading-none">Escaped</div>
+                    <div id="score-val" class="text-2xl sm:text-4xl font-black italic tracking-tighter leading-none text-white">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="distance-alert" class="absolute bottom-12 px-8 sm:px-12 py-3 sm:py-5 rounded-2xl sm:rounded-3xl bg-red-600/90 text-white font-black hidden shadow-2xl uppercase italic tracking-tighter text-lg sm:text-2xl backdrop-blur-md animate-bounce">
+            CAUGHT IN THE SHADOWS!
+        </div>
+    </div>
+
+    <div id="overlay">
+        <div class="relative mb-6 sm:mb-8">
+            <div class="absolute inset-0 bg-green-500 blur-3xl opacity-20 rounded-full animate-pulse"></div>
+            <span class="text-7xl sm:text-9xl relative">🧟</span>
+        </div>
+        <h1 id="overlay-title" class="text-5xl sm:text-8xl font-black mb-4 tracking-tighter italic comic-font text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 text-center">MATH ESCAPE</h1>
+        <p id="overlay-desc" class="text-sm sm:text-lg mb-8 sm:mb-12 text-gray-400 max-w-sm font-medium leading-relaxed text-center">Solve the sequence to unlock the hallway gates. The horde doesn't wait for calculators.</p>
+        <button id="start-btn" class="group relative bg-white text-black px-10 sm:px-16 py-4 sm:py-6 rounded-2xl sm:rounded-3xl text-xl sm:text-3xl font-black transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.2)]">
+            <span class="relative z-10">START RUNNING</span>
+            <div class="absolute inset-0 bg-indigo-500 rounded-2xl sm:rounded-3xl scale-0 group-hover:scale-100 transition-transform duration-300 opacity-10"></div>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Initialize elements
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const mathCard = document.getElementById('math-card');
+    const questionText = document.getElementById('question-text');
+    const answersGrid = document.getElementById('answers-grid');
+    const scoreVal = document.getElementById('score-val');
+    const startBtn = document.getElementById('start-btn');
+    const overlay = document.getElementById('overlay');
+    const overlayTitle = document.getElementById('overlay-title');
+    const overlayDesc = document.getElementById('overlay-desc');
+    const distanceAlert = document.getElementById('distance-alert');
+    const progressBar = document.getElementById('progress-bar');
+    const quipBubble = document.getElementById('quip-bubble');
+    const vignette = document.getElementById('vignette');
+    const doorNum = document.getElementById('door-num');
+
+    // Quips & Assets
+    const RIGHT_QUIPS = ["Calculated!", "Brain Blast!", "Too easy!", "Next!", "Genius!", "Speed Math!", "Locked & Loaded!"];
+    const WRONG_QUIPS = ["Wait...", "Brain fart!", "Uh oh!", "Math is hard!", "Panic!!", "Carry the what?!"];
+    const DEATH_QUIPS = [
+        "Your brain was a light snack.",
+        "Subtraction is hard when you're being eaten.",
+        "Divided and conquered.",
+        "The zombies win the mathlete trophy.",
+        "0% Brainpower Remaining."
+    ];
+
+    // Game Config
+    let PLAYER_X = 300;
+    let ZOMBIE_START_X = -300;
+    const SCROLL_SPEED = 7;
+    const ZOMBIE_SPEED_BASE = 2.4;
+    const DOOR_INTERVAL = 800;
+
+    // State
+    let state = 'START';
+    let score = 0;
+    let cameraX = 0;
+    let zombieX = ZOMBIE_START_X;
+    let zombieSpeed = ZOMBIE_SPEED_BASE;
+    let currentQuestion = { q: '', a: 0 };
+    let frameCount = 0;
+    let floorY = 0;
+    let doorProgress = 0;
+    let shakeAmount = 0;
+    let particles = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        floorY = canvas.height * 0.75;
+        
+        // Responsive positioning
+        if (canvas.width < 640) {
+            PLAYER_X = canvas.width * 0.6; // More to the right on small screens
+            ZOMBIE_START_X = -canvas.width * 0.5;
+        } else {
+            PLAYER_X = 300;
+            ZOMBIE_START_X = -300;
+        }
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createParticles(x, y, color, count = 10) {
+        for(let i = 0; i < count; i++) {
+            particles.push({
+                x, y,
+                vx: (Math.random() - 0.5) * 10,
+                vy: (Math.random() - 0.5) * 10,
+                life: 1.0,
+                color
+            });
+        }
+    }
+
+    function showQuip(text, x, y) {
+        quipBubble.innerText = text;
+        quipBubble.style.left = x + 'px';
+        quipBubble.style.top = (y - 120) + 'px';
+        quipBubble.style.opacity = '1';
+        quipBubble.style.transform = 'translate(-50%, -100%) scale(1.1)';
+        setTimeout(() => {
+            quipBubble.style.opacity = '0';
+            quipBubble.style.transform = 'translate(-50%, -100%) scale(0.9)';
+        }, 1200);
+    }
+
+    function generateQuestion() {
+        const level = Math.floor(score / 2);
+        let a, b, op, ans;
+        
+        if (level === 0) {
+            a = Math.floor(Math.random() * 9) + 1;
+            b = Math.floor(Math.random() * 9) + 1;
+            op = '+'; ans = a + b;
+        } else if (level === 1) {
+            a = Math.floor(Math.random() * 15) + 5;
+            b = Math.floor(Math.random() * 12) + 1;
+            op = '-'; ans = a - b;
+        } else {
+            const r = Math.random();
+            if (r < 0.4) {
+                a = Math.floor(Math.random() * 10) + 2;
+                b = Math.floor(Math.random() * 8) + 2;
+                op = '×'; ans = a * b;
+            } else {
+                a = Math.floor(Math.random() * 40) + 10;
+                b = Math.floor(Math.random() * 40) + 10;
+                op = '+'; ans = a + b;
+            }
+        }
+
+        const choices = [ans];
+        while (choices.length < 4) {
+            let offset = Math.floor(Math.random() * 15) - 7;
+            if (offset === 0) offset = 5;
+            const wrong = ans + offset;
+            if (wrong >= 0 && !choices.includes(wrong)) choices.push(wrong);
+        }
+        choices.sort(() => Math.random() - 0.5);
+        return { q: `${a} ${op} ${b}`, a: ans, choices };
+    }
+
+    function showMath() {
+        state = 'MATH';
+        currentQuestion = generateQuestion();
+        questionText.innerText = currentQuestion.q;
+        doorNum.innerText = score + 1;
+        answersGrid.innerHTML = '';
+        currentQuestion.choices.forEach(choice => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-answer';
+            btn.innerText = choice;
+            btn.onclick = (e) => { e.stopPropagation(); checkAnswer(choice); };
+            answersGrid.appendChild(btn);
+        });
+        mathCard.classList.remove('shake-ui');
+        mathCard.classList.add('active');
+    }
+
+    function checkAnswer(choice) {
+        if (choice === currentQuestion.a) {
+            score++;
+            scoreVal.innerText = score;
+            mathCard.classList.remove('active');
+            state = 'RUNNING';
+            doorProgress = 0;
+            zombieX -= 250;
+            if (zombieX < ZOMBIE_START_X) zombieX = ZOMBIE_START_X;
+            zombieSpeed += 0.2;
+            createParticles(PLAYER_X, floorY - 50, '#4f46e5', 20);
+            showQuip(RIGHT_QUIPS[Math.floor(Math.random()*RIGHT_QUIPS.length)], PLAYER_X, floorY);
+        } else {
+            mathCard.classList.remove('shake-ui');
+            void mathCard.offsetWidth;
+            mathCard.classList.add('shake-ui');
+            zombieX += 100;
+            shakeAmount = 20;
+            createParticles(PLAYER_X, floorY - 50, '#ef4444', 15);
+            showQuip(WRONG_QUIPS[Math.floor(Math.random()*WRONG_QUIPS.length)], PLAYER_X, floorY);
+        }
+    }
+
+    function drawStickman(x, y, frame, isRunning) {
+        const scale = canvas.width < 640 ? 0.8 : 1;
+        const jitter = state === 'MATH' ? Math.sin(frame * 0.5) * 4 : 0;
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 7 * scale;
+        ctx.lineCap = 'round';
+        ctx.shadowBlur = 10 * scale; 
+        ctx.shadowColor = 'rgba(255,255,255,0.5)';
+
+        // Head & Body
+        ctx.beginPath(); ctx.arc(x + jitter, y - (90 * scale), 16 * scale, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x + jitter, y - (74 * scale)); ctx.lineTo(x + jitter, y - (35 * scale)); ctx.stroke();
+
+        if (isRunning) {
+            const lMove = Math.sin(frame * 0.3) * (35 * scale);
+            const aMove = Math.cos(frame * 0.3) * (25 * scale);
+            ctx.beginPath(); ctx.moveTo(x, y - (35 * scale)); ctx.lineTo(x + lMove, y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x, y - (35 * scale)); ctx.lineTo(x - lMove, y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x, y - (65 * scale)); ctx.lineTo(x + (25 * scale) + aMove, y - (40 * scale)); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x, y - (65 * scale)); ctx.lineTo(x - (20 * scale) - aMove, y - (40 * scale)); ctx.stroke();
+            
+            if(frame % 5 === 0) particles.push({ x: x - (10 * scale), y: y - Math.random() * 5, vx: -2, vy: -Math.random(), life: 0.5, color: 'rgba(255,255,255,0.3)' });
+        } else {
+            ctx.beginPath(); ctx.moveTo(x + jitter, y - (35 * scale)); ctx.lineTo(x - (15 * scale) + jitter, y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x + jitter, y - (35 * scale)); ctx.lineTo(x + (15 * scale) + jitter, y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(x + jitter, y - (65 * scale)); ctx.lineTo(x + (40 * scale) + jitter, y - (65 * scale)); ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+    }
+
+    function drawZombie(x, y, frame, offset, scaleMult = 1) {
+        const baseScale = canvas.width < 640 ? 0.7 : 1;
+        const finalScale = baseScale * scaleMult;
+        
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(finalScale, finalScale);
+        const f = Math.sin((frame + offset) * 0.12) * 10;
+        ctx.font = '45px serif';
+        ctx.textAlign = 'center';
+        ctx.shadowBlur = 15; ctx.shadowColor = '#4ade80';
+        ctx.fillText('🧟', 0, -90 + f);
+        
+        ctx.strokeStyle = '#4ade80';
+        ctx.lineWidth = 6;
+        ctx.beginPath(); ctx.moveTo(0, -75 + f); ctx.lineTo(0, -35 + f); ctx.stroke();
+        const l = Math.sin((frame + offset) * 0.3) * 25;
+        ctx.beginPath(); ctx.moveTo(0, -35 + f); ctx.lineTo(l, 0); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -35 + f); ctx.lineTo(-l, 0); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, -70 + f); ctx.lineTo(45, -80 + Math.sin(frame * 0.2) * 15); ctx.stroke();
+        ctx.restore();
+        ctx.shadowBlur = 0;
+    }
+
+    function drawDoor(x) {
+        const scale = canvas.width < 640 ? 0.7 : 1;
+        const w = 160 * scale, h = 300 * scale, top = floorY - h;
+        const colorMain = state === 'MATH' ? '#ef4444' : '#4f46e5';
+        
+        // Heavy Metal Outer Frame
+        ctx.fillStyle = '#111';
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 12 * scale;
+        ctx.fillRect(x - w/2 - (10 * scale), top - (10 * scale), w + (20 * scale), h + (20 * scale));
+        ctx.strokeRect(x - w/2 - (10 * scale), top - (10 * scale), w + (20 * scale), h + (20 * scale));
+
+        // Rivets on frame
+        ctx.fillStyle = '#444';
+        for(let i = 0; i < 6; i++) {
+            ctx.beginPath(); ctx.arc(x - w/2 - (5 * scale), top + (h/5)*i, 3 * scale, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x + w/2 + (5 * scale), top + (h/5)*i, 3 * scale, 0, Math.PI*2); ctx.fill();
+        }
+
+        // Inner Door Surface
+        const grad = ctx.createLinearGradient(x - w/2, top, x + w/2, floorY);
+        grad.addColorStop(0, '#1a1a1a');
+        grad.addColorStop(0.5, '#2a2a2a');
+        grad.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = grad;
+        ctx.fillRect(x - w/2, top, w, h);
+
+        // Warning Stripes (Hazard Pattern)
+        ctx.save();
+        ctx.beginPath(); ctx.rect(x - w/2, top, w, 20 * scale); ctx.clip();
+        ctx.fillStyle = '#ffd700';
+        ctx.fillRect(x - w/2, top, w, 20 * scale);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 10 * scale;
+        for(let i = -10; i < 20; i++) {
+            ctx.beginPath(); ctx.moveTo(x - w/2 + i*(20 * scale), top); ctx.lineTo(x - w/2 + i*(20 * scale) + (20 * scale), top + (20 * scale)); ctx.stroke();
+        }
+        ctx.restore();
+
+        // Neon Trim
+        ctx.strokeStyle = colorMain;
+        ctx.lineWidth = 4 * scale;
+        ctx.shadowBlur = 15 * scale;
+        ctx.shadowColor = colorMain;
+        ctx.strokeRect(x - w/2 + (5 * scale), top + (25 * scale), w - (10 * scale), h - (35 * scale));
+        ctx.shadowBlur = 0;
+
+        // Status Display
+        ctx.fillStyle = '#000';
+        ctx.fillRect(x - (40 * scale), top + (40 * scale), 80 * scale, 25 * scale);
+        ctx.fillStyle = state === 'MATH' ? '#ef4444' : '#10b981';
+        ctx.font = `bold ${12 * scale}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillText(state === 'MATH' ? 'LOCKED' : 'Bypassed', x, top + (57 * scale));
+
+        // Laser Grid Gate
+        if (state === 'MATH') {
+            const flicker = Math.sin(frameCount * 1.2) * 0.2 + 0.8;
+            ctx.strokeStyle = `rgba(239, 68, 68, ${0.5 * flicker})`;
+            ctx.lineWidth = 5 * scale;
+            ctx.shadowBlur = 10 * scale * flicker;
+            ctx.shadowColor = '#ef4444';
+            
+            for(let i = 1; i < 12; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x - w/2 + (8 * scale), top + (30 * scale) + ((h - (40 * scale))/12)*i);
+                ctx.lineTo(x + w/2 - (8 * scale), top + (30 * scale) + ((h - (40 * scale))/12)*i);
+                ctx.stroke();
+            }
+            ctx.shadowBlur = 0;
+        }
+
+        // Industrial Gasket / Side Panels
+        ctx.fillStyle = '#111';
+        ctx.fillRect(x - w/2 - (2 * scale), top + (20 * scale), 4 * scale, h - (20 * scale));
+        ctx.fillRect(x + w/2 - (2 * scale), top + (20 * scale), 4 * scale, h - (20 * scale));
+    }
+
+    function gameLoop() {
+        if (shakeAmount > 0) {
+            ctx.save();
+            ctx.translate((Math.random()-0.5)*shakeAmount, (Math.random()-0.5)*shakeAmount);
+            shakeAmount *= 0.92;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // --- Spooky Background ---
+        ctx.fillStyle = '#050508';
+        ctx.fillRect(0, 0, canvas.width, floorY);
+
+        const layers = [
+            { speed: 0.1, color: '#0a0a0f', count: 12, spacing: 500 },
+            { speed: 0.4, color: '#111116', count: 15, spacing: 350 },
+            { speed: 1.0, color: '#1a1a20', count: 18, spacing: 250 }
+        ];
+
+        layers.forEach((l, idx) => {
+            ctx.strokeStyle = l.color;
+            ctx.lineWidth = 2;
+            for(let i = -2; i < l.count; i++) {
+                let lx = (i * l.spacing - ((cameraX * l.speed) % l.spacing));
+                ctx.beginPath(); ctx.moveTo(lx, floorY); ctx.lineTo(lx - (l.spacing * 1.2), 0); ctx.stroke();
+                
+                if (idx === 2 && i % 3 === 0) {
+                    ctx.strokeStyle = '#050505';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(lx - 50, 0);
+                    ctx.bezierCurveTo(lx - 40, 100, lx - 70, 150, lx - 60, 250);
+                    ctx.stroke();
+                }
+
+                if (idx === 1 && i % 4 === 0) {
+                    ctx.fillStyle = 'rgba(40, 0, 0, 0.3)';
+                    ctx.beginPath();
+                    ctx.ellipse(lx - 100, floorY - 50, 40, 80, Math.PI/4, 0, Math.PI*2);
+                    ctx.fill();
+                }
+            }
+        });
+
+        // Floor
+        ctx.fillStyle = '#050505'; 
+        ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
+        
+        for(let i = 0; i < 5; i++) {
+            let sx = (i * 600 - (cameraX % 600));
+            ctx.fillStyle = 'rgba(60, 0, 0, 0.2)';
+            ctx.beginPath(); ctx.ellipse(sx + 100, floorY + 40, 80, 30, 0, 0, Math.PI*2); ctx.fill();
+        }
+
+        const fogGrad = ctx.createLinearGradient(0, floorY, 0, canvas.height);
+        fogGrad.addColorStop(0, 'rgba(20, 20, 30, 0.4)');
+        fogGrad.addColorStop(0.3, 'rgba(10, 10, 15, 0.2)');
+        fogGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = fogGrad;
+        ctx.fillRect(0, floorY, canvas.width, 100);
+
+        ctx.strokeStyle = '#11111a'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(0, floorY); ctx.lineTo(canvas.width, floorY); ctx.stroke();
+
+        // Game Update Logic
+        if (state === 'RUNNING' || state === 'MATH') {
+            frameCount++;
+            if (state === 'RUNNING') {
+                cameraX += SCROLL_SPEED;
+                doorProgress += SCROLL_SPEED;
+                if (doorProgress >= DOOR_INTERVAL) showMath();
+            }
+
+            progressBar.style.width = Math.min(100, (doorProgress / DOOR_INTERVAL) * 100) + '%';
+            zombieX += zombieSpeed;
+            if (state !== 'MATH') zombieX -= SCROLL_SPEED;
+
+            const dist = PLAYER_X - zombieX;
+            const darkLevel = Math.max(0, 1 - (dist / 1000));
+            vignette.style.background = `radial-gradient(circle, transparent ${35 - darkLevel*25}%, rgba(0,0,0,${0.7 + darkLevel*0.3}) 140%)`;
+
+            if (dist < 300) distanceAlert.classList.remove('hidden');
+            else distanceAlert.classList.add('hidden');
+
+            if (zombieX >= PLAYER_X - 25) gameOver();
+
+            const doorDrawX = state === 'MATH' ? (PLAYER_X + (canvas.width < 640 ? 80 : 150)) : ((DOOR_INTERVAL - doorProgress) + PLAYER_X + (canvas.width < 640 ? 80 : 150));
+            drawDoor(doorDrawX);
+
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.life);
+                ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+            });
+            ctx.globalAlpha = 1.0;
+
+            drawStickman(PLAYER_X, floorY, frameCount, state === 'RUNNING');
+            for(let i = 0; i < 7; i++) {
+                drawZombie(zombieX - (i * 70), floorY, frameCount, i * 30, 0.8 + (i * 0.15));
+            }
+        } else if (state === 'START') {
+            frameCount++;
+            drawStickman(PLAYER_X, floorY, frameCount, false);
+        }
+
+        if (shakeAmount > 0) ctx.restore();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function gameOver() {
+        state = 'GAMEOVER';
+        overlay.classList.remove('hidden');
+        overlayTitle.innerText = "OVERRUN!";
+        overlayTitle.className = "text-5xl sm:text-8xl font-black mb-4 tracking-tighter text-red-600 comic-font italic";
+        overlayDesc.innerHTML = `<div class="bg-red-950/30 p-4 sm:p-6 rounded-3xl border border-red-500/20 mb-6">
+            <span class="text-white text-xl sm:text-3xl font-black">${score} GATES OPENED</span><br>
+            <p class="text-gray-400 mt-2 sm:mt-4 italic text-sm sm:text-base">"${DEATH_QUIPS[Math.floor(Math.random()*DEATH_QUIPS.length)]}"</p>
+        </div>`;
+        startBtn.innerText = "RETRY MISSION";
+    }
+
+    function start() {
+        score = 0;
+        if(scoreVal) scoreVal.innerText = score;
+        zombieX = ZOMBIE_START_X;
+        zombieSpeed = ZOMBIE_SPEED_BASE;
+        doorProgress = 0;
+        cameraX = 0;
+        state = 'RUNNING';
+        overlay.classList.add('hidden');
+        particles = [];
+        mathCard.classList.remove('active');
+    }
+
+    window.onload = () => {
+        resize();
+        startBtn.onclick = (e) => {
+            e.preventDefault();
+            start();
+        };
+        gameLoop();
+    };
+</script>
+
+</body>
+</html>

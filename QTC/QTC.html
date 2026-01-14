@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Access internal QTC training videos and workflow sessions for Accesco Living team members.">
+    <title>ACCESCO LIVING | QTC Video Hub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --brand-bg: #fff2eb;
+            --brand-white: #ffffff;
+            --brand-dark: #050505;
+            --brand-accent: #1e293b;
+            --brand-border: #e8ded8;
+            --muted: #6b7280;
+            --accent-gold: #f4b400;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--brand-bg); 
+            color: var(--brand-dark);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .glass-nav { 
+            background: rgba(255, 242, 235, 0.8); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid var(--brand-border); 
+        }
+
+        .video-card {
+            background: var(--brand-white);
+            border: 1px solid var(--brand-border);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.08);
+            border-color: #d1c6be;
+        }
+
+        .video-thumbnail {
+            aspect-ratio: 16/9;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .hero-banner {
+            background: var(--brand-dark);
+            border-radius: 40px;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ACCESSIBILITY FIX: Contrast ratio - ensure text is readable over overlay */
+        .hero-banner video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3; /* Slightly darker for better text contrast */
+        }
+
+        .btn-pill {
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .tag {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            background: var(--brand-bg);
+            border: 1px solid var(--brand-border);
+        }
+
+        footer { background: #050505; padding: 80px 24px 40px; color: #ffffff; }
+        .footer-grid { max-width: 1280px; margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; }
+        .social-links { display: flex; gap: 12px; margin-top: 20px; }
+        .social-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background-color: rgba(255,255,255,0.05); color: #ffffff; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
+        .app-buttons { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .app-btn-img { height: 40px; width: auto; border-radius: 6px; }
+        footer a { color: #9ca3af; }
+        
+        @media(max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+        @media(max-width: 640px) { .footer-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="#" class="flex items-center gap-3 group">
+                    <img src="assets/logo.png" alt="Accesco Living Logo" fetchpriority="high" class="h-10 w-auto" onerror="this.src='../images/accesco_original.png'">
+                    <span class="font-poppins font-900 text-xl tracking-tighter text-slate-900 uppercase">ACCESCO LIVING</span>
+                </a>
+            </div>
+
+            <div class="hidden md:flex flex-1 max-w-md mx-12">
+                <div class="relative w-full">
+                    <i class="ri-search-2-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" aria-label="Search training videos" placeholder="Search QTC training..." class="w-full bg-white border border-slate-200 rounded-full py-2.5 pl-12 pr-4 text-sm focus:ring-2 focus:ring-slate-200 transition-all outline-none">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <section class="hero-banner min-h-[440px] flex items-center p-8 lg:p-16 mb-16 relative shadow-2xl">
+            <video autoplay muted loop playsinline poster="assets/hero_poster.jpg">
+                <source src="assets/sample.mp4" type="video/mp4">
+            </video>
+            <div class="relative z-10 max-w-xl">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="w-3 h-3 bg-white rounded-full animate-pulse"></span>
+                    <span class="text-xs font-900 tracking-[3px] uppercase opacity-70 text-white">Featured Session</span>
+                </div>
+                <h1 class="font-poppins text-5xl lg:text-6xl font-900 leading-[1.05] mb-6">Turning your expectations into everyday convenience.</h1>
+            </div>
+        </section>
+
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12 border-b border-slate-200 pb-8">
+            <div>
+                <h2 class="font-poppins text-3xl font-900 tracking-tight mb-2">Video Library</h2>
+                <p class="text-slate-500 text-sm font-medium">Internal QTC resources and workflow sessions.</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="filterVideos('All')" class="filter-btn bg-black text-white text-[10px] font-900 tracking-widest uppercase px-5 py-2 rounded-full transition-all">All</button>
+                <button onclick="filterVideos('About')" class="filter-btn bg-white border border-slate-200 text-[10px] font-900 tracking-widest uppercase px-5 py-2 rounded-full hover:bg-slate-50 transition-all">About</button>
+                <button onclick="filterVideos('Riders')" class="filter-btn bg-white border border-slate-200 text-[10px] font-900 tracking-widest uppercase px-5 py-2 rounded-full hover:bg-slate-50 transition-all">Riders</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="videoGrid"></div>
+    </main>
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-logo-box">
+                <div style="display:flex; gap:16px; align-items:center">
+                    <div class="logo-wrapper" style="width:80px; height:80px;">
+                        <img src="../images/accesco_white.png" alt="Accesco White Logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <div class="font-poppins font-900 text-xl tracking-tight">ACCESCO LIVING</div>
+                        <p class="text-slate-500 text-xs mt-1 max-w-[200px]">Empowering digital excellence through innovation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-poppins font-800 text-xs tracking-widest uppercase mb-6">Company</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="../index.html">About Us</a></li>
+                    <li><a href="https://www.linkedin.com/company/acceso-living/">Careers</a></li>
+                    <li><a href="../partner.html">Partner With Us</a></li>
+                    <li><a href="../terms.html">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-poppins font-800 text-xs tracking-widest uppercase mb-6">Resources</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="../certificates/certificates.html">Metrics & Certificates</a></li>
+                    <li><a href="QTC.html">QTC Videos</a></li>
+                    <li><a href="../BLOGS_PAGE/blogs.html">Blogs</a></li>
+                    <li><a href="../index.html#contact-form">Help & Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-poppins font-800 text-xs tracking-widest uppercase mb-6">Social Links</h4>
+               <div class="social-links">
+                    <a href="https://www.instagram.com/accescoliving" target="_blank" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com/accesco_living" target="_blank" class="social-icon" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://www.youtube.com/@accescoliving" target="_blank" class="social-icon" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.linkedin.com/company/acceso-living/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.threads.net/@accescoliving" target="_blank" class="social-icon" aria-label="Threads" rel="noopener noreferrer"><i class="ri-threads-line"></i></a>
+                </div>
+
+                <div class="app-buttons">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" class="app-btn-img" alt="Download on App Store">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" class="app-btn-img" alt="Get it on Google Play">
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:60px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); color:#4b5563; font-size:12px; text-align: center; font-weight: 600; letter-spacing: 1px;">
+            © 2026 ACCESCO — ALL RIGHTS RESERVED.
+        </div>
+    </footer>
+
+    <div id="playerModal" class="fixed inset-0 bg-[#050505] z-[200] hidden flex flex-col items-center justify-center p-6">
+        <button onclick="toggleModal('playerModal')" class="absolute top-8 right-8 text-white/40 hover:text-white transition-colors">
+            <i class="ri-close-fill text-4xl"></i>
+        </button>
+        <div class="w-full max-w-5xl aspect-video rounded-3xl overflow-hidden bg-zinc-900 shadow-2xl">
+            <video id="mainPlayer" controls class="w-full h-full">
+                <source src="" type="video/mp4">
+            </video>
+        </div>
+        <div class="mt-8 text-white text-center">
+            <h3 id="playerTitle" class="font-poppins text-3xl font-900 mb-2">Video Title</h3>
+            <p id="playerMeta" class="text-slate-400 text-sm font-bold uppercase tracking-widest">Category • 00:00</p>
+        </div>
+    </div>
+
+    <script>
+        const videoData = [
+            { title: "About US", cat: "About", dur: "00:26", asset: "assets/video_1.mp4", thumb: "assets/thumbnail_1.jpeg" },
+            { title: "Delivery Process Overview", cat: "Riders", dur: "00:25", asset: "assets/video_3.mp4", thumb: "assets/thumbnail_3.jpeg" }
+        ]; 
+
+        let filteredVideos = [...videoData];
+
+        function renderGrid(data = filteredVideos) {
+            const grid = document.getElementById('videoGrid');
+            const videoList = Array.isArray(data) ? data : filteredVideos;
+
+            if (videoList.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-[32px]"><p class="font-poppins text-xl font-800 text-slate-300">No results found</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = videoList.map(v => `
+                <div class="video-card p-4 cursor-pointer" onclick='playVideo(${JSON.stringify(v)})'>
+                    <div class="video-thumbnail relative mb-6">
+                        <img src="${v.thumb}" alt="${v.title} thumbnail" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800'">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-[2px]">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-2xl"><i class="ri-play-fill text-2xl ml-1"></i></div>
+                        </div>
+                        <div class="absolute bottom-4 right-4 bg-black/80 text-white text-[10px] font-bold px-2 py-1 rounded">${v.dur}</div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <span class="tag">${v.cat}</span>
+                        <h3 class="font-poppins text-lg font-800 leading-tight mb-3 mt-3">${v.title}</h3>
+                        <p class="text-xs text-slate-400 font-medium leading-relaxed line-clamp-2">Internal resource session for global operations teams.</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const results = videoData.filter(v => v.title.toLowerCase().includes(query) || v.cat.toLowerCase().includes(query));
+            renderGrid(results);
+        });
+
+        function filterVideos(category) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => {
+                if (btn.innerText === category) {
+                    btn.classList.add('bg-black', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-900');
+                } else {
+                    btn.classList.remove('bg-black', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-900');
+                }
+            });
+            filteredVideos = category === 'All' ? [...videoData] : videoData.filter(v => v.cat === category);
+            renderGrid(filteredVideos);
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            document.body.style.overflow = el.classList.contains('hidden') ? 'auto' : 'hidden';
+            if(id === 'playerModal' && el.classList.contains('hidden')) document.getElementById('mainPlayer').pause();
+        }
+
+        function playVideo(v) {
+            document.getElementById('playerTitle').innerText = v.title;
+            document.getElementById('playerMeta').innerText = `${v.cat} • ${v.dur}`;
+            const player = document.getElementById('mainPlayer');
+            player.src = v.asset;
+            player.load();
+            player.play();
+            toggleModal('playerModal');
+        }
+
+        window.onload = () => renderGrid();
+    </script>
+</body>
+</html>
