@@ -3,12 +3,140 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grokly Market</title>
+<title>Grokly Market | Fresh & Fast</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="./services-grokly-style/style.css">
 <link rel="stylesheet" href="./services-grokly-style/media.css">
+
+<style>
+  :root { 
+    --primary: #27ae60; 
+    --primary-light: #eafaf1;
+    --dark: #1a1a1a; 
+    --gray: #f4f4f4;
+    --text-muted: #717171;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  /* --- Improved Grid Layout --- */
+  .market-feed {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .feed-section { margin-bottom: 40px; }
+  
+  .feed-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Grid instead of horizontal scroll for better visibility */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  /* --- Modern Product Cards --- */
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+  }
+
+  .p-img-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--gray);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .p-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 0.5s ease;
+  }
+
+  .product-card:hover .p-img { scale: 1.1; }
+
+  .p-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .p-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    color: var(--dark);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 2.4em;
+  }
+
+  .p-meta {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-btn {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: none;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .add-btn:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* Success Toast & Processing */
+  .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
+  .success-toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: var(--primary); color: white; padding: 16px 32px;
+    border-radius: 50px; z-index: 3000; display: none;
+    box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+    font-weight: 600; animation: slideUp 0.3s ease-out;
+  }
+  @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+  .order-processing { opacity: 0.5; pointer-events: none; filter: grayscale(0.5); }
+</style>
 </head>
 
 <body>
@@ -20,749 +148,290 @@
         <img src="./images/grokerly_logo.png" alt="Grokly Logo" class="logo">
         <h1 class="brand-name">Grokly</h1>
       </div>
-      
       <div class="location-wrapper">
         <button class="address-btn" id="addressBtn">
           <i class="ri-map-pin-line"></i>
-          <span class="addr-display">Add address</span>
+          <span class="addr-display" id="addrDisplay">Add address</span>
         </button>
       </div>
     </div>
-
     <div class="header-bottom">
       <div class="search-bar">
         <i class="ri-search-line"></i>
         <input type="search" id="searchInput" placeholder="Search groceries...">
       </div>
-      
       <div class="action-icons">
         <button class="icon-btn" id="filterBtn"><i class="ri-equalizer-line"></i></button>
-        
         <button class="icon-btn" id="cartBtn">
           <i class="ri-shopping-cart-line"></i>
           <span class="cart-badge" id="cart-count" style="display:none;">0</span>
         </button>
-        
         <a class="icon-btn" href="login.html"><i class="ri-user-line"></i></a>
       </div>
     </div>
   </div>
 </header>
  
-<div class="category-bar">
+<div class="category-bar" id="categoryBar">
   <div class="category active">All</div>
-  <div class="category">vegetables</div>
+  <div class="category">Vegetables</div>
   <div class="category">Fruits</div>
-  <div class="category">Diary and Bakery</div>
-  <div class="category">oils</div>
-  <div class="category">beverages</div>
+  <div class="category">Dairy and Bakery</div>
+  <div class="category">Oils</div>
+  <div class="category">Beverages</div>
   <div class="category">Grocery</div>
   <div class="category">Snacks</div>
-  <div class="category">Personal care</div>
+  <div class="category">Personal Care</div>
   <div class="category">Frozen</div>
 </div>
 
-<!-- CATEGORY STRIP -->
-<nav class="category-strip" aria-label="Top categories">
-  <div class="category-inner">
-    <a class="cat-item" href="#vegetables" title="Vegetables">
-      <img class="cat-icon" src="https://cdn.britannica.com/17/196817-050-6A15DAC3/vegetables.jpg?w=300" alt="vegetables">
-      <div class="cat-label">Vegetables</div>
-    </a>
-    <a class="cat-item" href="#fruits" title="Fruits">
-      <img class="cat-icon" src="https://res.cloudinary.com/hz3gmuqw6/image/upload/c_fill,q_30,w_750/f_auto/wip--21-healthiest-fruits-to-eat-in-2024-php3RGRfc" alt="fruits">
-      <div class="cat-label">Fruits</div>
-    </a>
-    <a class="cat-item" href="#dairy" title="Dairy & Bakery">
-      <img class="cat-icon" src="https://5.imimg.com/data5/SELLER/Default/2023/11/361839726/JD/GB/GS/38273424/bakery-and-dairy-machinery-1000x1000.png" alt="dairy">
-      <div class="cat-label">Dairy & Bakery</div>
-    </a>
-    <a class="cat-item" href="#oils" title="Oils">
-      <img class="cat-icon" src="https://cdn.shopaccino.com/refresh/articles/edible-oils-418048_l.jpg?v=591" alt="oils">
-      <div class="cat-label">Oils</div>
-    </a>
-    <a class="cat-item" href="#beverages" title="Beverages">
-      <img class="cat-icon" src="https://static.wixstatic.com/media/8f1abd_80bf432a005041b59c2a7fa1960ce71e~mv2.jpeg/v1/fill/w_799,h_330,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/8f1abd_80bf432a005041b59c2a7fa1960ce71e~mv2.jpeg" alt="beverages">
-      <div class="cat-label">Beverages</div>
-    </a>
-    <a class="cat-item" href="#grocery" title="Grocery">
-      <img class="cat-icon" src="https://www.bansalsupermarket.com/upload/category/grocery_staples/loose_grocessary.png" alt="grocery">
-      <div class="cat-label">Grocery</div>
-    </a>
-    <a class="cat-item" href="#snacks" title="Snacks">
-      <img class="cat-icon" src="https://images-cdn.ubuy.co.in/669d224fd6d33541092a5ed0-100-count-snacks-variety-pack-gift-box.jpg" alt="snacks">
-      <div class="cat-label">Snacks</div>
-    </a>
-    <a class="cat-item" href="#personal-care" title="Personal Care">
-      <img class="cat-icon" src="https://5.imimg.com/data5/QS/TO/MY-44941618/personal-care-1000x1000.jpg" alt="personal care">
-      <div class="cat-label">Personal Care</div>
-    </a>
-    <a class="cat-item" href="#frozen" title="frozen">
-      <img class="cat-icon" src="https://platform.eater.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25524135/Comparisons.png?quality=90&strip=all&crop=7.8125,0,84.375,100" alt="personal care">
-      <div class="cat-label">Frozen</div>
-    </a>
-  </div>
-</nav>
-
-
-<!-- BANNER -->
-<section class="hero-banner">
-  <div class="banner-card">
-    <div class="banner-carousel" id="bannerCarousel">
-      <!-- slides injected by JS -->
-    </div>
-    <div class="banner-controls">
-      <button id="bannerPrev" class="banner-nav">‹</button>
-      <div class="banner-dots" id="bannerDots"></div>
-      <button id="bannerNext" class="banner-nav">›</button>
-    </div>
-  </div>
-</section>
-
-<!-- BEST SELLERS -->
-<section class="section best-sellers" aria-label="Best Sellers">
-  <h4 class="section-title">Best Sellers</h4>
-  <div class="best-row" id="bestRow"></div>
-</section>
-
-<!-- (categories nav removed — feed renders explicit category sections below) -->
-
-<!-- MARKET FEED (curated Blinkit-like rows) -->
 <section id="feed" class="market-feed"></section>
 
-
-<!-- CART -->
 <div class="cart-backdrop" id="cartBackdrop"></div>
-
 <aside class="side-cart" id="cartView">
-
   <div class="cart-header">
     <i class="ri-arrow-left-line" id="closeCart"></i>
     <span>Your Cart</span>
   </div>
-
   <div class="cart-body" id="cartItems"></div>
-
   <div class="cart-footer">
     <div class="total-row">
       <span>Total</span>
-      <strong id="cartTotal">₹40</strong>
+      <strong id="cartTotal">₹0</strong>
     </div>
-    <button class="checkout-btn">Checkout</button>
+    <button class="checkout-btn" id="placeOrderBtn">Place Order</button>
   </div>
-
 </aside>
 
-
 <div class="address-backdrop" id="addressBackdrop"></div>
-
 <div class="address-modal" id="addressModal">
   <div class="address-header">
-    <span>Add Delivery Address</span>
+    <span>Delivery Address</span>
     <i class="ri-close-line" id="closeAddress"></i>
   </div>
-
   <div class="address-body">
-    <input id="addrName" placeholder="Full Name">
-    <input id="addrPhone" placeholder="Phone Number">
     <input id="addrHouse" placeholder="House / Flat No.">
     <input id="addrStreet" placeholder="Area / Street">
-    <input id="addrCity" value="Bengaluru">
+    <input id="addrCity" value="Bengaluru" readonly>
     <input id="addrPin" placeholder="Pincode">
   </div>
-
   <div class="address-footer">
     <button id="saveAddressBtn">Save & Continue</button>
   </div>
 </div>
 
-<!-- FILTER MODAL -->
-<div class="filter-modal" id="filterModal">
-  <div class="filter-content">
-    <h3>Filter Products</h3>
-    <label>
-      Max Price
-      <input id="fPrice" type="number" placeholder="e.g. 500">
-    </label>
-    <div class="filter-actions">
-      <button id="resetBtn">Reset</button>
-      <button id="applyBtn">Apply</button>
-    </div>
-  </div>
-</div>
+<div id="successToast" class="success-toast">Order Placed Successfully!</div>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-  /* ================= SUPABASE ================= */
   const supabase = createClient(
-    'https://jgliqmqielkvncjpiowx.supabase.co',
-    'sb_publishable_XXKvo7uRkmGIKmYK-xIxhg_an2IvBTO'
+    'https://nfdrnbikwzfmijrqmoqt.supabase.co',
+    'sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b'
   )
 
-  /* ================= STATE ================= */
   let products = []
   let filtered = []
   let cart = JSON.parse(localStorage.getItem('cart')) || []
-  
-  /* ================= BANNER CAROUSEL ================= */
-  
 
-  /* normalize raw category strings into canonical groups */
+  const ui = {
+    feed: document.getElementById('feed'),
+    cartCount: document.getElementById('cart-count'), 
+    cartItems: document.getElementById('cartItems'),
+    cartTotal: document.getElementById('cartTotal'),
+    cartView: document.getElementById('cartView'),
+    cartBackdrop: document.getElementById('cartBackdrop'),
+    placeOrderBtn: document.getElementById('placeOrderBtn'),
+    addrDisplay: document.getElementById('addrDisplay'),
+    addressModal: document.getElementById('addressModal'),
+    addressBackdrop: document.getElementById('addressBackdrop')
+  };
+
+  async function fetchProducts() {
+    try {
+      const { data, error } = await supabase.from('products').select('*').limit(100)
+      if (error) throw error
+      products = data.map(p => ({
+        id: p.id,
+        title: p.title || p.name || 'Product',
+        price: p.price || 0,
+        image: p.image || 'https://via.placeholder.com/300?text=No+Image',
+        category: canonicalCategory(p.category),
+        vendor_id: p.vendor_id || null
+      }))
+      filtered = [...products]
+      renderProducts(); 
+      updateBadge();
+      loadSavedAddress();
+    } catch (e) {
+      console.error("Fetch error:", e)
+    }
+  }
+
   function canonicalCategory(cat){
-    const s = (cat||'').toString().toLowerCase();
+    const s = (cat||'').toLowerCase();
     if (s.includes('fruit')) return 'Fruits';
     if (s.includes('veget')) return 'Vegetables';
-    if (s.includes('oil')) return 'Oils';
-    if (s.includes('bever')||s.includes('drink')||s.includes('juice')) return 'Beverages';
-    if (s.includes('snack')) return 'Snacks';
-    if (s.includes('dairy')||s.includes('milk')||s.includes('bread')||s.includes('bakery')) return 'Diary and Bakery';
-    if (s.includes('personal')||s.includes('care')) return 'Personal Care';
-    if (s.includes('frozen')) return 'Frozen';
+    if (s.includes('dairy') || s.includes('milk')) return 'Dairy and Bakery';
     return 'Grocery';
   }
 
-  /* ================= ELEMENTS ================= */
-  
-  /* Banner carousel data and logic */
-  const banners = [
-    // Add or remove entries here to update carousel slides easily.
-    // Use local paths or external URLs; include `title`, `subtitle`, and `cta`.
-    { img: './images/IMG_5097.JPG', title: 'Fresh groceries. Faster.', subtitle: 'Locally sourced produce, daily essentials and exclusive offers — delivered to your door.', cta: 'Shop Now', href:'#feed' },
-    { img: './images/IMG_5102.JPG', title: 'Weekly essentials, on time', subtitle: 'Stock up on your household favourites with great savings.', cta: 'Explore Offers', href:'#offers' },
-    { img: './images/IMG_5110.JPG', title: 'Fresh from farms', subtitle: 'Seasonal fruits & vegetables, directly from growers.', cta: 'See Vegetables', href:'#vegetables' },
-    { img: 'https://images.unsplash.com/photo-1506801310323-534be5e7bf4b?auto=format&fit=crop&w=1400&q=80', title: 'Organic & Local', subtitle: 'Handpicked organic produce for your family.', cta: 'Browse Organic', href:'#organic' },
-    { img: 'https://images.unsplash.com/photo-1505740106531-4243f3831f7d?auto=format&fit=crop&w=1400&q=80', title: 'Beverages & Snacks', subtitle: 'Refreshments and quick bites — curated for you.', cta: 'Shop Snacks', href:'#beverages' },
-    { img: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1400&q=80', title: 'Daily Essentials', subtitle: 'Everything you need, delivered fast.', cta: 'Get Essentials', href:'#essentials' }
-  ]
-  
-  function createBannerSlide(b, idx) {
-    const slide = el('div', {class: 'banner-slide', 'data-index': idx})
-    const img = el('img', {class: 'banner-img', src: b.img, alt: b.title, loading: 'lazy'})
-    const overlay = el('div', {class: 'banner-overlay'})
-    const content = el('div', {class: 'banner-content'})
-    const top = el('div', {class: 'banner-top'}, el('span', {class: 'badge'}, 'Free delivery'), el('span', {class: 'eta'}, '30-40 min'))
-    const h1 = el('h1', {class: 'banner-title'}, b.title)
-    const p = el('p', {class: 'banner-sub'}, b.subtitle)
-    const actions = el('div', {class: 'banner-actions'})
-    const ctaBtn = el('button', {class: 'cta primary'}, b.cta)
-    if(b.href){
-      const a = el('a', {href: b.href})
-      a.appendChild(ctaBtn)
-      actions.appendChild(a)
-    } else {
-      actions.appendChild(ctaBtn)
-    }
-    content.appendChild(top)
-    content.appendChild(h1)
-    content.appendChild(p)
-    content.appendChild(actions)
-    slide.appendChild(img)
-    slide.appendChild(overlay)
-    slide.appendChild(content)
-    return slide
-  }
-  
-  function initBannerCarousel() {
-    const container = document.getElementById('bannerCarousel')
-    const dots = document.getElementById('bannerDots')
-    banners.forEach((b, i) => {
-      const s = createBannerSlide(b, i)
-      container.appendChild(s)
-      const dot = el('button', {class: 'dot', 'data-index': i, ariaLabel: `Go to slide ${i+1}`})
-      dot.addEventListener('click', () => goToSlide(i))
-      dots.appendChild(dot)
-    })
-  
-    let current = 0
-    let interval = null
-  
-    function setActive(idx) {
-      const slides = container.querySelectorAll('.banner-slide')
-      slides.forEach(s => s.classList.remove('active'))
-      slides[idx].classList.add('active')
-      Array.from(dots.children).forEach(d => d.classList.remove('active'))
-      dots.children[idx].classList.add('active')
-      current = idx
-    }
-  
-    function goToSlide(idx) {
-      setActive((idx + banners.length) % banners.length)
-      resetAutoplay()
-    }
-  
-    document.getElementById('bannerPrev').addEventListener('click', () => goToSlide(current - 1))
-    document.getElementById('bannerNext').addEventListener('click', () => goToSlide(current + 1))
-  
-    function autoplay() {
-      interval = setInterval(() => {
-        goToSlide(current + 1)
-      }, 4500)
-    }
-  
-    function resetAutoplay() {
-      if (interval) clearInterval(interval)
-      autoplay()
-    }
-  
-    container.addEventListener('mouseenter', () => { if (interval) clearInterval(interval) })
-    container.addEventListener('mouseleave', () => { resetAutoplay() })
-  
-    setActive(0)
-    autoplay()
-  }
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    initBannerCarousel()
-  })
-  // expose for non-module fallback (helpful if module fails to run)
-  try{ window.initBannerCarousel = initBannerCarousel }catch(e){}
-  const ui = {
-  feed: document.getElementById('feed'),
-  bestRow: document.getElementById('bestRow'),
-  cartCount: document.getElementById('cart-count'), 
-  cartItems: document.getElementById('cartItems'),
-  cartTotal: document.getElementById('cartTotal'),
-  searchInput: document.getElementById('searchInput'), 
-  cartBtn: document.getElementById('cartBtn'),      
-  filterBtn: document.getElementById('filterBtn'),  
-  cartView: document.getElementById('cartView'),
-  cartBackdrop: document.getElementById('cartBackdrop'),
-  filterModal: document.getElementById('filterModal'),
-};
-
-  /* ================= FETCH PRODUCTS ================= */
-  async function fetchProducts() {
-    try {
-      const { data, error } = await supabase.from('products').select('*').order('id', { ascending: true }).limit(500)
-      if (error) throw error
-      // normalize fields (best effort)
-      products = (data || []).map(p => ({
-        id: p.id ?? p.product_id ?? Math.random().toString(36).slice(2,9),
-        title: p.title || p.name || p.product_name || 'Untitled',
-        price: p.price ?? p.mrp ?? p.amount ?? 0,
-        image: p.image || p.photo || p.image_url || p.photo_url || './images/IMG_5097.JPG',
-        category: p.category || p.type || 'Misc',
-        rating: p.rating ?? p.score ?? 0,
-        offer: !!p.offer || !!p.discount || (p.price && p.mrp && p.mrp > p.price),
-        bestseller: !!p.bestseller || !!p.popular
-      }))
-      // resolve image fields (support arrays, objects, storage paths)
-      const buckets = ['products','product-images','images','public']
-      await Promise.all(products.map(async prod => {
-        try {
-          let img = prod.image
-          if (!img) { prod.image = './images/IMG_5097.JPG'; return }
-          // arrays -> first item
-          if (Array.isArray(img) && img.length) img = img[0]
-          // object-style fields
-          if (typeof img === 'object') {
-            img = img.url || img.path || img.public_url || img.publicUrl || img.name || img.filename || img.filepath || ''
-          }
-          if (!img) { prod.image = './images/IMG_5097.JPG'; return }
-          img = String(img).trim()
-          // already a full URL
-          if (/^https?:\/\//i.test(img)) { prod.image = img; return }
-          // remove leading slash
-          img = img.replace(/^\//, '')
-          let resolved = null
-          for (const b of buckets) {
-            try {
-              const res = await supabase.storage.from(b).getPublicUrl(img)
-              if (res && res.error) {
-                console.warn('Supabase getPublicUrl error', {bucket: b, path: img, error: res.error})
-              }
-              if (res && res.data && (res.data.publicUrl || res.data.public_url)) { resolved = res.data.publicUrl || res.data.public_url; break }
-            } catch(e){ console.warn('Supabase getPublicUrl threw', {bucket: b, path: img, err: e}) }
-          }
-          prod.image = resolved || `./images/IMG_5097.JPG`
-        } catch(e){ prod.image = './images/IMG_5097.JPG' }
-      }))
-      filtered = [...products]
-      // normalize category names into canonical groups
-      function canonicalCategory(cat){
-        const s = (cat||'').toString().toLowerCase();
-        if (s.includes('fruit')) return 'Fruits';
-        if (s.includes('veget')) return 'Vegetables';
-        if (s.includes('oil')) return 'Oils';
-        if (s.includes('bever')||s.includes('drink')||s.includes('juice')) return 'Beverages';
-        if (s.includes('snack')) return 'Snacks';
-        if (s.includes('dairy')||s.includes('milk')||s.includes('bread')||s.includes('bakery')) return 'Diary and Bakery';
-        if (s.includes('personal')||s.includes('care')) return 'Personal Care';
-        if (s.includes('frozen')) return 'Frozen';
-        return 'Grocery';
-      }
-      products.forEach(p => { p.category = canonicalCategory(p.category); })
-      renderBestSellers()
-      renderProducts()
-      updateBadge()
-    } catch (e) {
-      console.error('Failed to fetch products', e)
-      // fallback demo: create a few demo products if none
-      if (products.length === 0) {
-        products = [
-          {id:1,title:'Bananas - 1kg',price:40,image:'./images/banana.jpg',category:'Fruits and Vegetables',rating:4.2,offer:true,bestseller:true},
-          {id:2,title:'Milk (1L)',price:60,image:'./images/milk.jpg',category:'Diary and Bakery',rating:4.5,offer:false,bestseller:true},
-          {id:3,title:'Whole Wheat Bread',price:45,image:'./images/bread.jpg',category:'Diary and Bakery',rating:4.0,offer:true}
-        ]
-          filtered = [...products]
-          // canonicalize categories for fallback data
-          products.forEach(p => { p.category = canonicalCategory(p.category); })
-          renderBestSellers()
-          renderProducts()
-      }
-    }
-  }
-
-  /* ================= RENDER HELPERS ================= */
-  function el(tag, attrs = {}, children = []){
-    const node = document.createElement(tag)
-    Object.entries(attrs).forEach(([k,v]) => { if (k === 'class') node.className = v; else if (k.startsWith('data-')) node.setAttribute(k,v); else if (k==='html') node.innerHTML=v; else node[k]=v })
-    ;(Array.isArray(children)?children:[children]).filter(Boolean).forEach(c => node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c))
-    return node
-  }
-
-  /* ================= BEST SELLERS + CATEGORIES ================= */
-  function renderBestSellers(){
-    if (!ui.bestRow) return
-    ui.bestRow.innerHTML = ''
-    const list = products.filter(p => p.bestseller).slice(0,12)
-    list.forEach(p => {
-      const item = el('div',{class:'best-item'});
-      const img = el('img',{src:p.image,alt:p.title});
-      const t = el('div',{class:'best-title',html:p.title});
-      item.appendChild(img); item.appendChild(t)
-      ui.bestRow.appendChild(item)
-    })
-  }
-
-  
-
-  function productCard(p){
-    const card = el('div',{class:'product-card'});
-    const img = el('img',{class:'p-img',src:p.image,alt:p.title});
-    const info = el('div',{class:'p-info'});
-    const title = el('div',{class:'p-title',html:p.title});
-    const meta = el('div',{class:'p-meta',html:`<span class="price">₹${p.price}</span><span class="cat">${p.category || ''}</span>`});
-    const actions = el('div',{class:'p-actions'});
-    const add = el('button',{class:'add-btn',onclick:()=>addToCart(p.id)},['Add'])
-    actions.appendChild(add)
-    info.appendChild(title); info.appendChild(meta); info.appendChild(actions)
-    card.appendChild(img); card.appendChild(info)
-    return card
-  }
-
-  /* ================= RENDER SECTIONS (Blinkit-like) ================= */
-  // dynamic feed will be rendered into `ui.feed`
-
   function renderProducts(){
-    if (!ui.feed) return
     ui.feed.innerHTML = ''
-    // 1) Featured carousel (top offers)
-    const offers = filtered.filter(p => p.offer && !p.bestseller).slice(0,12)
-    if (offers.length){
-      const sec = el('section',{class:'feed-section featured'})
-      sec.appendChild(el('h3',{class:'feed-title',html:'Top Offers'}))
-      const row = el('div',{class:'carousel-row'})
-      offers.forEach(p => row.appendChild(productCard(p)))
-      sec.appendChild(row)
-      ui.feed.appendChild(sec)
-    }
-
-    // 2) Explicit category sections in requested order
-    const preferred = ['Vegetables','Fruits','Oils','Beverages','Grocery','Snacks','Diary and Bakery','Personal Care','Frozen']
-    const usedIds = new Set(offers.map(p=>p.id))
-    preferred.forEach(cat => {
-      const items = filtered.filter(p => (p.category||'Misc') === cat && !usedIds.has(p.id)).slice(0,10)
-      items.forEach(i=>usedIds.add(i.id))
-      const sec = el('section',{class:'feed-section'})
-      sec.appendChild(el('h3',{class:'feed-title',html:cat}))
-      const row = el('div',{class:'carousel-row'})
-      if (items.length) {
-        items.forEach(p => row.appendChild(productCard(p)))
-      } else {
-        const empty = el('div',{class:'empty-section',html:'No items available'})
-        row.appendChild(empty)
-      }
-      sec.appendChild(row)
+    const categories = [...new Set(filtered.map(p => p.category))]
+    
+    categories.forEach(cat => {
+      const items = filtered.filter(p => p.category === cat)
+      const sec = el('section', {class:'feed-section'}, [
+        el('h3', {class:'feed-title'}, [cat]),
+        el('div', {class:'product-grid'}, items.map(p => productCard(p)))
+      ])
       ui.feed.appendChild(sec)
     })
-
-    // 3) Remaining categories (take next few distinct categories)
-    const remainingCats = Array.from(new Set(filtered.map(p => p.category || 'Misc'))).filter(c => !preferred.includes(c))
-    remainingCats.slice(0,6).forEach(cat => {
-      const items = filtered.filter(p => (p.category||'Misc') === cat && !usedIds.has(p.id)).slice(0,10)
-      items.forEach(i=>usedIds.add(i.id))
-      if (!items.length) return
-      const sec = el('section',{class:'feed-section'})
-      sec.appendChild(el('h3',{class:'feed-title',html:cat}))
-      const row = el('div',{class:'carousel-row'})
-      items.forEach(p => row.appendChild(productCard(p)))
-      sec.appendChild(row)
-      ui.feed.appendChild(sec)
-    })
-
-    // 4) Fallback grid of any remaining items
-    const remaining = filtered.filter(p => !usedIds.has(p.id))
-    if (remaining.length){
-      const sec = el('section',{class:'feed-section all-grid'})
-      sec.appendChild(el('h3',{class:'feed-title',html:'More for you'}))
-      const g = el('div',{class:'product-grid'})
-      remaining.forEach(p => g.appendChild(productCard(p)))
-      sec.appendChild(g)
-      ui.feed.appendChild(sec)
-    }
   }
 
-  /* ================= CART FUNCTIONS ================= */
-  function saveCart(){ localStorage.setItem('cart', JSON.stringify(cart)) }
+function productCard(p){
+    // This fallback ensures that even if the URL is broken, the UI doesn't look empty
+    const fallbackImage = 'https://placehold.co/400x400?text=Product+Image';
 
-  function addToCart(productId){
-    const p = products.find(x=>x.id==productId)
-    if (!p) return
-    const idx = cart.findIndex(i=>i.id==productId)
-    if (idx>-1) { cart[idx].qty += 1 } else { cart.push({ id: p.id, title: p.title, price: p.price, qty: 1 }) }
+    return el('div', {class:'product-card'}, [
+      el('div', {class:'p-img-wrapper'}, [
+        el('img', {
+          class:'p-img', 
+          src: p.image, 
+          loading: 'lazy',
+          // If the image fails to load, use the fallback
+          onerror: (e) => { e.target.src = fallbackImage } 
+        })
+      ]),
+      el('div', {class:'p-info'}, [
+        el('div', {class:'p-title', innerHTML: p.title}),
+        el('div', {class:'p-meta'}, [
+          el('span', {innerHTML: `₹${p.price}`}),
+          el('button', {class:'add-btn', onclick: () => addToCart(p), innerHTML: 'Add'})
+        ])
+      ])
+    ])
+  }
+
+  function el(tag, attrs={}, children=[]){
+    const n = document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v]) => k === 'onclick' ? n.onclick = v : n[k] = v);
+    (Array.isArray(children) ? children : [children]).forEach(c => n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c));
+    return n;
+  }
+
+  window.addToCart = (p) => {
+    const idx = cart.findIndex(i => i.id === p.id)
+    if(idx > -1) cart[idx].qty++
+    else cart.push({...p, qty: 1})
     saveCart(); updateBadge();
   }
 
-  function renderCart(){
-    if (!ui.cartItems) return
-    ui.cartItems.innerHTML = ''
-    let total = 0
-    cart.forEach(item => {
-      total += (item.price||0) * (item.qty||1)
-      const row = el('div',{class:'cart-row'})
-      row.appendChild(el('div',{class:'cart-title',html:`${item.title}`}))
-      const qtyWrap = el('div',{class:'qty-wrap'})
-      const dec = el('button',{class:'qty-btn',onclick:()=>{ updateQty(item.id, -1) }},['-'])
-      const num = el('span',{class:'qty-num',html:item.qty})
-      const inc = el('button',{class:'qty-btn',onclick:()=>{ updateQty(item.id, 1) }},['+'])
-      qtyWrap.appendChild(dec); qtyWrap.appendChild(num); qtyWrap.appendChild(inc)
-      row.appendChild(qtyWrap)
-      ui.cartItems.appendChild(row)
-    })
-    ui.cartTotal.textContent = `₹${total.toFixed(0)}`
-  }
-
-  function updateQty(id, delta){
-    const idx = cart.findIndex(i=>i.id==id)
-    if (idx===-1) return
-    cart[idx].qty += delta
-    if (cart[idx].qty <= 0) cart.splice(idx,1)
-    saveCart(); updateBadge(); renderCart()
-  }
+  function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
 
   function updateBadge() {
-    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-    ui.cartCount.innerText = totalQty;
-    ui.cartCount.style.display = totalQty > 0 ? 'grid' : 'none';
-    ui.cartCount.style.transform = 'scale(1.15)';
-    setTimeout(() => ui.cartCount.style.transform = 'scale(1)', 160);
+    const total = cart.reduce((s, i) => s + i.qty, 0)
+    ui.cartCount.innerText = total
+    ui.cartCount.style.display = total > 0 ? 'grid' : 'none'
   }
 
-  /* ================= BIND UI & FILTER/SEARCH ================= */
-  ui.searchInput?.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase().trim();
-    filtered = term ? products.filter(p => p.title.toLowerCase().includes(term)) : [...products]
-    renderProducts()
-  })
-
-  ui.cartBtn?.addEventListener('click', () => {
-    renderCart();
-    ui.cartView?.classList.add('show');
-    ui.cartBackdrop?.classList.add('show');
-  });
-  // show filter modal
-  ui.filterBtn?.addEventListener('click', () => { ui.filterModal?.classList.add('show'); });
-  // close filter modal when clicking backdrop area
-  ui.filterModal?.addEventListener('click', (e) => { if (e.target === ui.filterModal) ui.filterModal.classList.remove('show'); });
-  document.getElementById('closeCart')?.addEventListener('click', () => {
-    ui.cartView?.classList.remove('show'); ui.cartBackdrop?.classList.remove('show');
-  });
-  ui.cartBackdrop?.addEventListener('click', () => { ui.cartView?.classList.remove('show'); ui.cartBackdrop?.classList.remove('show'); });
-
-  // filter modal handlers retained from earlier (reset/apply)
-  document.getElementById('resetBtn')?.addEventListener('click', () => {
-    document.getElementById('fCategory').value = '';
-    document.getElementById('fPrice').value = '';
-    filtered = [...products]; renderProducts();
-  });
-  document.getElementById('applyBtn')?.addEventListener('click', () => {
-    const cat = document.getElementById('fCategory')?.value || '';
-    const max = parseFloat(document.getElementById('fPrice')?.value || '') || Infinity;
-    filtered = products.filter(p => {
-      const matchesCat = !cat || (p.category && p.category.toLowerCase().includes(cat.toLowerCase()));
-      const matchesPrice = !isFinite(max) || (p.price !== undefined && p.price <= max);
-      return matchesCat && matchesPrice;
-    });
-    renderProducts(); document.getElementById('filterModal')?.classList.remove('show');
-  });
-
-  //Category
-  document.addEventListener("DOMContentLoaded", () => {
-  const categories = document.querySelectorAll(".category");
-
-  categories.forEach(category => {
-    category.addEventListener("click", () => {
-      // remove active from all
-      categories.forEach(c => c.classList.remove("active"));
-
-      // add active to clicked
-      category.classList.add("active");
-
-      // get category name (for filtering later)
-      const selectedCategory = category.textContent.trim();
-      console.log("Selected category:", selectedCategory);
-
-      // 👉 later you can call:
-      // filterProducts(selectedCategory);
-    });
-  });
-});
-
-
-  // address handlers preserved
-  const addressBtn = document.getElementById('addressBtn');
-  const addressModal = document.getElementById('addressModal');
-  const addressBackdrop = document.getElementById('addressBackdrop');
-  const closeAddress = document.getElementById('closeAddress');
-  const saveAddressBtn = document.getElementById('saveAddressBtn');
-  const addrDisplay = document.getElementById('addrDisplay');
-  addressBtn?.addEventListener('click', () => { addressModal?.classList.add('show'); addressBackdrop?.classList.add('show'); });
-  addressBackdrop?.addEventListener('click', () => { addressModal?.classList.remove('show'); addressBackdrop?.classList.remove('show'); });
-  closeAddress?.addEventListener('click', () => { addressModal?.classList.remove('show'); addressBackdrop?.classList.remove('show'); });
-  saveAddressBtn?.addEventListener('click', () => {
-    const city = document.getElementById('addrCity')?.value.trim() || '';
-    const street = document.getElementById('addrStreet')?.value.trim() || '';
-    const pin = document.getElementById('addrPin')?.value.trim() || '';
-    const displayText = city || street || pin ? (city || street || pin) : 'Saved';
-    if (addrDisplay) addrDisplay.textContent = displayText;
-    addressModal?.classList.remove('show'); addressBackdrop?.classList.remove('show');
-    try { localStorage.setItem('grokly_address', JSON.stringify({city,street,pin})); } catch (e){}
-  });
-  try { const stored = JSON.parse(localStorage.getItem('grokly_address')) || null; if (stored && addrDisplay) addrDisplay.textContent = stored.city || stored.street || 'Saved'; } catch(e){}
-
-  /* ================= RESPONSIVE HEADER ADAPTATION (kept) ================= */
-  const searchBar = document.querySelector('.search-bar');
-  const searchClose = document.getElementById('searchClose');
-  function adaptHeader() {
-    const w = window.innerWidth;
-    if (w <= 900) {
-      searchBar?.classList.remove('expanded');
-      document.querySelectorAll('.address-btn').forEach(b => b.classList.add('icon-only'));
-      if (searchClose) searchClose.hidden = true;
-    } else {
-      searchBar?.classList.remove('expanded');
-      document.querySelectorAll('.address-btn').forEach(b => b.classList.remove('icon-only'));
-      if (searchClose) searchClose.hidden = false;
-    }
+  function renderCart() {
+    ui.cartItems.innerHTML = cart.length ? '' : '<div class="empty-cart-msg">Your cart is empty</div>'
+    let total = 0
+    cart.forEach(item => {
+      total += item.price * item.qty
+      ui.cartItems.appendChild(el('div', {class:'cart-row'}, [
+        el('span', {innerHTML: `${item.title} x${item.qty}`}),
+        el('span', {innerHTML: `₹${item.price * item.qty}`})
+      ]))
+    })
+    ui.cartTotal.innerText = `₹${total}`
   }
-  searchBar?.addEventListener('click', (e) => {
-    const w = window.innerWidth;
-    if (w <= 900 && !searchBar.classList.contains('expanded')) {
-      if (w <= 480) {
-        document.body.classList.add('search-overlay');
-        const overlay = document.createElement('div'); overlay.className = 'search-overlay';
-        const clone = searchBar.cloneNode(true); clone.classList.add('expanded'); overlay.appendChild(clone); document.body.appendChild(overlay);
-        const input = clone.querySelector('input'); const closeBtn = clone.querySelector('.search-close'); if (closeBtn) closeBtn.hidden = false; input?.focus();
-        overlay.addEventListener('click', (ev) => { if (ev.target === overlay) { try{ document.body.removeChild(overlay);}catch(e){} document.body.classList.remove('search-overlay'); } });
-        if (closeBtn) closeBtn.addEventListener('click', () => { try{ document.body.removeChild(overlay);}catch(e){} document.body.classList.remove('search-overlay'); });
-        return;
-      }
-      searchBar.classList.add('expanded'); const input = searchBar.querySelector('input'); input?.focus(); if (searchClose) searchClose.hidden = false;
+
+  async function placeOrder() {
+    const savedAddress = JSON.parse(localStorage.getItem('grokly_address'));
+    if (!savedAddress || !savedAddress.street) {
+      ui.addressModal.classList.add('show');
+      ui.addressBackdrop.classList.add('show');
+      return;
     }
-  });
-  const sInput = searchBar?.querySelector('input');
-  sInput?.addEventListener('blur', () => { const w = window.innerWidth; if (w <= 900 && sInput.value.trim() === '') searchBar.classList.remove('expanded'); if (searchClose && w <= 900) searchClose.hidden = true; });
-  searchClose?.addEventListener('click', () => { searchBar?.classList.remove('expanded'); searchClose.hidden = true; });
-  window.addEventListener('resize', adaptHeader);
-  adaptHeader();
+    if (cart.length === 0) return;
 
-  // initial fetch
-  fetchProducts()
-</script>
+    ui.placeOrderBtn.disabled = true;
+    ui.placeOrderBtn.innerText = "Processing...";
+    ui.cartView.classList.add('order-processing');
 
-<!-- Non-module fallback: try to init carousel if module didn't run (useful when opened via file://) -->
-<script>
-  setTimeout(() => {
+    const orderPayload = {
+      items: cart,
+      total_amount: cart.reduce((s, i) => s + (i.price * i.qty), 0),
+      address: savedAddress,
+      status: 'pending'
+    };
+
     try {
-      if (window.initBannerCarousel && document.getElementById('bannerCarousel') && document.getElementById('bannerCarousel').children.length === 0) {
-        window.initBannerCarousel()
-      }
-    } catch(e){ /* ignore */ }
-  }, 350);
+      const { error } = await supabase.from('orders').insert([orderPayload]);
+      if (error) throw error;
+      cart = []; saveCart(); updateBadge();
+      ui.cartView.classList.remove('show');
+      ui.cartBackdrop.classList.remove('show');
+      const toast = document.getElementById('successToast');
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      ui.placeOrderBtn.disabled = false;
+      ui.placeOrderBtn.innerText = "Place Order";
+      ui.cartView.classList.remove('order-processing');
+    }
+  }
+
+  ui.placeOrderBtn.onclick = placeOrder;
+  
+  document.getElementById('cartBtn').onclick = () => { 
+    renderCart(); 
+    ui.cartView.classList.add('show'); 
+    ui.cartBackdrop.classList.add('show'); 
+  };
+
+  document.getElementById('closeCart').onclick = () => { 
+    ui.cartView.classList.remove('show'); 
+    ui.cartBackdrop.classList.remove('show'); 
+  };
+
+  document.getElementById('addressBtn').onclick = () => {
+    ui.addressModal.classList.add('show');
+    ui.addressBackdrop.classList.add('show');
+  };
+
+  document.getElementById('closeAddress').onclick = () => {
+    ui.addressModal.classList.remove('show');
+    ui.addressBackdrop.classList.remove('show');
+  };
+
+  document.getElementById('saveAddressBtn').onclick = () => {
+    const addr = { 
+      house: document.getElementById('addrHouse').value, 
+      street: document.getElementById('addrStreet').value, 
+      pincode: document.getElementById('addrPin').value,
+      city: 'Bengaluru' 
+    };
+    if(!addr.street || !addr.house) return alert("Please fill address details");
+    
+    localStorage.setItem('grokly_address', JSON.stringify(addr));
+    ui.addrDisplay.innerText = addr.street;
+    ui.addressModal.classList.remove('show');
+    ui.addressBackdrop.classList.remove('show');
+  };
+
+  function loadSavedAddress() {
+    const saved = JSON.parse(localStorage.getItem('grokly_address'));
+    if(saved) ui.addrDisplay.innerText = saved.street || "Saved Address";
+  }
+
+  fetchProducts();
 </script>
 </main>
-<footer class="marketplace-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-col about">
-        <a href="index.html" class="footer-logo">
-          <img src="./images/grokerly_logo.png" alt="Grokly logo">
-          <div class="brand-small">Grokly</div>
-        </a>
-        <p class="muted">Fresh groceries, fast — delivered from local farms and trusted suppliers. Quality you can count on.</p>
-        <div class="social-row">
-          <a href="https://www.facebook.com/p/Accesco-Living-61585132566972/" class="social-icon" target="_blank" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
-          <a href="https://x.com/accesco_living?s=21" class="social-icon" target="_blank" aria-label="Twitter"><i class="ri-twitter-x-line"></i></a>
-          <a href="https://www.instagram.com/accescoliving?igsh=MWVxOHpyeW96NGltZQ==" class="social-icon" target="_blank" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
-          <a href="https://www.linkedin.com/company/acceso-living/" class="social-icon" target="_blank" aria-label="LinkedIn"><i class="ri-linkedin-box-fill"></i></a>
-          <a href="https://youtube.com/@accescoliving?si=YqfNRXvc0SRm4s8g" class="social-icon" target="_blank" aria-label="YouTube"><i class="ri-youtube-fill"></i></a>
-        </div>
-      </div>
-
-      <div class="footer-col links">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="services-grokly.html">Shop</a></li>
-          <li><a href="services.html">All Services</a></li>
-          <li><a href="login.html">Account</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="README.md">Help & FAQ</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col categories">
-        <h4>Shop by Category</h4>
-        <ul>
-          <li><a href="#vegetables">Vegetables</a></li>
-          <li><a href="#fruits">Fruits</a></li>
-          <li><a href="#beverages">Beverages</a></li>
-          <li><a href="#grocery">Grocery</a></li>
-          <li><a href="#snacks">Snacks</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col contact">
-        <h4>Get in touch</h4>
-        <address>
-          Grokly by Accesco Living<br>
-          Bengaluru, India<br>
-          <a href="tel:+911234567890">+91 12345 67890</a><br>
-          <a href="mailto:hello@grokly.example">hello@grokly.example</a>
-        </address>
-
-        <div class="blogs-widget">
-          <ul class="blogs-list">
-            <li><a class="blogs-link" href="BLOGS_PAGE/blogs.html">Read our blogs</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="left">
-        <small>© Grokly Market Private Limited, 2025. All rights reserved.</small>
-        <small class="muted">Grokly is a brand of Accesco Living.</small>
-      </div>
-      <div class="right">
-        <div class="app-badges">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store">
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
 </body>
 </html>

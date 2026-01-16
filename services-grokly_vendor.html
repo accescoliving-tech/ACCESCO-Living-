@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grokly Vendor Central</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .text-grokly { color: #059669; }
+        .bg-grokly { background-color: #059669; }
+        .border-grokly { border-color: #059669; }
+
+        .nav-link.active {
+            background-color: #ecfdf5;
+            color: #059669;
+            border-right: 4px solid #059669;
+        }
+
+        .upload-area {
+            border: 2px dashed #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #059669;
+            background-color: #f0fdf4;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #059669;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        .tab-content.hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Vendor Login Overlay -->
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-emerald-950 flex items-center justify-center p-4 transition-opacity duration-500">
+        <div class="bg-white rounded-[2rem] p-10 w-full max-w-md shadow-2xl text-center border border-emerald-900/10">
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-emerald-100 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+                    <i class="fas fa-store text-3xl text-emerald-600"></i>
+                </div>
+                <h1 class="text-3xl font-black text-gray-900 tracking-tight">Grokly <span class="text-emerald-600">Vendor</span></h1>
+                <p class="text-gray-500 text-sm mt-2 font-medium">Manage your items and track sales</p>
+            </div>
+            
+            <div class="space-y-5">
+                <div class="text-left">
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] ml-1 mb-2 block">Vendor Access ID</label>
+                    <input type="number" id="vendor-id-input" placeholder="Enter your ID (e.g. 101)" 
+                        class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:border-emerald-500 font-bold transition-all placeholder:text-gray-300">
+                </div>
+                <button id="login-btn" onclick="handleVendorLogin()" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 disabled:opacity-50">
+                    Launch Dashboard
+                </button>
+                <div id="connection-status" class="flex items-center justify-center gap-2 mt-4">
+                    <div id="status-dot" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span id="status-text" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Supabase Engine Linked</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden flex-1 flex flex-col">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+            <div class="max-w-[1600px] mx-auto px-8 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-10">
+                    <div class="font-black text-2xl tracking-tighter text-gray-900">
+                        <span class="text-emerald-600">Grokly</span> Vendor
+                    </div>
+                    <nav class="hidden md:flex items-center gap-1">
+                        <button onclick="switchTab('inventory')" id="tab-inventory" class="nav-link active px-6 py-2 rounded-xl text-sm font-bold transition-all">Inventory</button>
+                        <button onclick="switchTab('orders')" id="tab-orders" class="nav-link px-6 py-2 rounded-xl text-sm font-bold text-gray-400 hover:text-gray-900 transition-all">Orders</button>
+                        <button onclick="switchTab('sales')" id="tab-sales" class="nav-link px-6 py-2 rounded-xl text-sm font-bold text-gray-400 hover:text-gray-900 transition-all">Sales Tracker</button>
+                    </nav>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <div class="bg-emerald-50 px-4 py-2 rounded-2xl flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                        <span class="text-xs font-black text-emerald-700 uppercase" id="vendor-display-tag">Vendor ID: --</span>
+                    </div>
+                    <button onclick="location.reload()" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 transition-all">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-[1600px] mx-auto px-8 py-10 w-full grid grid-cols-12 gap-10">
+            
+            <!-- Sidebar / Upload Area -->
+            <aside class="col-span-12 lg:col-span-4 xl:col-span-3">
+                <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-100 sticky top-28">
+                    <h2 class="text-xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                        <i class="fas fa-plus-circle text-emerald-600"></i>
+                        Quick Upload
+                    </h2>
+                    
+                    <form id="product-upload-form" class="space-y-5" onsubmit="handleProductUpload(event)">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Product Name</label>
+                            <input type="text" id="p-name" required placeholder="e.g. Fresh Mangoes" 
+                                class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 font-semibold text-sm">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Price ($)</label>
+                                <input type="number" id="p-price" step="0.01" required placeholder="4.99" 
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 font-semibold text-sm">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Category</label>
+                                <select id="p-category" class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 font-semibold text-sm appearance-none cursor-pointer">
+                                    <option value="dairy">Dairy</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="veggies">Vegetables</option>
+                                    <option value="bakery">Bakery</option>
+                                    <option value="snacks">Snacks</option>
+                                    <option value="meat">Meat</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Unit</label>
+                                <input type="text" id="p-qty" required placeholder="e.g. 500g" 
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 font-semibold text-sm">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Stock</label>
+                                <input type="number" id="p-stock" required placeholder="20" 
+                                    class="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3.5 focus:outline-none focus:border-emerald-500 font-semibold text-sm">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Media</label>
+                            <label class="upload-area w-full rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer bg-gray-50/50">
+                                <i class="fas fa-image text-gray-300 text-3xl mb-2"></i>
+                                <span class="text-[11px] font-bold text-gray-400 uppercase tracking-tighter" id="file-name-label">Upload Photo</span>
+                                <input type="file" id="image-input" class="hidden" accept="image/*" onchange="previewFileName(this)">
+                            </label>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-600/10 flex items-center justify-center gap-3">
+                            <span>Save Listing</span>
+                            <div id="btn-spinner" class="loading-spinner hidden"></div>
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="col-span-12 lg:col-span-8 xl:col-span-9 space-y-8">
+                
+                <!-- Inventory Tab -->
+                <div id="content-inventory" class="tab-content">
+                    <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-8 border-b border-gray-50 flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-black text-gray-900">Inventory Feed</h2>
+                                <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-widest" id="inventory-count">0 ACTIVE LISTINGS</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50/50">
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Product</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Price</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Stock</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Control</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="divide-y divide-gray-50">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div id="content-orders" class="tab-content hidden space-y-8">
+                    <!-- Live Orders -->
+                    <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-8 border-b border-gray-50 flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-black text-gray-900">Live Orders</h2>
+                                <p class="text-xs font-bold text-emerald-600 uppercase mt-1 tracking-widest">AWAITING FULFILLMENT</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-emerald-50/30">
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Order ID</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Items</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Address</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Amount</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="live-orders-table" class="divide-y divide-gray-50">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Previous Order History -->
+                    <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden opacity-80">
+                        <div class="p-8 border-b border-gray-50">
+                            <h2 class="text-xl font-black text-gray-900">Order History</h2>
+                            <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-widest">PAST 30 DAYS</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50/50">
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">ID</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Summary</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Status</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-orders-table" class="divide-y divide-gray-50">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Tracker Tab -->
+                <div id="content-sales" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Earnings</p>
+                            <h3 id="stat-earnings" class="text-3xl font-black text-emerald-600 leading-none">$0.00</h3>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Orders Completed</p>
+                            <h3 id="stat-sold" class="text-3xl font-black text-gray-900 leading-none">0</h3>
+                        </div>
+                        <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Vendor Level</p>
+                            <h3 id="stat-rank" class="text-3xl font-black text-orange-500 leading-none">Starter</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-8 border-b border-gray-50">
+                            <h2 class="text-2xl font-black text-gray-900">Revenue Stream</h2>
+                            <p class="text-xs font-bold text-gray-400 uppercase mt-1 tracking-widest">COMPLETED TRANSACTIONS</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50/50">
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Order ID</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Items Count</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Earnings</th>
+                                        <th class="px-10 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-table-body" class="divide-y divide-gray-50">
+                                    <!-- Dynamic Rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Component -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[200] bg-gray-900 text-white px-8 py-5 rounded-3xl shadow-2xl flex items-center gap-5 transition-all translate-y-24 opacity-0 pointer-events-none border border-white/10">
+        <div id="toast-icon" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-black"></div>
+        <span id="toast-message" class="font-bold text-sm tracking-tight"></span>
+    </div>
+
+    <!-- Supabase Engine Integration -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        /* ------------------------------------------------------------
+        SQL SETUP INSTRUCTIONS (Run these in your Supabase SQL Editor)
+        ------------------------------------------------------------
+        
+        -- 1. Create Products Table (with vendor_id)
+        CREATE TABLE IF NOT EXISTS public.products (
+            id bigint generated by default as identity primary key,
+            created_at timestamptz default now(),
+            name text not null,
+            price numeric not null,
+            category text not null,
+            qty text not null,
+            stock integer default 0,
+            vendor_id integer not null,
+            image_url text
+        );
+
+        -- 2. Create Orders Table
+        CREATE TABLE IF NOT EXISTS public.orders (
+            id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+            created_at timestamptz DEFAULT now(),
+            items jsonb NOT NULL, -- Format: [{"id": 1, "name": "Milk", "vendor_id": 101, ...}]
+            total_amount numeric NOT NULL,
+            address jsonb NOT NULL,
+            status text DEFAULT 'pending'
+        );
+
+        -- 3. Enable Realtime
+        ALTER PUBLICATION supabase_realtime ADD TABLE products;
+        ALTER PUBLICATION supabase_realtime ADD TABLE orders;
+        ------------------------------------------------------------
+        */
+
+        const supabaseUrl = 'https://nfdrnbikwzfmijrqmoqt.supabase.co';
+        const supabaseKey = 'sb_publishable_dVvOYAqamp2BGoI8zvyB5g_NfCSkQ6b';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        let currentVendorId = null;
+        let inventoryChannel = null;
+        let salesChannel = null;
+
+        // Login Handler
+        window.handleVendorLogin = () => {
+            const input = document.getElementById('vendor-id-input');
+            if (!input.value) return showToast("Enter a Vendor ID", true);
+            
+            currentVendorId = parseInt(input.value);
+            document.getElementById('vendor-display-tag').innerText = `Vendor ID: ${currentVendorId}`;
+            
+            const overlay = document.getElementById('login-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.getElementById('dashboard').classList.remove('hidden');
+                initSync();
+            }, 500);
+        };
+
+        const initSync = () => {
+            fetchInventory();
+            fetchOrders();
+            setupRealtime();
+        };
+
+        // Realtime Listeners
+        const setupRealtime = () => {
+            if (inventoryChannel) supabase.removeChannel(inventoryChannel);
+            if (salesChannel) supabase.removeChannel(salesChannel);
+
+            inventoryChannel = supabase
+                .channel('inventory-sync')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => fetchInventory())
+                .subscribe();
+
+            salesChannel = supabase
+                .channel('sales-sync')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+                    fetchOrders();
+                    if (payload.eventType === 'INSERT') showToast("New order detected! 📦");
+                })
+                .subscribe();
+        };
+
+        async function fetchInventory() {
+            try {
+                // IMPORTANT: Ensure the table 'products' has a column named 'vendor_id'
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('vendor_id', currentVendorId)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                renderInventory(data || []);
+            } catch (err) {
+                console.error("Inventory error:", err);
+                showToast("DB Error: Products table configuration issue.", true);
+            }
+        }
+
+        async function fetchOrders() {
+            try {
+                const { data, error } = await supabase
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                // FILTER IN MEMORY: Filter orders where the JSONB 'items' array contains current vendor's items
+                const myOrders = (data || []).filter(order => {
+                    return Array.isArray(order.items) && 
+                           order.items.some(item => parseInt(item.vendor_id) === currentVendorId);
+                });
+
+                const live = myOrders.filter(o => o.status === 'pending' || o.status === 'processing');
+                const history = myOrders.filter(o => o.status === 'delivered' || o.status === 'completed' || o.status === 'cancelled');
+                
+                renderOrders(live, history);
+                renderSales(history);
+            } catch (err) {
+                console.error("Fetch Orders Error:", err);
+                showToast("DB Error: Orders table configuration issue.", true);
+            }
+        }
+
+        window.handleProductUpload = async (event) => {
+            event.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('btn-spinner');
+            const fileInput = document.getElementById('image-input');
+            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            try {
+                let imageUrl = "https://via.placeholder.com/400?text=Grokly";
+                
+                if (fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    const fileName = `${currentVendorId}/${Date.now()}-${file.name}`;
+                    
+                    // Requires a public bucket named 'product-images' in Supabase
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('product-images')
+                        .upload(fileName, file);
+
+                    if (uploadError) throw uploadError;
+                    const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
+                    imageUrl = urlData.publicUrl;
+                }
+
+                const { error: insertError } = await supabase.from('products').insert([{
+                    name: document.getElementById('p-name').value,
+                    price: parseFloat(document.getElementById('p-price').value),
+                    category: document.getElementById('p-category').value,
+                    qty: document.getElementById('p-qty').value,
+                    stock: parseInt(document.getElementById('p-stock').value),
+                    vendor_id: currentVendorId,
+                    image_url: imageUrl
+                }]);
+
+                if (insertError) throw insertError;
+                showToast("Product listing created!");
+                document.getElementById('product-upload-form').reset();
+                document.getElementById('file-name-label').innerText = "Upload Photo";
+            } catch (err) {
+                console.error("Upload Error:", err);
+                showToast("Error: " + err.message, true);
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        };
+
+        function renderInventory(items) {
+            const tbody = document.getElementById('inventory-table-body');
+            document.getElementById('inventory-count').innerText = `${items.length} ACTIVE LISTINGS`;
+            if (items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="px-10 py-24 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">No listings found.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = items.map(p => `
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-10 py-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
+                                <img src="${p.image_url}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100?text=${p.name}'">
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-900">${p.name}</p>
+                                <p class="text-[10px] text-emerald-600 font-black uppercase tracking-widest">${p.qty}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-10 py-6 text-center font-black text-gray-700">$${p.price.toFixed(2)}</td>
+                    <td class="px-10 py-6 text-center font-bold text-gray-900">${p.stock}</td>
+                    <td class="px-10 py-6 text-right">
+                        <button onclick="deleteProduct(${p.id})" class="w-10 h-10 rounded-xl hover:bg-red-50 text-gray-300 hover:text-red-500 transition-all">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderOrders(live, history) {
+            const liveTbody = document.getElementById('live-orders-table');
+            const historyTbody = document.getElementById('history-orders-table');
+
+            if (live.length === 0) {
+                liveTbody.innerHTML = `<tr><td colspan="5" class="px-10 py-16 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">No active orders.</td></tr>`;
+            } else {
+                liveTbody.innerHTML = live.map(o => {
+                    // Filter to only show items belonging to this vendor in the order summary
+                    const myItems = Array.isArray(o.items) ? o.items.filter(i => parseInt(i.vendor_id) === currentVendorId) : [];
+                    const itemsText = myItems.map(i => `${i.name} (x${i.qty || i.quantity || 1})`).join(', ');
+                    const addressStr = typeof o.address === 'object' ? `${o.address.street || o.address.streetAddress || ''}, ${o.address.city || ''}` : o.address;
+                    
+                    return `
+                        <tr class="hover:bg-emerald-50/10 transition-colors">
+                            <td class="px-10 py-6"><span class="text-[10px] font-black text-emerald-600 uppercase">#${o.id.slice(0,8)}</span></td>
+                            <td class="px-10 py-6">
+                                <p class="font-bold text-gray-900 text-sm line-clamp-1">${itemsText || 'Item(s)'}</p>
+                            </td>
+                            <td class="px-10 py-6 text-center">
+                                <p class="text-[10px] font-medium text-gray-600 truncate max-w-[150px] mx-auto uppercase tracking-tighter">${addressStr || 'Address'}</p>
+                            </td>
+                            <td class="px-10 py-6 text-center font-black text-gray-700">$${parseFloat(o.total_amount || 0).toFixed(2)}</td>
+                            <td class="px-10 py-6 text-right">
+                                <button onclick="updateOrderStatus('${o.id}', 'delivered')" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg hover:bg-emerald-700 transition-all">
+                                    Deliver
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            if (history.length === 0) {
+                historyTbody.innerHTML = `<tr><td colspan="4" class="px-10 py-12 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">History clear.</td></tr>`;
+            } else {
+                historyTbody.innerHTML = history.map(o => {
+                    const myItems = Array.isArray(o.items) ? o.items.filter(i => parseInt(i.vendor_id) === currentVendorId) : [];
+                    const itemsText = myItems.map(i => i.name).join(', ');
+                    return `
+                        <tr>
+                            <td class="px-10 py-4 text-[10px] font-bold text-gray-400 uppercase">#${o.id.slice(0,6)}</td>
+                            <td class="px-10 py-4 font-bold text-gray-700 text-sm line-clamp-1">${itemsText || 'Summary'}</td>
+                            <td class="px-10 py-4 text-center">
+                                <span class="text-[9px] font-black uppercase px-2 py-1 rounded-full ${o.status === 'delivered' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">
+                                    ${o.status}
+                                </span>
+                            </td>
+                            <td class="px-10 py-4 text-right text-xs font-bold text-gray-400">${new Date(o.created_at).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        function renderSales(history) {
+            const tbody = document.getElementById('sales-table-body');
+            let earnings = 0;
+            if (history.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="px-10 py-24 text-center text-gray-400 font-bold uppercase tracking-widest text-[10px]">Revenue pending.</td></tr>`;
+                document.getElementById('stat-earnings').innerText = `$0.00`;
+                document.getElementById('stat-sold').innerText = '0';
+                return;
+            }
+            tbody.innerHTML = history.map(s => {
+                const amount = parseFloat(s.total_amount || 0);
+                earnings += amount;
+                return `
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-10 py-6"><span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">#${s.id.slice(0,8)}</span></td>
+                        <td class="px-10 py-6 font-bold text-gray-900">${Array.isArray(s.items) ? s.items.length : 0} Items Transaction</td>
+                        <td class="px-10 py-6 text-center font-black text-emerald-600">+$${amount.toFixed(2)}</td>
+                        <td class="px-10 py-6 text-right text-xs font-bold text-gray-400">${new Date(s.created_at).toLocaleDateString()}</td>
+                    </tr>
+                `;
+            }).join('');
+            document.getElementById('stat-earnings').innerText = `$${earnings.toFixed(2)}`;
+            document.getElementById('stat-sold').innerText = history.length;
+            document.getElementById('stat-rank').innerText = earnings > 1000 ? 'Platinum' : (earnings > 500 ? 'Gold' : 'Starter');
+        }
+
+        window.deleteProduct = async (id) => {
+            if (!confirm("Are you sure?")) return;
+            const { error } = await supabase.from('products').delete().eq('id', id);
+            if (error) showToast("Error deleting item", true);
+            else { showToast("Listing removed"); fetchInventory(); }
+        };
+
+        window.updateOrderStatus = async (id, status) => {
+            const { error } = await supabase.from('orders').update({ status }).eq('id', id);
+            if (error) showToast("Update Failed", true);
+            else { showToast(`Order fulfilled!`); fetchOrders(); }
+        };
+
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            if (tab === 'inventory') fetchInventory(); else fetchOrders();
+        };
+
+        window.previewFileName = (input) => {
+            const label = document.getElementById('file-name-label');
+            if (input.files && input.files[0]) {
+                label.innerText = `Selected: ${input.files[0].name.slice(0, 15)}...`;
+                label.classList.add('text-emerald-600');
+            }
+        };
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+            msgEl.innerText = msg;
+            iconEl.className = `w-8 h-8 rounded-full flex items-center justify-center text-sm font-black ${isError ? 'bg-red-500' : 'bg-emerald-500'}`;
+            iconEl.innerHTML = isError ? '<i class="fas fa-exclamation"></i>' : '<i class="fas fa-check"></i>';
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => toast.classList.add('translate-y-24', 'opacity-0'), 3000);
+        }
+    </script>
+</body>
+</html>
