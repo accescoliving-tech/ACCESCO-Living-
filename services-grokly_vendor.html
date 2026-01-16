@@ -358,12 +358,26 @@
         let salesChannel = null;
 
         // Login Handler
-        window.handleVendorLogin = () => {
+        window.handleVendorLogin = async () => {
             const input = document.getElementById('vendor-id-input');
             if (!input.value) return showToast("Enter a Vendor ID", true);
             
             currentVendorId = parseInt(input.value);
             document.getElementById('vendor-display-tag').innerText = `Vendor ID: ${currentVendorId}`;
+            
+            // Test database connection
+            try {
+                const { count, error } = await supabase.from('products').select('id', { count: 'exact' }).limit(1);
+                if (error) {
+                    console.warn("Database test:", error);
+                    showToast("⚠️ Database connection issue. Check Supabase setup.", true);
+                    return;
+                }
+            } catch (err) {
+                console.error("Connection test failed:", err);
+                showToast("❌ Cannot connect to database", true);
+                return;
+            }
             
             const overlay = document.getElementById('login-overlay');
             overlay.style.opacity = '0';
@@ -452,23 +466,37 @@
             spinner.classList.remove('hidden');
 
             try {
+                // Check if vendor is logged in
+                if (!currentVendorId) {
+                    throw new Error("Vendor ID not set. Please login again.");
+                }
+
                 let imageUrl = "https://via.placeholder.com/400?text=Grokly";
                 
                 if (fileInput.files[0]) {
                     const file = fileInput.files[0];
                     const fileName = `${currentVendorId}/${Date.now()}-${file.name}`;
                     
-                    // Requires a public bucket named 'product-images' in Supabase
-                    const { data: uploadData, error: uploadError } = await supabase.storage
-                        .from('product-images')
-                        .upload(fileName, file);
+                    try {
+                        // Requires a public bucket named 'product-images' in Supabase
+                        const { data: uploadData, error: uploadError } = await supabase.storage
+                            .from('product-images')
+                            .upload(fileName, file);
 
-                    if (uploadError) throw uploadError;
-                    const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
-                    imageUrl = urlData.publicUrl;
+                        if (uploadError) {
+                            console.warn("Image upload failed, using placeholder:", uploadError);
+                            // Continue without image if upload fails
+                        } else {
+                            const { data: urlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
+                            imageUrl = urlData.publicUrl;
+                        }
+                    } catch (imgErr) {
+                        console.warn("Image storage error, using placeholder:", imgErr);
+                        // Continue with placeholder image
+                    }
                 }
 
-                const { error: insertError } = await supabase.from('products').insert([{
+                const productData = {
                     name: document.getElementById('p-name').value,
                     price: parseFloat(document.getElementById('p-price').value),
                     category: document.getElementById('p-category').value,
@@ -476,15 +504,28 @@
                     stock: parseInt(document.getElementById('p-stock').value),
                     vendor_id: currentVendorId,
                     image_url: imageUrl
-                }]);
+                };
 
-                if (insertError) throw insertError;
-                showToast("Product listing created!");
+                console.log("Submitting product data:", productData);
+
+                const { data, error: insertError } = await supabase.from('products').insert([productData]).select();
+
+                if (insertError) {
+                    console.error("Insert error details:", insertError);
+                    throw insertError;
+                }
+
+                console.log("Product inserted successfully:", data);
+                showToast("✅ Product listing created!");
                 document.getElementById('product-upload-form').reset();
                 document.getElementById('file-name-label').innerText = "Upload Photo";
+                
+                // Refresh inventory list
+                setTimeout(() => fetchInventory(), 500);
             } catch (err) {
                 console.error("Upload Error:", err);
-                showToast("Error: " + err.message, true);
+                const errorMsg = err.message || err.error || "Unknown error occurred";
+                showToast("Error: " + errorMsg, true);
             } finally {
                 btn.disabled = false;
                 spinner.classList.add('hidden');
