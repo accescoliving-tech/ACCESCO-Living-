@@ -1699,139 +1699,146 @@
     </style>
 
 
-    <script type="application/ld+json"> 
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
     {
-  "@context": "https://schema.org", 
-  "@graph": [ 
-    { 
-      "@type": "Organization", 
-      "@id": "https://accesco.co.in/#organization", 
-      "name": "Accesco Living Private Limited", 
-      "url": "https://accesco.co.in/", 
-      "logo": "https://accesco.co.in/assets/logo.png", 
-      "description": "Accesco Living Private Limited is an intelligent commerce company in India integrating groceries, food delivery, dining, fashion, mobility, and expense planning into a unified digital ecosystem for everyday living.", 
-      "foundingLocation": { 
-        "@type": "Country", 
-        "name": "India" 
-      }, 
-      "areaServed": { 
-        "@type": "Country", 
-        "name": "India" 
-      }, 
-      "sameAs": [ 
-        "https://www.linkedin.com/company/accesco-living", 
-        "https://www.instagram.com/accesco.living" 
-      ]     }, 
-    { 
-      "@type": "WebSite", 
-      "@id": "https://accesco.co.in/#website", 
-      "url": "https://accesco.co.in/", 
-      "name": "Accesco Living", 
-      "inLanguage": "en-IN", 
-      "potentialAction": { 
-        "@type": "SearchAction", 
-        "target": "https://accesco.co.in/search?q={search_term_string}", 
-        "query-input": "required name=search_term_string" 
-      }     }, 
-    { 
-      "@type": "LocalBusiness", 
-      "@id": "https://accesco.co.in/#localbusiness", 
-      "name": "Accesco Living", 
-      "url": "https://accesco.co.in/", 
-      "telephone": "+91-9900384517", 
-      "priceRange": "₹₹", 
-      "address": { 
-        "@type": "PostalAddress", 
-        "addressCountry": "IN" 
-      }, 
-      "areaServed": [ 
-        { "@type": "City", "name": "Bengaluru" }, 
-        { "@type": "City", "name": "Mumbai" }, 
-        { "@type": "City", "name": "Delhi" }, 
-        { "@type": "City", "name": "Hyderabad" }, 
-        { "@type": "City", "name": "Pune" } 
-      ] 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#grocery", 
-      "name": "Online Grocery and Daily Essentials Delivery", 
-      "description": "Digital grocery and daily essentials service designed for Indian households with focus on reliability, planning, and convenience.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#food", 
-      "name": "Online Food Delivery Service", 
-      "description": "Food ordering and delivery service connecting users with local kitchens and restaurants for reliable everyday meals.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#dining", 
-      "name": "Dining Discovery and Experience Platform", 
-      "description": "Platform enabling users to discover dining options, plan outings, and access curated dining experiences.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#fashion", 
-      "name": "On-Demand Fashion and Lifestyle Delivery", 
-      "description": "Quick access to fashion and lifestyle products with personalised selection and doorstep delivery.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#mobility", 
-      "name": "Mobility and Local Logistics Service", 
-      "description": "Urban mobility and parcel movement service supporting daily transportation and local logistics needs.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "Service", 
-      "@id": "https://accesco.co.in/#expenseplanning", 
-      "name": "Intelligent Expense Planning and Insights", 
-      "description": "Digital expense planning and spending insights to help users understand and manage monthly consumption.", 
-      "provider": { "@id": "https://accesco.co.in/#organization" }, 
-      "areaServed": { "@type": "Country", "name": "India" } 
-    }, 
-    { 
-      "@type": "FAQPage", 
-      "@id": "https://accesco.co.in/#faq", 
-      "mainEntity": [ 
-        { 
-          "@type": "Question", 
-          "name": "What services does Accesco Living provide?", 
-          "acceptedAnswer": { 
-            "@type": "Answer", 
-            "text": "Accesco Living provides integrated services including groceries, food delivery, dining discovery, fashion access, mobility, and expense planning through a single intelligent ecosystem." 
-          } 
-        }, 
-        { 
-          "@type": "Question", 
-          "name": "Is Accesco Living available in India?", 
-          "acceptedAnswer": { 
-            "@type": "Answer", 
-            "text": "Yes, Accesco Living is designed for Indian consumers and operates across multiple cities in India." 
-          } 
-        }, 
-        { 
-          "@type": "Question", 
-          "name": "Does Accesco Living offer grocery delivery?", 
-          "acceptedAnswer": { 
-            "@type": "Answer", 
-            "text": "Yes, Accesco Living supports online grocery and daily essentials delivery with a focus on reliability and planning." 
-          } 
-        } 
-      ]     } 
-  ] 
-} 
-</script> 
+      "@type": "Organization",
+      "@id": "https://accesco.co.in/#organization",
+      "name": "Accesco Living Private Limited",
+      "url": "https://accesco.co.in/",
+      "logo": "https://accesco.co.in/assets/logo.png",
+      "description": "Accesco Living Private Limited is an intelligent commerce company in India integrating groceries, food delivery, dining, fashion, mobility, and expense planning into a unified digital ecosystem for everyday living.",
+      "foundingLocation": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/accesco-living",
+        "https://www.instagram.com/accesco.living"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://accesco.co.in/#website",
+      "url": "https://accesco.co.in/",
+      "name": "Accesco Living",
+      "inLanguage": "en-IN",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://accesco.co.in/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://accesco.co.in/#localbusiness",
+      "name": "Accesco Living",
+      "url": "https://accesco.co.in/",
+      "telephone": "+91-9900384517",
+      "priceRange": "₹₹",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Bengaluru" },
+        { "@type": "City", "name": "Mumbai" },
+        { "@type": "City", "name": "Delhi" },
+        { "@type": "City", "name": "Hyderabad" },
+        { "@type": "City", "name": "Pune" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#grocery",
+      "name": "Online Grocery and Daily Essentials Delivery",
+      "description": "Digital grocery and daily essentials service designed for Indian households with focus on reliability, planning, and convenience.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#food",
+      "name": "Online Food Delivery Service",
+      "description": "Food ordering and delivery service connecting users with local kitchens and restaurants for reliable everyday meals.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#dining",
+      "name": "Dining Discovery and Experience Platform",
+      "description": "Platform enabling users to discover dining options, plan outings, and access curated dining experiences.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#fashion",
+      "name": "On-Demand Fashion and Lifestyle Delivery",
+      "description": "Quick access to fashion and lifestyle products with personalised selection and doorstep delivery.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#mobility",
+      "name": "Mobility and Local Logistics Service",
+      "description": "Urban mobility and parcel movement service supporting daily transportation and local logistics needs.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://accesco.co.in/#expenseplanning",
+      "name": "Intelligent Expense Planning and Insights",
+      "description": "Digital expense planning and spending insights to help users understand and manage monthly consumption.",
+      "provider": { "@id": "https://accesco.co.in/#organization" },
+      "areaServed": { "@type": "Country", "name": "India" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://accesco.co.in/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What services does Accesco Living provide?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Accesco Living provides integrated services including groceries, food delivery, dining discovery, fashion access, mobility, and expense planning through a single intelligent ecosystem."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Accesco Living available in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Accesco Living is designed for Indian consumers and operates across multiple cities in India."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Accesco Living offer grocery delivery?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Accesco Living supports online grocery and daily essentials delivery with a focus on reliability and planning."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+ 
 
 
     <body>
